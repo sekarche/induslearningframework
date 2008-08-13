@@ -1,24 +1,17 @@
 #labels User-Guide
 This describes way to run the various classifiers in the Indus Learning Framework (ILF).
 
-= Set Up and Configuration =
+== Set Up and Configuration ==
 Download the latest ILF jar.
 
 In the directory you downloaded the ILF.jar, create a config directory. In it create a file called database.properties with following fields
-
+{{{
 DataSource.driverClassName=com.mysql.jdbc.Driver
 DataSource.url=jdbc:mysql://localhost/db_research
 DataSource.username=ilf_user
-DataSource.password=ilf_passworf
-
-Change the values as appropriate to your case.
-
-
-Set the classpath to include the dependant jars:
- * WEKA (weka.jar)  for some utility functions
- * appropriate jdbc driver (e.g  mysql-connector-java-5.0.7-bin.jar)
- * DBCP commons (e.g. commons-dbcp-1.2.2.jar ) http://commons.apache.org/dbcp/
-
+DataSource.password=ilf_password
+}}}
+Change the values as appropriate to your case. These are used to make connection to the database that contains the learning instances
 
 == Command Line Options ==
 
@@ -27,4 +20,19 @@ The Ilf.jar depends on the following jars:
  * appropriate jdbc driver (e.g  mysql-connector-java-5.0.7-bin.jar)
  * DBCP commons (e.g. commons-dbcp-1.2.2.jar ) http://commons.apache.org/dbcp/
  
+When calling from command line the  -classpath option is to use to point to these jars (alternatively environment variable CLASSPATH can be set)
+
+ * Niave Bayes
+java -classpath <list ; seperated list of dependent jars and ilf.jar> airldm2.classifiers.bayes.NaiveBayesClassifier <options>
+
+ * Decision Trees
+java -classpath <list ; seperated list of dependent jars and ilf.jar> airldm2.classifiers.trees.NaiveBayesClassifier <options> 
+
 Set the class path variable to include these jar (or alternative use -classpath option when running using java command)
+
+====Niave Bayes====
+java -classpath <list ; seperated list of dependent jars and ilf.jar> airldm2.classifiers.bayes.NaiveBayesClassifier <options>
+
+
+==== supported options ===
+
