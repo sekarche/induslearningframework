@@ -22,16 +22,24 @@ The Ilf.jar depends on the following jars:
  
 When calling from command line the  -classpath option is to use to point to these jars (alternatively environment variable CLASSPATH can be set)
 
- * Niave Bayes
-java -classpath <list ; seperated list of dependent jars and ilf.jar> airldm2.classifiers.bayes.NaiveBayesClassifier <options>
+ * Naive Bayes
+_ java -classpath < semi colon seperated list of dependent jars and ilf.jar> airldm2.classifiers.bayes.NaiveBayesClassifier <options> _
 
  * Decision Trees
-java -classpath <list ; seperated list of dependent jars and ilf.jar> airldm2.classifiers.trees.NaiveBayesClassifier <options> 
+_ java -classpath < semi colon seperated list of dependent jars and ilf.jar> airldm2.classifiers.trees.id3Classifier <options> _
 
-Set the class path variable to include these jar (or alternative use -classpath option when running using java command)
+=== Supported Options ===
 
-====Niave Bayes====
-java -classpath <list ; seperated list of dependent jars and ilf.jar> airldm2.classifiers.bayes.NaiveBayesClassifier <options>
+   * * -a *    The training file is to be read from an arff file and inserted into database.
+
+   * * -b *     The training instances are in a  relational database.
+
+   * * -trainTable*  The Name of the table  which contains training instances (used in conjuction with flag -b).  
+
+   * * -testFile * The arff file against which to test.
+
+   * * -trainFile * The arff file which contains training instances ( use in conjuction with flag -a ).
 
 
-==== supported options ===
+
+
