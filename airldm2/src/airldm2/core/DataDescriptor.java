@@ -18,4 +18,5 @@ public interface DataDescriptor {
     public String getProperty(String key);
 
     public int getAttributeCount();
+    public String[] getClassLabels();
 }

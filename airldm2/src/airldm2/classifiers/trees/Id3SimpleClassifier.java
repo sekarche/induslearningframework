@@ -29,7 +29,7 @@ import airldm2.util.AttribValuePair;
  * @since Apr 8, 2008
  * @version $Date: 2008/08/04 16:06:30 $
  */
-public class Id3SimpleClassifier extends DefaultOptionHandlerImpl implements
+public class Id3SimpleClassifier extends 
       Classifier {
 
    /*

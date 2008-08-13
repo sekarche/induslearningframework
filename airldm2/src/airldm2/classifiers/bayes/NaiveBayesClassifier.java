@@ -13,8 +13,7 @@ import airldm2.core.datatypes.relational.ColumnDescriptor;
 import airldm2.core.datatypes.relational.SingleRelationDataDescriptor;
 import airldm2.util.AttribValuePair;
 
-public class NaiveBayesClassifier extends DefaultOptionHandlerImpl implements
-      Classifier {
+public class NaiveBayesClassifier extends  Classifier {
 
    boolean DEBUG = true;
 

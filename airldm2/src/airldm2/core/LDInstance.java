@@ -12,29 +12,34 @@ import airldm2.constants.Constants;
  * @author neeraj
  * 
  * Represents a Single Instance of the Data. It is assumed a Single
- * Instance can be stored in memory unlike LDInstance
+ * Instance can be stored in memory unlike LDInstances
  */
 public class LDInstance {
 
    /**
     * The Data Descriptor for this instance
     */
-   DataDescriptor desc;
+   private DataDescriptor desc;
 
    /*
     * The Values of the various attributes for this DataDescriptor.
     * Everything is stored as a String. It can be converted to appropriate
     * types based on the DataDesc
     */
-   Vector<String> values;
+   private Vector<String> values;
 
    /**
     * Whether this is a labeled instance. If this is labeled, the last
     * value is assumed to be class label.
     */
-   boolean labeled;
+   private boolean labeled;
 
-   int[] locations;
+   private int[] locations;
+   
+   /**
+    * What is index of class Label in possible values of class label
+    */
+   private int classLabelLocation = -1;
 
    /**
     * 
@@ -145,7 +150,34 @@ public class LDInstance {
       return locations;
 
    }
+/**
+ * Returns the ClassLabel as an index in the possible values of the ClassLabel
+ * @return
+ * @throws Exception
+ */
 
+   public double getClassValueLocation() throws Exception {
+      
+      if(!labeled) throw new Exception(" The instance is not labelled:" + getStringRepresentation());
+      
+      if (this.classLabelLocation == -1 ) {
+      
+      
+      
+      // Will Have to change if we use other descriptors(Cast Will fail)
+      // Change function to take parameters. No need to over engineer
+      // currently
+      SingleRelationDataDescriptor tableDesc = (SingleRelationDataDescriptor) desc;
+      Vector<ColumnDescriptor> cols = tableDesc.getTableDesc().getColumns();
+      ColumnDescriptor classCol = cols.lastElement();
+      String classLableValue = getClassLabel();
+       classLabelLocation = classCol.getIndex(classLableValue);
+      }
+      //return as double
+      double result = classLabelLocation;
+      return result;
+   }
+   
    public String getValue(int index) {
       return values.get(index);
    }

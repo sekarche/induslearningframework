@@ -133,7 +133,17 @@ public class ColumnDescriptor {
 	result = airldm2.util.Utils.removeTrailing(result, Constants.COMMA);
 	return result;
     }
-
+    
+    public String[] getPossibleValuesAsArray() {
+       int size = possibleValues.size();
+       String[] vals = new String[size];
+       for (int i=0; i <  size; i++) {
+          vals[i] = possibleValues.get(i);
+       }
+       return vals;
+       
+      
+    }
     public void dump(PrintStream out) {
 	out.println("name=" + columnName);
 	out.println("values=" + getCommaSeperatedPossibleValues());
@@ -154,3 +164,5 @@ public class ColumnDescriptor {
 	return columnSize;
     }
 }
+
+    

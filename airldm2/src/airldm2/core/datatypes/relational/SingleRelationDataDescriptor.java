@@ -11,18 +11,18 @@ public class SingleRelationDataDescriptor implements DataDescriptor {
     int numberColumns = -1;
 
     public String getDataName() {
-	return relation.getTableName();
+       return relation.getTableName();
     }
 
     public TableDescriptor getTableDesc() {
-	return relation;
+       return relation;
     }
 
     public SingleRelationDataDescriptor(String tableName,
 	    Vector<ColumnDescriptor> columns) {
-	relation = new TableDescriptor(tableName, columns);
+       relation = new TableDescriptor(tableName, columns);
 
-	numberColumns = (columns != null) ? columns.size() : -1;
+       numberColumns = (columns != null) ? columns.size() : -1;
     }
 
     public SingleRelationDataDescriptor() {
@@ -34,10 +34,21 @@ public class SingleRelationDataDescriptor implements DataDescriptor {
     }
 
     public void setProperty(String key, String value) {
-	props.put(key, value);
+       props.put(key, value);
     }
 
     public int getAttributeCount() {
-	return numberColumns;
+       return numberColumns;
     }
+    
+    public ColumnDescriptor getClassLabelDescriptor() {
+       //TODO: All Access to ClassLabel Descriptor should be through this
+          return  relation.getColumns().lastElement();
+    }
+    
+    public String[] getClassLabels() {
+      return  getClassLabelDescriptor().getPossibleValuesAsArray();
+    }
+    
+    
 }

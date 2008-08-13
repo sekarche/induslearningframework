@@ -6,12 +6,13 @@ package airldm2.classifiers;
 import airldm2.core.LDInstance;
 import airldm2.core.LDInstances;
 import airldm2.core.OptionHandler;
+import airldm2.core.DefaultOptionHandlerImpl;
 
 /**
  * @author neeraj
  * 
  */
-public interface Classifier extends OptionHandler {
+public abstract  class Classifier extends DefaultOptionHandlerImpl implements OptionHandler {
 
    /*
     * @param data set of instances serving as training data @exception
@@ -22,7 +23,15 @@ public interface Classifier extends OptionHandler {
    public abstract double classifyInstance(LDInstance instance)
          throws Exception;
 
-   public double[] distributionForInstance(LDInstance instance)
+   public abstract double[] distributionForInstance(LDInstance instance)
          throws Exception;
+   public static void runClassifier(Classifier classifier, String[] options) {
+      try {
+         Evaluation eval = new Evaluation();
+         eval.evaluateModel(classifier, options);
+      } catch (Exception e) {
+         e.printStackTrace();
+      }
+   }
 
 }

@@ -43,6 +43,8 @@ public class NaiveBayesTest {
           */
          SingleRelationDataDescriptor desc = new SingleRelationDataDescriptor(
                tableName, columns);
+         
+         
 
          // Create a Large DataSet Instance and set its
          // descriptor and source

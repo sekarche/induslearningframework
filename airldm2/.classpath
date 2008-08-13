@@ -6,5 +6,6 @@
 	<classpathentry kind="lib" path="lib/weka-3.5.6/weka.jar"/>
 	<classpathentry kind="lib" path="lib/apache/commons-pool-20070730.jar"/>
 	<classpathentry kind="lib" path="lib/apache/commons-dbcp-1.2.2.jar"/>
+	<classpathentry kind="lib" path="lib/junit/junit-4.5.jar"/>
 	<classpathentry kind="output" path="classes"/>
 </classpath>
