@@ -409,18 +409,20 @@ public class Id3SimpleClassifier extends
       return text.toString();
    }
 
-   /**
-    * @param args
-    */
-   public static void main(String[] args) {
-      // TODO Auto-generated method stub
-
-   }
+  
 
    private void Debug(String debug) {
       if (DEBUG) {
          System.out.println(debug);
       }
    }
+   
+   public static void main(String[] args) {
+      
+       Id3SimpleClassifier classifier = new Id3SimpleClassifier();
+       runClassifier( classifier,  args) ;
+    
+
+}
 
 }

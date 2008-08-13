@@ -303,5 +303,11 @@ public class NaiveBayesClassifier extends  Classifier {
       }
 
    }
+   
+   public static void main(String[] args) {
+      NaiveBayesClassifier classifier = new NaiveBayesClassifier();
+      runClassifier( classifier,  args) ;
+   }
+   
 
 }

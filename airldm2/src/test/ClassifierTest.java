@@ -39,7 +39,7 @@ public class  ClassifierTest{
    public void setUp() throws Exception {
    }
    
-   //@Test
+   @Test
    public void testNBWithOptionsArff(){
       
       String[] options= {"-a", "-?", "-trainFile", "sample/HouseVotesTrain.arff", "-testFile" ,"sample/HouseVotesTrain.arff"};
@@ -56,7 +56,7 @@ public class  ClassifierTest{
    }
    
    
-   //@Test
+   @Test
    public void testNBWithOptionsDB(){
       
       String[] options= {"-b",  "-trainTable", "votes_train", "-testFile" ,"sample/HouseVotesTrain.arff"};

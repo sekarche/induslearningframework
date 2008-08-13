@@ -452,18 +452,22 @@ public class Id3Classifier extends
       return text.toString();
    }
 
-   /**
-    * @param args
-    */
-   public static void main(String[] args) {
-      // TODO Auto-generated method stub
-
-   }
+  
 
    private void Debug(String debug) {
       if (DEBUG) {
          System.out.println(debug);
       }
+   }
+   /**
+    * @param args
+    */
+   public static void main(String[] args) {
+      
+          Id3Classifier classifier = new Id3Classifier();
+          runClassifier( classifier,  args) ;
+       
+
    }
 
 }
