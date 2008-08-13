@@ -1,0 +1,20 @@
+#labels User-Guide
+#This describes way to run the various classifiers in the Indus Learning Framework (ILF).
+
+= Introduction =
+Download the latest ILF jar.
+Set the classpath to include the dependant jars
+==Dependant jars==
+* WEKA (weka.jar)  _for some utility functions_
+* appropriate jdbc driver (e.g  mysql-connector-java-5.0.7-bin.jar)
+* DBCP commons _for connection to database_
+
+
+
+
+= Command Line Options =
+
+Add your content here.  Format your content with:
+  * Text in *bold* or _italic_
+  * Headings, paragraphs, and lists
+  * Automatic links to other wiki pages
