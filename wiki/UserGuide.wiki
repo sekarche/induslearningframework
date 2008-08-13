@@ -1,4 +1,4 @@
-#labels User-Guide
+#labels User-Guide,Featured
 This describes way to run the various classifiers in the Indus Learning Framework (ILF).
 
 == Set Up and Configuration ==
@@ -35,4 +35,3 @@ java -classpath <list ; seperated list of dependent jars and ilf.jar> airldm2.cl
 
 
 ==== supported options ===
-
