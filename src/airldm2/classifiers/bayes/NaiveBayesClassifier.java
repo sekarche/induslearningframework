@@ -4,7 +4,6 @@ import java.util.Vector;
 
 import weka.core.Instance;
 import airldm2.classifiers.Classifier;
-import airldm2.core.DefaultOptionHandlerImpl;
 import airldm2.core.ISufficentStatistic;
 import airldm2.core.LDInstance;
 import airldm2.core.LDInstances;
