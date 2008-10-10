@@ -1,0 +1,38 @@
+%This file is used to create experimental data for experimenting algorithms in Indus
+%Attributes of the produced data will have nominal values from 0 to (numOfMaxValues-1)
+
+%number of attributes including the class
+@numOfAttributes=11
+
+%Following list specifies the numOfMaxValues for each attribute
+%Attribute name should be of the type attrib<number>,number beginning with 0
+%attrib<number> <numOfMaxValues>
+@attributes
+attrib0 2
+attrib1 2
+attrib2 2
+attrib3 2
+attrib4 2
+attrib5 2
+attrib6 2
+attrib7 2
+attrib8 2
+attrib9 2
+class 2
+
+@numOfFiles=9
+@fileNamePrefix=sampleA
+%Following is the list of files that will be generated using the meta-data so specified
+%FileName should be of the type file<number>, number beginning with 0
+%file<number> <numOfInstances>
+@files
+file0 51000
+file1 52000
+file2 53000
+file3 54000
+file4 55000
+file5 56000
+file6 57000
+file7 58000
+file8 59000
+
