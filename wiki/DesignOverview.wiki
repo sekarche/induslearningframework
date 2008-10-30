@@ -13,4 +13,4 @@ The following are the major classes in the learning framework.
  * *Evaluation:*  Evaluates the given classifier on train and test data to return a Confusion matrix. Any implemented Classifier will automatically have access to this.
 
 
-C:\LATEX_PAPER\SuffStat\IEEE_CS_Latex-2
+ [http://code.google.com/p/induslearningframework/downloads/Classifier_seeded2.jpg]
