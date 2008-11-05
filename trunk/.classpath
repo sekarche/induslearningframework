@@ -1,11 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="indus_extension_src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="lib/mysql/mysql-connector-java-5.0.7-bin.jar"/>
 	<classpathentry kind="lib" path="lib/weka-3.5.6/weka.jar"/>
 	<classpathentry kind="lib" path="lib/apache/commons-pool-20070730.jar"/>
 	<classpathentry kind="lib" path="lib/apache/commons-dbcp-1.2.2.jar"/>
 	<classpathentry kind="lib" path="lib/junit/junit-4.5.jar"/>
+	<classpathentry kind="lib" path="lib/apache/commons-beanutils-core.jar"/>
+	<classpathentry kind="lib" path="lib/apache/commons-beanutils.jar"/>
+	<classpathentry kind="lib" path="lib/apache/commons-collections-3.2.jar"/>
+	<classpathentry kind="lib" path="lib/apache/commons-digester-1.8.jar"/>
+	<classpathentry kind="lib" path="lib/apache/commons-logging-1.1.jar"/>
+	<classpathentry kind="lib" path="lib/apache/xercesImpl.jar"/>
+	<classpathentry kind="lib" path="lib/iif/ilf_libs/matheval/meval.jar"/>
+	<classpathentry kind="lib" path="lib/iif/ilf_libs/owlapi/commons-lang-2.2.jar"/>
+	<classpathentry kind="lib" path="lib/iif/ilf_libs/owlapi/owlapi-api.jar"/>
+	<classpathentry kind="lib" path="lib/iif/ilf_libs/owlapi/owlapi-apibinding.jar"/>
+	<classpathentry kind="lib" path="lib/iif/ilf_libs/owlapi/owlapi-change.jar"/>
+	<classpathentry kind="lib" path="lib/iif/ilf_libs/owlapi/owlapi-debugging.jar"/>
+	<classpathentry kind="lib" path="lib/iif/ilf_libs/owlapi/owlapi-dig1_1.jar"/>
+	<classpathentry kind="lib" path="lib/iif/ilf_libs/owlapi/owlapi-functionalparser.jar"/>
+	<classpathentry kind="lib" path="lib/iif/ilf_libs/owlapi/owlapi-functionalrenderer.jar"/>
+	<classpathentry kind="lib" path="lib/iif/ilf_libs/owlapi/owlapi-impl.jar"/>
+	<classpathentry kind="lib" path="lib/iif/ilf_libs/owlapi/owlapi-krssparser.jar"/>
+	<classpathentry kind="lib" path="lib/iif/ilf_libs/owlapi/owlapi-metrics.jar"/>
+	<classpathentry kind="lib" path="lib/iif/ilf_libs/owlapi/owlapi-oboparser.jar"/>
+	<classpathentry kind="lib" path="lib/iif/ilf_libs/owlapi/owlapi-owlxmlparser.jar"/>
+	<classpathentry kind="lib" path="lib/iif/ilf_libs/owlapi/owlapi-owlxmlrenderer.jar"/>
+	<classpathentry kind="lib" path="lib/iif/ilf_libs/owlapi/owlapi-rdfapi.jar"/>
+	<classpathentry kind="lib" path="lib/iif/ilf_libs/owlapi/owlapi-rdfxmlparser.jar"/>
+	<classpathentry kind="lib" path="lib/iif/ilf_libs/owlapi/owlapi-rdfxmlrenderer.jar"/>
+	<classpathentry kind="lib" path="lib/iif/ilf_libs/owlapi/owlapi-util.jar"/>
+	<classpathentry kind="lib" path="lib/iif/ilf_libs/commons-lang-2.2.jar"/>
+	<classpathentry kind="lib" path="lib/iif/ilf_libs/junit-4.4.jar"/>
+	<classpathentry kind="lib" path="lib/iif/ilf_libs/log4j-1.2.15.jar"/>
+	<classpathentry kind="lib" path="lib/iif/ilf_libs/postgresql-8.1-410.jdbc3.jar"/>
+	<classpathentry kind="lib" path="lib/iif/ilf_libs/Zql.jar"/>
+	<classpathentry kind="lib" path="lib/iif/UseSemanticQuery_3.0.jar"/>
 	<classpathentry kind="output" path="classes"/>
 </classpath>

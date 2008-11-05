@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?> 
+ <descriptors>
+ <descriptor>
+<datasource name="DS1">
+<table name="table1">
+ <!-- key is reserved key word so using key2 -->
+  <column name="movie" type="varchar" />
+  <column name="area"  type="varchar" /> 
+  <column name="stars" type="varchar">
+   <!--  the base is used to construct a URI for the value stored in the table
+  e.g if the table stores a value status. It would correspond to URI ${base}/status
+  --> 
+  <operation type="AVH" base="indus://nteflix/stars_AVH" ontology="indus://netflix/stars_AVH" ontLoc="ont.txt" /> 
+  
+  </column>
+  <column name="buy" type="varchar"/>
+  </table>
+  </datasource>
+  </descriptor>
+  </descriptors>

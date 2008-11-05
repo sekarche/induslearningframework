@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?> 
+<tree>
+<node name="DS1_DS2" fragmentationType="horizontal">
+	<dataSourceDescriptor file="userviewdesc.xml" />
+	<children>
+		<node name="DS1" fragmentationType="horizontal">
+			<dbInfo type="mysql" host="localhost" DRIVER="org.postgresql.Driver" datasource="netflix" />
+			<dataSourceDescriptor file="ds1desc.xml" />
+		</node>
+		<node name="DS2" fragmentationType="horizontal">			
+					<dbInfo type="mysql" host="localhost" DRIVER="org.postgresql.Driver" datasource="blockbuster" />
+					<dataSourceDescriptor file="ds2desc.xml" />
+		</node>
+	</children>
+</node>
+</tree>

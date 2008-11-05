@@ -3,7 +3,6 @@
  */
 package airldm2.core.datatypes.relational;
 
-import java.io.File;
 import java.sql.Connection;
 
 import airldm2.core.DefaultSufficentStatisticImpl;
@@ -16,7 +15,7 @@ import airldm2.exceptions.RTConfigException;
 import airldm2.util.AttribValuePair;
 
 /**
- * @author neeraj
+ * @author neeraj (neeraj.kaul@gmail.com, neeraj@cs.iastate.edu)
  * 
  */
 public class RelationalDataSource implements SSDataSource {
@@ -48,15 +47,26 @@ public class RelationalDataSource implements SSDataSource {
        * "jdbc:mysql://129.186.93.141/db_research", "indus", "indus"); }
        * catch (Exception e) { throw new DatabaseException(
        * DatabaseException.ExceptionType.UNABLE_TO_CONNECT, e); }
-       * 
        */
       con = new DBCPConnectionManager().createConnection();
+   }
+
+   /**
+    * Empty param constructor . Currently used for creating instances via
+    * Class.forName()
+    * 
+    * @throws DatabaseException
+    */
+   public RelationalDataSource() throws DatabaseException {
+      con = new DBCPConnectionManager().createConnection();
+
    }
 
    /*
     * (non-Javadoc)
     * 
-    * @see airldm2.core.SSDataSource#getSufficientStatistic(java.lang.String)
+    * @see
+    * airldm2.core.SSDataSource#getSufficientStatistic(java.lang.String)
     */
    public ISufficentStatistic getSufficientStatistic(String query)
          throws Exception {
@@ -69,7 +79,8 @@ public class RelationalDataSource implements SSDataSource {
    /*
     * (non-Javadoc)
     * 
-    * @see airldm2.core.SSDataSource#getSufficientStatistic(java.lang.String[])
+    * @see
+    * airldm2.core.SSDataSource#getSufficientStatistic(java.lang.String[])
     */
    public ISufficentStatistic[] getSufficientStatistic(String[] countQueries)
          throws Exception {
@@ -144,8 +155,13 @@ public class RelationalDataSource implements SSDataSource {
 
    }
 
-   public RelationalDataSource(File arrfFilePath) throws Exception {
-      // TODO Call Online ArrfReader to do the needful
+   // public RelationalDataSource(File arrfFilePath) throws Exception {
+   // TODO Call Online ArrfReader to do the needful
+
+   // }
+
+   public void setRelationName(String relationName) {
+      this.relationName = relationName;
 
    }
 
