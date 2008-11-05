@@ -62,4 +62,12 @@ public interface SSDataSource {
     */
    public int getNumberInstances() throws Exception;
 
+   /**
+    * Set the relation in the dataSource against which sufficient
+    * statistics are returned For a databse, it may be name of a table
+    * 
+    * @return
+    */
+   public void setRelationName(String relationName);
+
 }

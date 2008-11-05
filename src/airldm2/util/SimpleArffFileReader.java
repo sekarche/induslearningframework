@@ -38,7 +38,9 @@ public class SimpleArffFileReader {
    /** The keyword used to denote the start of the arff data section */
    public final static String ARFF_DATA = "@data";
 
-   /** The keyword used to denote the start of an arff attribute declaration */
+   /**
+    * The keyword used to denote the start of an arff attribute declaration
+    */
    public final static String ARFF_ATTRIBUTE = "@attribute";
 
    String file;
@@ -125,7 +127,6 @@ public class SimpleArffFileReader {
        * "jdbc:mysql://129.186.93.141/db_research", "indus", "indus"); }
        * catch (Exception e) { throw new DatabaseException(
        * DatabaseException.ExceptionType.UNABLE_TO_CONNECT, e); } // test
-       * 
        */
       this.file = arffFile;
       this.append = append;
@@ -227,12 +228,15 @@ public class SimpleArffFileReader {
          }
 
       } catch (FileNotFoundException e) {
+         e.printStackTrace();
          throw e;
 
       } catch (IOException e) {
+         e.printStackTrace();
          throw e;
 
       } catch (ArffReadingException e) {
+         e.printStackTrace();
          throw e;
       }
 
@@ -308,7 +312,8 @@ public class SimpleArffFileReader {
     * into db
     */
    private String handleData(String line) {
-      // 'n','y','n','y','y','y','n','n','n','y','?','y','y','y','n','y','republican'
+      // 'n','y','n','y','y','y','n','n','n','y','?','y','y','y','n','y',
+      // 'republican'
       /*
        * StringTokenizer tokenizer = new StringTokenizer(line, "', ");
        * Vector<String> vals = new Vector<String>(); String
@@ -325,7 +330,8 @@ public class SimpleArffFileReader {
    }
 
    public Vector<String> getValuesFromthisLine(String line) {
-      // 'n','y','n','y','y','y','n','n','n','y','?','y','y','y','n','y','republican'
+      // 'n','y','n','y','y','y','n','n','n','y','?','y','y','y','n','y',
+      // 'republican'
       StringTokenizer tokenizer = new StringTokenizer(line, "', ");
       Vector<String> vals = new Vector<String>();
       String currAttributeValue;

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?> 
+ <descriptors>
+ <descriptor>
+<datasource name="DS1_DS2">
+<table name="MOVIETABLE">
+ <!-- key is reserved key word so using key2 -->
+  <column name="title" type="varchar" />
+  <column name="genre"  type="varchar" /> 
+  <column name="reviews" type="varchar">
+   <!--  the base is used to construct a URI for the value stored in the table
+  e.g if the table stores a value status. It would correspond to URI ${base}/status
+   -->
+  <operation type="AVH" base="indus://uView/reviews_AVH" ontology="indus://uView/reviews_AVH" ontLoc="ont.txt" /> 
+  </column>
+   <column name="Class" type="varchar"/>
+  </table>
+  </datasource>
+  </descriptor>
+  
+  </descriptors>

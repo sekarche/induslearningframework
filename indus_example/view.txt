@@ -1,0 +1,4 @@
+UserViewName=DS1_DS2
+DTreeFile=tree.xml
+SchemaMap=schemamap.txt
+OntologyMap=ontomap.txt

@@ -1,0 +1,14 @@
+# NEW FORMAT. Allows to Read as properties
+
+#format: (targetDataSource-->userView)  UserView is always on RHS
+#targetDataSource@ontologyId@classId = [EQUAL|SUPER|SUB]@ontologyI@classId =
+#both OntoloyId and classId should be valids URI
+# exception id classId begins with "_" it means it is relative to URI of the ontologI
+
+#For Data Source DS1
+DS1@indus\://netflix/stars_AVH@_good_stars=EQUAL@indus\://uView/reviews_AVH@_good
+DS1@indus\://netflix/stars_AVH@_bad_stars=EQUAL@indus\://uView/reviews_AVH@_bad
+
+#For Data Source DS2
+DS2@indus\://blockbuster/rating_AVH@_good_review=EQUAL@indus\://uView/reviews_AVH@_good
+DS2@indus\://blockbuster/rating_AVH@_bad_review=EQUAL@indus\://uView/reviews_AVH@_bad
