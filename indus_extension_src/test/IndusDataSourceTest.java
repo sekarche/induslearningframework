@@ -18,7 +18,7 @@ import airldm2.classifiers.bayes.NaiveBayesClassifier;
 /**
  * TODO Write class description here.
  * 
- * @author neeraj (TODO Write email id here)
+ * @author neeraj (neeraj@cs.iastate.edu, neeraj.kaul@gmail.com)
  * @since Oct 28, 2008
  * @version $Date: $
  */
