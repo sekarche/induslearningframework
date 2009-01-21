@@ -9,9 +9,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Vector;
 
+import airldm2.constants.Constants;
 import airldm2.core.datatypes.relational.ColumnDescriptor;
 import airldm2.core.datatypes.relational.TableDescriptor;
-import airldm2.constants.Constants;
 
 /**
  * @author neeraj
@@ -46,6 +46,9 @@ public class DBHelper {
     */
    public static int ExecuteQuery(String query, Connection con)
          throws SQLException {
+
+      // TODO: Put all the queries in log
+      // System.out.println("Query Executed:" + query + "\n");
       Integer readInteger = null;
       ResultSet resultSet = null;
       Statement statement = con.createStatement();
@@ -71,7 +74,7 @@ public class DBHelper {
          throws SQLException {
 
       Statement statement = con.createStatement();
-      //System.out.println(query);
+      // System.out.println(query);
       return statement.executeUpdate(query);
 
    }

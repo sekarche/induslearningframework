@@ -1,19 +1,23 @@
 /**
  * Id3SimpleClassifier.java<br>
- * TODO Write description for Id3SimpleClassifier.java.
+ * An implementation of Decision Tree in Indus Learning Framework
  * 
- * $Header:
- * /home/CVS/airldm2/src/airldm2/classifiers/trees/Id3SimpleClassifier.java,v
- * 1.1 2008/04/08 22:14:47 kansas Exp $
+ * HISTORY
+ * 
+ * 1: Vikas Bahirwani (April 2008) : First Cut
+ * 
+ * 2: Neeraj Koul (January 2009) : Added Support For Handling Missing
+ * Values
+ * 
  */
 
 package airldm2.classifiers.trees;
 
+import java.util.HashMap;
 import java.util.Vector;
 
 import weka.core.Utils;
 import airldm2.classifiers.Classifier;
-import airldm2.core.DefaultOptionHandlerImpl;
 import airldm2.core.ISufficentStatistic;
 import airldm2.core.LDInstance;
 import airldm2.core.LDInstances;
@@ -29,13 +33,14 @@ import airldm2.util.AttribValuePair;
  * @since Apr 8, 2008
  * @version $Date: 2008/08/04 16:06:30 $
  */
-public class Id3SimpleClassifier extends 
-      Classifier {
+public class Id3SimpleClassifier extends Classifier {
 
    /*
     * (non-Javadoc)
     * 
-    * @see airldm2.classifiers.Classifier#buildClassifier(airldm2.core.LDInstances)
+    * @see
+    * airldm2.classifiers.Classifier#buildClassifier(airldm2.core.LDInstances
+    * )
     */
    /** The node's successors */
    private Id3SimpleClassifier[] m_Successors;
@@ -63,11 +68,13 @@ public class Id3SimpleClassifier extends
 
    static Vector<ColumnDescriptor> allAttributes;
 
+   private static HashMap<ColumnDescriptor, String> mostLikelyValues = new HashMap<ColumnDescriptor, String>();
+
    static ColumnDescriptor classAttribute;
 
    // @Override
    public void buildClassifier(LDInstances instances) throws Exception {
-      // TODO Auto-generated method stub
+
       dataDesc = (SingleRelationDataDescriptor) instances.getDesc();
       dataSource = instances.getDataSource();
       allAttributes = dataDesc.getTableDesc().getColumns();
@@ -79,11 +86,12 @@ public class Id3SimpleClassifier extends
 
       // TODO check whether input contains only nominal values
 
-      AttribValuePair[] classifyingAttrib = new AttribValuePair[1];
+      Vector<AttribValuePair> classifyingAttrib = new Vector<AttribValuePair>();
       AttribValuePair classAttribValue = new AttribValuePair();
       classAttribValue.setAttribName(classAttribute.getColumnName());
-      classifyingAttrib[0] = classAttribValue;
-      makeTree(classifyingAttrib);
+      classifyingAttrib.add(classAttribValue);
+      boolean firstTime = true;
+      makeTree(classifyingAttrib, firstTime);
       Debug(Id3SimpleClassifier.countQueries + " Queries requested");
       System.out.println(Id3SimpleClassifier.countQueries
             + " Queries requested");
@@ -97,11 +105,15 @@ public class Id3SimpleClassifier extends
     * attribute with no values associated with it.
     * @throws Exception
     */
-   private void makeTree(AttribValuePair[] usedAttribValueSet) throws Exception {
+   private void makeTree(Vector<AttribValuePair> usedAttribValueSet,
+         boolean isFirstTime) throws Exception {
       if (usedAttribValueSet == null) {
-         System.err.println("Cannot make the decision tree");
+         System.err
+               .println("Cannot make the decision tree: class label not set");
          System.exit(0);
       }
+
+      printusedAttributeValueSet(usedAttribValueSet);
 
       boolean zeroInstances = false;
       int numberOfInstances = 0;
@@ -118,7 +130,7 @@ public class Id3SimpleClassifier extends
          if (contains(usedAttribValueSet, tempAttrib)) {
             infoGains[i] = 0;
          } else {
-            counts = computeCounts(usedAttribValueSet, tempAttrib);
+            counts = computeCounts(usedAttribValueSet, tempAttrib, isFirstTime);
             for (int x = 0; x < tempAttrib.getNumValues(); x++)
                for (int y = 0; y < numOfClassLabels; y++) {
                   numberOfInstances += counts[x][y];
@@ -126,6 +138,7 @@ public class Id3SimpleClassifier extends
             // Debug("Inside makeTree: numberOfInstances=" +
             // numberOfInstances);
             if (numberOfInstances == 0) {
+               // NEERAJ-->Explain This
                zeroInstances = true;
                m_Attribute = null;
                m_ClassValue = ColumnDescriptor.DEFAULT_MISSING_VALUE;
@@ -142,6 +155,7 @@ public class Id3SimpleClassifier extends
       m_Attribute = allAttributes.get(maxIndex);
       Debug("Inside makeTree(): Attribute with maximum information gain is "
             + m_Attribute.getColumnName() + " infoGain =" + maxInfoGain);
+      // NEERAJ: why doing seperate when maxInfoGain=0
       if (maxInfoGain == 0) {
          if (counts != null) {
             m_Attribute = null;
@@ -164,7 +178,7 @@ public class Id3SimpleClassifier extends
                      + m_Distribution[i]);
             }
          }
-         Utils.normalize(m_Distribution);
+         Utils.normalize(m_Distribution); // NEERAJ: Explain Normalization
          m_ClassValue = classLabels.elementAt(Utils.maxIndex(m_Distribution));
 
       } else {
@@ -172,76 +186,188 @@ public class Id3SimpleClassifier extends
           * Instances[] splitData = splitData(data, m_Attribute). Following
           * segment of code mimics this statement of Id3 in Weka
           */
-         AttribValuePair[] newAttribValueSet = new AttribValuePair[usedAttribValueSet.length + 1];
-         for (int i = 0; i < usedAttribValueSet.length; i++) {
-            newAttribValueSet[i] = usedAttribValueSet[i];
+
+         Vector<AttribValuePair> newAttribValueSet = new Vector<AttribValuePair>();
+
+         // AttribValuePair[] newAttribValueSet = new
+         // AttribValuePair[usedAttribValueSet.length + 1];
+         int passedSize = usedAttribValueSet.size();
+         for (int i = 0; i < usedAttribValueSet.size(); i++) {
+            newAttribValueSet.add(usedAttribValueSet.get(i));
+            // newAttribValueSet[i] = usedAttribValueSet[i];
          }
-         newAttribValueSet[usedAttribValueSet.length] = new AttribValuePair(
-               m_Attribute.getColumnName(), "");
+
+         /**
+          * Add a place holder for the current Attribute. The possible
+          * value for each path will be set later by iterating through all
+          * possibe values for the attribute
+          */
+         AttribValuePair placeHolder = new AttribValuePair();
+         newAttribValueSet.add(placeHolder);
+
          m_Successors = new Id3SimpleClassifier[m_Attribute.getNumValues()];
          possibleValues = m_Attribute.getPossibleValues();
+
+         // option to handle missing values
+         boolean replaceMissingWithModeValue = Utils.getFlag("?", getOptions());
+         // NEERAJ--> Testing, remove
+         // replaceMissingWithModeValue = true;
+         // NEERAJ--> Testing, remove
+
          for (int j = 0; j < m_Attribute.getNumValues(); j++) {
-            newAttribValueSet[usedAttribValueSet.length]
-                  .setAttribValue(possibleValues.get(j));
+            AttribValuePair m_AttributeValuePair = new AttribValuePair();
+            m_AttributeValuePair.setAttribName(m_Attribute.getColumnName());
+            m_AttributeValuePair.setAttribValue(possibleValues.get(j));
+            if (replaceMissingWithModeValue) {
+               String mostLikelyValue = getMostLikelyValue(m_Attribute);
+               if (possibleValues.get(j).equals(mostLikelyValue)) {
+                  m_AttributeValuePair.setIncludeMissingValue(m_Attribute
+                        .getMissingValue());
+               }
+               /* replace Place Holder with correct set */
+               newAttribValueSet.set(passedSize, m_AttributeValuePair);
+            }
+
             m_Successors[j] = new Id3SimpleClassifier();
-            m_Successors[j].makeTree(newAttribValueSet);
+            /**
+             * record the next call to makeTree is NOT the firstInvocation
+             */
+            isFirstTime = false;
+            m_Successors[j].makeTree(newAttribValueSet, isFirstTime);
          }
       }
    }
 
-   public double[] computeDistribution(AttribValuePair[] usedAttribValueSet)
-         throws Exception {
+   private void printusedAttributeValueSet(
+         Vector<AttribValuePair> usedAttribValueSet) {
+      String output = "";
+      for (int i = 0; i < usedAttribValueSet.size(); i++) {
+         output += usedAttribValueSet.get(i).getAttribName() + "="
+               + usedAttribValueSet.get(i).getAttribValue() + ";";
+      }
+      System.out.println("usedAttribute Set->" + output);
+
+   }
+
+   public double[] computeDistribution(
+         Vector<AttribValuePair> usedAttribValueSet) throws Exception {
       double[] distrib = new double[numOfClassLabels];
       ISufficentStatistic tempSuffStat;
+
+      // get the attributeValue pair at the first location which is class
+      // label
+      AttribValuePair temp = usedAttribValueSet.get(0);
       for (int i = 0; i < numOfClassLabels; i++) {
-         usedAttribValueSet[0].setAttribValue(classLabels.get(i));
-         tempSuffStat = dataSource.getSufficientStatistic(usedAttribValueSet);
+         temp.setAttribValue(classLabels.get(i));
+         usedAttribValueSet.set(0, temp);
+         // usedAttribValueSet[0].setAttribValue(classLabels.get(i));
+         AttribValuePair[] usedAttribValueSetAsArray = (AttribValuePair[]) usedAttribValueSet
+               .toArray(new AttribValuePair[usedAttribValueSet.size()]);
+         tempSuffStat = dataSource
+               .getSufficientStatistic(usedAttribValueSetAsArray);
          Id3SimpleClassifier.countQueries++;
          distrib[i] = tempSuffStat.getValue();
       }
       return distrib;
    }
 
-   public int[][] computeCounts(AttribValuePair[] oldAttribValueSet,
-         ColumnDescriptor newAttrib) throws Exception {
+   public int[][] computeCounts(Vector<AttribValuePair> oldAttribValueSet,
+         ColumnDescriptor newAttrib, boolean firstTime) throws Exception {
       int[][] counts = new int[newAttrib.getNumValues()][numOfClassLabels];
-      AttribValuePair[] newAttribValueSet = new AttribValuePair[oldAttribValueSet.length + 1];
+      Vector<AttribValuePair> newAttribValueSet = new Vector<AttribValuePair>();
 
-      for (int i = 0; i < oldAttribValueSet.length; i++) {
-         newAttribValueSet[i] = oldAttribValueSet[i];
+      // Neeraj: See if you require this and what about using arrayCopy
+      for (int i = 0; i < oldAttribValueSet.size(); i++) {
+         newAttribValueSet.add(oldAttribValueSet.get(i));
       }
-      newAttribValueSet[oldAttribValueSet.length] = new AttribValuePair(
-            newAttrib.getColumnName(), "");
 
+      AttribValuePair newAttribValuePair = new AttribValuePair(newAttrib
+            .getColumnName(), "");
+      /* Add the new Attrib , Each possible values will be set below */
+      newAttribValueSet.add(newAttribValuePair);
       Vector<String> newAttribValues = newAttrib.getPossibleValues();
       ISufficentStatistic tempSuffStat;
       for (int i = 0; i < newAttrib.getNumValues(); i++) {
-         newAttribValueSet[oldAttribValueSet.length]
-               .setAttribValue(newAttribValues.get(i));
+
+         /* set the possible value for newAttrib */
+         newAttribValuePair.setAttribValue(newAttribValues.get(i));
+
+         /*
+          * Add the fully formed newAttributeValuePair at the correct
+          * location
+          */
+         newAttribValueSet.set(oldAttribValueSet.size(), newAttribValuePair);
+         AttribValuePair classLabelAttribValuePair;
          for (int j = 0; j < numOfClassLabels; j++) {
-            newAttribValueSet[0].setAttribValue(classLabels.get(j));
-            tempSuffStat = dataSource.getSufficientStatistic(newAttribValueSet);
+            classLabelAttribValuePair = newAttribValueSet.get(0);
+
+            // set the current value for class label
+            classLabelAttribValuePair.setAttribValue(classLabels.get(j));
+
+            newAttribValueSet.set(0, classLabelAttribValuePair);
+            // newAttribValueSet[0].setAttribValue(classLabels.get(j));
+            AttribValuePair[] conjuctionQuery = (AttribValuePair[]) newAttribValueSet
+                  .toArray(new AttribValuePair[newAttribValueSet.size()]);
+            tempSuffStat = dataSource.getSufficientStatistic(conjuctionQuery);
             Id3SimpleClassifier.countQueries++;
             counts[i][j] = tempSuffStat.getValue().intValue();
             /*
              * Debug("Inside computeCounts(): counts[" + i + "][" + j +
              * "]=" + counts[i][j]);
              */
+
          }
       }
+
+      /**
+       * If this is the firstTime that it was called, the counts can be
+       * used to the most likely value for the attributes
+       */
+      if (firstTime) {
+         AddMostCommonValue(newAttrib, counts);
+      }
+
       return counts;
    }
 
-   public boolean contains(AttribValuePair[] usedAttribs,
+   private void AddMostCommonValue(ColumnDescriptor newAttrib, int[][] counts) {
+      int maxIndex = 0;
+      int maxCount = 0;
+
+      for (int i = 0; i < counts.length; i++) {
+         int currAttribCount = 0;
+         for (int j = 0; j < counts[i].length; j++) {
+            currAttribCount += counts[i][j];
+         }
+         if (currAttribCount > maxCount) {
+            maxCount = currAttribCount;
+            maxIndex = i;
+         }
+      }
+      String value = newAttrib.getPossibleValues().get(maxIndex);
+      System.out.println(" Most common value for " + newAttrib.getColumnName()
+            + "=" + value);
+      mostLikelyValues.put(newAttrib, value);
+   }
+
+   private boolean contains(Vector<AttribValuePair> usedAttribs,
          ColumnDescriptor newAttrib) {
-      for (int i = 0; i < usedAttribs.length; i++) {
-         if ((usedAttribs[i].getAttribName()).equalsIgnoreCase(newAttrib
-               .getColumnName())) {
+
+      for (int i = 0; i < usedAttribs.size(); i++) {
+         if (usedAttribs.get(i).getAttribName().equals(
+               newAttrib.getColumnName())) {
             Debug("newAttrib " + newAttrib.getColumnName() + "already in use");
             return true;
          }
       }
       return false;
+      /*
+       * for (int i = 0; i < usedAttribs.length; i++) { if
+       * ((usedAttribs[i].getAttribName()).equalsIgnoreCase(newAttrib
+       * .getColumnName())) { Debug("newAttrib " +
+       * newAttrib.getColumnName() + "already in use"); return true; } }
+       * return false;
+       */
    }
 
    /**
@@ -309,7 +435,7 @@ public class Id3SimpleClassifier extends
          for (int j = 0; j < numOfClassLabels; j++) {
             if (classCounts[j] > 0) {
                /*
-                * temp = classCounts[j] * Utils.log2(classCounts[j]);
+                * temp = classCounts[j] Utils.log2(classCounts[j]);
                 * 
                 * Debug("Class Count " + j + " = " + classCounts[j]);
                 * Debug("temp=" + temp);
@@ -329,7 +455,9 @@ public class Id3SimpleClassifier extends
    /*
     * (non-Javadoc)
     * 
-    * @see airldm2.classifiers.Classifier#classifyInstance(airldm2.core.LDInstance)
+    * @see
+    * airldm2.classifiers.Classifier#classifyInstance(airldm2.core.LDInstance
+    * )
     */
    // @Override
    public double classifyInstance(LDInstance instance) throws Exception {
@@ -350,7 +478,9 @@ public class Id3SimpleClassifier extends
    /*
     * (non-Javadoc)
     * 
-    * @see airldm2.classifiers.Classifier#distributionForInstance(airldm2.core.LDInstance)
+    * @see
+    * airldm2.classifiers.Classifier#distributionForInstance(airldm2.core
+    * .LDInstance)
     */
    // @Override
    public double[] distributionForInstance(LDInstance instance)
@@ -381,7 +511,7 @@ public class Id3SimpleClassifier extends
       if ((m_Distribution == null) && (m_Successors == null)) {
          return "Id3: No model built yet.";
       }
-      return "Id3\n\n" + toString(0);
+      return " Resultant Decison Tree \n\n" + toString(0);
    }
 
    private String toString(int level) {
@@ -409,20 +539,22 @@ public class Id3SimpleClassifier extends
       return text.toString();
    }
 
-  
-
    private void Debug(String debug) {
       if (DEBUG) {
          System.out.println(debug);
       }
    }
-   
-   public static void main(String[] args) {
-      
-       Id3SimpleClassifier classifier = new Id3SimpleClassifier();
-       runClassifier( classifier,  args) ;
-    
 
-}
+   public static String getMostLikelyValue(ColumnDescriptor desc) {
+      return mostLikelyValues.get(desc);
+
+   }
+
+   public static void main(String[] args) {
+
+      Id3SimpleClassifier classifier = new Id3SimpleClassifier();
+      runClassifier(classifier, args);
+
+   }
 
 }
