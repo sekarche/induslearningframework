@@ -19,6 +19,8 @@ public class SuffStatQueryConstructor {
 
    final static String MORE_ATTRIBS_TEMPLATE = " AND %attribName%=\"%attribValue%\"";
 
+   final static String MORE_ATTRIBS_MISSING_TEMPLATE = " AND %attribName% IN (\"%attribValue%\",\"%missingValue%\")";
+
    final static String NUMBER_INSTANCES_TEMPLATE = "SELECT COUNT(*) FROM  %tableName%"
          + Constants.SEMI_COLON;
 
@@ -56,13 +58,21 @@ public class SuffStatQueryConstructor {
       String moreAttribs = "";
 
       for (int i = 1; i < values.length; i++) {
-         moreAttribs += MORE_ATTRIBS_TEMPLATE; // set template
+         if (values[i].IsIncludeMissingValue()) {
+            moreAttribs += MORE_ATTRIBS_MISSING_TEMPLATE; // set template
+         } else {
+            moreAttribs += MORE_ATTRIBS_TEMPLATE; // set template
+         }
 
          moreAttribs = moreAttribs.replace("%attribName%",
                Constants.SQL_QUOTE_CHAR + values[i].getAttribName()
                      + Constants.SQL_QUOTE_CHAR);
          moreAttribs = moreAttribs.replace("%attribValue%", values[i]
                .getAttribValue());
+         if (values[i].IsIncludeMissingValue()) {
+            moreAttribs = moreAttribs.replace("%missingValue%", values[i]
+                  .getMissingValueRepresentation());
+         }
       }
 
       query = query.replace("%MORE_ATTRIBS%", moreAttribs);
