@@ -9,6 +9,9 @@
  * 2: Neeraj Koul (January 2009) : Added Support For Handling Missing
  * Values
  * 
+ * 3: Neeraj Koul (Feburary 2009): Bug Fix so that option for missing value
+ * is read correctly
+ * 
  */
 
 package airldm2.classifiers.trees;
@@ -90,8 +93,15 @@ public class Id3SimpleClassifier extends Classifier {
       AttribValuePair classAttribValue = new AttribValuePair();
       classAttribValue.setAttribName(classAttribute.getColumnName());
       classifyingAttrib.add(classAttribValue);
+
+      // option too handle missing values. Read and store it . If read as
+      // Utils.getFlag() in
+      // recursion makeTree() it reads incorrect values after second
+      // invocation
+      boolean replaceMissingWithModeValue = Utils.getFlag("?", getOptions());
+
       boolean firstTime = true;
-      makeTree(classifyingAttrib, firstTime);
+      makeTree(classifyingAttrib, firstTime, replaceMissingWithModeValue);
       Debug(Id3SimpleClassifier.countQueries + " Queries requested");
       System.out.println(Id3SimpleClassifier.countQueries
             + " Queries requested");
@@ -103,17 +113,25 @@ public class Id3SimpleClassifier extends Classifier {
     * the current node in the tree. (Even for an empty or null tree) The
     * first attribute of usedAttribValueSet should be the classifying
     * attribute with no values associated with it.
+    * @param isFirsTime records if this is the first invocation of this
+    * recusrion call
+    * @param replaceMissingWithModeValue records the option to handle
+    * missing values. Passed down the recursion tree as Utils.getOption()
+    * does not retain values down recursionTree
     * @throws Exception
     */
    private void makeTree(Vector<AttribValuePair> usedAttribValueSet,
-         boolean isFirstTime) throws Exception {
+         boolean isFirstTime, boolean replaceMissingWithModeValue)
+         throws Exception {
       if (usedAttribValueSet == null) {
          System.err
                .println("Cannot make the decision tree: class label not set");
          System.exit(0);
       }
 
-      printusedAttributeValueSet(usedAttribValueSet);
+      if (this.DEBUG) {
+         printusedAttributeValueSet(usedAttribValueSet);
+      }
 
       boolean zeroInstances = false;
       int numberOfInstances = 0;
@@ -200,7 +218,7 @@ public class Id3SimpleClassifier extends Classifier {
          /**
           * Add a place holder for the current Attribute. The possible
           * value for each path will be set later by iterating through all
-          * possibe values for the attribute
+          * possible values for the attribute
           */
          AttribValuePair placeHolder = new AttribValuePair();
          newAttribValueSet.add(placeHolder);
@@ -208,32 +226,28 @@ public class Id3SimpleClassifier extends Classifier {
          m_Successors = new Id3SimpleClassifier[m_Attribute.getNumValues()];
          possibleValues = m_Attribute.getPossibleValues();
 
-         // option to handle missing values
-         boolean replaceMissingWithModeValue = Utils.getFlag("?", getOptions());
-         // NEERAJ--> Testing, remove
-         // replaceMissingWithModeValue = true;
-         // NEERAJ--> Testing, remove
-
          for (int j = 0; j < m_Attribute.getNumValues(); j++) {
             AttribValuePair m_AttributeValuePair = new AttribValuePair();
             m_AttributeValuePair.setAttribName(m_Attribute.getColumnName());
             m_AttributeValuePair.setAttribValue(possibleValues.get(j));
             if (replaceMissingWithModeValue) {
                String mostLikelyValue = getMostLikelyValue(m_Attribute);
+
                if (possibleValues.get(j).equals(mostLikelyValue)) {
                   m_AttributeValuePair.setIncludeMissingValue(m_Attribute
                         .getMissingValue());
                }
-               /* replace Place Holder with correct set */
-               newAttribValueSet.set(passedSize, m_AttributeValuePair);
             }
 
+            /* replace Place Holder with correct set */
+            newAttribValueSet.set(passedSize, m_AttributeValuePair);
             m_Successors[j] = new Id3SimpleClassifier();
             /**
              * record the next call to makeTree is NOT the firstInvocation
              */
             isFirstTime = false;
-            m_Successors[j].makeTree(newAttribValueSet, isFirstTime);
+            m_Successors[j].makeTree(newAttribValueSet, isFirstTime,
+                  replaceMissingWithModeValue);
          }
       }
    }

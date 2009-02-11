@@ -16,7 +16,6 @@ import weka.classifiers.evaluation.ConfusionMatrix;
 import weka.core.Utils;
 import airldm2.classifiers.Evaluation;
 import airldm2.classifiers.bayes.NaiveBayesClassifier;
-import airldm2.classifiers.trees.Id3SimpleClassifier;
 import airldm2.core.LDInstances;
 import airldm2.core.LDTestInstances;
 import airldm2.core.SSDataSource;
@@ -31,7 +30,7 @@ import airldm2.util.SimpleArffFileReader;
  * @since Aug 12, 2008
  * @version $Date: $
  */
-public class ClassifierTest {
+public class NaiveBayesClassifierTests {
    /**
     * @throws java.lang.Exception
     */
@@ -173,95 +172,6 @@ public class ClassifierTest {
 
       } catch (Exception e) {
          Assert.fail("Exception reading file" + testFile);
-         e.printStackTrace();
-      }
-
-   }
-
-   @Test
-   public void testDescionTreeWithTrainInArff() {
-      String[] options = { "-a", "-?", "-trainFile",
-            "sample/weather_nominal.arff", "-testFile",
-            "sample/weather_nominalTest.arff" };
-
-      try {
-
-         String trainFile = Utils.getOption("trainFile", options);
-         String testFile = Utils.getOption("testFile", options);
-         testDecisionTreeWithTrainInArff(trainFile, testFile, options);
-      } catch (Exception e) {
-         Assert.fail();
-         e.printStackTrace();
-      }
-
-      /*
-       * Alternate way to test above is
-       * 
-       * Id3SimpleClassifier classifier = new Id3SimpleClassifier();
-       * 
-       * String res = Evaluation.evaluateModel(classifier, options);
-       * 
-       * Use the above format to show code fragment to build LDInstances
-       */
-
-   }
-
-   @Test
-   public void testDescionTreeEvaluationOptions() {
-
-      /**
-       * Decision Tree test which uses options to figure that the training
-       * data is in database
-       */
-      try {
-
-         Id3SimpleClassifier classifier = new Id3SimpleClassifier();
-
-         // String[] options = { "-b", "-trainTable", "votes_train",
-         // "-testFile",
-         // "sample/HouseVotesTrain.arff" };
-
-         String[] options = { "-b", "-?", "-trainTable", "weather",
-               "-testFile", "sample/weather_nominalTest.arff " };
-
-         String res = Evaluation.evaluateModel(classifier, options);
-         // Print Confusion Matrix
-         System.out.println(res);
-         // Print Decision Tree
-         System.out.println(" \n " + classifier.toString());
-
-      } catch (Exception e) {
-         e.printStackTrace();
-         Assert.fail();
-
-      }
-
-   }
-
-   private void testDecisionTreeWithTrainInArff(String trainFile,
-         String testFile, String[] options) {
-      /**
-       * Decision Tree when the training file is in Arff.
-       * 
-       */
-
-      Id3SimpleClassifier classifier = new Id3SimpleClassifier();
-
-      try {
-         SimpleArffFileReader readTrain = new SimpleArffFileReader(trainFile);
-         SimpleArffFileReader readTest = new SimpleArffFileReader(testFile);
-         LDInstances trainData = readTrain.getLDInstances(true);
-         LDTestInstances testData = readTest.getTestInstances();
-         ConfusionMatrix matrix = Evaluation.evlauateModel2(classifier,
-               trainData, testData, options);
-         System.out.println(matrix.toString("===Confusion Matrix==="));
-
-         System.out.println(" \n " + classifier.toString());
-
-      } catch (Exception e) {
-
-         Assert.fail("Error reading instances or buildDing classifier:"
-               + e.getMessage());
          e.printStackTrace();
       }
 
