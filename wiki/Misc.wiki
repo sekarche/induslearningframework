@@ -2,7 +2,9 @@
 
 = introduction =
 
+[test]
 
+[Something]
 Add your content here.
 [http://www.google.com Google home page]
 
@@ -12,8 +14,17 @@ Add your content here.  Format your content with:
   * Text in *bold* or _italic_
   * Headings, paragraphs, and lists
   * Automatic links to other wiki pages
-[#introduction]
-[[#introduction]]
+[introduction]
+
+[[introduction]]
+
+==Something==
+*1
+*2
+*3
+=test=
+
+
 [http://code.google.com/p/induslearningframework/w/Misc#introduction]]
-[www.cnn.com]
+[http://www.cnn.com]
 [Misc]
