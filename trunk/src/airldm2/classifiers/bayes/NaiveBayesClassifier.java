@@ -12,7 +12,7 @@ import airldm2.core.datatypes.relational.ColumnDescriptor;
 import airldm2.core.datatypes.relational.SingleRelationDataDescriptor;
 import airldm2.util.AttribValuePair;
 
-public class NaiveBayesClassifier extends  Classifier {
+public class NaiveBayesClassifier extends Classifier {
 
    boolean DEBUG = true;
 
@@ -101,12 +101,19 @@ public class NaiveBayesClassifier extends  Classifier {
                ISufficentStatistic tempSuffStat = dataSource
                      .getSufficientStatistic(classAndAttribute);
                counts[i][j][k] = tempSuffStat.getValue().intValue();
+
+               /*
+                * STUPID LAPLACE CORRECTION - it will change number of
+                * instances, adjust counts accordingly if (counts[i][j][k]
+                * == 0) { counts[i][j][k] = 1; }
+                */
+
                /*
                 * query = "SELECT count(*) FROM " +
                 * dataDesc.getRelationName() + " WHERE `" +
                 * attribNames[classIndex] + "`='" +
-                * attribValues[classIndex][j] + "' AND `" + attribNames[i] +
-                * "`='" + attribValues[i][k] + "'"; counts[i][j][k] =
+                * attribValues[classIndex][j] + "' AND `" + attribNames[i]
+                * + "`='" + attribValues[i][k] + "'"; counts[i][j][k] =
                 * dataSource.getSufficientStatistic(query)
                 * .getValue().intValue() + 1;
                 */
@@ -302,11 +309,10 @@ public class NaiveBayesClassifier extends  Classifier {
       }
 
    }
-   
+
    public static void main(String[] args) {
       NaiveBayesClassifier classifier = new NaiveBayesClassifier();
-      runClassifier( classifier,  args) ;
+      runClassifier(classifier, args);
    }
-   
 
 }

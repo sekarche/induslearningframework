@@ -14,6 +14,7 @@ import org.junit.Test;
 
 import airldm2.classifiers.Evaluation;
 import airldm2.classifiers.bayes.NaiveBayesClassifier;
+import airldm2.classifiers.trees.Id3SimpleClassifier;
 
 /**
  * TODO Write class description here.
@@ -32,10 +33,10 @@ public class IndusDataSourceTest {
    }
 
    @Test
-   public void testNBWithOptionsDB() {
+   public void testNBWithOptionsDB2() {
 
-      String[] options = { "-b", "-indus", "-trainTable", "MOVIETABLE",
-            "-testFile", "indus_example/MovieTest.arff" };
+      String[] options = { "-b", "-indus", "-trainTable", "details",
+            "-testFile", "indus_example-2/MovieTest.arff" };
       NaiveBayesClassifier classifier = new NaiveBayesClassifier();
       try {
          String out = Evaluation.evaluateModel(classifier, options);
@@ -49,4 +50,20 @@ public class IndusDataSourceTest {
 
    }
 
+   @Test
+   public void testDecisionTreeWithDatainDB() {
+      /* Ensure votes_train is in DB */
+      String[] options = { "-b", "-indus", "-trainTable", "details",
+            "-testFile", "indus_example-2/MovieTest.arff" };
+
+      Id3SimpleClassifier classifier = new Id3SimpleClassifier();
+
+      try {
+         String res = Evaluation.evaluateModel(classifier, options);
+         System.out.println(res);
+      } catch (Exception e) {
+         System.out.println("Error(1001):" + e.getMessage());
+         e.printStackTrace();
+      }
+   }
 }

@@ -38,6 +38,6 @@
 	<classpathentry kind="lib" path="lib/iif/ilf_libs/log4j-1.2.15.jar"/>
 	<classpathentry kind="lib" path="lib/iif/ilf_libs/postgresql-8.1-410.jdbc3.jar"/>
 	<classpathentry kind="lib" path="lib/iif/ilf_libs/Zql.jar"/>
-	<classpathentry kind="lib" path="lib/iif/UseSemanticQuery_3.0.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/IndusIntegrationFramework"/>
 	<classpathentry kind="output" path="classes"/>
 </classpath>
