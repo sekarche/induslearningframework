@@ -134,7 +134,10 @@ public class DBCPConnectionManager extends ConnectionManager {
 
          final String driverClassName = defaultProps
                .getProperty("DataSource.driverClassName");
-         final String url = defaultProps.getProperty("DataSource.url");
+         String url = defaultProps.getProperty("DataSource.url");
+
+         // trim the url in case of empty spaces at end
+         url = (url != null) ? url.trim() : url;
          final String username = defaultProps
                .getProperty("DataSource.username");
          String password = defaultProps.getProperty("DataSource.password");

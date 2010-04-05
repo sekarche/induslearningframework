@@ -154,7 +154,8 @@ public class IndusDataSource implements SSDataSource {
 
    }
 
-   private ISufficentStatistic executeIndusSuffStatQuery(String countQuery) {
+   private ISufficentStatistic executeIndusSuffStatQuery(String countQuery)
+         throws Exception {
       QueryResult result = engine.execute(countQuery);
       int count = result.getCount().intValue();
       double tempDouble = new Double(count).doubleValue();

@@ -3,6 +3,7 @@
 	<name>airldm2</name>
 	<comment></comment>
 	<projects>
+		<project>IndusIntegrationFramework</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

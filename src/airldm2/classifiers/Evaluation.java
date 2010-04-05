@@ -142,6 +142,13 @@ public class Evaluation {
          distribution = classifier.distributionForInstance(testData
                .getLDInstance(i));
          double actual = testData.getLDInstance(i).getClassValueLocation();
+
+         // return some error message if the class label is not according
+         // to the descriptor
+         if (actual == -1) {
+            System.out
+                  .println("Please check the class label of  test instances match their description");
+         }
          wekaConfusionMatrix.addPrediction(new NominalPrediction(actual,
                distribution));
       }
