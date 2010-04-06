@@ -26,7 +26,11 @@ public class Evaluation {
       boolean trainFileInArff = Utils.getFlag("a", options);
       boolean trainFileInDB = Utils.getFlag("b", options);
       if (trainFileInArff && trainFileInDB) {
-         throw new Exception(" Option -a  and -b  are incompatible");
+         throw new Exception(" Flag -a  and -b  are incompatible");
+      }
+
+      if (!(trainFileInArff || trainFileInDB)) {
+         throw new Exception("Either Flag -a or -b must be specified ");
       }
 
       String testFile = Utils.getOption("testFile", options);
@@ -36,16 +40,15 @@ public class Evaluation {
             .getDesc();
       if (trainFileInDB) {
          String dataSourceType = "relational";
-
          // set dataSourceType to Indus if option is used
          boolean dataSourceTypeOption = Utils.getFlag("indus", options);
          if (dataSourceTypeOption) {
             dataSourceType = "indus";
 
-            // TODO : Check indus.conf exists before proceeding further
          }
 
          String trainTableName = Utils.getOption("trainTable", options);
+
          // SSDataSource dataSource = new
          // RelationalDataSource(trainTableName);
          SSDataSource dataSource;
@@ -54,6 +57,21 @@ public class Evaluation {
 
          } else if (dataSourceType.equals("indus")) {
             dataSource = SSDataSourceFactory.getSSDataSourceImpl("indus");
+
+            /*
+             * get access to the directory containing the indus
+             * configuration files (including indus.conf)
+             */
+            String indusBase = Utils.getOption("indus_base", options);
+
+            if (indusBase == null || indusBase.equals("")) {
+               throw new Exception(
+                     " Check options. The indus Flag should be followed by a directory to initialize Indus Integration Framework ");
+
+            }
+
+            /* Initialize the Indus Data Source */
+            dataSource.init(indusBase);
          } else
             throw new Exception(
                   " Only Relational and indus Data Sources are supported");

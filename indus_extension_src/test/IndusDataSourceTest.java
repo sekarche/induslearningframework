@@ -35,8 +35,9 @@ public class IndusDataSourceTest {
    @Test
    public void testNBWithOptionsDB2() {
 
-      String[] options = { "-b", "-indus", "-trainTable", "details",
-            "-testFile", "indus_example-2/MovieTest.arff" };
+      String[] options = { "-b", "-indus", "-indus_base", "indus_example-2",
+            "-trainTable", "details", "-testFile",
+            "indus_example-2/MovieTest.arff" };
       NaiveBayesClassifier classifier = new NaiveBayesClassifier();
       try {
          String out = Evaluation.evaluateModel(classifier, options);
@@ -53,8 +54,9 @@ public class IndusDataSourceTest {
    @Test
    public void testDecisionTreeWithDatainDB() {
       /* Ensure votes_train is in DB */
-      String[] options = { "-b", "-indus", "-trainTable", "details",
-            "-testFile", "indus_example-2/MovieTest.arff" };
+      String[] options = { "-b", "-indus", "-indus_base", "indus_example-2",
+            "-trainTable", "details", "-testFile",
+            "indus_example-2/MovieTest.arff" };
 
       Id3SimpleClassifier classifier = new Id3SimpleClassifier();
 

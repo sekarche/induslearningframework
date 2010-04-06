@@ -28,6 +28,13 @@ public class RelationalDataSource implements SSDataSource {
    int numberOfInstances = -1;
 
    /**
+    * Empty method as NO specific configuration required . Here to satisfy
+    * interface implementation
+    */
+   public void init(String configFile) {
+   }
+
+   /**
     * A constructor Sets up the connection to the database using
     * ConnectionManger
     * 

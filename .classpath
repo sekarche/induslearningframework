@@ -14,9 +14,6 @@
 	<classpathentry kind="lib" path="lib/apache/commons-digester-1.8.jar"/>
 	<classpathentry kind="lib" path="lib/apache/commons-logging-1.1.jar"/>
 	<classpathentry kind="lib" path="lib/apache/xercesImpl.jar"/>
-	<classpathentry kind="lib" path="lib/iif/ilf_libs/owlapi/commons-lang-2.2.jar"/>
-	<classpathentry kind="lib" path="lib/iif/ilf_libs/commons-lang-2.2.jar"/>
-	<classpathentry kind="lib" path="lib/iif/ilf_libs/Zql.jar"/>
-	<classpathentry kind="lib" path="lib/iif/ilf_libs/IndusIntegrationFramework_fat.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/IndusIntegrationFramework"/>
 	<classpathentry kind="output" path="classes"/>
 </classpath>

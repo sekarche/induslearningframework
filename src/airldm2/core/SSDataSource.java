@@ -1,5 +1,6 @@
 package airldm2.core;
 
+import airldm2.exceptions.RTConfigException;
 import airldm2.util.AttribValuePair;
 
 /**
@@ -9,6 +10,15 @@ import airldm2.util.AttribValuePair;
  * Interface for a Sufficent Statistic DataSource
  */
 public interface SSDataSource {
+
+   /**
+    * Utility method to pass a config Parameter which may be used while
+    * setting the SSDataSource
+    * 
+    * @param config
+    * @throws RTConfigException
+    */
+   public void init(String config) throws RTConfigException;
 
    /**
     * The new function that returns information from the data. The

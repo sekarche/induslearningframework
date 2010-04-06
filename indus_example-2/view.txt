@@ -1,0 +1,4 @@
+UserViewName=movies
+DTreeFile=tree.xml
+SchemaMap=schemamap.txt
+OntMapProperties=ontmap.properties
