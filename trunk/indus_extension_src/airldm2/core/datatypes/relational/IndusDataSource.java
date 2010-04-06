@@ -10,7 +10,6 @@ package airldm2.core.datatypes.relational;
 import org.iastate.ailab.qengine.core.QueryEngine;
 import org.iastate.ailab.qengine.core.QueryResult;
 
-import airldm2.core.ConfigReader;
 import airldm2.core.DefaultSufficentStatisticImpl;
 import airldm2.core.ISufficentStatistic;
 import airldm2.core.SSDataSource;
@@ -34,6 +33,18 @@ public class IndusDataSource implements SSDataSource {
 
    String relationName = null;
 
+   public void init(String baseDirectory) throws RTConfigException {
+      try {
+         engine = new QueryEngine(baseDirectory);
+      } catch (Exception e) {
+
+         throw new RTConfigException(
+               "Error initializing Query Engine for Indus. Property indus.base is:"
+                     + baseDirectory, e);
+      }
+
+   }
+
    /**
     * Constructor. indus.conf is assumed to be in directory pointed by
     * System.getProperty("user.dir");
@@ -43,20 +54,15 @@ public class IndusDataSource implements SSDataSource {
     */
 
    public IndusDataSource() throws RTConfigException {
-
-      String base = ConfigReader._this().getProperty("indus_base");
-      // String base =
-      // "C:\\Users\\neeraj\\workspace\\airldm2\\indus_example";
-      // String base = System.getProperty("user.dir");
-      try {
-         engine = new QueryEngine(base);
-      } catch (Exception e) {
-
-         throw new RTConfigException(
-               "Error initializing Query Engine for Indus. Property indus.base is:"
-                     + base, e);
-      }
-
+      /*
+       * String base = ConfigReader._this().getProperty("indus_base");
+       * 
+       * try { engine = new QueryEngine(base); } catch (Exception e) {
+       * 
+       * throw new RTConfigException(
+       * "Error initializing Query Engine for Indus. Property indus.base is:"
+       * + base, e); }
+       */
    }
 
    public IndusDataSource(String base) throws RTConfigException {

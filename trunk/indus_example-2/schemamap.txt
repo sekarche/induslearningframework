@@ -1,0 +1,24 @@
+#---------------------------------------------------------------------------------------------
+# Keys are stored from DataSorceView to UserView in the format,   name=value
+# If an conversion function is required for transforming values of the attribute between the two views, the format is
+#  
+#   name=value,exp1,exp2 where exp1 and exp2 are expressions with variable x
+#   exp1 is used to convert a value from the user view to datasource view and exp2 from datasource view to user view
+#
+#   For format of expression supported http://lts.online.fr/dev/java/math.evaluator/
+#   Expression is ignored if the column has an AVH associated with it
+#-------------------------------------------------------------------------------------------
+#netflix database mappings
+
+netflix.table1.movie=movies.details.title
+netflix.table1.area=movies.details.genre
+netflix.table1.stars=movies.details.reviews
+netflix.table1.buy=movies.details.Class
+
+#blockbuster database mappings
+
+blockbuster.table2.name=movies.details.title
+blockbuster.table2.category=movies.details.genre
+blockbuster.table2.rating=movies.details.reviews
+blockbuster.table2.watch=movies.details.Class
+

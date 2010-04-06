@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?> 
+ <descriptors>
+ <descriptor>
+<datasource name="netflix">
+<table name="table1">
+  <column name="movie" type="varchar" />
+  <column name="area"  type="varchar" >
+      <operation type="AVH" base= "http://localhost/movieExample/Netflix.owl" ontology= "http://localhost/movieExample/Netflix.owl" ontLoc="Netflix.owl" /> 
+  </column> 
+  <column name="stars" type="varchar"/>
+  <column name="buy" type="varchar"/>
+  </table>
+  </datasource>
+  </descriptor>
+  </descriptors>

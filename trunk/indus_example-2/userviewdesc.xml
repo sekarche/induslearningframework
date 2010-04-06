@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?> 
+ <descriptors>
+ <descriptor>
+<datasource name="movies">
+<table name="details">
+  <column name="title" type="varchar" />
+  <column name="genre"  type="varchar" >
+    <operation type="AVH" base= "http://localhost/movieExample/userMovies.owl" ontology = "http://localhost/movieExample/userMovies.owl" ontLoc="userMovies.owl" /> 
+  </column> 
+  <column name="reviews" type="varchar"/>
+   <column name="Class" type="varchar"/>
+  </table>
+  </datasource>
+  </descriptor>
+  
+  </descriptors>
