@@ -3,7 +3,8 @@ package airldm2.constants;
 public final class Constants {
 
    /** The Constant CONFIG_HOME. */
-   private static final String CONFIG_HOME = "config/";
+   // private static final String CONFIG_HOME = "config/";
+   private static final String CONFIG_HOME = "";
 
    /** The Constant DATABASE_PROPERTIES_RESOURCE_PATH. */
    public static final String DATABASE_PROPERTIES_RESOURCE_PATH = CONFIG_HOME
