@@ -33,6 +33,11 @@ public class IndusDataSource implements SSDataSource {
 
    String relationName = null;
 
+   /**
+    * initializes the QueryEngine of the Integration Framework. The
+    * baseDirectory points to the directory that contains indus.conf and
+    * other relevant configurations files
+    */
    public void init(String baseDirectory) throws RTConfigException {
       try {
          engine = new QueryEngine(baseDirectory);
@@ -46,23 +51,11 @@ public class IndusDataSource implements SSDataSource {
    }
 
    /**
-    * Constructor. indus.conf is assumed to be in directory pointed by
-    * System.getProperty("user.dir");
-    * 
-    * @throws RTConfigException
+    * Empty constructor
     * 
     */
 
-   public IndusDataSource() throws RTConfigException {
-      /*
-       * String base = ConfigReader._this().getProperty("indus_base");
-       * 
-       * try { engine = new QueryEngine(base); } catch (Exception e) {
-       * 
-       * throw new RTConfigException(
-       * "Error initializing Query Engine for Indus. Property indus.base is:"
-       * + base, e); }
-       */
+   public IndusDataSource() {
    }
 
    public IndusDataSource(String base) throws RTConfigException {
