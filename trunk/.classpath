@@ -8,11 +8,7 @@
 	<classpathentry kind="lib" path="lib/apache/commons-pool-20070730.jar"/>
 	<classpathentry kind="lib" path="lib/apache/commons-dbcp-1.2.2.jar"/>
 	<classpathentry kind="lib" path="lib/junit/junit-4.5.jar"/>
-	<classpathentry kind="lib" path="lib/apache/commons-beanutils-core.jar"/>
-	<classpathentry kind="lib" path="lib/apache/commons-beanutils.jar"/>
 	<classpathentry kind="lib" path="lib/apache/commons-collections-3.2.jar"/>
-	<classpathentry kind="lib" path="lib/apache/commons-digester-1.8.jar"/>
-	<classpathentry kind="lib" path="lib/apache/commons-logging-1.1.jar"/>
 	<classpathentry kind="lib" path="lib/apache/xercesImpl.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/IndusIntegrationFramework"/>
 	<classpathentry kind="output" path="classes"/>
