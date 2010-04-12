@@ -10,6 +10,6 @@
 	<classpathentry kind="lib" path="lib/junit/junit-4.5.jar"/>
 	<classpathentry kind="lib" path="lib/apache/commons-collections-3.2.jar"/>
 	<classpathentry kind="lib" path="lib/apache/xercesImpl.jar"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/IndusIntegrationFramework"/>
+	<classpathentry kind="lib" path="lib/iif/ilf_libs/IndusIntegrationFramework_fat.jar"/>
 	<classpathentry kind="output" path="classes"/>
 </classpath>

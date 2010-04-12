@@ -51,7 +51,7 @@ public class IndusDataSourceTest {
 
    }
 
-   @Test
+   // @Test
    public void testDecisionTreeWithDatainDB() {
       /* Ensure votes_train is in DB */
       String[] options = { "-b", "-indus", "-indus_base", "indus_example-2",
@@ -66,6 +66,7 @@ public class IndusDataSourceTest {
       } catch (Exception e) {
          System.out.println("Error(1001):" + e.getMessage());
          e.printStackTrace();
+         Assert.fail();
       }
    }
 }

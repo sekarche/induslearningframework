@@ -56,7 +56,7 @@ public class SuffStatQueryConstructor2 {
 
       if (!checkConfig(tableName, values)) {
          throw new RTConfigException(200,
-               "Error while composing query frim templates");
+               "Error while composing query from templates");
       }
 
       String query = MULTIPLE_ATTRIB_COUNT_TEMPLATE;
