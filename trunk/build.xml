@@ -106,6 +106,8 @@
         <zipfileset dir="." includes="build.xml"/> 
         <zipfileset dir="examples" prefix="examples"/>
      </zip>
+	<!--    Clean up -->
+	<antcall target="clean"/>
     </target>
 	
 	 <target name="clean"
