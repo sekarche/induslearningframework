@@ -10,6 +10,32 @@
 	<classpathentry kind="lib" path="lib/junit/junit-4.5.jar"/>
 	<classpathentry kind="lib" path="lib/apache/commons-collections-3.2.jar"/>
 	<classpathentry kind="lib" path="lib/apache/xercesImpl.jar"/>
-	<classpathentry kind="lib" path="lib/iif/ilf_libs/IndusIntegrationFramework_fat.jar"/>
+	<classpathentry kind="lib" path="lib/iif/lib/matheval/meval.jar"/>
+	<classpathentry kind="lib" path="lib/iif/lib/pellet_jars/aterm-java-1.6.jar"/>
+	<classpathentry kind="lib" path="lib/iif/lib/pellet_jars/owlapi-bin.jar"/>
+	<classpathentry kind="lib" path="lib/iif/lib/pellet_jars/owlapi-src.jar"/>
+	<classpathentry kind="lib" path="lib/iif/lib/pellet_jars/pellet-cli.jar"/>
+	<classpathentry kind="lib" path="lib/iif/lib/pellet_jars/pellet-core.jar"/>
+	<classpathentry kind="lib" path="lib/iif/lib/pellet_jars/pellet-datatypes.jar"/>
+	<classpathentry kind="lib" path="lib/iif/lib/pellet_jars/pellet-dig.jar"/>
+	<classpathentry kind="lib" path="lib/iif/lib/pellet_jars/pellet-el.jar"/>
+	<classpathentry kind="lib" path="lib/iif/lib/pellet_jars/pellet-explanation.jar"/>
+	<classpathentry kind="lib" path="lib/iif/lib/pellet_jars/pellet-jena.jar"/>
+	<classpathentry kind="lib" path="lib/iif/lib/pellet_jars/pellet-modularity.jar"/>
+	<classpathentry kind="lib" path="lib/iif/lib/pellet_jars/pellet-owlapi.jar"/>
+	<classpathentry kind="lib" path="lib/iif/lib/pellet_jars/pellet-pellint.jar"/>
+	<classpathentry kind="lib" path="lib/iif/lib/pellet_jars/pellet-query.jar"/>
+	<classpathentry kind="lib" path="lib/iif/lib/pellet_jars/pellet-rules.jar"/>
+	<classpathentry kind="lib" path="lib/iif/lib/pellet_jars/pellet-test.jar"/>
+	<classpathentry kind="lib" path="lib/iif/lib/pellet_jars/relaxngDatatype.jar"/>
+	<classpathentry kind="lib" path="lib/iif/lib/pellet_jars/servlet.jar"/>
+	<classpathentry kind="lib" path="lib/iif/lib/pellet_jars/xsdlib.jar"/>
+	<classpathentry kind="lib" path="lib/iif/lib/commons-lang-2.2.jar"/>
+	<classpathentry kind="lib" path="lib/iif/lib/junit-4.4.jar"/>
+	<classpathentry kind="lib" path="lib/iif/lib/log4j-1.2.15.jar"/>
+	<classpathentry kind="lib" path="lib/iif/lib/mysql-connector-java-5.0.7-bin.jar"/>
+	<classpathentry kind="lib" path="lib/iif/lib/postgresql-8.1-410.jdbc3.jar"/>
+	<classpathentry kind="lib" path="lib/iif/lib/Zql.jar"/>
+	<classpathentry kind="lib" path="lib/iif/iif_0.1.1.jar"/>
 	<classpathentry kind="output" path="classes"/>
 </classpath>

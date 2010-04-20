@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="induslearningframework" default="zip" basedir=".">
+  <description>INtelligent Data Understanding System- Learning Framework</description>
+  <!-- 
+    Properties
+    -->
+ <property name="src" location="src"/>
+ <property name="extension_src" location="indus_extension_src"/>
+	
+  <property name="class" location="class"/>
+  <property name="lib" location="lib"/>
+  <property name="dist" location="dist"/>
+ <property name="examples" location="examples"/>
+  <property name="java_version" value="1.6"/>
+
+  <path id="project.classpath">
+    <pathelement path="${class}"/>
+    <fileset dir="lib" includes="*.jar"/>
+    <fileset dir="lib" includes="apache/*.jar"/>
+  	<fileset dir="lib" includes="weka-3.5.6/*.jar"/>
+  	<fileset dir="lib" includes="mysql/*.jar"/>
+  	<fileset dir="lib" includes="junit/*.jar"/>
+  	<!--   Should contain the Indus Integration Framework jar -->
+  	<fileset dir="lib" includes="iif/**/*.jar"/>
+  	
+  </path>
+<!--
+  <path id="project.base.source.files">
+    <fileset dir="${src}"/>
+  </path>
+-->
+  <!--
+    Initialization 
+    -->
+  <target name="init">
+    <!-- Create a time stamp -->
+    <tstamp/>
+    <!-- Create an output directory for files -->
+    <mkdir dir="${class}"/>
+    <mkdir dir="${dist}"/>
+    <mkdir dir="${examples}"/>
+  </target>
+  
+  <!--
+    Target: compile
+    -->
+  <target
+    name="compile"
+    depends="init"
+    description="Compile all the source files">
+    <javac
+      source="${java_version}"
+      destdir="${class}"
+      classpathref="project.classpath"
+      debug="true"
+      deprecation="off"
+      listfiles="no"
+      >
+      <src path="${src}"/>
+      <src path="${extension_src}"/> 
+    </javac>
+  </target>
+ 
+ 
+  <!-- Create a jar file -->
+	<!-- Notice the jar file is jaring the classes from ${class}. This my be different
+	 from where eclipse put its class files (check project properties) -->
+  <target name="jar" depends="compile">
+      <jar destfile="${dist}/ilf_0.1.1.jar" basedir="${class}">
+        <manifest>
+                  <!-- Information about the program itself -->
+                  <attribute name="Implementation-Title" value="Indus Learning Framework"/>
+                  <attribute name="Implementation-Version" value="0.1.1"/>
+        </manifest>
+      </jar>
+  </target>
+    
+
+<!-- Copy all examples to the main example folder -->   
+  
+<target name="copy" depends="jar">
+    <copy todir="examples">
+        <fileset dir=".">  
+            <include name="sample/*"/>
+            <include name="indus_example/*"/>
+            <include name="indus_example-2/*"/>
+        </fileset>
+ </copy>
+	<copy todir="${dist}">
+	        <fileset dir=".">  
+	            <include name="database.properties"/>
+	        </fileset>
+	 </copy>
+	
+</target>   
+    
+    
+<!-- Create a zip file -->
+<target name="zip" depends="copy">
+    <zip destfile="induslearningframework_0.1.1.zip">
+        <zipfileset dir="dist" prefix=""/>
+        <zipfileset dir="lib" prefix="lib"/>
+        <zipfileset dir="class" prefix="class"/>
+        <zipfileset dir="src" prefix="src"/>
+    	<zipfileset dir="indus_extension_src" prefix="extension_src"/>
+        <zipfileset dir="." includes="build.xml"/> 
+        <zipfileset dir="examples" prefix="examples"/>
+     </zip>
+    </target>
+	
+	 <target name="clean"
+	        description="clean up" >
+	    <!-- Delete the ${class} and ${dist} directory trees -->
+	    <delete dir="${class}"/>
+	    <delete dir="${dist}"/>
+	 	<delete dir="${examples}"/>
+	  </target>
+
+</project>
