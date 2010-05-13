@@ -51,7 +51,7 @@ public class IndusDataSourceTest {
 
    }
 
-   // @Test
+   @Test
    public void testDecisionTreeWithDatainDB() {
       /* Ensure votes_train is in DB */
       String[] options = { "-b", "-indus", "-indus_base", "indus_example-2",

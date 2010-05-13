@@ -158,6 +158,17 @@ public class NaiveBayesClassifier extends Classifier {
             // Debug(nameValue.getAttribName() + "=" +
             // nameValue.getAttribValue() + " has Count " +
             // classCounts[index]);
+
+            if (classCounts[index] == 0) {
+               System.out
+                     .println(nameValue.getAttribName()
+                           + "="
+                           + nameValue.getAttribValue()
+                           + " has Count "
+                           + classCounts[index]
+                           + "  . Zero count may result in exception when computing distribution for instance. Check configurations");
+            }
+
          }
       }
 
