@@ -1,14 +1,14 @@
 @relation MOVIETABLE
-@attribute genre {oscar,award,popular,other}
+@attribute genre {Action,RomanticComedy,Spoof,Drama}
 @attribute reviews {good,bad}
-@attribute Class {y,n}
+@attribute Class {yes,no}
 
 @data
-oscar,good,y
-oscar,bad,y
-award,good,y
-award,bad,n
-popular,good,y
-popular,bad,n
-other,good,y
-other,bad,n
+Action,good,yes
+Action,bad,yes
+Drama,good,yes
+Drama,bad,no
+RomanticComedy,good,yes
+RomanticComedy,bad,no
+Spoof,good,yes
+Spoof,bad,no
