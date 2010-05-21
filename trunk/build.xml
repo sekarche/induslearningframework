@@ -107,7 +107,7 @@
     	<zipfileset dir="indus_extension_src" prefix="extension_src"/>
         <zipfileset dir="." includes="build.xml,ilf.bat"/> 
         <zipfileset dir="examples" prefix="examples"/>
-    	<zipfileset dir="docs" prefix="user-doc"/>
+    	<zipfileset dir="docs" prefix=""/>
     	<zipfileset dir="license" prefix=""/>
     	
     	
