@@ -1,0 +1,3205 @@
+<html>
+
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=windows-1252">
+<meta name=Generator content="Microsoft Word 12 (filtered)">
+<title>Indus Integration Framework</title>
+
+<style>
+<!--
+ /* Font Definitions */
+ @font-face
+	{font-family:Wingdings;
+	panose-1:5 0 0 0 0 0 0 0 0 0;}
+@font-face
+	{font-family:"Cambria Math";
+	panose-1:2 4 5 3 5 4 6 3 2 4;}
+@font-face
+	{font-family:Cambria;
+	panose-1:2 4 5 3 5 4 6 3 2 4;}
+@font-face
+	{font-family:Calibri;
+	panose-1:2 15 5 2 2 2 4 3 2 4;}
+@font-face
+	{font-family:Tahoma;
+	panose-1:2 11 6 4 3 5 4 4 2 4;}
+@font-face
+	{font-family:"\0027courier new\0027";}
+@font-face
+	{font-family:Verdana;
+	panose-1:2 11 6 4 3 5 4 4 2 4;}
+ /* Style Definitions */
+ p.MsoNormal, li.MsoNormal, div.MsoNormal
+	{margin:0in;
+	margin-bottom:.0001pt;
+	font-size:12.0pt;
+	font-family:"Times New Roman","serif";}
+h1
+	{mso-style-link:"Heading 1 Char";
+	margin-top:12.0pt;
+	margin-right:0in;
+	margin-bottom:3.0pt;
+	margin-left:0in;
+	page-break-after:avoid;
+	font-size:16.0pt;
+	font-family:"Arial","sans-serif";
+	font-weight:bold;}
+h2
+	{mso-style-link:"Heading 2 Char";
+	margin-right:0in;
+	margin-left:0in;
+	font-size:18.0pt;
+	font-family:"Times New Roman","serif";
+	font-weight:bold;}
+h3
+	{margin-top:12.0pt;
+	margin-right:0in;
+	margin-bottom:3.0pt;
+	margin-left:0in;
+	page-break-after:avoid;
+	font-size:13.0pt;
+	font-family:"Arial","sans-serif";
+	font-weight:bold;}
+p.MsoToc1, li.MsoToc1, div.MsoToc1
+	{margin:0in;
+	margin-bottom:.0001pt;
+	font-size:12.0pt;
+	font-family:"Times New Roman","serif";}
+p.MsoToc2, li.MsoToc2, div.MsoToc2
+	{margin-top:0in;
+	margin-right:0in;
+	margin-bottom:0in;
+	margin-left:12.0pt;
+	margin-bottom:.0001pt;
+	font-size:12.0pt;
+	font-family:"Times New Roman","serif";}
+p.MsoToc3, li.MsoToc3, div.MsoToc3
+	{margin-top:0in;
+	margin-right:0in;
+	margin-bottom:0in;
+	margin-left:24.0pt;
+	margin-bottom:.0001pt;
+	font-size:12.0pt;
+	font-family:"Times New Roman","serif";}
+p.MsoFootnoteText, li.MsoFootnoteText, div.MsoFootnoteText
+	{mso-style-link:"Footnote Text Char";
+	margin:0in;
+	margin-bottom:.0001pt;
+	font-size:10.0pt;
+	font-family:"Times New Roman","serif";}
+p.MsoHeader, li.MsoHeader, div.MsoHeader
+	{mso-style-link:"Header Char";
+	margin:0in;
+	margin-bottom:.0001pt;
+	font-size:12.0pt;
+	font-family:"Times New Roman","serif";}
+p.MsoFooter, li.MsoFooter, div.MsoFooter
+	{mso-style-link:"Footer Char";
+	margin:0in;
+	margin-bottom:.0001pt;
+	font-size:12.0pt;
+	font-family:"Times New Roman","serif";}
+span.MsoFootnoteReference
+	{vertical-align:super;}
+a:link, span.MsoHyperlink
+	{color:blue;
+	text-decoration:underline;}
+a:visited, span.MsoHyperlinkFollowed
+	{color:purple;
+	text-decoration:underline;}
+p
+	{margin-right:0in;
+	margin-left:0in;
+	font-size:12.0pt;
+	font-family:"Times New Roman","serif";}
+pre
+	{mso-style-link:"HTML Preformatted Char";
+	margin:0in;
+	margin-bottom:.0001pt;
+	font-size:10.0pt;
+	font-family:"Courier New";}
+p.MsoAcetate, li.MsoAcetate, div.MsoAcetate
+	{mso-style-link:"Balloon Text Char";
+	margin:0in;
+	margin-bottom:.0001pt;
+	font-size:8.0pt;
+	font-family:"Tahoma","sans-serif";}
+p.MsoNoSpacing, li.MsoNoSpacing, div.MsoNoSpacing
+	{mso-style-link:"No Spacing Char";
+	margin:0in;
+	margin-bottom:.0001pt;
+	font-size:11.0pt;
+	font-family:"Calibri","sans-serif";}
+p.MsoListParagraph, li.MsoListParagraph, div.MsoListParagraph
+	{margin-top:0in;
+	margin-right:0in;
+	margin-bottom:0in;
+	margin-left:.5in;
+	margin-bottom:.0001pt;
+	font-size:12.0pt;
+	font-family:"Times New Roman","serif";}
+p.MsoTocHeading, li.MsoTocHeading, div.MsoTocHeading
+	{margin-top:24.0pt;
+	margin-right:0in;
+	margin-bottom:0in;
+	margin-left:0in;
+	margin-bottom:.0001pt;
+	line-height:115%;
+	page-break-after:avoid;
+	font-size:14.0pt;
+	font-family:"Cambria","serif";
+	color:#365F91;
+	font-weight:bold;}
+span.Heading1Char
+	{mso-style-name:"Heading 1 Char";
+	mso-style-link:"Heading 1";
+	font-family:"Arial","sans-serif";
+	font-weight:bold;}
+span.HeaderChar
+	{mso-style-name:"Header Char";
+	mso-style-link:Header;}
+span.FooterChar
+	{mso-style-name:"Footer Char";
+	mso-style-link:Footer;}
+span.BalloonTextChar
+	{mso-style-name:"Balloon Text Char";
+	mso-style-link:"Balloon Text";
+	font-family:"Tahoma","sans-serif";}
+span.NoSpacingChar
+	{mso-style-name:"No Spacing Char";
+	mso-style-link:"No Spacing";
+	font-family:"Calibri","sans-serif";}
+span.HTMLPreformattedChar
+	{mso-style-name:"HTML Preformatted Char";
+	mso-style-link:"HTML Preformatted";
+	font-family:"Courier New";}
+span.error
+	{mso-style-name:error;}
+span.kwd
+	{mso-style-name:kwd;}
+span.pln
+	{mso-style-name:pln;}
+span.pun
+	{mso-style-name:pun;}
+span.typ
+	{mso-style-name:typ;}
+span.str
+	{mso-style-name:str;}
+span.com
+	{mso-style-name:com;}
+span.Heading2Char
+	{mso-style-name:"Heading 2 Char";
+	mso-style-link:"Heading 2";
+	font-weight:bold;}
+p.Img, li.Img, div.Img
+	{mso-style-name:Img;
+	margin:0in;
+	margin-bottom:.0001pt;
+	background:white;
+	font-size:12.0pt;
+	font-family:"Verdana","sans-serif";
+	color:black;
+	background:white;}
+p.Div, li.Div, div.Div
+	{mso-style-name:Div;
+	margin:0in;
+	margin-bottom:.0001pt;
+	background:white;
+	font-size:12.0pt;
+	font-family:"Verdana","sans-serif";
+	color:black;
+	background:white;}
+span.FootnoteTextChar
+	{mso-style-name:"Footnote Text Char";
+	mso-style-link:"Footnote Text";}
+ /* Page Definitions */
+ @page Section1
+	{size:8.5in 11.0in;
+	margin:1.0in 1.0in 1.0in 1.0in;}
+div.Section1
+	{page:Section1;}
+ /* List Definitions */
+ ol
+	{margin-bottom:0in;}
+ul
+	{margin-bottom:0in;}
+-->
+</style>
+
+</head>
+
+<body lang=EN-US link=blue vlink=purple>
+
+<div class=Section1>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoTocHeading>&nbsp;</p>
+
+<div align=center>
+
+<table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0 width="100%"
+ style='width:100.0%;border-collapse:collapse'>
+ <tr style='height:2.0in'>
+  <td width="100%" valign=top style='width:100.0%;padding:0in 5.4pt 0in 5.4pt;
+  height:2.0in'>
+  <p class=MsoNoSpacing align=center style='text-align:center'><b><span
+  style='font-size:14.0pt;text-transform:uppercase'>Artificial Intelligence
+  Research Laboratory</span></b></p>
+  <p class=MsoNoSpacing align=center style='text-align:center'><b><span
+  style='font-size:14.0pt;text-transform:uppercase'>Center for Computational
+  Intelligence, Learning, and Discovery</span></b></p>
+  <p class=MsoNoSpacing align=center style='text-align:center'><b><span
+  style='font-size:14.0pt;text-transform:uppercase'>Department of Computer
+  Science</span></b></p>
+  <p class=MsoNoSpacing align=center style='text-align:center'><b><span style='font-size:14.0pt;text-transform:uppercase'>Iowa</span></b><b><span
+   style='font-size:14.0pt;text-transform:uppercase'> State University</span></b></p>
+  <p class=MsoNoSpacing align=center style='text-align:center'><span
+  style='text-transform:uppercase'>&nbsp;</span></p>
+  </td>
+ </tr>
+ <tr style='height:1.0in'>
+  <td width="100%" style='width:100.0%;border:none;border-bottom:solid #4F81BD 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt;height:1.0in'>
+  <p class=MsoNoSpacing align=center style='text-align:center'><span style='font-size:40.0pt'>INDUS</span><a href="#_ftn1" name="_ftnref1" title=""><span
+  class=MsoFootnoteReference><span style='font-size:40.0pt'><span
+  class=MsoFootnoteReference><span style='font-size:40.0pt;font-family:"Calibri","sans-serif"'>[1]</span></span></span></span></a><span
+  style='font-size:40.0pt'> <a href="#_ftn2" name="_ftnref2" title=""><span
+  class=MsoFootnoteReference><span class=MsoFootnoteReference><span
+  style='font-size:40.0pt;font-family:"Calibri","sans-serif"'>[2]</span></span></span></a>
+  <a href="#_ftn3" name="_ftnref3" title=""><span class=MsoFootnoteReference><span
+  class=MsoFootnoteReference><span style='font-size:40.0pt;font-family:"Calibri","sans-serif"'>[3]</span></span></span></a></span></p>
+  </td>
+ </tr>
+ <tr style='height:.5in'>
+  <td width="100%" style='width:100.0%;border:none;padding:0in 5.4pt 0in 5.4pt;
+  height:.5in'>
+  <p class=MsoNoSpacing align=center style='text-align:center'><span
+  style='font-size:22.0pt'>User Guide</span></p>
+  </td>
+ </tr>
+ <tr style='height:.25in'>
+  <td width="100%" style='width:100.0%;padding:0in 5.4pt 0in 5.4pt;height:.25in'>
+  <p class=MsoNoSpacing align=center style='text-align:center'>&nbsp;</p>
+  </td>
+ </tr>
+ <tr style='height:.25in'>
+  <td width="100%" style='width:100.0%;padding:0in 5.4pt 0in 5.4pt;height:.25in'>
+  <p class=MsoNoSpacing align=center style='text-align:center'><b>REVISION
+  HISTORY</b></p>
+  </td>
+ </tr>
+ <tr style='height:.25in'>
+  <td width="100%" style='width:100.0%;padding:0in 5.4pt 0in 5.4pt;height:.25in'>
+  <p class=MsoNoSpacing align=center style='text-align:center'><b>O4/04/2010  
+  Initial Version  (Neeraj Koul)</b></p>
+  </td>
+ </tr>
+ <tr style='height:.25in'>
+  <td width="100%" style='width:100.0%;padding:0in 5.4pt 0in 5.4pt;height:.25in'>
+  <p class=MsoNoSpacing align=center style='text-align:center'><b>05/21/2010 
+  Included Licensing Information (Neeraj Koul)</b></p>
+  </td>
+ </tr>
+</table>
+
+</div>
+
+<p class=MsoTocHeading>&nbsp;</p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoTocHeading>Table of Contents</p>
+
+<p class=MsoToc1><span class=MsoHyperlink><a href="#_Toc262199371">INDUS<span
+style='color:windowtext;display:none;text-decoration:none'>. </span><span
+style='color:windowtext;display:none;text-decoration:none'>3</span></a></span></p>
+
+<p class=MsoToc1><span class=MsoHyperlink><a href="#_Toc262199372">INDUS
+Learning Framework<span style='color:windowtext;display:none;text-decoration:
+none'>. </span><span
+style='color:windowtext;display:none;text-decoration:none'>3</span></a></span></p>
+
+<p class=MsoToc2><span class=MsoHyperlink><a href="#_Toc262199373">Overview<span
+style='color:windowtext;display:none;text-decoration:none'>.. </span><span
+style='color:windowtext;display:none;text-decoration:none'>3</span></a></span></p>
+
+<p class=MsoToc2><span class=MsoHyperlink><a href="#_Toc262199374">Availability<span
+style='color:windowtext;display:none;text-decoration:none'>. </span><span
+style='color:windowtext;display:none;text-decoration:none'>3</span></a></span></p>
+
+<p class=MsoToc2><span class=MsoHyperlink><a href="#_Toc262199375">Using INDUS
+Learning Framework<span style='color:windowtext;display:none;text-decoration:
+none'>. </span><span
+style='color:windowtext;display:none;text-decoration:none'>3</span></a></span></p>
+
+<p class=MsoToc3><span class=MsoHyperlink><a href="#_Toc262199376">System
+Requirements<span style='color:windowtext;display:none;text-decoration:none'>. </span><span
+style='color:windowtext;display:none;text-decoration:none'>4</span></a></span></p>
+
+<p class=MsoToc3><span class=MsoHyperlink><a href="#_Toc262199377">Install
+Howto<span style='color:windowtext;display:none;text-decoration:none'>. </span><span
+style='color:windowtext;display:none;text-decoration:none'>4</span></a></span></p>
+
+<p class=MsoToc3><span class=MsoHyperlink><a href="#_Toc262199378">Configuration<span
+style='color:windowtext;display:none;text-decoration:none'>. </span><span
+style='color:windowtext;display:none;text-decoration:none'>4</span></a></span></p>
+
+<p class=MsoToc3><span class=MsoHyperlink><a href="#_Toc262199379">Command Line
+Execution<span style='color:windowtext;display:none;text-decoration:none'>. </span><span
+style='color:windowtext;display:none;text-decoration:none'>5</span></a></span></p>
+
+<p class=MsoToc3><span class=MsoHyperlink><a href="#_Toc262199380">Running IIF
+using a script<span style='color:windowtext;display:none;text-decoration:none'> </span><span
+style='color:windowtext;display:none;text-decoration:none'>6</span></a></span></p>
+
+<p class=MsoToc3><span class=MsoHyperlink><a href="#_Toc262199381">API
+Integration<span style='color:windowtext;display:none;text-decoration:none'>. </span><span
+style='color:windowtext;display:none;text-decoration:none'>7</span></a></span></p>
+
+<p class=MsoToc3><span class=MsoHyperlink><a href="#_Toc262199382">Running Test
+Example<span style='color:windowtext;display:none;text-decoration:none'>. </span><span
+style='color:windowtext;display:none;text-decoration:none'>8</span></a></span></p>
+
+<p class=MsoToc3><span class=MsoHyperlink><a href="#_Toc262199383">Use  with
+INDUS Integration Framework<span style='color:windowtext;display:none;
+text-decoration:none'>. </span><span
+style='color:windowtext;display:none;text-decoration:none'>8</span></a></span></p>
+
+<p class=MsoToc3><span class=MsoHyperlink><a href="#_Toc262199384">Scripts to
+run  with INDUS Integration Framework<span style='color:windowtext;display:
+none;text-decoration:none'>. </span><span
+style='color:windowtext;display:none;text-decoration:none'>9</span></a></span></p>
+
+<p class=MsoToc1><span class=MsoHyperlink><a href="#_Toc262199385">INDUS
+Integration Framework:<span style='color:windowtext;display:none;text-decoration:
+none'> </span><span
+style='color:windowtext;display:none;text-decoration:none'>10</span></a></span></p>
+
+<p class=MsoToc2><span class=MsoHyperlink><a href="#_Toc262199386">Overview<span
+style='color:windowtext;display:none;text-decoration:none'>.. </span><span
+style='color:windowtext;display:none;text-decoration:none'>10</span></a></span></p>
+
+<p class=MsoToc2><span class=MsoHyperlink><a href="#_Toc262199387">Availability<span
+style='color:windowtext;display:none;text-decoration:none'>. </span><span
+style='color:windowtext;display:none;text-decoration:none'>10</span></a></span></p>
+
+<p class=MsoToc2><span class=MsoHyperlink><a href="#_Toc262199388">Using INDUS
+Integration Framework<span style='color:windowtext;display:none;text-decoration:
+none'>. </span><span
+style='color:windowtext;display:none;text-decoration:none'>10</span></a></span></p>
+
+<p class=MsoToc3><span class=MsoHyperlink><a href="#_Toc262199389">System
+Requirements<span style='color:windowtext;display:none;text-decoration:none'>. </span><span
+style='color:windowtext;display:none;text-decoration:none'>10</span></a></span></p>
+
+<p class=MsoToc3><span class=MsoHyperlink><a href="#_Toc262199390">Install
+Howto<span style='color:windowtext;display:none;text-decoration:none'>. </span><span
+style='color:windowtext;display:none;text-decoration:none'>10</span></a></span></p>
+
+<p class=MsoToc3><span class=MsoHyperlink><a href="#_Toc262199391">Command Line
+Execution<span style='color:windowtext;display:none;text-decoration:none'>. </span><span
+style='color:windowtext;display:none;text-decoration:none'>11</span></a></span></p>
+
+<p class=MsoToc3><span class=MsoHyperlink><a href="#_Toc262199392">Running
+Sample  Example<span style='color:windowtext;display:none;text-decoration:none'>. </span><span
+style='color:windowtext;display:none;text-decoration:none'>11</span></a></span></p>
+
+<p class=MsoToc3><span class=MsoHyperlink><a href="#_Toc262199393">API
+Integration<span style='color:windowtext;display:none;text-decoration:none'>. </span><span
+style='color:windowtext;display:none;text-decoration:none'>12</span></a></span></p>
+
+<p class=MsoToc2><span class=MsoHyperlink><a href="#_Toc262199394">Configuration
+Files<span style='color:windowtext;display:none;text-decoration:none'>. </span><span
+style='color:windowtext;display:none;text-decoration:none'>13</span></a></span></p>
+
+<p class=MsoToc3><span class=MsoHyperlink><a href="#_Toc262199395">System
+Configuration File<span style='color:windowtext;display:none;text-decoration:
+none'>. </span><span
+style='color:windowtext;display:none;text-decoration:none'>13</span></a></span></p>
+
+<p class=MsoToc3><span class=MsoHyperlink><a href="#_Toc262199396">User
+Configuration Files<span style='color:windowtext;display:none;text-decoration:
+none'>. </span><span
+style='color:windowtext;display:none;text-decoration:none'>14</span></a></span></p>
+
+<p class=MsoToc2><span class=MsoHyperlink><a href="#_Toc262199397">1. The
+UserView&nbsp;File ( view.txt )<span style='color:windowtext;display:none;
+text-decoration:none'> </span><span
+style='color:windowtext;display:none;text-decoration:none'>15</span></a></span></p>
+
+<p class=MsoToc2><span class=MsoHyperlink><a href="#_Toc262199398">2. DTreeFile
+(tree.xml)<span style='color:windowtext;display:none;text-decoration:none'> </span><span
+style='color:windowtext;display:none;text-decoration:none'>15</span></a></span></p>
+
+<p class=MsoToc2><span class=MsoHyperlink><a href="#_Toc262199399">3.
+DataSource&nbsp;Descriptor<span style='color:windowtext;display:none;
+text-decoration:none'> </span><span
+style='color:windowtext;display:none;text-decoration:none'>16</span></a></span></p>
+
+<p class=MsoToc2><span class=MsoHyperlink><a href="#_Toc262199400">4.  Schema
+Map<span style='color:windowtext;display:none;text-decoration:none'>. </span><span
+style='color:windowtext;display:none;text-decoration:none'>18</span></a></span></p>
+
+<p class=MsoToc2><span class=MsoHyperlink><a href="#_Toc262199401">5. 
+ontmap.properties File<span style='color:windowtext;display:none;text-decoration:
+none'>. </span><span
+style='color:windowtext;display:none;text-decoration:none'>18</span></a></span></p>
+
+<p class=MsoToc3><span class=MsoHyperlink><a href="#_Toc262199402">Custom 
+Format (Ontology and Ontology Mappings)<span style='color:windowtext;
+display:none;text-decoration:none'> </span><span
+style='color:windowtext;display:none;text-decoration:none'>18</span></a></span></p>
+
+<p class=MsoToc2><span class=MsoHyperlink><a href="#_Toc262199403">Assumptions
+and  Limitations<span style='color:windowtext;display:none;text-decoration:
+none'>. </span><span
+style='color:windowtext;display:none;text-decoration:none'>19</span></a></span></p>
+
+<p class=MsoToc1><span class=MsoHyperlink><a href="#_Toc262199404">License<span
+style='color:windowtext;display:none;text-decoration:none'>. </span><span
+style='color:windowtext;display:none;text-decoration:none'>19</span></a></span></p>
+
+<p class=MsoToc2><span class=MsoHyperlink><a href="#_Toc262199405">References<span
+style='color:windowtext;display:none;text-decoration:none'>. </span><span
+style='color:windowtext;display:none;text-decoration:none'>20</span></a></span></p>
+
+<p class=MsoToc1><span class=MsoHyperlink><a href="#_Toc262199406">Appendix<span
+style='color:windowtext;display:none;text-decoration:none'>. </span><span
+style='color:windowtext;display:none;text-decoration:none'>21</span></a></span></p>
+
+<p class=MsoToc3><span class=MsoHyperlink><a href="#_Toc262199407">Sample <i>View
+File </i> - using OWL syntax for ontology mappings (view.txt)<span
+style='color:windowtext;display:none;text-decoration:none'> </span><span
+style='color:windowtext;display:none;text-decoration:none'>21</span></a></span></p>
+
+<p class=MsoToc3><span class=MsoHyperlink><a href="#_Toc262199408">Sample
+DTreeFile (tree.xml)<span style='color:windowtext;display:none;text-decoration:
+none'> </span><span
+style='color:windowtext;display:none;text-decoration:none'>21</span></a></span></p>
+
+<p class=MsoToc3><span class=MsoHyperlink><a href="#_Toc262199409">Sample  
+DataSource&nbsp;Descriptor  (e.g. userviewdesc.xml):<span style='color:windowtext;
+display:none;text-decoration:none'> </span><span
+style='color:windowtext;display:none;text-decoration:none'>22</span></a></span></p>
+
+<p class=MsoToc3><span class=MsoHyperlink><a href="#_Toc262199410">Sample
+ontmap.properties file:<span style='color:windowtext;display:none;text-decoration:
+none'> </span><span
+style='color:windowtext;display:none;text-decoration:none'>22</span></a></span></p>
+
+<p class=MsoToc3><span class=MsoHyperlink><a href="#_Toc262199411">Sample
+ontology mappings file – Using OWL (mapNetflixArea.owl):<span style='color:
+windowtext;display:none;text-decoration:none'> </span><span
+style='color:windowtext;display:none;text-decoration:none'>22</span></a></span></p>
+
+<p class=MsoToc3><span class=MsoHyperlink><a href="#_Toc262199412">Sample <i>ontology</i>
+file (custom format):<span style='color:windowtext;display:none;text-decoration:
+none'> </span><span
+style='color:windowtext;display:none;text-decoration:none'>24</span></a></span></p>
+
+<p class=MsoToc3><span class=MsoHyperlink><a href="#_Toc262199413">Sample
+ontmap.txt file:<span style='color:windowtext;display:none;text-decoration:
+none'> </span><span
+style='color:windowtext;display:none;text-decoration:none'>25</span></a></span></p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoTocHeading>&nbsp;</p>
+
+<h1><a name="_Toc231704940"></a><a name="_Toc262199371"></a><a
+name="_Toc258254475"></a><a name="_Toc258250126">INDUS</a></h1>
+
+<p class=MsoNormal style='text-align:justify'>INDUS  (<u>INtelligent Data
+Understanding System</u>), is a <i>federated</i>, <i>query-centric</i> system
+for knowledge acquisition from distributed, semantically heterogeneous data .  INDUS
+is composed of two different components, <i>INDUS Learning Framework</i> (ILF)
+and <i>INDUS Integration Framework (IIF). </i> The Learning framework (ILF)
+learns predictive models from   a single data source (stored in a RDBMS  such
+as  MySQL) using  SQL count queries.  The Integration Framework allows a user 
+or an application to view a collection of physically distributed, autonomous,
+semantically heterogeneous data sources (regardless of location, internal
+structure and query interfaces) as though they were a collection of tables
+structured according to an ontology supplied by the user. The Integration Framework 
+employs ontologies and inter-ontology mappings to answer user queries against
+distributed, semantically heterogeneous data sources without the need for a
+centralized data warehouse or a common global ontology.  Consequently the IIF
+can be used in conjunction with ILF to learn predictive models from
+semantically disparate data sources.  However, both of them are available as
+separate applications and can also be run individually.</p>
+
+<h1><a name="_Toc262199372"></a><a name="_Toc258254476"></a><a
+name="_Toc258250127">INDUS Learning Framework</a> </h1>
+
+<h2 style='text-align:justify'><a name="_Toc262199373"></a><a
+name="_Toc258254477"></a><a name="_Toc258250128">Overview</a></h2>
+
+<p style='text-align:justify'>The Indus learning framework is a suite of machine
+learning algorithms that learn from datasets using  statistical queries. This
+framework is particularly useful in the following scenarios: </p>
+
+<ul type=disc>
+ <li class=MsoNormal style='text-align:justify'>When the data set is huge and
+     it cannot be fit into memory (e.g.  when for a massive  arff file , WEKA
+     runs out of memory) </li>
+</ul>
+
+<ul type=disc>
+ <li class=MsoNormal style='text-align:justify'>When access to underlying data
+     instances is not available (due to considerations such as security or
+     cost) but the datasources provides some statistics (like count queries) </li>
+</ul>
+
+<p style='text-align:justify'>The current implementation of the framework
+provides Naive Bayes and Decision Trees. The framework has been written so that
+it can be extended to include more classifiers that are amenable to the
+statistical queries  approach. </p>
+
+<h2><a name="_Toc262199374"></a><a name="_Toc258254478"></a><a
+name="_Toc258250129">Availability</a></h2>
+
+<p class=MsoNormal style='text-align:justify'>INDUS is an open source project
+that  is freely available  . The software  is provided as is without any
+warranty (explicit or implied). The software  for the ILF  component can be
+downloaded from the following location  (<a
+href="http://code.google.com/p/induslearningframework/">http://code.google.com/p/induslearningframework/</a>). 
+</p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<h2><a name="_Toc262199375"></a><a name="_Toc258254479"></a><a
+name="_Toc258250130">Using INDUS Learning Framework</a></h2>
+
+<h3 style='text-align:justify'><a name="_Toc262199376">System Requirements</a> </h3>
+
+<p class=MsoNormal style='text-align:justify'>In order to run INDUS Learning
+Framework on your computer, you should have Java 1.6.0 or above installed in
+your system.  INDUS requires a database to store ARFF files  (See section on
+Configuration Files regarding how to set access to this database).  The current
+system has been tested using a MySQL database.</p>
+
+<h3 style='text-align:justify'> <a name="_Toc262199377">Install Howto</a> </h3>
+
+<p class=MsoNormal style='text-align:justify'>Download the  latest distribution
+(e.g. <i>induslearningframework_0.1.1.zip</i>)  from the open source site   and
+extract the contents to a  folder  in your system. The extracted folder will
+contain the learning framework jar (iif_0.1.1.jar), the java source code
+folders (src,extension_src), an  examples folder, and a lib folder that 
+contains <i>dependant </i> jars that the application needs to run.The  jars in
+the lib folder  are provide for ease of use and  <i>Please ensure you have the
+proper licenses for the dependant jars. </i> The list of dependant jars is</p>
+
+<p class=MsoNormal style='text-align:justify'>&nbsp;</p>
+
+<ul type=disc>
+ <li class=MsoNormal style='text-align:justify'>WEKA (weka.jar) for some
+     utility functions   - <a href="http://www.cs.waikato.ac.nz/ml/weka/">http://www.cs.waikato.ac.nz/ml/weka/</a>)</li>
+ <li class=MsoNormal style='text-align:justify'>DBCP commons  - <a
+     href="http://commons.apache.org/dbcp/">http://commons.apache.org/dbcp/</a>
+     </li>
+ <ul type=circle>
+  <li class=MsoNormal style='text-align:justify'>Commons Pool   <a
+      href="http://commons.apache.org/pool/">http://commons.apache.org/pool/</a>
+      (since DBCP requires it)</li>
+ </ul>
+ <li class=MsoNormal style='text-align:justify'>Appropriate JDBC connector
+     (e.g. mysql-connector-java-5.0.7-bin.jar) </li>
+ <li class=MsoNormal style='text-align:justify'>See Section on Use with INDUS
+     Integration Framework for  additional jars ( if you plan to use the
+     integration framework)</li>
+</ul>
+
+<h3 style='text-align:justify'><a name="_Toc262199378"></a><a
+name="_Toc258254480"></a><a name="_Toc258250131">Configuration</a></h3>
+
+<p class=MsoNormal style='text-align:justify'>The application uses JDBC to
+connect to the database that contains the training dataset for the classifier
+to build. The information required to make the connection via JDBC is read from
+a configuration file called <i>database.properties.</i> This configuration file
+contains the following fields (as name value pairs):</p>
+
+<p class=MsoNormal>  </p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<pre style='margin-left:1.0in;text-indent:-.25in'><span class=typ>1.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span><span
+class=typ>DataSource</span><span class=pun>.</span><span class=pln>driverClassName</span><span
+class=pun>=</span><span class=pln>&lt;JDBC DRIVER&gt;</span></pre><pre
+style='margin-left:1.0in;text-indent:-.25in'><span class=com>2.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span><span
+class=typ>DataSource</span><span class=pun>.</span><span class=pln>url</span><span
+class=pun>=&lt;URL for database containing training dataset&gt; </span></pre><pre
+style='margin-left:1.0in;text-indent:-.25in'>3.<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span
+class=typ>DataSource</span><span class=pun>.</span><span class=pln>username</span><span
+class=pun>=</span><span class=pln>&lt;User Name&gt;</span></pre><pre
+style='margin-left:1.0in;text-indent:-.25in'><span class=pln>4.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span><span
+class=typ>DataSource</span><span class=pun>.</span><span class=pln>password</span><span
+class=pun>=</span><span class=pln>&lt;Password&gt;</span></pre><pre
+style='margin-left:1.0in;text-indent:-.25in'>5.<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>dbPoolMinSize=&lt;value&gt;</pre><pre
+style='margin-left:1.0in;text-indent:-.25in'>6.<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>dbPoolMaxSize=&lt;value&gt;</pre>
+
+<p class=MsoNormal style='margin-left:.5in'> </p>
+
+<p class=MsoNormal style='text-align:justify'><u>In addition if a classifier is
+to be build from training data in a ARFF file, the  same database  (in <i>database.properties</i>
+)  will be used to create a table in which the ARFF file is stored.</u>  The
+configuration file is to be placed  in the  same directory in which the
+application is started (see  section on running the ILF).  Typically this is
+the  same  directory that will contain the ILF jar (ilf.jar)</p>
+
+<p>An example database.properties is given below</p>
+
+<pre style='margin-left:.5in'><span class=typ>DataSource</span><span class=pun>.</span><span
+class=pln>driverClassName</span><span class=pun>=</span><span class=pln>com</span><span
+class=pun>.</span><span class=pln>mysql</span><span class=pun>.</span><span
+class=pln>jdbc</span><span class=pun>.</span><span class=typ>Driver</span><br>
+<span class=typ>DataSource</span><span class=pun>.</span><span class=pln>url</span><span
+class=pun>=</span><span class=pln>jdbc</span><span class=pun>:</span><span
+class=pln>mysql</span><span class=pun>:</span><span class=com>//localhost/db_research</span><br>
+<span class=typ>DataSource</span><span class=pun>.</span><span class=pln>username</span><span
+class=pun>=</span><span class=pln>ilf_user</span><br>
+<span class=typ>DataSource</span><span class=pun>.</span><span class=pln>password</span><span
+class=pun>=</span><span class=pln>ilf_password</span></pre><pre
+style='margin-left:.5in'>dbPoolMinSize=30</pre><pre style='margin-left:.5in'>dbPoolMaxSize=70</pre>
+
+<p class=MsoNormal style='margin-left:.5in'>&nbsp;</p>
+
+<h3><a name="_Toc262199379"></a><a name="_Toc258254481"></a><a
+name="_Toc258250132">Command Line Execution</a></h3>
+
+<p class=MsoNormal style='text-align:justify'> When executing ILF  from command
+line the -classpath option is to use to point to dependant  jars  
+(alternatively environment variable CLASSPATH can be set to point to the list
+of dependant jars) . </p>
+
+<p class=MsoNormal> </p>
+
+<p class=MsoNormal>To run the Naïve Bayes classifier used the following command
+</p>
+
+<p><i>java -classpath &lt; semi colon seperated list of dependent jars and ilf_&lt;version&gt;.jar&gt;
+airldm2.classifiers.bayes.NaiveBayesClassifier</i> [options]</p>
+
+<p class=MsoNormal>To run the Decision Tree classifier used the following
+command </p>
+
+<p><i>java -classpath &lt; semi colon seperated list of dependent jars and
+ilf.jar&gt; airldm2.classifiers.trees.Id3SimpleClassifier</i> [options]</p>
+
+<p><i> </i></p>
+
+<p>The following options are supported </p>
+
+<ul type=disc>
+ <li class=MsoNormal><a name="Supported_Options"><strong>-a </strong>The
+     training file is to be read from an arff file and inserted into database. </a></li>
+</ul>
+
+<ul type=disc>
+ <li class=MsoNormal><strong>-b </strong>The training instances are in a
+     relational database. </li>
+</ul>
+
+<ul type=disc>
+ <li class=MsoNormal><strong>-trainTable</strong> The Name of the table which
+     contains training instances (used in conjunction with flag -b). </li>
+</ul>
+
+<ul type=disc>
+ <li class=MsoNormal><strong>-testFile </strong>The arff file against which to
+     test (used  in conjunction with  flag –a or flag –b)</li>
+</ul>
+
+<ul type=disc>
+ <li class=MsoNormal><strong>-trainFile </strong>The arff file which contains
+     training instances ( use in conjunction with flag -a).   </li>
+ <li class=MsoNormal><b>-?</b>  Handle missing values</li>
+</ul>
+
+<p class=MsoNormal style='margin-left:.5in'><b>Note: <i> </i> The ILF is
+restricted to working with nominal attributes</b></p>
+
+<p class=MsoNormal style='margin-left:.5in'>A few example of the command line
+execution of the ILF are given below </p>
+
+<p style='margin-left:.5in;text-align:justify;text-indent:-.25in'><i>1.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></i><i>  java
+-classpath 
+ilf_0.1.1.jar;lib/mysql/mysql-connector-java-5.0.7-bin.jar;lib/weka-3.5.6/weka.jar;lib/apache/commons-dbcp-1.2.2.jar;lib/apache/commons-pool-20070730.jar;lib/junit/junit-4.5.jar;airldm2.classifiers.trees.Id3SimpleClassifier
+-a -trainFile examples/sample/HouseVotesTrain.arff  -testFile
+sample/HouseVotesTest.arff   </i></p>
+
+<p class=MsoListParagraph style='text-align:justify'>This command builds a 
+decision tree  classifier from the training  data in the  file <i>examples/</i><i>sample/HouseVotesTrain.arff
+</i> and then evaluates the  performance of the built classifier against the
+test data in <i> examples/sample/HouseVotesTest.arff</i>.  This command 
+results in   the   training data  (contained in the  <i>examples/sample/HouseVotesTrain)
+</i> being inserted into a table (whose  name corresponds to the relation name
+in the arff file)  in  SQL database.  Then the classifier is build by
+interacting with this table using SQL queries.  </p>
+
+<p style='margin-left:.5in;text-align:justify;text-indent:-.25in'><i>2.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></i><i>java
+-classpath  ilf_0.1.1.jar;lib/mysql/mysql-connector-java-5.0.7-bin.jar;lib/weka-3.5.6/weka.jar;lib/apache/commons-dbcp-1.2.2.jar;lib/apache/commons-pool-20070730.jar;lib/junit/junit-4.5.jar;
+airldm2.classifiers.trees.Id3SimpleClassifier -b -trainTable  votes_train 
+-testFile examples/sample/HouseVotesTest.arff   </i></p>
+
+<p style='margin-left:.5in;text-align:justify'>This command builds a   <i>decision
+tree</i> classifier from the training  data in  the  <i>votes_train </i>table
+and then evaluates the performance of  the built classifier against the test
+data in <i>examples</i>/<i>sample/HouseVotesTest.arff.  Note that the
+attributes in the votes_train table should correspond to the attributes
+described in the test arff file. </i> As mentioned earlier the  information in <i>database.properties
+</i>is used to connect to the database that contains the <i>votes_train</i>
+table.</p>
+
+<p><i>&nbsp;</i></p>
+
+<p style='margin-left:.5in;text-align:justify;text-indent:-.25in'><i>3.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></i><i>java
+-classpath  ilf_0.1.1.jar;lib/mysql/mysql-connector-java-5.0.7-bin.jar;lib/weka-3.5.6/weka.jar;lib/apache/commons-dbcp-1.2.2.jar;lib/apache/commons-pool-20070730.jar;lib/junit/junit-4.5.jar;;
+airldm2.classifiers.trees.Id3SimpleClassifier</i><i> –a –trainFile  examples/sample/HouseVotesTrain.arff 
+-testFile examples/sample/HouseVotesTest.arff  -?   </i></p>
+
+<p class=MsoNormal style='margin-left:.5in'>Same as above but handle missing
+values by replacing them by the most possible value.</p>
+
+<p class=MsoNormal style='margin-left:.5in'>&nbsp;</p>
+
+<h3><a name="_Toc262199380">Running IIF using a script</a></h3>
+
+<p class=MsoNormal>Since running the IIF involves    a batch file (<i>ilf.bat</i>) 
+has been included in the <i>dist  folder </i>for ease of running the IIF. To
+run the Naïve Bayes classifier using the batch file , use the   following
+command: </p>
+
+<p class=MsoNormal><i>ilf naive-bayes [options]</i></p>
+
+<p class=MsoNormal>To run the Decision Tree classifier used the following
+command:</p>
+
+<p class=MsoNormal><i>ilf decision-tree [options]</i></p>
+
+<p class=MsoNormal>The <i>options </i> are as described earlier. A few examples
+of running the ILF using the batch file are given below </p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal>   1.  ilf decision-tree  -a -trainFile 
+examples/sample/HouseVotesTrain.arff  -testFile
+examples/sample/HouseVotesTest.arff  </p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal>   2.  ilf decision-tree  -b -trainTable  votes_train 
+-testFile examples/sample/HouseVotesTest.arff  </p>
+
+<p class=MsoNormal>        </p>
+
+<p class=MsoNormal>   3. ilf decision-tree   -a -trainFile 
+examples/sample/HouseVotesTrain.arff  -testFile
+examples/sample/HouseVotesTest.arff -?</p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal>(<b><i>Note</i></b><i>:  Please modify the batch file
+appropriately in case you want to change the versions of the dependant jar
+files from those included in the distribution </i>)</p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<h3><a name="_Toc262199381"></a><a name="_Toc258254482"></a><a
+name="_Toc258250133">API Integration</a></h3>
+
+<p class=MsoNormal style='text-align:justify'>In addition to running from  the
+command line , the ILF  can be integrated into your application. It  can build a  
+specific classifier (Naïve Bayes or Decision Tree)  for the  data contained in
+an arff file (or a database) and return the built classifier. The built
+classifier can also be evaluated on a test data and the   <i>Confusion Matrix </i>returned 
+ can be further processed by your application. The code snippet below shows an
+example how to integrate Naïve Bayes in your application.</p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<pre><a name="sample_1"><span class=kwd>import</span><span class=pln> airldm2</span><span
+class=pun>.</span><span class=pln>core</span><span class=pun>.</span><span
+class=pln>datatypes</span><span class=pun>.</span><span class=pln>relational</span><span
+class=pun>.</span><span class=typ>SingleRelationDataDescriptor</span><span
+class=pun>;</span><br>
+<span class=kwd>import</span><span class=pln> airldm2</span><span class=pun>.</span><span
+class=pln>core</span><span class=pun>.</span><span class=pln>datatypes</span><span
+class=pun>.</span><span class=pln>relational</span><span class=pun>.</span><span
+class=typ>RelationalDataSource</span><span class=pun>;</span><br>
+<span class=kwd>import</span><span class=pln> &nbsp;airldm2</span><span
+class=pun>.</span><span class=pln>util</span><span class=pun>.</span><span
+class=typ>SimpleArffFileReader</span><span class=pun>;</span><br>
+<span class=kwd>import</span><span class=pln> airldm2</span><span class=pun>.</span><span
+class=pln>classifiers</span><span class=pun>.</span><span class=typ>Evaluation</span><br>
+<span class=kwd>import</span><span class=pln> weka</span><span class=pun>.</span><span
+class=pln>classifiers</span><span class=pun>.</span><span class=pln>evaluation</span><span
+class=pun>.</span><span class=typ>ConfusionMatrix</span><span class=pun>;</span><br>
+<span class=kwd>import</span><span class=pln> weka</span><span class=pun>.</span><span
+class=pln>core</span><span class=pun>.</span><span class=typ>Utils</span><span
+class=pun>;</span><br>
+<br>
+<span class=pun>........</span><br>
+<span class=pun>.......</span><br>
+<br>
+<span class=typ>String</span><span class=pun>[]</span><span class=pln> options</span><span
+class=pun>=</span><span class=pln> </span><span class=pun>{</span><span
+class=str>&quot;-b&quot;</span><span class=pun>,</span><span class=pln> &nbsp;</span><span
+class=str>&quot;-trainTable&quot;</span><span class=pun>,</span><span
+class=pln> </span><span class=str>&quot;votes_train&quot;</span><span
+class=pun>,</span><span class=pln> </span><span class=str>&quot;-testFile&quot;</span><span
+class=pun>,</span><span class=str>&quot;sample/HouseVotesTrain.arff&quot;</span><span
+class=pun>};</span><br>
+<span class=pln>&nbsp; &nbsp; </span><br>
+<span class=pln>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; </span><br>
+<span class=typ>String</span><span class=pln> trainTableName </span><span
+class=pun>=</span><span class=pln> </span><span class=typ>Utils</span><span
+class=pun>.</span><span class=pln>getOption</span><span class=pun>(</span><span
+class=str>&quot;trainTable&quot;</span><span class=pun>,</span><span class=pln> options</span><span
+class=pun>);</span><br>
+<span class=typ>String</span><span class=pln> testFile </span><span class=pun>=</span><span
+class=pln> </span><span class=typ>Utils</span><span class=pun>.</span><span
+class=pln>getOption</span><span class=pun>(</span><span class=str>&quot;testFile&quot;</span><span
+class=pun>,</span><span class=pln> options</span><span class=pun>);</span><br>
+<br>
+<span class=typ>NaiveBayesClassifier</span><span class=pln> classifier </span><span
+class=pun>=</span><span class=pln> </span><span class=kwd>new</span><span
+class=pln> </span><span class=typ>NaiveBayesClassifier</span><span class=pun>();</span><br>
+<span class=pln>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</span><br>
+<span class=typ>SingleRelationDataDescriptor</span><span class=pln> &nbsp;desc </span><span
+class=pun>=</span><span class=pln> </span><span class=kwd>null</span><span
+class=pun>;</span><br>
+<span class=pln>&nbsp; &nbsp; &nbsp;</span><br>
+<span class=pln>&nbsp; &nbsp; &nbsp; </span><br>
+<span class=typ>SimpleArffFileReader</span><span class=pln> readTest </span><span
+class=pun>=</span><span class=pln> </span><span class=kwd>new</span><span
+class=pln> </span><span class=typ>SimpleArffFileReader</span><span class=pun>(</span><span
+class=pln>testFile</span><span class=pun>);</span><br>
+<span class=typ>LDTestInstances</span><span class=pln> testInst </span><span
+class=pun>=</span><span class=pln> readTest</span><span class=pun>.</span><span
+class=pln>getTestInstances</span><span class=pun>();</span><br>
+<span class=pln>desc </span><span class=pun>=</span><span class=pln> </span><span
+class=pun>(</span><span class=typ>SingleRelationDataDescriptor</span><span
+class=pln> </span><span class=pun>)</span><span class=pln>testInst</span><span
+class=pun>.</span><span class=pln>getDesc</span><span class=pun>();</span><br>
+<span class=pln>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</span><br>
+<span class=typ>SSDataSource</span><span class=pln> dataSource </span><span
+class=pun>=</span><span class=pln> </span><span class=kwd>new</span><span
+class=pln> </span><span class=typ>RelationalDataSource</span><span class=pun>(</span><span
+class=pln>trainTableName</span><span class=pun>);</span><br>
+<span class=com>// Create a Large DataSet Instance and set its descriptor and source</span><br>
+<span class=typ>LDInstances</span><span class=pln> trainData </span><span
+class=pun>=</span><span class=pln> </span><span class=kwd>new</span><span
+class=pln> </span><span class=typ>LDInstances</span><span class=pun>();</span><br>
+<span class=pln>trainData</span><span class=pun>.</span><span class=pln>setDesc</span><span
+class=pun>(</span><span class=pln>desc</span><span class=pun>);</span><br>
+<span class=pln>trainData</span><span class=pun>.</span><span class=pln>setDataSource</span><span
+class=pun>(</span><span class=pln>dataSource</span><span class=pun>);</span><br>
+<span class=pln>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</span><br>
+<span class=typ>ConfusionMatrix</span><span class=pln> matrix </span><span
+class=pun>=</span><span class=pln> </span><span class=typ>Evaluation</span><span
+class=pun>.</span><span class=pln>evlauateModel2</span><span class=pun>(</span><span
+class=pln>classifier</span><span class=pun>,</span><span class=pln> trainData</span><span
+class=pun>,</span><span class=pln> testInst</span><span class=pun>,</span><span
+class=pln> options</span><span class=pun>);</span><br>
+<span class=typ>System</span><span class=pun>.</span><span class=kwd>out</span><span
+class=pun>.</span><span class=pln>println</span><span class=pun>(</span><span
+class=pln>matrix</span><span class=pun>.</span><span class=pln>toString</span><span
+class=pun>(</span><span class=str>&quot;===Confusion Matrix===&quot;</span><span
+class=pun>));</span><br>
+<span class=pln>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</span></a></pre>
+
+<h3><a name="_Toc262199382"></a><a name="_Toc258254483"></a><a
+name="_Toc258250134">Running Test Example</a></h3>
+
+<p class=MsoNormal style='text-align:justify'>Make sure you have an RDMS (e.g
+mySQL ) instance running on your system. Create a database (say <span
+class=com>db_research) and a user (say ilf_user) that has permissions to  query
+and create tables in the created database</span>. Download the Ilf.zip from the
+open source location mentioned. The zip file contains  ilf.jar, the dependant
+jars (weka, DBCP commons, JDBC driver), a sample example and   the
+configuration file database.properties.  Unzip the file to a location in your
+directory. If you are running an RDBMS instance besides mySQL, please add the
+relevant JDBC driver to this directory and modify <span class=com>  </span><i>database.properties
+</i> accordingly. If you are using mySQL  (running on localhost) the database.properties
+would look like</p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<pre style='margin-left:.5in;text-align:justify'><span class=typ>DataSource</span><span
+class=pun>.</span><span class=pln>driverClassName</span><span class=pun>=</span><span
+class=pln>com</span><span class=pun>.</span><span class=pln>mysql</span><span
+class=pun>.</span><span class=pln>jdbc</span><span class=pun>.</span><span
+class=typ>Driver</span><br>
+<span class=typ>DataSource</span><span class=pun>.</span><span class=pln>url</span><span
+class=pun>=</span><span class=pln>jdbc</span><span class=pun>:</span><span
+class=pln>mysql</span><span class=pun>:</span><span class=com>//localhost/db_research</span><br>
+<span class=typ>DataSource</span><span class=pun>.</span><span class=pln>username</span><span
+class=pun>=</span><span class=pln>ilf_user</span><br>
+<span class=typ>DataSource</span><span class=pun>.</span><span class=pln>password</span><span
+class=pun>=</span><span class=pln>ilf_password</span></pre>
+
+<p class=MsoNormal style='text-align:justify'>&nbsp;</p>
+
+<p class=MsoNormal style='text-align:justify'>The classifier for arff  data  in
+the sample folder can be built  by executing the following from the command
+line  (from the folder where you extracted the distribution) . </p>
+
+<p style='margin-left:.5in;text-align:justify'><i> java -classpath 
+ilf_0.1.1.jar;lib/mysql/mysql-connector-java-5.0.7-bin.jar;lib/weka-3.5.6/weka.jar;lib/apache/commons-dbcp-1.2.2.jar;lib/apache/commons-pool-20070730.jar;lib/junit/junit-4.5.jar;-
+airldm2.classifiers.trees.Id3SimpleClassifier</i><i>  –a –tr </i></p>
+
+<p style='text-align:justify'><i>&nbsp;</i></p>
+
+<p class=MsoNormal style='text-align:justify'>Alternatively the included batch
+file can be used to run the above command as follows :</p>
+
+<p style='margin-left:.5in'><i>ilf decision-tree –a –trainFile&nbsp;
+sample/HouseVotesTrain.arff&nbsp; -testFile
+sample/HouseVotesTest.arff&nbsp;&nbsp; </i></p>
+
+<p class=MsoNormal><b>&nbsp;</b></p>
+
+<p class=MsoNormal><b>Note</b>: If you are unable to build and evaluate the
+classifier, ensure that  you are able to connect to the database and the user
+in <i>database.properties</i>  has the correct password and has permissions to
+create and query tables.</p>
+
+<h3><a name="_Toc262199383"></a><a name="_Toc258254484"></a><a
+name="_Toc258250135">Use  with INDUS Integration Framework</a></h3>
+
+<p class=MsoNormal style='text-align:justify'>The Learning Framework can only
+be used  with a single datasource.  To allow the Learning framework to build
+classifiers   over multiple disparate data sources, the Indus Integration
+Framework is used to present the   multiple datasources as a single data
+source. The use of this extension is made possible by supporting an  
+additional  <i>-indus</i> option (in conjunction with the   –b option).  In addition
+the option <i>indus_base</i>  is used and it is followed by the directory that
+contains configuration files required by the Indus Integration Framework (refer
+INDUS Integration Framework documentation).  Again  you can set up the
+CLASSPATH explicty or use the –classpath option  with java  (Note you also need
+to include   the jars that the indus integration framework needs – in the
+distribution they are under lib/iif/lib folder)</p>
+
+<p class=MsoNormal style='text-align:justify'>&nbsp;</p>
+
+<p class=MsoNormal style='text-align:justify'>Below is an example to   build Naïve
+Bayes classifier using the said option.</p>
+
+<p style='text-align:justify'><i>java -classpath 
+ilf_0.1.1.jar;lib/mysql/mysql-connector-java-5.0.7-bin.jar;lib/weka-3.5.6/weka.jar;lib/apache/commons-dbcp-1.2.2.jar;lib/apache/commons-pool-20070730.jar;lib/junit/junit-4.5.jar;lib/iif/iif_0.1.1.jar;lib/iif/lib/commons-lang-2.2.jar;lib/iif/lib/junit-4.4.jar;lib/iif/lib/log4j-1.2.15.jar;lib/iif/lib/mysql-connector-java-5.0.7-bin.jar;lib/iif/lib/Zql.jar;lib/iif/lib/pellet_jars/aterm-java-1.6.jar;lib/iif/lib/pellet_jars/owlapi-bin.jar;lib/iif/lib/pellet_jars/owlapi-src.jar;lib/iif/lib/pellet_jars/pellet-cli.jar;lib/iif/lib/pellet_jars/pellet-core.jar;lib/iif/lib/pellet_jars/pellet-datatypes.jar;lib/iif/lib/pellet_jars/pellet-dig.jar;lib/iif/lib/pellet_jars/pellet-el.jar;lib/iif/lib/pellet_jars/pellet-explanation.jar;lib/iif/lib/pellet_jars/pellet-jena.jar;lib/iif/lib/pellet_jars/pellet-modularity.jar;lib/iif/lib/pellet_jars/pellet-owlapi.jar;lib/iif/lib/pellet_jars/pellet-pellint.jar;lib/iif/lib/pellet_jars/pellet-query.jar;lib/iif/lib/pellet_jars/pellet-rules.jar;lib/iif/lib/pellet_jars/pellet-test.jar;lib/iif/lib/pellet_jars/relaxngDatatype.jar;lib/iif/lib/pellet_jars/servlet.jar;lib/iif/lib/pellet_jars/xsdlib.jar;lib/iif/lib/matheval/meval.jar;
+airldm2.classifiers.bayes.NaiveBayesClassifier -b  -indus  -indus_base 
+examples/indus_example-2     -trainTable  details   -testFile
+examples/indus_example-2/movieTest.arff</i></p>
+
+<p class=MsoNormal style='text-align:justify'><i>&nbsp;</i></p>
+
+<p class=MsoNormal style='text-align:justify'>Notice this option assumes that
+the required configuration files required by the Indus Integration Framework
+are set appropriately  (refer Indus Integration Framework section below).  The
+distribution  includes an  <i>examples/indus_example-2 </i>that has the various
+configuration files for the command above . </p>
+
+<h3><a name="_Toc262199384">Scripts to run  with INDUS Integration Framework</a></h3>
+
+<p class=MsoNormal style='text-align:justify'>&nbsp;</p>
+
+<p class=MsoNormal style='text-align:justify'>Again for ease of use the batch
+file (ilf.bat)  can be used to run the ILF with IIF. The command to run IIF 
+with the INDUS Integration Framework are:  </p>
+
+<p class=MsoNormal style='text-align:justify'>ilf <b>integration</b>
+naive-bayes  [options]</p>
+
+<p class=MsoNormal style='text-align:justify'>ilf <b>integration</b>
+decision-tree  [options] </p>
+
+<p class=MsoNormal style='text-align:justify'>&nbsp;</p>
+
+<p class=MsoNormal style='text-align:justify'>Note the <i>integration </i> flag
+to indicate that the classifier should use the INDUS Integration Framework. 
+The <i>options</i> are as stated before . </p>
+
+<p class=MsoNormal style='text-align:justify'>&nbsp;</p>
+
+<p class=MsoNormal style='text-align:justify'>Below is an example to   build
+Naïve Bayes classifier  (uses the Integration Framework)  by executing the  batch
+file:</p>
+
+<p class=MsoNormal style='text-align:justify'><i>ilf integration naive-bayes  
+-b  -indus  -indus_base  examples/indus_example-2     -trainTable  details  
+-testFile examples/indus_example-2/movieTest.arff</i></p>
+
+<p class=MsoNormal style='text-align:justify'>&nbsp;</p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<h1><a name="_Toc262199385"></a><a name="_Toc258254485"></a><a
+name="_Toc258250136">INDUS Integration Framework:</a></h1>
+
+<h2><a name="_Toc262199386"></a><a name="_Toc258254486"></a><a
+name="_Toc258250137">Overview</a></h2>
+
+<p class=MsoNormal style='text-align:justify'>The INDUS Integration Framework (IIF)
+ allows users to virtually combine data that is physically spread across many
+data sources and run queries on that data as though it existed in a single
+database.  The individual data sources can be Ontology Extended Data Sources
+and the system is able to understand queries using ontological constructs such
+as equivalent class, superclass and subclass respectively. The user poses the
+queries in SQL like syntax (INDUS SQL) which overloads the <i>equalto,  greater
+than</i> and <i>less than</i>  <i> brackets</i> (&quot;=&quot;, “&lt;” and
+“&gt;”) to imply equivalent class, subclass and superclass respectively.
+Additionally the system can be configured to  imply “=”  in INDUS SQL as a  IS-A
+relationship existing in the ontology.  The  system uses a reasoner to handle
+queries with ontological constructs. The current system can be configured to
+use   Pellet  (http://clarkparsia.com/pellet )   for the reasoning task (in
+addition to a custom reasoner  developed  in our group). </p>
+
+<h2 style='text-align:justify'><a name="Where_can_I_download/get_INDUS?"></a> <a
+name="_Toc262199387"></a><a name="_Toc258254487"></a><a name="_Toc258250138">Availability</a></h2>
+
+<p class=MsoNormal style='text-align:justify'> The   IIF  component of INDUS  is 
+available as an open sourced  hosted at     (<a
+href="http://code.google.com/p/indusintegrationframework/">http://code.google.com/p/indusintegrationframework/</a>).  
+The software  is provided as is without any warranty (explicit or implied).  The
+application is available as a zip file which includes the IIF jar file along
+with some dependant jars and some sample examples. The dependant jars are made
+available  for ease of use and please ensure you have the relevant licenses as
+applicable.</p>
+
+<p class=MsoNormal style='text-align:justify'>&nbsp;</p>
+
+<h2 style='text-align:justify'><a name="_Toc262199388"></a><a
+name="_Toc258254488"></a><a name="_Toc258250139">Using INDUS Integration
+Framework</a></h2>
+
+<h3 style='text-align:justify'><a name="Environment_Setup"></a> <a
+name="_Toc262199389"></a><a name="_Toc258254489"></a><a name="_Toc258250140">System
+Requirements</a> </h3>
+
+<p class=MsoNormal style='text-align:justify'>In order to run INDUS Integration
+Framework on your computer, you should have Java 1.6.0 or above installed in
+your system.  INDUS requires a database to store temporary results (See section
+on Configuration Files regarding how to set access to this database).  The
+temporary results are deleted when they are no longer needed.   In order to run
+the examples that are part of the current release, a MySQL database has to be
+installed on the user's computer.&nbsp; </p>
+
+<h3> <a name="_Toc262199390"></a><a name="_Toc258254490"></a><a
+name="_Toc258250141">Install Howto</a> </h3>
+
+<p class=MsoNormal>Download the  distribution  ( indusintegration.zip)  from
+the open source site   and extract the contents to a  location on your system.
+The extracted folder will contain <i>IndusIntegrationFramework.jar</i>, few
+sample examples and a  <i>lib</i> directory that includes a the dependant jars   that
+are used by <i>IndusIntegrationFramework.jar</i>. <i>Please ensure you have the
+proper licenses for the dependant jars. </i> The list of dependant jars is</p>
+
+<p class=MsoNormal>Zql.jar -  SQL Parser  (<a
+href="http://www.gibello.com/code/zql/"><b>http://www.gibello.com/code/zql/</b></a>)</p>
+
+<p class=MsoNormal>meval.jar -  Math Evaluator (<a
+href="http://lts.online.fr/dev/java/math.evaluator/"><b>http://lts.online.fr/dev/java/math.evaluator/</b></a>
+)</p>
+
+<p class=MsoNormal>Pellet – Pellet OWL API Implementation ( <a
+href="http://clarkparsia.com/pellet"><b>http://clarkparsia.com/pellet</b></a>) </p>
+
+<p class=MsoNormal>Log4j -  (<a href="http://logging.apache.org/log4j/"><b>http://logging.apache.org/log4j/</b></a>)</p>
+
+<p class=MsoNormal>MySQL  drivers for JDBC connectivity (<a
+href="http://www.mysql.com/products/connector/"><b>http://www.mysql.com/products/connector/</b></a>
+) </p>
+
+<p class=MsoNormal>Apache Commons Lang ( <a
+href="http://commons.apache.org/lang/"><b>http://commons.apache.org/lang/</b></a>
+)</p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal>. </p>
+
+<h3><a name="_Toc262199391"></a><a name="_Toc258254491"></a><a
+name="_Toc258250142">Command Line Execution</a></h3>
+
+<p class=MsoNormal>The IIF framework can be run from the command line using the
+following command</p>
+
+<p class=MsoNormal>java –jar <i>IndusIntegrationFramework_fat.jar &lt;</i>configuration_directory<i>&gt;.</i> 
+</p>
+
+<p class=MsoNormal>java  -classpath &lt;dependant jars and  iif_version.jar&gt;
+org.iastate.ailab.qengine.core.QueryEngine <i>&lt;</i>configuration_directory<i>&gt;.</i> 
+</p>
+
+<p class=MsoNormal> The <i> &lt;configuration_directory&gt; </i>is a folder
+that contains the various configuration files that are needed to run the
+example.  Please see the section on IIF Configuration files  for information
+related to the configuration files that are to be included in the  &lt;<i>configuration_directory</i>&gt;.
+Some user’s may find it easier/useful  to check the   configurations files
+included in an example available with the distribution (See section on Running
+Sample Example)</p>
+
+<p class=MsoNormal>For ease of use a script (iif.bat)  has been  included  with
+the distribution  that can be used to run the  IIF.  The syntax of running the
+script is   </p>
+
+<p class=MsoNormal> iif  <i>&lt;</i>configuration_directory<i>&gt;.</i></p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<h3><a name="_Toc262199392"></a><a name="_Toc258254492"></a><a
+name="_Toc258250143">Running Sample  Example</a></h3>
+
+<p class=MsoNormal>The  example  included with the distribution ( <i>examples/indus_example-2)
+</i> simulates combining movie information stored in two different datasources 
+( named netflix and blockbuster in the example) from  a user point of view. The
+datasources  have different attribute value hierarchies (in OWL syntax)
+associated  with them  and mappings are used to resolve the semantic
+heterogeneity.  In order to run the example, the  databases  <i>netflix</i> and
+<i>blockbuster</i> needs to be set up  and additionally OWL files need to be
+made available at the appropriate URIs.  Navigate to the  config  folder  under
+the directory where you  extracted the zip file   and run  '<i>indus_test_database.sql'
+</i>file in proper MySQL environment  it will create users, grant permissions
+and set up necessary databases for the demo examples to run successfully.  <i>Note
+</i> if  Pellet is used as a reasoner (correspondingly OWL syntax for the
+ontologies and mappings), the OWL files should be available at the URI being 
+referred . To do so the  config  contains a folder  <i>movieExample</i> that
+contains the necessary OWL files. Please copy the folder in the <b>www  </b>directory
+of web server (e.g. apache) running on your system. Once this is done you
+should be able to navigate to the following locations:</p>
+
+<p class=MsoNormal><a href="http://localhost/movieExample/Blockbuster.owl">http://localhost/movieExample/Blockbuster.owl</a></p>
+
+<p class=MsoNormal><a href="http://localhost/movieExample/Netflix.owl">http://localhost/movieExample/Netflix.owl</a></p>
+
+<p class=MsoNormal><a href="http://localhost/movieExample/userMovies.owl">http://localhost/movieExample/userMovies.owl</a></p>
+
+<p class=MsoNormal><a
+href="http://localhost/movieExample/mapBlockBusterCategory.owl">http://localhost/movieExample/mapBlockBusterCategory.owl</a></p>
+
+<p class=MsoNormal><a
+href="http://localhost/movieExample/mapBlockBusterCategory.owl">http://localhost/movieExample/mapBlockBusterCategory.owl</a></p>
+
+<p class=MsoNormal> Now perform the following steps to run the example</p>
+
+<p class=MsoNormal>Step 1: open the command prompt. </p>
+
+<p class=MsoNormal>Step 2: cd to the directory to which you extracted the
+distribution This folder also contains some examples which can be used to test
+the system and to understand the scope of this project. </p>
+
+<p class=MsoNormal>Step 3: Type the following command on the command line
+giving an example folder name as a command line argument. &nbsp; </p>
+
+<p class=MsoNormal><i>java -classpath 
+iif_0.1.1.jar;lib/commons-lang-2.2.jar;lib/junit-4.4.jar;lib/log4j-1.2.15.jar;lib/mysql-connector-java-5.0.7-bin.jar;lib/Zql.jar;lib/pellet_jars/aterm-java-1.6.jar;lib/pellet_jars/owlapi-bin.jar;lib/pellet_jars/owlapi-src.jar;lib/pellet_jars/pellet-cli.jar;lib/pellet_jars/pellet-core.jar;lib/pellet_jars/pellet-datatypes.jar;lib/pellet_jars/pellet-dig.jar;lib/pellet_jars/pellet-el.jar;lib/pellet_jars/pellet-explanation.jar;lib/pellet_jars/pellet-jena.jar;lib/pellet_jars/pellet-modularity.jar;lib/pellet_jars/pellet-owlapi.jar;lib/pellet_jars/pellet-pellint.jar;lib/pellet_jars/pellet-query.jar;lib/pellet_jars/pellet-rules.jar;lib/pellet_jars/pellet-test.jar;lib/pellet_jars/relaxngDatatype.jar;lib/pellet_jars/servlet.jar;lib/pellet_jars/xsdlib.jar;lib/matheval/meval.jar;
+org.iastate.ailab.qengine.core.QueryEngine examples/indus-example-2 </i></p>
+
+<p class=MsoNormal>If the command line argument is valid, we will see the
+&quot;indus&quot; prompt. A query related to the example is to be entered at
+the &quot;indus&quot; prompt.</p>
+
+<p class=MsoNormal>The above example can also be easily run using the included
+script as</p>
+
+<p class=MsoNormal><i>iif  examples/indus_example-2 </i></p>
+
+<p class=MsoNormal>On  Similar lines the other examples included in the
+distribution can be run.</p>
+
+<h3><a name="_Toc262199393"></a><a name="_Toc258254493"></a><a
+name="_Toc258250144">API Integration</a></h3>
+
+<p class=MsoNormal>In addition to running from  the command, the IIF  can be
+integrated into your application. It  can be used to  build a   specific
+classifier which can be  used in your application as desired.</p>
+
+<p class=MsoNormal>The following snippet of code indicates how to integrate
+into your application (once the configuration files have been set as specified
+in the Configuration file). The relevant classes are </p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal style='margin-left:38.25pt;text-indent:-.25in'><span
+style='font-family:Symbol'>·<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span>org.iastate.ailab.qengine.core.QueryEngine </p>
+
+<p class=MsoNormal style='margin-left:38.25pt;text-indent:-.25in'><span
+style='font-family:Symbol'>·<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span>org.iastate.ailab.qengine.core.QueryResult</p>
+
+<p class=MsoNormal style='margin-left:38.25pt'>&nbsp;</p>
+
+<table class=MsoNormalTable border=1 cellspacing=0 cellpadding=0
+ style='margin-left:-.6pt;border-collapse:collapse;border:none'>
+ <tr style='height:208.5pt'>
+  <td width=603 valign=top style='width:452.25pt;border:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt;height:208.5pt'>
+  <p class=MsoNormal style='margin-left:26.25pt'>&nbsp;</p>
+  <p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+  font-family:"Courier New"'>String baseDir; //  contains the directory that
+  points to indus.conf </span></p>
+  <p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+  font-family:"Courier New"'>&nbsp;</span></p>
+  <p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+  font-family:"Courier New"'>baseDir = System.getProperty(&quot;user.dir&quot;)
+  + File.separator + &quot;config&quot;;</span></p>
+  <p class=MsoNormal><span style='font-size:10.0pt;font-family:"Courier New"'>QuerEngine
+  engine = new QueryEngine(baseDir); //configure the Engine</span></p>
+  <p class=MsoNormal style='margin-left:6.0pt'><span style='font-size:10.0pt;
+  font-family:"Courier New"'>&nbsp;</span></p>
+  <p class=MsoNormal style='margin-left:6.0pt'><span style='font-size:10.0pt;
+  font-family:"Courier New"'>&nbsp;</span></p>
+  <p class=MsoNormal style='margin-left:6.0pt'><span style='font-size:10.0pt;
+  font-family:"Courier New"'>String query1 = &quot;select COUNT(*) from
+  EMPLOYEETABLE;&quot;;</span></p>
+  <p class=MsoNormal style='margin-left:6.0pt'><span style='font-size:10.0pt;
+  font-family:"Courier New"'>QueryResult result1 = Engine.execute execute
+  (query1);  //Execute a query</span></p>
+  <p class=MsoNormal style='margin-left:6.0pt'><span style='font-size:10.0pt;
+  font-family:"Courier New"'>&nbsp;</span></p>
+  <p class=MsoNormal style='margin-left:6.0pt'><span style='font-size:10.0pt;
+  font-family:"Courier New"'>String query2 = &quot;select COUNT(*) from
+  EMPLOYEETABLE where position &gt;  'redshirt';&quot;;</span></p>
+  <p class=MsoNormal style='margin-left:6.0pt'><span style='font-size:10.0pt;
+  font-family:"Courier New"'>&nbsp;</span></p>
+  <p class=MsoNormal style='margin-left:6.0pt'><span style='font-size:10.0pt;
+  font-family:"Courier New"'>QueryResult result2 = Engine.execute(query2);
+  //Execute Another Query</span></p>
+  </td>
+ </tr>
+</table>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<h2><a name="_Toc262199394"></a><a name="_Toc258254494"></a><a
+name="_Toc258250145"></a><a name="INDUS_Configuration_File"></a>Configuration
+Files </h2>
+
+<p class=MsoNormal>The INDUS Integration Framework (IIF) reads from a number of
+configuration files the  information it requires to query multiple ontology
+extended data sources from the perspective of a user.   The configuration files
+ includes a  <i>schemaMap</i> configuration file  to resolve schema
+heterogeneity,   a <i>ontoMap</i> configuratuon  file to specify the relations
+between the ontologies used by the datasource and the  user and  <i>a DTree</i>
+configuration file specifies how the multiple datasources combine to form a
+user view of the data. In addition a system wide configuration file
+(indus.conf) specifies information to access  the database that is used to
+store any temporary results</p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<h3><a name="_Toc262199395"></a><a name="_Toc258254495"></a><a
+name="_Toc258250146">System Configuration File</a></h3>
+
+<p class=MsoNormal>This is the main configuration file that sets up the INDUS Integration
+framework. This file has to be named&nbsp;<b>indus.conf</b>. The possible
+key/value pairs that can exist in this file are </p>
+
+<table class=MsoNormalTable border=1 cellspacing=0 cellpadding=0 width=638
+ style='width:6.65in;border-collapse:collapse;border:none'>
+ <tr>
+  <td width=139 valign=top style='width:1.45in;border:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal><b>Key</b></p>
+  </td>
+  <td width=180 valign=top style='width:135.0pt;border:solid windowtext 1.0pt;
+  border-left:none;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal><b>Value</b></p>
+  </td>
+  <td width=319 valign=top style='width:239.4pt;border:solid windowtext 1.0pt;
+  border-left:none;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal><b>Comments</b></p>
+  </td>
+ </tr>
+ <tr>
+  <td width=139 valign=top style='width:1.45in;border:solid windowtext 1.0pt;
+  border-top:none;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal>driver_&lt;rdbms&gt;</p>
+  </td>
+  <td width=180 valign=top style='width:135.0pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal>&lt;driver_class&gt;</p>
+  </td>
+  <td width=319 valign=top style='width:239.4pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal>Examples of &lt;rdbms&gt;:</p>
+  <p class=MsoNormal style='margin-left:30.6pt'>mysql, postgress, oracle</p>
+  <p class=MsoNormal>Examples of &lt;driver_class&gt;:</p>
+  <p class=MsoNormal style='margin-left:30.6pt'>com.mysql.jdbc.Driver,
+  org.postgresql.Driver</p>
+  <p class=MsoNormal>The current version has been tested with mysql</p>
+  </td>
+ </tr>
+ <tr>
+  <td width=139 valign=top style='width:1.45in;border:solid windowtext 1.0pt;
+  border-top:none;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal>dbname_indus</p>
+  </td>
+  <td width=180 valign=top style='width:135.0pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal>&lt;DB_name&gt;</p>
+  </td>
+  <td width=319 valign=top style='width:239.4pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal>Name of the database in which INDUS will store temporary
+  results</p>
+  </td>
+ </tr>
+ <tr>
+  <td width=139 valign=top style='width:1.45in;border:solid windowtext 1.0pt;
+  border-top:none;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal>hostname_indus</p>
+  </td>
+  <td width=180 valign=top style='width:135.0pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal>&lt;URL_to_DB&gt;</p>
+  </td>
+  <td width=319 valign=top style='width:239.4pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal>Location of a database in which INDUS will store temporary
+  results</p>
+  </td>
+ </tr>
+ <tr>
+  <td width=139 valign=top style='width:1.45in;border:solid windowtext 1.0pt;
+  border-top:none;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal>dbtype_indus</p>
+  </td>
+  <td width=180 valign=top style='width:135.0pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal>&lt;DB_type&gt;</p>
+  </td>
+  <td width=319 valign=top style='width:239.4pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal>Type of the database in which INDUS will store temporary
+  results.  It must match &lt;rdbms&gt; for one of the driver keys provided
+  above.</p>
+  </td>
+ </tr>
+ <tr>
+  <td width=139 valign=top style='width:1.45in;border:solid windowtext 1.0pt;
+  border-top:none;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal>&lt;DB_name&gt;</p>
+  </td>
+  <td width=180 valign=top style='width:135.0pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal>&lt;username&gt;;&lt;password&gt;</p>
+  </td>
+  <td width=319 valign=top style='width:239.4pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal>A user name (with read access) and password must be
+  provided for every database</p>
+  </td>
+ </tr>
+ <tr>
+  <td width=139 valign=top style='width:1.45in;border:solid windowtext 1.0pt;
+  border-top:none;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal>&lt;view_filename&gt;</p>
+  </td>
+  <td width=180 valign=top style='width:135.0pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal>&lt;view.txt&gt;</p>
+  </td>
+  <td width=319 valign=top style='width:239.4pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal>Path to the file  containing configuration files for view.
+  </p>
+  </td>
+ </tr>
+ <tr>
+  <td width=139 valign=top style='width:1.45in;border:solid windowtext 1.0pt;
+  border-top:none;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal>&lt;class_name_key&gt;</p>
+  </td>
+  <td width=180 valign=top style='width:135.0pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal>&lt;class_name&gt;</p>
+  </td>
+  <td width=319 valign=top style='width:239.4pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal>Only applicable for developers who want to add custom
+  implementations of  certain components (in lieu of defaults) .  This feature
+  allows  for the dynamic loading of classes other than the defaults.</p>
+  <p class=MsoNormal>The possible strings for &lt;class_name_key&gt; can be
+  found in:</p>
+  <p class=MsoNormal style='margin-left:30.6pt'>org.iastate.ailab.qengine.core.factories.solution.SolutionCreator</p>
+  <p class=MsoNormal>The value of &lt;class_name&gt; should be the fully
+  qualified class name of a class that implements the same interface as
+  &lt;class_name_key&gt;.</p>
+  </td>
+ </tr>
+ <tr>
+  <td width=139 valign=top style='width:1.45in;border:solid windowtext 1.0pt;
+  border-top:none;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal>equivalent_flag</p>
+  </td>
+  <td width=180 valign=top style='width:135.0pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal>FALSE or TRUE</p>
+  </td>
+  <td width=319 valign=top style='width:239.4pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal>Set the below flag to 'TRUE' to change default behavior of
+  '=' in SQL_indus from  'IS-A' to 'equivalent' relation. Currently supported
+  when Pellet is used as reasoner. Ignored for default reasoner which always
+  interprets ‘=’ as equivalent relation</p>
+  </td>
+ </tr>
+ <tr>
+  <td width=139 valign=top style='width:1.45in;border:solid windowtext 1.0pt;
+  border-top:none;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal>world_semantics</p>
+  </td>
+  <td width=180 valign=top style='width:135.0pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal>&lt;open_or_closed&gt;</p>
+  </td>
+  <td width=319 valign=top style='width:239.4pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal>Future use. Currently Ignored.</p>
+  <p class=MsoNormal>&nbsp;</p>
+  </td>
+ </tr>
+</table>
+
+<p class=MsoNormal> </p>
+
+<p class=MsoNormal>The following  key/value pairs in indus.conf  to configure
+INDUS with   Pellet as a Reasoner (check out indus.conf  for indus-example-2 in
+the distribution)</p>
+
+<p class=Div><span lang=RU style='color:#666666'>viewImplClass=org.iastate.ailab.qengine.core.PelletViewImpl</span><span
+lang=RU> </span><span lang=RU style='color:#666666'>reasonerImplClass=org.iastate.ailab.qengine.core.reasoners.impl.PelletReasonerImpl</span><span
+lang=RU> </span><span lang=RU style='color:#666666'>queryTransformerImplClass=org.iastate.ailab.qengine.core.PelletQueryTransFormer</span><span
+lang=RU> </span></p>
+
+<h3><a name="_Toc262199396"></a><a name="_Toc258254496"></a><a
+name="_Toc258250147">User Configuration Files</a></h3>
+
+<p class=MsoNormal>These includes configurations files to describe to data
+sources, ontologies (if any) associated with the attributes in the data sources
+and schema and ontology mappings to resolve schema and data content heterogeneity.
+Once these files have been set, the user can query over the disparate data
+sources as if it is a single datasource </p>
+
+<h2><a name="The_File"></a><span style='font-size:12.0pt'> <a
+name="_Toc262199397"></a><a name="_Toc258254497"></a><a name="_Toc258250148">1.
+The UserView&nbsp;File ( view.txt )</a></span> </h2>
+
+<p class=MsoNormal>This file gives a name to a user view and provides the paths
+to the files that describe the DTree, SchemaMap, and the Ontology Map
+associated with this user view (See the appendix for an example of a user view
+file.).  The various   possible key/value pairs that can exist in this file: </p>
+
+<table class=MsoNormalTable border=1 cellpadding=0 style='border:none'>
+ <tr>
+  <td style='border:none;padding:.75pt .75pt .75pt .75pt'>
+  <p class=MsoNormal><b>Key</b> </p>
+  </td>
+  <td style='border:none;padding:.75pt .75pt .75pt .75pt'>
+  <p class=MsoNormal><b>Value</b> </p>
+  </td>
+  <td style='border:none;padding:.75pt .75pt .75pt .75pt'>
+  <p class=MsoNormal><b>Comments</b> </p>
+  </td>
+ </tr>
+ <tr>
+  <td style='border:none;padding:.75pt .75pt .75pt .75pt'>
+  <p class=MsoNormal><span style='color:#666666'>UserViewName</span> </p>
+  </td>
+  <td style='border:none;padding:.75pt .75pt .75pt .75pt'>
+  <p class=MsoNormal><span style='font-family:"Courier New";color:#666666'>&lt;name_of_userview&gt;</span>
+  </p>
+  </td>
+  <td style='border:none;padding:.75pt .75pt .75pt .75pt'>
+  <p class=MsoNormal><span style='color:#666666'>Name of this userview</span> </p>
+  </td>
+ </tr>
+ <tr>
+  <td style='border:none;padding:.75pt .75pt .75pt .75pt'>
+  <p class=MsoNormal><span style='color:#666666'>DTreeFile</span> </p>
+  </td>
+  <td style='border:none;padding:.75pt .75pt .75pt .75pt'>
+  <p class=MsoNormal><span style='font-family:"Courier New";color:#666666'>&lt;path_to_dtreefile&gt;</span>
+  </p>
+  </td>
+  <td style='border:none;padding:.75pt .75pt .75pt .75pt'>
+  <p class=MsoNormal><span style='color:#666666'>Path to the Data Agrregation
+  Tree File</span> </p>
+  </td>
+ </tr>
+ <tr>
+  <td style='border:none;padding:.75pt .75pt .75pt .75pt'>
+  <p class=MsoNormal><span style='color:#666666'>SchemaMap</span> </p>
+  </td>
+  <td style='border:none;padding:.75pt .75pt .75pt .75pt'>
+  <p class=MsoNormal><span style='font-family:"Courier New";color:#666666'>&lt;path_to_schema_map&gt;</span>
+  </p>
+  </td>
+  <td style='border:none;padding:.75pt .75pt .75pt .75pt'>
+  <p class=MsoNormal><span style='color:#666666'>Path to the Schema Map File</span>
+  </p>
+  </td>
+ </tr>
+ <tr>
+  <td style='border:none;padding:.75pt .75pt .75pt .75pt'>
+  <p class=MsoNormal><span style='color:#666666'>OntologyMap</span> </p>
+  </td>
+  <td style='border:none;padding:.75pt .75pt .75pt .75pt'>
+  <p class=MsoNormal><span style='font-family:"Courier New";color:#666666'>&lt;path_to_ontology_map&gt;</span>&nbsp;
+  &nbsp; &nbsp; </p>
+  </td>
+  <td style='border:none;padding:.75pt .75pt .75pt .75pt'>
+  <p class=MsoNormal><span style='color:#666666'>Path to the Ontology Map File.
+  This field is required if the reasoner used is in house reasoner. </span></p>
+  </td>
+ </tr>
+ <tr>
+  <td style='border:none;padding:.75pt .75pt .75pt .75pt'>
+  <p class=MsoNormal><span style='color:#666666'>OntMapProperties</span> </p>
+  </td>
+  <td style='border:none;padding:.75pt .75pt .75pt .75pt'>
+  <p class=MsoNormal><span style='font-family:"\0027courier new\0027";
+  color:#666666'>&lt;name_of_mappingsfile&gt;</span> </p>
+  </td>
+  <td style='border:none;padding:.75pt .75pt .75pt .75pt'>
+  <p class=MsoNormal><span style='color:#666666'>Name of the properties file
+  which has the locations of the mappings files. extension
+  (&lt;name&gt;.properties). This field is required if the<br>
+  reasoner is pellet reasoner. </span></p>
+  </td>
+ </tr>
+</table>
+
+<p class=MsoNormal>The Data Aggregation Tree, Schema Map, and Ontology Map
+files are described below. </p>
+
+<h2><a name="_Toc262199398"></a><a name="_Toc258254498"></a><a
+name="_Toc258250149"></a><a name="Data_File_(DTree_File)"></a><span
+style='font-size:12.0pt'>2. DTreeFile (tree.xml)</span> </h2>
+
+<p class=MsoNormal>The DTreeFile  specifies how the multiple data sources
+combine to form the user view of the data. In addition it contains information
+to configuration file that describe the schema of the data sources as well as
+the ontologies associated with them</p>
+
+<p class=MsoNormal>It is an XML file with following structure ( See the
+Appendix for an example of a DTreeFile) </p>
+
+<table class=MsoNormalTable border=1 cellspacing=0 cellpadding=0
+ style='border-collapse:collapse;border:none'>
+ <tr>
+  <td width=153 valign=top style='width:114.8pt;border:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal><b>Elements</b></p>
+  </td>
+  <td width=142 valign=top style='width:106.6pt;border:solid windowtext 1.0pt;
+  border-left:none;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal><b>Attributes</b></p>
+  </td>
+  <td width=157 valign=top style='width:117.8pt;border:solid windowtext 1.0pt;
+  border-left:none;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal><b>Subelements</b></p>
+  </td>
+  <td width=186 valign=top style='width:139.6pt;border:solid windowtext 1.0pt;
+  border-left:none;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal><b>Comments</b></p>
+  </td>
+ </tr>
+ <tr>
+  <td width=153 valign=top style='width:114.8pt;border:solid windowtext 1.0pt;
+  border-top:none;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal>Tree</p>
+  </td>
+  <td width=142 valign=top style='width:106.6pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal>&nbsp;</p>
+  </td>
+  <td width=157 valign=top style='width:117.8pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal>Node</p>
+  </td>
+  <td width=186 valign=top style='width:139.6pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal>This is the root element.</p>
+  </td>
+ </tr>
+ <tr>
+  <td width=153 valign=top style='width:114.8pt;border:solid windowtext 1.0pt;
+  border-top:none;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal>Node</p>
+  </td>
+  <td width=142 valign=top style='width:106.6pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal>name, fragmentationType</p>
+  </td>
+  <td width=157 valign=top style='width:117.8pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal>dataSourceDescriptor, children, dbInfo</p>
+  </td>
+  <td width=186 valign=top style='width:139.6pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal>If the node is a leaf node, it must contain the
+  subelements <i>dbInfo</i> and <i>dataSourceDescriptor</i>, otherwise it must
+  contain the subelement <i>children</i> except for the root node, which always
+  has the element <i>dataSourceDescriptor</i>.</p>
+  </td>
+ </tr>
+ <tr>
+  <td width=153 valign=top style='width:114.8pt;border:solid windowtext 1.0pt;
+  border-top:none;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal>dataSourceDescriptor</p>
+  </td>
+  <td width=142 valign=top style='width:106.6pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal>File</p>
+  </td>
+  <td width=157 valign=top style='width:117.8pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal>&nbsp;</p>
+  </td>
+  <td width=186 valign=top style='width:139.6pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal>&nbsp;</p>
+  </td>
+ </tr>
+ <tr>
+  <td width=153 valign=top style='width:114.8pt;border:solid windowtext 1.0pt;
+  border-top:none;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal>Children</p>
+  </td>
+  <td width=142 valign=top style='width:106.6pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal>joinTable, joincol</p>
+  </td>
+  <td width=157 valign=top style='width:117.8pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal>Node</p>
+  </td>
+  <td width=186 valign=top style='width:139.6pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal>There must be one or more <i>node</i> subelements.  When
+  the fragmentation of the subelement <i>node</i>s are vertical, the <i>children</i>
+  element must contain the attributes <i>joinTable</i> and <i>joincol</i>.</p>
+  </td>
+ </tr>
+ <tr>
+  <td width=153 valign=top style='width:114.8pt;border:solid windowtext 1.0pt;
+  border-top:none;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal>dbInfo</p>
+  </td>
+  <td width=142 valign=top style='width:106.6pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal>host, type</p>
+  </td>
+  <td width=157 valign=top style='width:117.8pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal>&nbsp;</p>
+  </td>
+  <td width=186 valign=top style='width:139.6pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal>&nbsp;</p>
+  </td>
+ </tr>
+</table>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal>Description of Attributes</p>
+
+<table class=MsoNormalTable border=1 cellspacing=0 cellpadding=0
+ style='border-collapse:collapse;border:none'>
+ <tr>
+  <td width=163 valign=top style='width:1.7in;border:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal><b>Element: Attribute</b></p>
+  </td>
+  <td width=180 valign=top style='width:135.0pt;border:solid windowtext 1.0pt;
+  border-left:none;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal><b>Value</b></p>
+  </td>
+  <td width=295 valign=top style='width:221.4pt;border:solid windowtext 1.0pt;
+  border-left:none;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal><b>Comments</b></p>
+  </td>
+ </tr>
+ <tr>
+  <td width=163 valign=top style='width:1.7in;border:solid windowtext 1.0pt;
+  border-top:none;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal>node: name</p>
+  </td>
+  <td width=180 valign=top style='width:135.0pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal>&lt;unrestricted&gt;</p>
+  </td>
+  <td width=295 valign=top style='width:221.4pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal>This is used to uniquely identify an element <i>node</i>. 
+  This <i>name</i> must match a <i>name</i> attribute of the <i>datasource</i>
+  element in the Data Source Descriptor file.</p>
+  </td>
+ </tr>
+ <tr>
+  <td width=163 valign=top style='width:1.7in;border:solid windowtext 1.0pt;
+  border-top:none;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal>node: fragmentationType</p>
+  </td>
+  <td width=180 valign=top style='width:135.0pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal>&lt;horizontal_or_vertical&gt;</p>
+  </td>
+  <td width=295 valign=top style='width:221.4pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal>The fragmentation type of the element <i>node</i>. The
+  value must be of the following: horizontal, vertical</p>
+  </td>
+ </tr>
+ <tr>
+  <td width=163 valign=top style='width:1.7in;border:solid windowtext 1.0pt;
+  border-top:none;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal>dataSourceDescriptor: file</p>
+  </td>
+  <td width=180 valign=top style='width:135.0pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal>&lt;path_to_desc&gt;</p>
+  </td>
+  <td width=295 valign=top style='width:221.4pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal>Relative path to the file describing the data source of
+  the superelement <i>node</i>.</p>
+  </td>
+ </tr>
+ <tr>
+  <td width=163 valign=top style='width:1.7in;border:solid windowtext 1.0pt;
+  border-top:none;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal>children: joinTable</p>
+  </td>
+  <td width=180 valign=top style='width:135.0pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal>&lt;table_name&gt;</p>
+  </td>
+  <td width=295 valign=top style='width:221.4pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal>The name of the table containing the <i>joincol</i>
+  attribute for this <i>children</i> element.</p>
+  </td>
+ </tr>
+ <tr>
+  <td width=163 valign=top style='width:1.7in;border:solid windowtext 1.0pt;
+  border-top:none;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal>children: joincol</p>
+  </td>
+  <td width=180 valign=top style='width:135.0pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal>&lt;column_name&gt;</p>
+  </td>
+  <td width=295 valign=top style='width:221.4pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal>The name of the column on which the data will be joined.  If
+  the value of <i>joincol</i> is the same for two fragmented pieces of data,
+  then each fragment is referring to the same data as a whole.</p>
+  </td>
+ </tr>
+ <tr>
+  <td width=163 valign=top style='width:1.7in;border:solid windowtext 1.0pt;
+  border-top:none;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal>dbInfo: host</p>
+  </td>
+  <td width=180 valign=top style='width:135.0pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal>&lt;URL_of_DB&gt;</p>
+  </td>
+  <td width=295 valign=top style='width:221.4pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal>Location of database described by the superelement <i>node</i>.</p>
+  </td>
+ </tr>
+ <tr>
+  <td width=163 valign=top style='width:1.7in;border:solid windowtext 1.0pt;
+  border-top:none;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal>dbInfo: type</p>
+  </td>
+  <td width=180 valign=top style='width:135.0pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal>&lt;DB_type&gt;</p>
+  </td>
+  <td width=295 valign=top style='width:221.4pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal>Type of the database described by the superelement <i>node</i>. 
+  It must match  &lt;rdbms&gt; for one of the driver keys provided above.</p>
+  </td>
+ </tr>
+</table>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal> </p>
+
+<h2><a name="_Toc262199399"></a><a name="_Toc258254499"></a><a
+name="_Toc258250150"></a><a name="Schema_Map"></a><a name=Descriptor></a><span
+style='font-size:12.0pt'>3. DataSource&nbsp;Descriptor</span> </h2>
+
+<p class=MsoNormal>The Data Source Descriptor file is an XML file that
+describes the tables, columns, and types of data in those columns for either
+the virtual database that exists at the root node or for actual databases at
+leaf nodes. If the attribute a column is associated with an ontology, it also
+containts links to the file (or database) containing the ontology. </p>
+
+<p class=MsoNormal>Here is the structure of a Data Source Descriptor file (see
+appendix for an example) :</p>
+
+<table class=MsoNormalTable border=1 cellspacing=0 cellpadding=0
+ style='border-collapse:collapse;border:none'>
+ <tr>
+  <td width=163 valign=top style='width:1.7in;border:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal><b>Element: Attribute</b></p>
+  </td>
+  <td width=180 valign=top style='width:135.0pt;border:solid windowtext 1.0pt;
+  border-left:none;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal><b>Value</b></p>
+  </td>
+  <td width=295 valign=top style='width:221.4pt;border:solid windowtext 1.0pt;
+  border-left:none;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal><b>Comments</b></p>
+  </td>
+ </tr>
+ <tr>
+  <td width=163 valign=top style='width:1.7in;border:solid windowtext 1.0pt;
+  border-top:none;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal>node: name</p>
+  </td>
+  <td width=180 valign=top style='width:135.0pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal>&lt;unrestricted&gt;</p>
+  </td>
+  <td width=295 valign=top style='width:221.4pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal>This is used to uniquely identify an element <i>node</i>. 
+  This <i>name</i> must match a <i>name</i> attribute of the <i>datasource</i>
+  element in the Data Source Descriptor file.</p>
+  </td>
+ </tr>
+ <tr>
+  <td width=163 valign=top style='width:1.7in;border:solid windowtext 1.0pt;
+  border-top:none;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal>node: fragmentationType</p>
+  </td>
+  <td width=180 valign=top style='width:135.0pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal>&lt;horizontal_or_vertical&gt;</p>
+  </td>
+  <td width=295 valign=top style='width:221.4pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal>The fragmentation type of the element <i>node</i>. The
+  value must be of the following: horizontal, vertical</p>
+  </td>
+ </tr>
+ <tr>
+  <td width=163 valign=top style='width:1.7in;border:solid windowtext 1.0pt;
+  border-top:none;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal>dataSourceDescriptor: file</p>
+  </td>
+  <td width=180 valign=top style='width:135.0pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal>&lt;path_to_desc&gt;</p>
+  </td>
+  <td width=295 valign=top style='width:221.4pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal>Relative path to the file describing the data source of
+  the superelement <i>node</i>.</p>
+  </td>
+ </tr>
+ <tr>
+  <td width=163 valign=top style='width:1.7in;border:solid windowtext 1.0pt;
+  border-top:none;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal>children: joinTable</p>
+  </td>
+  <td width=180 valign=top style='width:135.0pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal>&lt;table_name&gt;</p>
+  </td>
+  <td width=295 valign=top style='width:221.4pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal>The name of the table containing the <i>joincol</i>
+  attribute for this <i>children</i> element.</p>
+  </td>
+ </tr>
+ <tr>
+  <td width=163 valign=top style='width:1.7in;border:solid windowtext 1.0pt;
+  border-top:none;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal>children: joincol</p>
+  </td>
+  <td width=180 valign=top style='width:135.0pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal>&lt;column_name&gt;</p>
+  </td>
+  <td width=295 valign=top style='width:221.4pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal>The name of the column on which the data will be joined. 
+  If the value of <i>joincol</i> is the same for two fragmented pieces of data,
+  then each fragment is referring to the same data as a whole.</p>
+  </td>
+ </tr>
+ <tr>
+  <td width=163 valign=top style='width:1.7in;border:solid windowtext 1.0pt;
+  border-top:none;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal>dbInfo: host</p>
+  </td>
+  <td width=180 valign=top style='width:135.0pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal>&lt;URL_of_DB&gt;</p>
+  </td>
+  <td width=295 valign=top style='width:221.4pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal>Location of database described by the superelement <i>node</i>.</p>
+  </td>
+ </tr>
+ <tr>
+  <td width=163 valign=top style='width:1.7in;border:solid windowtext 1.0pt;
+  border-top:none;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal>dbInfo: type</p>
+  </td>
+  <td width=180 valign=top style='width:135.0pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal>&lt;DB_type&gt;</p>
+  </td>
+  <td width=295 valign=top style='width:221.4pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal>Type of the database described by the superelement <i>node</i>. 
+  It must match  &lt;rdbms&gt; for one of the driver keys provided above.</p>
+  </td>
+ </tr>
+</table>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal>The description of the attributes is as follows</p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<table class=MsoNormalTable border=1 cellspacing=0 cellpadding=0
+ style='border-collapse:collapse;border:none'>
+ <tr>
+  <td width=151 valign=top style='width:113.4pt;border:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal><b>Element: Attribute</b></p>
+  </td>
+  <td width=274 valign=top style='width:205.8pt;border:solid windowtext 1.0pt;
+  border-left:none;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal><b>Value</b></p>
+  </td>
+  <td width=213 valign=top style='width:159.6pt;border:solid windowtext 1.0pt;
+  border-left:none;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal><b>Comments</b></p>
+  </td>
+ </tr>
+ <tr>
+  <td width=151 valign=top style='width:113.4pt;border:solid windowtext 1.0pt;
+  border-top:none;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal>datasource: name</p>
+  </td>
+  <td width=274 valign=top style='width:205.8pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal>&lt;unrestricted&gt;</p>
+  </td>
+  <td width=213 valign=top style='width:159.6pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal>This is used to uniquely identify an element <i>datasource</i>. 
+  This <i>name</i> must match a <i>name</i> attribute of the <i>node</i>
+  element in the DTreeFile..</p>
+  </td>
+ </tr>
+ <tr>
+  <td width=151 valign=top style='width:113.4pt;border:solid windowtext 1.0pt;
+  border-top:none;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal>table: name</p>
+  </td>
+  <td width=274 valign=top style='width:205.8pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal>&lt;table_name&gt;</p>
+  </td>
+  <td width=213 valign=top style='width:159.6pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal>Name of the table</p>
+  </td>
+ </tr>
+ <tr>
+  <td width=151 valign=top style='width:113.4pt;border:solid windowtext 1.0pt;
+  border-top:none;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal>column: name</p>
+  </td>
+  <td width=274 valign=top style='width:205.8pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal>&lt;col_name&gt;</p>
+  </td>
+  <td width=213 valign=top style='width:159.6pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal>Name of the column</p>
+  </td>
+ </tr>
+ <tr>
+  <td width=151 valign=top style='width:113.4pt;border:solid windowtext 1.0pt;
+  border-top:none;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal>column: type</p>
+  </td>
+  <td width=274 valign=top style='width:205.8pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal>&lt;col_type&gt;</p>
+  </td>
+  <td width=213 valign=top style='width:159.6pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal>The type of the data in this column.</p>
+  </td>
+ </tr>
+ <tr>
+  <td width=151 valign=top style='width:113.4pt;border:solid windowtext 1.0pt;
+  border-top:none;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal>operation: type</p>
+  </td>
+  <td width=274 valign=top style='width:205.8pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal>&lt;op_type&gt;</p>
+  </td>
+  <td width=213 valign=top style='width:159.6pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal>Fixed value AVH</p>
+  </td>
+ </tr>
+ <tr>
+  <td width=151 valign=top style='width:113.4pt;border:solid windowtext 1.0pt;
+  border-top:none;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal>operation: base</p>
+  </td>
+  <td width=274 valign=top style='width:205.8pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal>&lt;op_base&gt;</p>
+  </td>
+  <td width=213 valign=top style='width:159.6pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal><i>base </i>is the Uri to be appended to the values of the
+  attribute to form concepts in the ontology</p>
+  </td>
+ </tr>
+ <tr>
+  <td width=151 valign=top style='width:113.4pt;border:solid windowtext 1.0pt;
+  border-top:none;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal>operation: ontology</p>
+  </td>
+  <td width=274 valign=top style='width:205.8pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal>&lt;op_ontology&gt;</p>
+  </td>
+  <td width=213 valign=top style='width:159.6pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal>The  ontology associated with the attribute</p>
+  </td>
+ </tr>
+ <tr>
+  <td width=151 valign=top style='width:113.4pt;border:solid windowtext 1.0pt;
+  border-top:none;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal>operation: ontLoc</p>
+  </td>
+  <td width=274 valign=top style='width:205.8pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal>&lt;path_to_ontLoc&gt;</p>
+  </td>
+  <td width=213 valign=top style='width:159.6pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal>The relative path to the file that describes the ontology.</p>
+  </td>
+ </tr>
+</table>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal><a name=File></a>The <b>ontLoc</b>  points to a  file that
+contains an attribute value hierarchy that can be associated with an attribute
+in the data source. The attribute value hierarchy can be specified  in OWL
+syntax (the   system can be extended to support a user specified format) .  </p>
+
+<h2><a name="_Toc262199400"></a><a name="_Toc258254500"></a><a
+name="_Toc258250151"><span style='font-size:12.0pt'>4.  Schema Map</span></a> </h2>
+
+<p class=MsoNormal>The Schema Map is a Java Properties file where the keys are
+actual table and column names that exist in real databases and their values are
+the table and column names from the user view (root DTree node) to which they
+should be mapped.  The key/value pairs should have the following structure</p>
+
+<p class=MsoNormal><span style='font-family:"Courier New";color:#666666'>&lt;datasourcename&gt;</span><span
+style='color:#666666'>.</span><span style='font-family:"Courier New";
+color:#666666'>&lt;tablename&gt;</span><span style='color:#666666'>.&lt;attributename</span><span
+style='font-family:"Courier New";color:#666666'>&gt;</span><span
+style='color:#666666'>&nbsp;= </span><span style='font-family:"Courier New";
+color:#666666'>&lt;userdatasource&gt;</span><span style='color:#666666'>.</span><span
+style='font-family:"Courier New";color:#666666'>&lt;usertablename&gt;</span><span
+style='color:#666666'>.&lt;userattributename</span><span style='font-family:
+"Courier New";color:#666666'>&gt;</span><span style='color:#666666'> </span></p>
+
+<h2><a name="_Toc262199401"></a><a name="_Toc258254501"><span style='font-size:
+12.0pt'>5.  ontmap.properties File</span></a> </h2>
+
+<p class=MsoNormal style='text-align:justify'>The <b><i>ontmap.properties</i></b>&nbsp;file
+contains the&nbsp; location of the ontology mapping file which has the mappings
+between an attribute in user view ontology to an attribute in data source view
+ontology.  Each entry in the ontmap.properties is a key/value pair of the
+following format</p>
+
+<p class=MsoNormal style='text-align:justify'><span style='color:#666666'>&lt;UserviewDatabaseName&gt;.&lt;UserViewTableName&gt;.&lt;UserViewColumnName&gt;|&lt;DatasourceDatabaseName&gt;.&lt;DatabaseTableName&gt;.&lt;DatasourceColumnName&gt;
+= &lt;URL of the Mappings file&gt;</span></p>
+
+<p class=MsoNormal>The directory were the  downloaded zip file was extracted 
+contains a sample&nbsp;<i>ontmap.properties</i> file in the config-example-5
+folder. </p>
+
+<p class=MsoNormal>Note that the mapping file is  in OWL Syntax</p>
+
+<h3><a name="_Toc262199402"></a><a name="_Toc258254502">Custom  Format</a>
+(Ontology and Ontology Mappings)</h3>
+
+<p class=MsoNormal>Although the recommend Ontology Format is OWL, the system
+also supports a custom  format.</p>
+
+<p class=MsoNormal>This has been done to demonstrate that the system can be
+extended.</p>
+
+<p class=MsoNormal> The syntax for the custom format of the  ontology is: </p>
+
+<p class=MsoNormal>Three key/value pairs proceeded by a single semicolon (;).
+These are for information purposes only </p>
+
+<p class=MsoNormal>The three key/value pairs are: </p>
+
+<table class=MsoNormalTable border=1 cellpadding=0 style='border:none'>
+ <tr>
+  <td style='border:none;padding:.75pt .75pt .75pt .75pt'>
+  <p class=MsoNormal><b>Key</b> </p>
+  </td>
+  <td style='border:none;padding:.75pt .75pt .75pt .75pt'>
+  <p class=MsoNormal><b>Value</b> </p>
+  </td>
+  <td style='border:none;padding:.75pt .75pt .75pt .75pt'>
+  <p class=MsoNormal><b>Comments</b> </p>
+  </td>
+ </tr>
+ <tr>
+  <td style='border:none;padding:.75pt .75pt .75pt .75pt'>
+  <p class=MsoNormal><span style='color:#666666'>typename &nbsp; &nbsp;</span> </p>
+  </td>
+  <td style='border:none;padding:.75pt .75pt .75pt .75pt'>
+  <p class=MsoNormal><span style='font-family:"Courier New";color:#666666'>&lt;attributename&gt;</span><span
+  style='color:#666666'>Type</span> </p>
+  </td>
+  <td style='border:none;padding:.75pt .75pt .75pt .75pt'>
+  <p class=MsoNormal><span style='color:#666666'>attributeName is the column in
+  the table with which ontology is used&nbsp; &nbsp; &nbsp;</span> </p>
+  </td>
+ </tr>
+ <tr>
+  <td style='border:none;padding:.75pt .75pt .75pt .75pt'>
+  <p class=MsoNormal><span style='color:#666666'>subTypeOf</span> </p>
+  </td>
+  <td style='border:none;padding:.75pt .75pt .75pt .75pt'>
+  <p class=MsoNormal><span style='color:#666666'>AVH</span> </p>
+  </td>
+  <td style='border:none;padding:.75pt .75pt .75pt .75pt'>
+  <p class=MsoNormal><span style='color:#666666'>fixed</span> </p>
+  </td>
+ </tr>
+ <tr>
+  <td style='border:none;padding:.75pt .75pt .75pt .75pt'>
+  <p class=MsoNormal><span style='color:#666666'>ordername</span> </p>
+  </td>
+  <td style='border:none;padding:.75pt .75pt .75pt .75pt'>
+  <p class=MsoNormal><span style='color:#666666'>ISA</span> </p>
+  </td>
+  <td style='border:none;padding:.75pt .75pt .75pt .75pt'>
+  <p class=MsoNormal><span style='color:#666666'>fixed</span> </p>
+  </td>
+ </tr>
+</table>
+
+<p class=MsoNormal>Following the key/value pairs is an optional alias that
+would be used to shorten the URIs for each item in the ontology. The alias is a
+key/value pair that is preceded by the string “xmlns:” (without quotes).  Finally,
+the structure of the ontology begins with URI of the ontology followed by a
+open curly brace ({). Each line between the curly braces is the URI to an item
+in the ontology. If using an alias, use double periods (..) to denote the use
+of the alias. The rest of the line should complete the URI for an item of the
+ontology. All items in the ontology that are refered to in the Ontology Map
+file must be present.  After the last URI, there must be a closing curly brace
+(}).  Multiple ontologies can be present in a single file. Comments begin with
+the pound sign (#) or double forward slashes (//) and continue until the end of
+the line.  The appendix includes an ontology in the custom format.</p>
+
+<p class=MsoNormal>The system also supports a custom format for specifying
+ontology mappings. The ontology mappings are specified as key/value pairs with
+the following syntax</p>
+
+<p class=MsoNormal> <span style='font-family:"Courier New";color:#666666'>&lt;targetdatasource&gt;</span><span
+style='color:#666666'>@</span><span style='font-family:"Courier New";
+color:#666666'>&lt;datasource_ontologyid&gt;</span><span style='color:#666666'>@</span><span
+style='font-family:"Courier New";color:#666666'>&lt;datasource_classid&gt;</span><span
+style='color:#666666'>&nbsp;= [EQUAL|SUPER|SUB]@</span><span style='font-family:
+"Courier New";color:#666666'>&lt;userview_ontologyid&gt;</span><span
+style='color:#666666'>@</span><span style='font-family:"Courier New";
+color:#666666'>&lt;userview_classid&gt;</span> </p>
+
+<p class=MsoNormal>The <i>&lt;datasource_classid&gt; </i>is the URI of a
+concept in the ontology with URI <i>&lt;datasource_ontologyid&gt;</i>&nbsp;
+that is associated with an attributed in the <i>&lt;targetdatasource&gt;.</i> 
+Similarly <i>&lt;userview_classid&gt; </i>is the URI of a concept in the
+ontology with URI <i>&lt;userview_ontologyid&gt;</i>&nbsp; that is associated
+with an attributed in the <i>User View.</i>  <i> </i>The keyword EQUAL, SUPER
+and SUB  specifies equivalent class, superclass and subclass relationship between
+the concept with URI  &lt;<i>datasource_classid&gt; and  </i>between the
+concept with URI <i>&lt;userview_classid&gt;</i>. Please see appendix for an
+example.</p>
+
+<h2><a name="_Toc262199403">Assumptions and  Limitations</a> </h2>
+
+<ul style='margin-top:0in' type=disc>
+ <li class=MsoNormal>The ILF is restricted to handling attributes with nominal
+     values.</li>
+ <li class=MsoNormal>The IIF ontologies are restricted to attribute value
+     hierarchies.</li>
+ <li class=MsoNormal>Schema Mappings are restricted to being one to one.</li>
+ <li class=MsoNormal>The supported ontology mappings are restricted subclass,
+     superclass and equivalent class relations</li>
+</ul>
+
+<h1><a name="_Toc262199404">License</a></h1>
+
+<p class=MsoNormal>INDUS is released under GPLv3  license (http://www.gnu.org/licenses/quick-guide-gplv3.html)
+and is provided on a  AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
+ANY KIND, either express or implied, including, without limitation, any
+warranties or conditions of TITLE, NON-INFRINGEMENT, MERCHANTABILITY, or FITNESS
+FOR A PARTICULAR PURPOSE. You are solely responsible for determining the
+appropriateness of using or redistributing the Work and assume any risks
+associated with Your exercise of permissions under this License.</p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal>The distribution includes a variety of third party
+applications that have been included in the distribution for ease and
+completeness (and verifying  correctness of the installation by running a test
+example).  It is the SOLE responsibility of the user's of the application to
+ensure that they have the appropriate license for these third party
+applications. Given below is a list of the third party applications along with
+their license requirement (s) (to the best of our knowledge) </p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal><b>Pellet</b> - <i>http://clarkparsia.com/pellet</i>  (
+Released under AGPL - http://www.gnu.org/licenses/agpl-3.0.html)</p>
+
+<p class=MsoNormal><b>WEKA</b>  - <i>http://www.cs.waikato.ac.nz/ml/weka/</i> 
+( Release under GNU GPL license)</p>
+
+<p class=MsoNormal><b>JDBC</b> <b>Driver</b> (mySQL) - <i>http://dev.mysql.com/downloads/connector/j/</i>
+(Released under GNU GPL License)</p>
+
+<p class=MsoNormal><b>Log4J</b> - http<i>://logging.apache.org/log4j/</i>
+(Released under Apache Software Foundation license - 
+http://www.apache.org/licenses/LICENSE-2.0.txt)</p>
+
+<p class=MsoNormal><b>DBCP Commons</b> - <i>http://commons.apache.org/dbcp/</i> 
+(Released under Apache Software Foundation license - 
+http://www.apache.org/licenses/LICENSE-2.0.txt)</p>
+
+<p class=MsoNormal><b>DBCP Pool</b>  (required to run DBCP Commons)  - <i>http://commons.apache.org/pool/</i>  
+(Released under Apache Software Foundation license - 
+http://www.apache.org/licenses/LICENSE-2.0.txt)</p>
+
+<p class=MsoNormal><b>ZQL </b>-  <i>http://www.gibello.com/code/zql/</i>  ( The
+page mentions the following- Zql is no commercial product: feel free to use it,
+but we provide no warranty.</p>
+
+<p class=MsoNormal><b>MathEval</b> -  <i>http://sourceforge.net/projects/matheval/</i> 
+( The included documentation states that you are free to use and or modify the
+source code, and use it in whatever manner you'd like, as long as you give me
+credit for the original, and do not claim it as your own.)</p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<h1><a name="_Toc262199405">References</a></h1>
+
+<p class=MsoNormal><i>The following is a list of papers  (partial) that have
+been published as a part of INDUS.  Users may find it worthwhile to go through
+the papers to understand the system better.</i> </p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<ol style='margin-top:0in' start=1 type=1>
+ <li class=MsoNormal style='text-autospace:none'>Koul, N., and Honavar, V.
+     (2009). Design and Implementation of a Query Planner for Data Integration.
+      In:Proceedings of the IEEE Conference on Tools with Artificial
+     Intelligence. IEEE Press. pp. 214<span style='font-family:"Calibri","sans-serif"'>&#8208;</span>218</li>
+ <li class=MsoNormal style='text-autospace:none'>Koul, N., Caragea, C.,
+     Bahirwani, V., Caragea, D., and Honavar, V. (2008). Using Sufficient
+     Statistics to LearnPredictive Models from Massive Data Sets. Proceedings
+     of the ACM/IEEE/WIC Conference on Web Intelligence (WI<span
+     style='font-family:"Calibri","sans-serif"'>&#8208;</span>2008). pp. 923<span
+     style='font-family:"Calibri","sans-serif"'>&#8208;</span>926.</li>
+ <li class=MsoNormal style='text-autospace:none'>Bao, J., Caragea, D., and
+     Honavar, V. (2006). A Tableau<span style='font-family:"Calibri","sans-serif"'>&#8208;</span>based
+     Federated Reasoning Algorithm for Modular Ontologies. ACM / IEEE / WIC
+     Conference on Web Intelligence, Hong Kong, pp. 404<span style='font-family:
+     "Calibri","sans-serif"'>&#8208;</span>410.</li>
+ <li class=MsoNormal style='text-autospace:none'>Caragea, D., Zhang, J., Bao,
+     J., Pathak, J., and Honavar, V. (2005). Algorithms and Software for Collaborative
+     Discovery from Autonomous, Semantically Heterogeneous, Distributed,
+     Information Sources. Invited paper. In: Proceedings of the Conference on
+     Algorithmic Learning Theory. Lecture Notes in Computer Science. Vol. 3734.
+     Berlin: Springer<span style='font-family:"Calibri","sans-serif"'>&#8208;</span>Verlag.
+     pp. 13<span style='font-family:"Calibri","sans-serif"'>&#8208;</span>44.</li>
+ <li class=MsoNormal style='text-autospace:none'>Zhang, J., Caragea, D. and
+     Honavar, V. (2005). Learning Ontology<span style='font-family:"Calibri","sans-serif"'>&#8208;</span>Aware
+     Classifiers. In: Proceedings of the 8<sup>th</sup> International
+     Conference on Discovery Science. Springer<span style='font-family:"Calibri","sans-serif"'>&#8208;</span>Verlag
+     Lecture Notes in Computer Science. Singapore. Vol. 3735. pp. 308<span
+     style='font-family:"Calibri","sans-serif"'>&#8208;</span>321. Berlin:
+     Springer<span style='font-family:"Calibri","sans-serif"'>&#8208;</span>Verlag</li>
+ <li class=MsoNormal style='text-autospace:none'>Caragea, D., Pathak, J., and
+     Honavar, V. (2004). Learning Classifiers from Semantically Heterogeneous
+     Data. In: Proceedings of the International Conference on Ontologies, Databases,
+     and Applications of Semantics (ODBASE 2004), Springer<span
+     style='font-family:"Cambria Math","serif"'>&#8208;</span>Verlag Lecture
+     Notes in Computer Science vol. 3291. pp. 963<span style='font-family:"Cambria Math","serif"'>&#8208;</span>980.</li>
+ <li class=MsoNormal style='text-autospace:none'>Caragea, D., Silvescu, A., and
+     Honavar, V. (2004). A Framework for Learning from Distributed Data Using
+     Sufficient Statistics and its Application to Learning Decision Trees. International
+     Journal of Hybrid Intelligent Systems. <b>Invited Paper. Vol 1. pp. 80</b><b><span
+     style='font-family:"Cambria Math","serif"'>&#8208;</span>89</b></li>
+</ol>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<h1><a name="_Toc262199406"></a><a name="_Toc258254503"></a><a
+name="_Toc258250153"><span class=Heading2Char><span style='font-size:18.0pt'>Appendix</span></span></a>
+</h1>
+
+<h3><a name="_Toc262199407"></a><a name="_Toc258254504"></a><a
+name="_Toc258250154">Sample <i>View File </i> - using OWL syntax for ontology
+mappings (view.txt)</a></h3>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>&nbsp;</span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>UserViewName=movies</span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>DTreeFile=tree.xml</span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>SchemaMap=schemamap.txt</span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>OntMapProperties=ontmap.properties</span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>&nbsp;</span></p>
+
+<h3><a name="_Toc262199408"></a><a name="_Toc258254505"></a><a
+name="_Toc258250155">Sample DTreeFile (tree.xml)</a></h3>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>&lt;?xml version=&quot;1.0&quot;
+encoding=&quot;ISO-8859-1&quot; ?&gt; </span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>&lt;tree&gt;</span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>&lt;node name=&quot;movies&quot;
+fragmentationType=&quot;horizontal&quot;&gt;</span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>      &lt;dataSourceDescriptor
+file=&quot;userviewdesc.xml&quot; /&gt;</span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>      &lt;children&gt;</span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>            &lt;node name=&quot;netflix&quot;
+fragmentationType=&quot;horizontal&quot;&gt;</span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>                  &lt;dbInfo type=&quot;mysql&quot;
+host=&quot;localhost&quot; DRIVER=&quot;org.postgresql.Driver&quot;
+datasource=&quot;netflix&quot; /&gt;</span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>                  &lt;dataSourceDescriptor
+file=&quot;netflix_desc.xml&quot; /&gt;</span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>            &lt;/node&gt;</span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>            &lt;node name=&quot;blockbuster&quot;
+fragmentationType=&quot;horizontal&quot;&gt;                </span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>                              &lt;dbInfo
+type=&quot;mysql&quot; host=&quot;localhost&quot; DRIVER=&quot;org.postgresql.Driver&quot;
+datasource=&quot;blockbuster&quot; /&gt;</span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>                              &lt;dataSourceDescriptor
+file=&quot;blockbuster_desc.xml&quot; /&gt;</span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>            &lt;/node&gt;</span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>      &lt;/children&gt;</span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>&lt;/node&gt;</span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>&lt;/tree&gt;</span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>&nbsp;</span></p>
+
+<h3><a name="_Toc262199409"></a><a name="_Toc258254507"></a><a
+name="_Toc258250157">Sample </a><span style='font-size:12.0pt'>  DataSource&nbsp;Descriptor</span> 
+<span style='font-size:12.0pt'>(e.g. userviewdesc.xml)</span>: </h3>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>&lt;?<u><span style='color:black'>xml</span></u>
+version=&quot;1.0&quot; encoding=&quot;ISO-8859-1&quot; ?&gt;</span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>&lt;descriptors&gt;</span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'> &lt;descriptor&gt;</span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>&lt;datasource name=&quot;movies&quot;&gt;</span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>&lt;table name=&quot;details&quot;&gt;</span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>  &lt;column name=&quot;title&quot;
+type=&quot;varchar&quot; /&gt;</span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>  &lt;column name=&quot;genre&quot; 
+type=&quot;varchar&quot; &gt;</span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>    &lt;operation type=&quot;AVH&quot; base=
+&quot;http://localhost/movieExample/userMovies.owl&quot; ontology =
+&quot;http://localhost/movieExample/userMovies.owl&quot;
+ontLoc=&quot;userMovies.owl&quot; /&gt; </span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>  &lt;/column&gt; </span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>  &lt;column name=&quot;reviews&quot;
+type=&quot;varchar&quot;/&gt;</span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>   &lt;column name=&quot;Class&quot;
+type=&quot;varchar&quot;/&gt;</span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>  &lt;/table&gt;</span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>  &lt;/datasource&gt;</span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>  &lt;/descriptor&gt;</span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>  &lt;/descriptors&gt;</span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'> </span></p>
+
+<p class=Div><span lang=RU style='font-size:10.0pt;font-family:"Courier New"'> 
+&lt;/descriptors&gt;</span></p>
+
+<p class=Div><b><span lang=RU>Sample </span></b><b>SchemaMap<span lang=RU> file</span></b><b>
+(schemamap.txt)</b></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>#netflix database mappings</span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>netflix.table1.movie=movies.details.title</span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>netflix.table1.area=movies.details.genre</span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>netflix.table1.stars=movies.details.reviews</span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>netflix.table1.buy=movies.details.Class</span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>&nbsp;</span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>#blockbuster database mappings</span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>blockbuster.table2.name=movies.details.title</span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>blockbuster.table2.category=movies.details.genre</span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>blockbuster.table2.rating=movies.details.reviews</span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>blockbuster.table2.watch=movies.details.Class</span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>&nbsp;</span></p>
+
+<h3><a name="_Toc262199410"></a><a name="_Toc258254508"></a><a
+name="_Toc258250158">Sample ontmap.properties file:</a> </h3>
+
+<p class=MsoNormal><span style='font-size:8.0pt;font-family:"Courier New"'>#Reference
+to Ontolgies Containing Mappings</span></p>
+
+<p class=MsoNormal><span style='font-size:8.0pt;font-family:"Courier New"'>movies.details.genre|netflix.table1.area
+= http://localhost/movieExample/mapNetflixArea.owl</span></p>
+
+<p class=MsoNormal><span style='font-size:8.0pt;font-family:"Courier New"'>movies.details.genre|blockbuster.table2.category
+= http://localhost/movieExample/mapBlockBusterCategory.owl</span></p>
+
+<p class=MsoNormal><span style='font-size:8.0pt;font-family:"Courier New"'>&nbsp;</span></p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<h3><a name="_Toc262199411"></a><a name="_Toc258254509"></a><a
+name="_Toc258250159">Sample ontology mappings file – Using OWL (mapNetflixArea.owl):</a>
+</h3>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>&lt;?xml version=&quot;1.0&quot;?&gt;</span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>&lt;!DOCTYPE rdf:RDF [</span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>    &lt;!ENTITY owl
+&quot;http://www.w3.org/2002/07/owl#&quot; &gt;</span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>    &lt;!ENTITY xsd
+&quot;http://www.w3.org/2001/XMLSchema#&quot; &gt;</span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>    &lt;!ENTITY owl2xml
+&quot;http://www.w3.org/2006/12/owl2-xml#&quot; &gt;</span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>    &lt;!ENTITY rdfs &quot;http://www.w3.org/2000/01/rdf-schema#&quot;
+&gt;</span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>    &lt;!ENTITY View
+&quot;http://localhost/movieExample/View.owl#&quot; &gt;</span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>    &lt;!ENTITY Netflix
+&quot;http://localhost/movieExample/Netflix.owl#&quot; &gt;</span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>    &lt;!ENTITY rdf
+&quot;http://www.w3.org/1999/02/22-rdf-syntax-ns#&quot; &gt;</span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>    &lt;!ENTITY userMovies &quot;http://www.ailab.iastate.edu/userMovies.owl#&quot;
+&gt;</span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>]&gt;</span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>&lt;rdf:RDF
+xmlns=&quot;http://localhost/userMovies/mapNetflixArea.owl#&quot;</span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>    
+xml:base=&quot;http://localhost/userMovies/mapNetflixArea.owl&quot;</span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>    
+xmlns:owl2xml=&quot;http://www.w3.org/2006/12/owl2-xml#&quot;</span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>     xmlns:Netflix=&quot;http://localhost/movieExample/Netflix.owl#&quot;</span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>    
+xmlns:View=&quot;http://localhost/movieExample/View.owl#&quot;</span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>    
+xmlns:xsd=&quot;http://www.w3.org/2001/XMLSchema#&quot;</span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>    
+xmlns:userMovies=&quot;http://www.ailab.iastate.edu/userMovies.owl#&quot;</span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>     xmlns:rdfs=&quot;http://www.w3.org/2000/01/rdf-schema#&quot;</span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>    
+xmlns:rdf=&quot;http://www.w3.org/1999/02/22-rdf-syntax-ns#&quot;</span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>    
+xmlns:owl=&quot;http://www.w3.org/2002/07/owl#&quot;&gt;</span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>    &lt;owl:Ontology rdf:about=&quot;&quot;&gt;</span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>        &lt;owl:imports
+rdf:resource=&quot;http://localhost/movieExample/Netflix.owl&quot;/&gt;</span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>        &lt;owl:imports
+rdf:resource=&quot;http://localhost/movieExample/UserMovies.owl&quot;/&gt;</span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>    &lt;/owl:Ontology&gt;</span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>    &lt;!-- </span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>   
+///////////////////////////////////////////////////////////////////////////////////////</span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>    //</span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>    // Classes</span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>    //</span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>    ///////////////////////////////////////////////////////////////////////////////////////</span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>     --&gt;</span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>    &lt;!--
+http://localhost/movieExample/Netflix.owl#Action --&gt;</span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>&nbsp;</span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>    &lt;owl:Class
+rdf:about=&quot;&amp;Netflix;Action&quot;&gt;</span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>        &lt;owl:equivalentClass
+rdf:resource=&quot;&amp;userMovies;Action&quot;/&gt;</span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>    &lt;/owl:Class&gt;</span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>    &lt;!--
+http://localhost/movieExample/Netflix.owl#ChickFlicks --&gt;</span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>&nbsp;</span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>    &lt;owl:Class
+rdf:about=&quot;&amp;Netflix;ChickFlicks&quot;&gt;</span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>        &lt;owl:equivalentClass
+rdf:resource=&quot;&amp;View;RomanticComedy&quot;/&gt;</span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>    &lt;/owl:Class&gt;</span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>    &lt;!--
+http://localhost/movieExample/Netflix.owl#Comedy --&gt;</span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>&nbsp;</span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>    &lt;owl:Class
+rdf:about=&quot;&amp;Netflix;Comedy&quot;&gt;</span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>        &lt;owl:equivalentClass
+rdf:resource=&quot;&amp;View;Comedy&quot;/&gt;</span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>    &lt;/owl:Class&gt;</span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>        &lt;!--
+http://localhost/movieExample/Netflix.owl#Drama --&gt;</span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>&nbsp;</span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>    &lt;owl:Class
+rdf:about=&quot;&amp;Netflix;Drama&quot;&gt;</span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>        &lt;owl:equivalentClass
+rdf:resource=&quot;&amp;View;Drama&quot;/&gt;</span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>    &lt;/owl:Class&gt;</span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>        &lt;!--
+http://localhost/movieExample/Netflix.owl#ScienceFiction --&gt;</span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>&nbsp;</span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>    &lt;owl:Class
+rdf:about=&quot;&amp;Netflix;ScienceFiction&quot;&gt;</span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>        &lt;owl:equivalentClass
+rdf:resource=&quot;&amp;View;ActionAdventure&quot;/&gt;</span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>    &lt;/owl:Class&gt;</span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>        &lt;!--
+http://localhost/movieExample/Netflix.owl#Spoof --&gt;</span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>&nbsp;</span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>    &lt;owl:Class
+rdf:about=&quot;&amp;Netflix;Spoof&quot;&gt;</span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>        &lt;owl:equivalentClass
+rdf:resource=&quot;&amp;View;Spoof&quot;/&gt;</span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>    &lt;/owl:Class&gt;</span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>    &lt;!--
+http://localhost/movieExample/Netflix.owl#War --&gt;</span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>&nbsp;</span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>    &lt;owl:Class
+rdf:about=&quot;&amp;Netflix;War&quot;&gt;</span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>        &lt;owl:equivalentClass
+rdf:resource=&quot;&amp;View;WarAction&quot;/&gt;</span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>    &lt;/owl:Class&gt;</span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>    &lt;!--
+http://localhost/movieExample/View.owl#ActionAdventure --&gt;</span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>&nbsp;</span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>    &lt;owl:Class
+rdf:about=&quot;&amp;View;ActionAdventure&quot;/&gt;</span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>    &lt;!-- http://localhost/movieExample/View.owl#Comedy
+--&gt;</span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>&nbsp;</span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>    &lt;owl:Class
+rdf:about=&quot;&amp;View;Comedy&quot;/&gt;</span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>    &lt;!--
+http://localhost/movieExample/View.owl#Drama --&gt;</span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>&nbsp;</span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>    &lt;owl:Class
+rdf:about=&quot;&amp;View;Drama&quot;/&gt;</span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>    </span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>    &lt;!--
+http://localhost/movieExample/View.owl#RomanticComedy --&gt;</span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>    &lt;owl:Class
+rdf:about=&quot;&amp;View;RomanticComedy&quot;/&gt;</span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>     &lt;!--
+http://localhost/movieExample/View.owl#Spoof --&gt;</span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>    &lt;owl:Class
+rdf:about=&quot;&amp;View;Spoof&quot;/&gt;</span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>    &lt;!--
+http://localhost/movieExample/View.owl#WarAction --&gt;</span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>&nbsp;</span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>    &lt;owl:Class
+rdf:about=&quot;&amp;View;WarAction&quot;/&gt;</span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>        &lt;!--
+http://www.ailab.iastate.edu/userMovies.owl#Action --&gt;</span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>&nbsp;</span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>    &lt;owl:Class
+rdf:about=&quot;&amp;userMovies;Action&quot;/&gt;</span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>&lt;/rdf:RDF&gt;</span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>&nbsp;</span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>&nbsp;</span></p>
+
+<p class=Div><b><span lang=RU>Sample </span></b><b><i>View </i><span lang=RU> file</span></b><b>
+–custom format for ontologies (view.txt)</b></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>UserViewName=DS1_DS2_DS3</span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>DTreeFile=tree.<u><span style='color:black'>xml</span></u></span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>SchemaMap=<u><span style='color:black'>schemamap</span></u>.<u><span
+style='color:black'>txt</span></u></span></p>
+
+<p class=Div><span lang=RU style='font-size:10.0pt;font-family:"Courier New"'>OntologyMap=<u>ontomap</u>.<u>txt</u></span></p>
+
+<h3><a name="_Toc262199412"></a><a name="_Toc258254510"></a><a
+name="_Toc258250160">Sample <i>ontology</i> file (custom format):</a> </h3>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>;<u><span style='color:black'>typename</span></u>=positionType</span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>;subTypeOf=AVH</span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>;<u><span style='color:black'>ordername</span></u>=ISA</span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>xmlns:n0=www.ailab.iastate.edu/indus/uView/ont0</span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>n0:positionType_AVH{</span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>..\positionType_AVH\grad</span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>..\positionType_AVH\grad\M.S</span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>..\positionType_AVH\grad\ph.D</span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>..\positionType_AVH\undergraduate</span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>..\positionType_AVH\undergraduate\fe</span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>..\positionType_AVH\undergraduate\fe\redshirt</span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>..\positionType_AVH\undergraduate\so</span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>..\positionType_AVH\undergraduate\jun</span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>..\positionType_AVH\undergraduate\se</span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>}</span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>&nbsp;</span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>;typename=statusType</span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>;subTypeOf=AVH</span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>;ordername=ISA</span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>xmlns:n1=www.ailab.iastate.edu/indus/ds/ont1</span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>n1:statusType_AVH{</span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>..\statusType_AVH\graduate</span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>..\statusType_AVH\graduate\mast</span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>..\statusType_AVH\graduate\doct</span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>..\statusType_AVH\undergraduate</span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>..\statusType_AVH\undergraduate\freshman</span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>..\statusType_AVH\undergraduate\sophomore</span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>..\statusType_AVH\undergraduate\junior</span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>..\statusType_AVH\undergraduate\senior</span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>}</span></p>
+
+<p class=MsoNormal style='text-autospace:none'><span style='font-size:10.0pt;
+font-family:"Courier New"'>&nbsp;</span></p>
+
+<h3><a name="_Toc262199413"></a><a name="_Toc258254511"></a><a
+name="_Toc258250161">Sample ontmap.txt file:</a> </h3>
+
+<p class=MsoNormal style='text-autospace:none'><a
+href="mailto:DS1@www.ailab.iastate.edu/indus/ds/ont1/statusType_AVH@_junior"><span
+style='font-size:10.0pt;font-family:"Courier New"'>DS1@www.ailab.iastate.edu/indus/ds/ont1/statusType_AVH@_junior</span></a><span
+style='font-size:10.0pt;font-family:"Courier New"'>= EQUAL<u><span
+style='color:black'>@www</span></u>.<u><span style='color:black'>ailab</span></u>.<u><span
+style='color:black'>iastate</span></u>.<u><span style='color:black'>edu</span></u>/<u><span
+style='color:black'>indus</span></u>/uView/ont0/positionType_AVH@_jun</span></p>
+
+<p class=Div><a
+href="mailto:DS1@www.ailab.iastate.edu/indus/ds/ont1/statusType_AVH@_graduate"><span
+lang=RU style='font-size:10.0pt;font-family:"Courier New"'>DS1@www.ailab.iastate.edu/indus/ds/ont1/statusType_AVH@_graduate</span></a><span
+lang=RU style='font-size:10.0pt;font-family:"Courier New"'>=</span><span
+lang=RU style='font-size:10.0pt;font-family:"Courier New"'> </span><a
+href="mailto:SUPER@www.ailab.iastate.edu/indus/uView/ont0/positionType_AVH@_M.S"><span
+lang=RU style='font-size:10.0pt;font-family:"Courier New"'>SUPER@www.ailab.iastate.edu/indus/uView/ont0/positionType_AVH@_M.S</span></a></p>
+
+<p class=Div><a
+href="mailto:DS2@www.ailab.iastate.edu/indus/ds/ont2/typeType_AVH@_junior"><span
+lang=RU style='font-size:10.0pt;font-family:"Courier New"'>DS2@www.ailab.iastate.edu/indus/ds/ont2/typeType_AVH@_junior</span></a><span
+lang=RU style='font-size:10.0pt;font-family:"Courier New"'>= SUPER<u>@www</u>.<u>ailab</u>.<u>iastate</u>.<u>edu</u>/<u>indus</u>/uView/ont0/positionType_AVH@_redshirt</span></p>
+
+<p class=MsoNormal style='text-autospace:none'><a
+href="mailto:DS2@www.ailab.iastate.edu/indus/ds/ont2/typeType_AVH@_fresh"><span
+style='font-size:10.0pt;font-family:"Courier New"'>DS2@www.ailab.iastate.edu/indus/ds/ont2/typeType_AVH@_fresh</span></a><span
+style='font-size:10.0pt;font-family:"Courier New"'>= </span><a
+href="mailto:SUB@www.ailab.iastate.edu/indus/uView/ont0/positionType_AVH@_undergraduate"><span
+style='font-size:10.0pt;font-family:"Courier New"'>SUB@www.ailab.iastate.edu/indus/uView/ont0/positionType_AVH@_undergraduate</span></a></p>
+
+</div>
+
+<div><br clear=all>
+
+<hr align=left size=1 width="33%">
+
+<div id=ftn1>
+
+<p class=MsoFootnoteText><a href="#_ftnref1" name="_ftn1" title=""><span
+class=MsoFootnoteReference><span class=MsoFootnoteReference><span
+style='font-size:10.0pt;font-family:"Times New Roman","serif"'>[1]</span></span></span></a>
+ INDUS includes open source prototype implementations of algorithms and
+software for learning classifiers from large, semantically disparate,
+distributed data sources. This work was funded in part by the National Science
+Foundation through grants NSF IIS 0219699 to Vasant Honavar (Iowa State University), and NSF IIS 0711356 to Vasant Honavar (Iowa State University) and Doina
+Caragea (Kansas State University). </p>
+
+</div>
+
+<div id=ftn2>
+
+<p class=MsoFootnoteText><a href="#_ftnref2" name="_ftn2" title=""><span
+class=MsoFootnoteReference><span class=MsoFootnoteReference><span
+style='font-size:10.0pt;font-family:"Times New Roman","serif"'>[2]</span></span></span></a>
+ INDUS is distributed under open source GPL license. INDUS relies on several
+open source software packages that are freely available under open source
+license or similar licensing terms.</p>
+
+</div>
+
+<div id=ftn3>
+
+<p class=MsoFootnoteText><a href="#_ftnref3" name="_ftn3" title=""><span
+class=MsoFootnoteReference><span class=MsoFootnoteReference><span
+style='font-size:10.0pt;font-family:"Times New Roman","serif"'>[3]</span></span></span></a>
+INDUS has been designed and implemented by Neeraj Koul, with contributions from
+Jie Bao, Jyotishman Pathak, Adrian Silvescu, Jun Zhang, Remy Younes, John 
+Leacox  under  the supervision of Dr. Vasant Honavar at Iowa State University and by Roshan Chetri and Rohit Parimi under the supervision of Dr. Doina
+Caragea at Kansas State University.</p>
+
+</div>
+
+</div>
+
+</body>
+
+</html>
