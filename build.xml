@@ -109,6 +109,8 @@
         <zipfileset dir="examples" prefix="examples"/>
     	<zipfileset dir="docs" prefix=""/>
     	<zipfileset dir="license" prefix=""/>
+    	<zipfileset dir="config" prefix="config"/>
+    	
     	
     	
      </zip>
