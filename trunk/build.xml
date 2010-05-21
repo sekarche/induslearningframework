@@ -10,7 +10,7 @@
   <property name="class" location="class"/>
   <property name="lib" location="lib"/>
   <property name="dist" location="dist"/>
- <property name="examples" location="examples"/>
+  <property name="examples" location="examples"/>
   <property name="java_version" value="1.6"/>
 
   <path id="project.classpath">
@@ -100,11 +100,13 @@
     <zip destfile="induslearningframework_0.1.1.zip">
         <zipfileset dir="dist" prefix=""/>
         <zipfileset dir="lib" prefix="lib"/>
-        <zipfileset dir="class" prefix="class"/>
+      <!--  <zipfileset dir="class" prefix="class"/> -->
         <zipfileset dir="src" prefix="src"/>
     	<zipfileset dir="indus_extension_src" prefix="extension_src"/>
-        <zipfileset dir="." includes="build.xml"/> 
+        <zipfileset dir="." includes="build.xml,ilf.bat"/> 
         <zipfileset dir="examples" prefix="examples"/>
+    	<zipfileset dir="docs" prefix=""/>
+    	
      </zip>
 	<!--    Clean up -->
 	<antcall target="clean"/>
