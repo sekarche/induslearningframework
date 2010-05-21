@@ -1,0 +1,15 @@
+INDUS is released under GPLv3  license (http://www.gnu.org/licenses/quick-guide-gplv3.html) and is provided on a  AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied, including, without limitation, any warranties or conditions of TITLE, NON-INFRINGEMENT, MERCHANTABILITY, or FITNESS FOR A PARTICULAR PURPOSE. You are solely responsible for determining the appropriateness of using or redistributing the Work and assume any risks associated with Your exercise of permissions under this License.
+
+The distribution includes a variety of third party applications that have been included in the distribution for ease and completeness (and  verifying installation by running test example).  It is the SOLE responsibility of the user's of the application to ensure that they have the appropriate license for these third party applications. Given below is a list of the third party applications along with their license requirement (s) (to the best of our knowledge) 
+
+
+Pellet - http://clarkparsia.com/pellet  ( Released under AGPL - http://www.gnu.org/licenses/agpl-3.0.html)
+WEKA   - http://www.cs.waikato.ac.nz/ml/weka/  ( Release under GNU GPL license)
+JDBC Driver (mySQL) - http://dev.mysql.com/downloads/connector/j/  (Released under GNU GPL License)
+Log4J - http://logging.apache.org/log4j/ (Released under Apache Software Foundation license -  http://www.apache.org/licenses/LICENSE-2.0.txt)
+DBCP Commons - http://commons.apache.org/dbcp/  (Released under Apache Software Foundation license -  http://www.apache.org/licenses/LICENSE-2.0.txt)
+DBCP Pool (required to run DBCP Commons)   - http://commons.apache.org/pool/   (Released under Apache Software Foundation license -  http://www.apache.org/licenses/LICENSE-2.0.txt)
+ZQL -  http://www.gibello.com/code/zql/  ( The page mentions the following- Zql is no commercial product: feel free to use it, but we provide no warranty.
+MathEval -  http://sourceforge.net/projects/matheval/  ( The included documentation states that you are free to use and or modify the source code, and use it in whatever manner you'd like, as long as you give me credit for the original, and do not claim it as your own.)
+
+

@@ -17,7 +17,7 @@ if "%CMD%"=="naive-bayes" set CLASS=airldm2.classifiers.bayes.NaiveBayesClassifi
 if not "%CLASS%" == "" goto gotClass
 
 echo IndusLearningFramework Classifiers: 
-echo   decision-tree        uses Decision Tree Classifier to run on the Data
+echo   decision-tree      uses Decision Tree Classifier to run on the Data
 echo   naive-bayes       uses Naive Bayes Classifier to run on the Data
 
 

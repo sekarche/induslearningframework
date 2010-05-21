@@ -1,0 +1,19 @@
+                        
+
+              INDUS 0.1.1/ RELEASE NOTES
+
+This release includes beta version of INDUS application.
+
+Changes since  0.1.0 include:
+
+New features:
+   First  released version
+Fixed Bugs:
+    First released version
+  
+
+For bug reports/feature request  contact  Vasant Honavar at honavar@cs.iastate.edu
+
+ 
+
+
