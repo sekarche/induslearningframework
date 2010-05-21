@@ -81,9 +81,11 @@
 <target name="copy" depends="jar">
     <copy todir="examples">
         <fileset dir=".">  
-            <include name="sample/*"/>
-            <include name="indus_example/*"/>
+            <include name="sample/*.arff"/>
             <include name="indus_example-2/*"/>
+        	<!-- Verify indus_example before including in distribution
+        	            <include name="indus_example/*"/>
+        	 -->
         </fileset>
  </copy>
 	<copy todir="${dist}">
@@ -105,7 +107,9 @@
     	<zipfileset dir="indus_extension_src" prefix="extension_src"/>
         <zipfileset dir="." includes="build.xml,ilf.bat"/> 
         <zipfileset dir="examples" prefix="examples"/>
-    	<zipfileset dir="docs" prefix=""/>
+    	<zipfileset dir="docs" prefix="user-doc"/>
+    	<zipfileset dir="license" prefix=""/>
+    	
     	
      </zip>
 	<!--    Clean up -->
