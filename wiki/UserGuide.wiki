@@ -1,5 +1,6 @@
 #labels User-Guide,Featured
-This describes way to run the various classifiers in the Indus Learning Framework (ILF).
+This  guide outlines the way to run the various classifiers in the Indus Learning Framework (ILF). A detailed guide is included in the zip available for download.
+
 
 == Set Up and Configuration ==
 Download the latest ILF jar.
@@ -39,7 +40,5 @@ _ java -classpath < semi colon seperated list of dependent jars and ilf.jar> air
    * * -testFile * The arff file against which to test.
 
    * * -trainFile * The arff file which contains training instances ( use in conjuction with flag -a ).
-
-
 
 
