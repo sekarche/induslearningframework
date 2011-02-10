@@ -230,6 +230,7 @@ public class NaiveBayesClassifier extends Classifier {
        */
       int numAttributes = counts.length;
 
+     // @Harris- Add logs to handle underflow
       /*
        * calculate the dist for each class value
        */
