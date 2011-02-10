@@ -26,13 +26,13 @@ public class LDInstance {
     * Everything is stored as a String. It can be converted to appropriate
     * types based on the DataDesc
     */
-   private Vector<String> values;
+   protected Vector<String> values;
 
    /**
     * Whether this is a labeled instance. If this is labeled, the last
     * value is assumed to be class label.
     */
-   private boolean labeled;
+   protected boolean labeled;
 
    private int[] locations;
    

@@ -37,5 +37,16 @@
 	<classpathentry kind="lib" path="lib/iif/lib/postgresql-8.1-410.jdbc3.jar"/>
 	<classpathentry kind="lib" path="lib/iif/lib/Zql.jar"/>
 	<classpathentry kind="lib" path="lib/iif/iif_0.1.1.jar"/>
+	<classpathentry kind="lib" path="lib/jena-2.6.4/arq-2.8.7.jar"/>
+	<classpathentry kind="lib" path="lib/jena-2.6.4/icu4j-3.4.4.jar"/>
+	<classpathentry kind="lib" path="lib/jena-2.6.4/iri-0.8.jar"/>
+	<classpathentry kind="lib" path="lib/jena-2.6.4/jena-2.6.4-tests.jar"/>
+	<classpathentry kind="lib" path="lib/jena-2.6.4/jena-2.6.4.jar"/>
+	<classpathentry kind="lib" path="lib/jena-2.6.4/lucene-core-2.3.1.jar"/>
+	<classpathentry kind="lib" path="lib/jena-2.6.4/slf4j-api-1.5.8.jar"/>
+	<classpathentry kind="lib" path="lib/jena-2.6.4/slf4j-log4j12-1.5.8.jar"/>
+	<classpathentry kind="lib" path="lib/jena-2.6.4/stax-api-1.0.1.jar"/>
+	<classpathentry kind="lib" path="lib/jena-2.6.4/wstx-asl-3.2.9.jar"/>
+	<classpathentry kind="lib" path="lib/jena-2.6.4/xercesImpl-2.7.1.jar"/>
 	<classpathentry kind="output" path="classes"/>
 </classpath>
