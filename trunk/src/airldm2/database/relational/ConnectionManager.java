@@ -5,7 +5,7 @@
  * $Header: /home/CVS/airldm2/src/airldm2/database/ConnectionManager.java,v
  * 1.1 2008/02/03 18:33:43 neeraj Exp $
  */
-package airldm2.database;
+package airldm2.database.relational;
 
 import java.sql.Connection;
 import java.sql.ResultSet;

@@ -1,4 +1,4 @@
-package airldm2.database;
+package airldm2.database.relational;
 
 import airldm2.constants.Constants;
 import airldm2.exceptions.RTConfigException;

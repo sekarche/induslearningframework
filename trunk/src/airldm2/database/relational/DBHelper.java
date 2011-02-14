@@ -1,7 +1,7 @@
 /**
  * 
  */
-package airldm2.database;
+package airldm2.database.relational;
 
 import java.sql.Connection;
 import java.sql.ResultSet;

@@ -8,8 +8,8 @@ import java.sql.Connection;
 import airldm2.core.DefaultSufficentStatisticImpl;
 import airldm2.core.ISufficentStatistic;
 import airldm2.core.SSDataSource;
-import airldm2.database.DBCPConnectionManager;
-import airldm2.database.SuffStatQueryConstructor;
+import airldm2.database.relational.DBCPConnectionManager;
+import airldm2.database.relational.SuffStatQueryConstructor;
 import airldm2.exceptions.DatabaseException;
 import airldm2.exceptions.RTConfigException;
 import airldm2.util.AttribValuePair;
@@ -95,7 +95,7 @@ public class RelationalDataSource implements SSDataSource {
       int count;
       double tempDouble;
       for (int i = 0; i < countQueries.length; i++) {
-         count = airldm2.database.DBHelper.ExecuteQuery(countQueries[i], con);
+         count = airldm2.database.relational.DBHelper.ExecuteQuery(countQueries[i], con);
 
          tempDouble = new Double(count).doubleValue();
          stats[i] = new DefaultSufficentStatisticImpl(tempDouble);
@@ -133,7 +133,7 @@ public class RelationalDataSource implements SSDataSource {
 
       String countQuery = SuffStatQueryConstructor
             .createCountQueryForAttribValues(relationName, nameValues);
-      int count = airldm2.database.DBHelper.ExecuteQuery(countQuery, con);
+      int count = airldm2.database.relational.DBHelper.ExecuteQuery(countQuery, con);
       double tempDouble = new Double(count).doubleValue();
       ISufficentStatistic stat = new DefaultSufficentStatisticImpl(tempDouble);
       return stat;
@@ -154,7 +154,7 @@ public class RelationalDataSource implements SSDataSource {
       if (numberOfInstances == -1 || force) {
          String countQuery = SuffStatQueryConstructor
                .createNumberInstancesQuery(relationName);
-         numberOfInstances = airldm2.database.DBHelper.ExecuteQuery(countQuery,
+         numberOfInstances = airldm2.database.relational.DBHelper.ExecuteQuery(countQuery,
                con);
       }
 
