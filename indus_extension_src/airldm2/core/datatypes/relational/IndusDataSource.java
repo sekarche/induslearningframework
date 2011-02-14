@@ -13,7 +13,7 @@ import org.iastate.ailab.qengine.core.QueryResult;
 import airldm2.core.DefaultSufficentStatisticImpl;
 import airldm2.core.ISufficentStatistic;
 import airldm2.core.SSDataSource;
-import airldm2.database.SuffStatQueryConstructor2;
+import airldm2.database.relational.SuffStatQueryConstructor2;
 import airldm2.exceptions.RTConfigException;
 import airldm2.util.AttribValuePair;
 

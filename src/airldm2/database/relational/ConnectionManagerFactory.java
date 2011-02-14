@@ -3,7 +3,7 @@
  * Factory for connection manager implementations
  *
  */
-package airldm2.database;
+package airldm2.database.relational;
 
 /**
  * Factory for connection manager implementations

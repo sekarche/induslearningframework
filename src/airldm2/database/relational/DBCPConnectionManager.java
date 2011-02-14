@@ -6,7 +6,7 @@
  * /home/CVS/airldm2/src/airldm2/database/DBCPConnectionManager.java,v 1.2
  * 2008/02/05 19:47:22 neeraj Exp $
  */
-package airldm2.database;
+package airldm2.database.relational;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
