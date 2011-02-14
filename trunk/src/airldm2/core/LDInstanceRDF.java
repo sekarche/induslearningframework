@@ -12,8 +12,8 @@ public class LDInstanceRDF extends LDInstance {
 
    }
    public String getClassLabel() throws Exception {
-      RDFDataDescriptor rdfDesc
-      
+      //RDFDataDescriptor rdfDesc
+      return null;
    }
 
 }
