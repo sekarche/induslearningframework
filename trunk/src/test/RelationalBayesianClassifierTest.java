@@ -1,63 +1,53 @@
 package test;
 
+import static org.junit.Assert.*;
+
+import java.net.URI;
 import java.util.Vector;
 
+import org.junit.Before;
+import org.junit.Test;
+
 import airldm2.classifiers.rl.RelationalBayesianClassifier;
-import airldm2.core.LDInstance;
 import airldm2.core.LDInstances;
 import airldm2.core.SSDataSource;
 import airldm2.core.rl.RDFDataDescriptor;
 import airldm2.core.rl.RDFDataSource;
 import airldm2.core.rl.RbcAttribute;
 
-   
 public class RelationalBayesianClassifierTest {
+   private static final double EPSILON = 0.00001;
    
-   public static void main(String[] args) throws Exception {
-      String context = ":default";
-
-      /**
-       * set the SufficentStatistic (SS) DataSource. It gets the
-       * connection information from config files . The table should
-       * exist in the database
-       * 
-       */
-      SSDataSource dataSource = new RDFDataSource(context);
-
-      Vector<RbcAttribute> attributes = getAttributeDesc();
-      RDFDataDescriptor desc = new RDFDataDescriptor(context, attributes);
-      
-      
-
-      // Create a Large DataSet Instance and set its
-      // descriptor and source
-      LDInstances instances = new LDInstances();
-      instances.setDesc(desc);
-      instances.setDataSource(dataSource);
-
-      RelationalBayesianClassifier rbc = new RelationalBayesianClassifier();
-      rbc.buildClassifier(instances);
-
-      // create programatically an instance to test
-      Vector<String> instanceAttributeValues = new Vector<String>();
-      instanceAttributeValues.add("y");
-      instanceAttributeValues.add("y");
-
-      LDInstance testInstance = new LDInstance(desc,
-            instanceAttributeValues, false);
-
-      double index = rbc.classifyInstance(testInstance);
-//      int resIndex = new Double(index).intValue();
-//
-//      ColumnDescriptor labelAttribute = desc.getTableDesc().getColumns()
-//            .lastElement();
-//
-//      String predictedClass = labelAttribute.getPossibleValues().get(
-//            resIndex);
-      System.out.println("predicted class=???");
+   @Before
+   public void setUp() {
    }
 
-   private static Vector<RbcAttribute> getAttributeDesc() {
+   @Test
+   public void testWithTrainInDBTestInDB() throws Exception {
+      Vector<RbcAttribute> attributes = getAttributeDesc();
+      RDFDataDescriptor desc = new RDFDataDescriptor(attributes);
+      
+      String trainContext = ":train";
+      SSDataSource trainSource = new RDFDataSource(trainContext);
+      LDInstances trainInstances = new LDInstances();
+      trainInstances.setDesc(desc);
+      trainInstances.setDataSource(trainSource);
+   
+      String testContext = ":test";
+      SSDataSource testSource = new RDFDataSource(testContext);
+      LDInstances testInstances = new LDInstances();
+      testInstances.setDesc(desc);
+      testInstances.setDataSource(testSource);
+   
+      RelationalBayesianClassifier rbc = new RelationalBayesianClassifier();
+      rbc.buildClassifier(trainInstances);
+      URI test1 = URI.create("http://data.linkedmdb.org/resource/film/2723");
+      double label = rbc.classifyInstance(testInstances, test1);
+      assertEquals(1.0, label, EPSILON);
+   }
+
+   private Vector<RbcAttribute> getAttributeDesc() {
+      // TODO Auto-generated method stub
       return null;
    }
 
