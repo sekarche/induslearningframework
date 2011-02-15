@@ -37,7 +37,7 @@ public class RDFDataDescriptor implements DataDescriptor {
     */
    private HashMap <String,URI> prefixes = new HashMap<String,URI>();
 
-   public RDFDataDescriptor(String context, Vector<RbcAttribute> attributes) {
+   public RDFDataDescriptor(Vector<RbcAttribute> attributes) {
       // TODO Auto-generated constructor stub
    }
 
