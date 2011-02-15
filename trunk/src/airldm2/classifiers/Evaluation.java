@@ -80,7 +80,7 @@ public class Evaluation {
          LDInstances trainData = new LDInstances();
          trainData.setDesc(desc);
          trainData.setDataSource(dataSource);
-         ConfusionMatrix matrix = Evaluation.evlauateModel2(classifier,
+         ConfusionMatrix matrix = Evaluation.evlauateModel(classifier,
                trainData, testInst, options);
          return matrix.toString("===Confusion Matrix===");
 
@@ -88,7 +88,7 @@ public class Evaluation {
          String trainFile = Utils.getOption("trainFile", options);
          SimpleArffFileReader readTrain = new SimpleArffFileReader(trainFile);
          LDInstances trainData = readTrain.getLDInstances(true);
-         ConfusionMatrix matrix = Evaluation.evlauateModel2(classifier,
+         ConfusionMatrix matrix = Evaluation.evlauateModel(classifier,
                trainData, testInst, options);
          return matrix.toString("===Confusion Matrix===");
       } else {
@@ -113,37 +113,7 @@ public class Evaluation {
 
    }
 
-   /**
-    * The train data and test data should have the same data descriptor
-    * format
-    * 
-    * @param classifier
-    * @param trainData
-    * @param testData
-    * @param options
-    * @return
-    * @throws Exception
-    */
-   public static IlfConfusionMatrix evlauateModel(Classifier classifier,
-         LDInstances trainData, LDTestInstances testData, String[] options)
-         throws Exception {
-      // TODO: Deprecate and Remove. Use evaluateModel2
-      int numTestInstances = testData.getNumberInstances();
-      double[] predictions = new double[numTestInstances];
-      classifier.setOptions(options);
-      classifier.buildClassifier(trainData);
-
-      for (int i = 0; i < numTestInstances; i++) {
-         predictions[i] = classifier
-               .classifyInstance(testData.getLDInstance(i));
-      }
-      double[] actual = testData.getClassLabelLocations();
-
-      return new IlfConfusionMatrix(trainData.getDesc(), actual, predictions);
-
-   }
-
-   public static ConfusionMatrix evlauateModel2(Classifier classifier,
+   public static ConfusionMatrix evlauateModel(Classifier classifier,
          LDInstances trainData, LDTestInstances testData, String[] options)
          throws Exception {
 
