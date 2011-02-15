@@ -185,7 +185,7 @@ public class DecisionTreeTests {
          SimpleArffFileReader readTest = new SimpleArffFileReader(testFile);
          LDInstances trainData = readTrain.getLDInstances(true);
          LDTestInstances testData = readTest.getTestInstances();
-         ConfusionMatrix matrix = Evaluation.evlauateModel2(classifier,
+         ConfusionMatrix matrix = Evaluation.evlauateModel(classifier,
                trainData, testData, options);
          System.out.println(matrix.toString("===Confusion Matrix==="));
 
