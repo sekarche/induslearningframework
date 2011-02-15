@@ -48,5 +48,7 @@
 	<classpathentry kind="lib" path="lib/jena-2.6.4/stax-api-1.0.1.jar"/>
 	<classpathentry kind="lib" path="lib/jena-2.6.4/wstx-asl-3.2.9.jar"/>
 	<classpathentry kind="lib" path="lib/jena-2.6.4/xercesImpl-2.7.1.jar"/>
+	<classpathentry kind="lib" path="lib/sesame/openrdf-sesame-2.3.2-onejar.jar"/>
+	<classpathentry kind="lib" path="lib/virtuoso/virt_sesame2.jar"/>
 	<classpathentry kind="output" path="classes"/>
 </classpath>
