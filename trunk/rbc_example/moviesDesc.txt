@@ -1,30 +1,46 @@
-Prelimanary Grammar
-# core_item=URI(a rdf type)
-# attribute@ [URI(s) seperated by commas]= [NOMINAL|ENUMERATED|NUMBER]@Values;AGGREGATOR=[INDEPENDENT_VAL|MODE|AVG|MIN|MAX]
-#Remark: Number is always binned
-#Remarks:If BINNED Option the format is range (of integers) seperated by commas e.g. MIN-15, 15-30, 30-45, 45-MAX   (MAX and MIN are Key words. It is assumed that the 
-#Remark: AVG,MIN,MAX are applicable to NUMBER datatype only.
-#ENDPOINT=SPARQL|LOCAL_API|OTHER
+%Prelimanary Grammar
+% @prefix ns: <URI>
+% @targetType=URI(a rdf type)
+%
+% @target attribute_name
+%
+% @attribute name
+% [URI(s) seperated by commas]
+% [NOMINAL|ENUMERATED|BINNED]=Values
+% AGGREGATOR=[COUNT|INDEPENDENT_VAL|MODE|AVG|MIN|MAX]
 
-//TODO  Add Prefix Support
-PREFIX@foaf=http://xmlns.com/foaf/0.1/
+%Remark: Number is always binned
+%Remarks:If BINNED Option the format is range (of integers) seperated by commas e.g. MIN-15, 15-30, 30-45, 45-MAX   (MAX and MIN are Key words. It is assumed that the 
+%Remark: AVG,MIN,MAX are applicable to NUMBER datatype only.
 
-core_item=movie:film
-PREDICT=attribute_1
 
-attribute_1@
-http://data.linkedmdb.org/resource/movie/openingreceipt=BINNED@MIN-2000000,2000001-MAX;NONE
-#
-attribute_2@
-http://data.linkedmdb.org/resource/movie/film/actor,foaf:page,fb:people.person.birth_year=
-BINNED@MIN-1940,1940-60,1960_MAX;AVG
-#
-attribute_3@http://data.linkedmdb.org/resource/movie/film/actor,foaf:page,fb:people.person.gender=ENUMERATED@http://rdf.freebase.com/ns/en.male,http://rdf.freebase.com/ns/en.female;INDEPENDENT_VAL
-#
-attribute_4@
-http://data.linkedmdb.org/resource/movie/rating movie:content_rating_name =NOMINAL@PG (USA),PG (USA),PG-13 (USA), R (USA) NC-17 (USA);NONE
-#attribute_5@
-http://data.linkedmdb.org/resource/movie/film/director,foaf:page,fb:award.award_winner.awards_won=DEGREE@MIN-1,2-MAX,COUNT;
+@prefix movie: <http://data.linkedmdb.org/resource/movie/>
+@prefix foaf: <http://xmlns.com/foaf/0.1/>
+@prefix freebase: <http://rdf.freebase.com/ns/>
+
+@targetType=movie:film
+
+@target=openingreceipt
+
+@attribute openingreceipt
+movie:openingreceipt
+BINNED=MIN-2000000,2000001-MAX
+AGGREGATOR=NONE
+
+@attribute actorBirth
+movie:film/actor,foaf:page,freebase:people.person.birth_year
+BINNED=MIN-1940,1940-60,1960_MAX
+AGGREGATOR=AVG
+
+@attribute actorGender
+movie:film/actor,foaf:page,fb:people.person.gender
+ENUMERATED=freebase:en.male,freebase:en.female
+AGGREGATOR=INDEPENDENT_VAL
+
+@attribute directorAward
+movie:film/director,foaf:page,freebase:award.award_winner.awards_won
+BINNED=MIN-1,2-MAX
+AGGREGATOR=COUNT
 
 
 
