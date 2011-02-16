@@ -1,6 +1,8 @@
 package airldm2.core.rl;
 
 import org.openrdf.repository.Repository;
+import org.openrdf.repository.RepositoryConnection;
+import org.openrdf.repository.RepositoryException;
 
 import virtuoso.sesame2.driver.VirtuosoRepository;
 import airldm2.core.ISufficentStatistic;
@@ -11,9 +13,11 @@ import airldm2.util.AttribValuePair;
 public class RDFDataSource implements SSDataSource {
 
    private Repository mRepository;
+   private RepositoryConnection mConn;
 
-   public RDFDataSource(String context) {
+   public RDFDataSource(String context) throws RepositoryException {
       mRepository = new VirtuosoRepository("", "dba", "dba");
+      mConn = mRepository.getConnection();
    }
 
    @Override
