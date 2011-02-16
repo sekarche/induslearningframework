@@ -7,11 +7,13 @@
 
 package airldm2.core.rl;
 
-import airldm2.core.DataDescriptor;
 import java.net.URI;
 import java.util.Collection;
-import java.util.HashMap;
+import java.util.Map;
 import java.util.Vector;
+
+import airldm2.core.DataDescriptor;
+import airldm2.util.CollectionUtil;
 
 /**
  * TODO Write class description here.
@@ -30,12 +32,12 @@ public class RDFDataDescriptor implements DataDescriptor {
    /**
     * A HashMap of attributes indexed  by attribute name
     */
-   private  HashMap<String,RbcAttribute> mAttributes = new HashMap<String,RbcAttribute>();
+   private Map<String,RbcAttribute> mAttributes = CollectionUtil.makeMap();
 
    /**
     * A HashMap to resolve prefixed
     */
-   private HashMap <String,URI> prefixes = new HashMap<String,URI>();
+   private Map<String,URI> prefixes = CollectionUtil.makeMap();
 
    public RDFDataDescriptor(Vector<RbcAttribute> attributes) {
       // TODO Auto-generated constructor stub
