@@ -1,46 +1,41 @@
 %Prelimanary Grammar
-% @prefix ns: <URI>
-% @targetType=URI(a rdf type)
+% @targetType URI(a rdf type)
 %
 % @target attribute_name
 %
 % @attribute name
-% [URI(s) seperated by commas]
-% [NOMINAL|ENUMERATED|BINNED]=Values
-% AGGREGATOR=[COUNT|INDEPENDENT_VAL|MODE|AVG|MIN|MAX]
-
+% [URI(s) separated by commas]
+% [NOMINAL|ENUMERATED|BINNED]=[values separated by commas]
+% aggregator=[INDEPENDENT_VAL|COUNT|MODE|AVG|MIN|MAX]
+%
 %Remark: Number is always binned
-%Remarks:If BINNED Option the format is range (of integers) seperated by commas e.g. MIN-15, 15-30, 30-45, 45-MAX   (MAX and MIN are Key words. It is assumed that the 
+%Remark:If BINNED Option the format is range (of integers) seperated by commas e.g. MIN-15, 15-30, 30-45, 45-MAX   (MAX and MIN are Key words. It is assumed that the 
 %Remark: AVG,MIN,MAX are applicable to NUMBER datatype only.
+%TODO add prefix support
 
+@targetType http://data.linkedmdb.org/resource/movie/film
 
-@prefix movie: <http://data.linkedmdb.org/resource/movie/>
-@prefix foaf: <http://xmlns.com/foaf/0.1/>
-@prefix freebase: <http://rdf.freebase.com/ns/>
-
-@targetType=movie:film
-
-@target=openingreceipt
+@target openingreceipt
 
 @attribute openingreceipt
-movie:openingreceipt
+http://data.linkedmdb.org/resource/movie/openingreceipt
 BINNED=MIN-2000000,2000001-MAX
-AGGREGATOR=NONE
+aggregator=NONE
 
 @attribute actorBirth
-movie:film/actor,foaf:page,freebase:people.person.birth_year
+http://data.linkedmdb.org/resource/movie/film/actor,http://xmlns.com/foaf/0.1/page,http://rdf.freebase.com/ns/people.person.birth_year
 BINNED=MIN-1940,1940-60,1960_MAX
-AGGREGATOR=AVG
+aggregator=AVG
 
 @attribute actorGender
-movie:film/actor,foaf:page,fb:people.person.gender
-ENUMERATED=freebase:en.male,freebase:en.female
-AGGREGATOR=INDEPENDENT_VAL
+http://data.linkedmdb.org/resource/movie/film/actor,http://xmlns.com/foaf/0.1/page,fb:people.person.gender
+ENUMERATED=http://rdf.freebase.com/ns/en.male,http://rdf.freebase.com/ns/en.female
+aggregator=INDEPENDENT_VAL
 
 @attribute directorAward
-movie:film/director,foaf:page,freebase:award.award_winner.awards_won
+http://data.linkedmdb.org/resource/movie/film/director,http://xmlns.com/foaf/0.1/page,http://rdf.freebase.com/ns/award.award_winner.awards_won
 BINNED=MIN-1,2-MAX
-AGGREGATOR=COUNT
+aggregator=COUNT
 
 
 

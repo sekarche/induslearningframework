@@ -25,10 +25,9 @@ public class RDFDataDescriptor implements DataDescriptor {
 
    private URI mTargetType;
    private String mTargetAttributeName;
-   private Map<String,URI> mPrefixes;
 
    /**
-    * A HashMap of attributes indexed  by attribute name
+    * A HashMap of attributes indexed by attribute name
     */
    private Map<String,RbcAttribute> mAttributes;
 
@@ -40,8 +39,6 @@ public class RDFDataDescriptor implements DataDescriptor {
       mTargetType = targetType;
       mTargetAttributeName = targetAttributeName;
       mAttributes = attributes;
-      
-      mPrefixes = CollectionUtil.makeMap();
    }
 
 
@@ -61,10 +58,6 @@ public class RDFDataDescriptor implements DataDescriptor {
       return mAttributes.get(mTargetAttributeName);
    }
    
-   public void addPrefix(String prefix, URI resolved) {
-      mPrefixes.put(prefix, resolved);
-   }
-
    @Override
    public String getDataName() {
       return null;
