@@ -32,24 +32,24 @@ public class RbcAttribute {
    public enum ValueType{NOMINAL,ENUMERATED,BINNED,DEGREE};
    
    
-   private ValueType attribValueType;
-   private ValueAggregator aggregatoraType;
+   private ValueType mValueType;
+   private ValueAggregator mAggregatorType;
    
    /*The bins to use if value type is binned*/
-   Vector<BinnedType> bins;
+   Vector<BinnedType> mBins;
    
    
-   Vector<URI> attribute ;
+   Vector<URI> mProperties;
    
-   RbcAttribute(Vector<URI> attribute) {
-      this.attribute = attribute;
+   RbcAttribute(Vector<URI> props) {
+      this.mProperties = props;
    }
    
    public ValueAggregator  getAggregatoraType(){
-      return aggregatoraType;
+      return mAggregatorType;
    }
    public ValueType getValueType(){
-      return attribValueType;
+      return mValueType;
    }
    
 }
