@@ -9,6 +9,8 @@ public final class Constants {
    /** The Constant DATABASE_PROPERTIES_RESOURCE_PATH. */
    public static final String DATABASE_PROPERTIES_RESOURCE_PATH = CONFIG_HOME
          + "database.properties";
+   
+   public static final String RDFSTORE_PROPERTIES_RESOURCE_PATH = CONFIG_HOME + "rdfstore.properties";
 
    /* String representing ',' */
    public static final String COMMA = ",";

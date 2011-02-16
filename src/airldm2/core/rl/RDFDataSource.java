@@ -1,10 +1,16 @@
 package airldm2.core.rl;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.Properties;
+
 import org.openrdf.repository.Repository;
 import org.openrdf.repository.RepositoryConnection;
 import org.openrdf.repository.RepositoryException;
 
 import virtuoso.sesame2.driver.VirtuosoRepository;
+import airldm2.constants.Constants;
 import airldm2.core.ISufficentStatistic;
 import airldm2.core.SSDataSource;
 import airldm2.exceptions.RTConfigException;
@@ -14,9 +20,26 @@ public class RDFDataSource implements SSDataSource {
 
    private Repository mRepository;
    private RepositoryConnection mConn;
+   private String mDefaultContext;
 
-   public RDFDataSource(String context) throws RepositoryException {
-      mRepository = new VirtuosoRepository("", "dba", "dba");
+   public RDFDataSource(String context) throws RepositoryException, RTConfigException {
+      mDefaultContext = context;
+      
+      final Properties defaultProps = new Properties();
+      try {
+         FileInputStream in = new FileInputStream(Constants.RDFSTORE_PROPERTIES_RESOURCE_PATH);
+         defaultProps.load(in);
+         in.close();
+      } catch (IOException e) {
+         throw new RTConfigException("Error reading " + Constants.RDFSTORE_PROPERTIES_RESOURCE_PATH, e);
+      }
+
+      String url = defaultProps.getProperty("DataSource.url");
+      if (url != null) url = url.trim();
+      String username = defaultProps.getProperty("DataSource.username");
+      String password = defaultProps.getProperty("DataSource.password");
+
+      mRepository = new VirtuosoRepository(url, username, password);
       mConn = mRepository.getConnection();
    }
 
