@@ -10,7 +10,6 @@ package airldm2.core.rl;
 import java.net.URI;
 import java.util.Collection;
 import java.util.Map;
-import java.util.Vector;
 
 import airldm2.core.DataDescriptor;
 import airldm2.util.CollectionUtil;
@@ -24,84 +23,66 @@ import airldm2.util.CollectionUtil;
  */
 public class RDFDataDescriptor implements DataDescriptor {
 
-   String RDFdataSourceName ="";
-   private  URI core_item;
-   int attribute_count =0;
-   String targetAttributeName;
+   private URI mTargetType;
+   private String mTargetAttributeName;
+   private Map<String,URI> mPrefixes;
 
    /**
     * A HashMap of attributes indexed  by attribute name
     */
-   private Map<String,RbcAttribute> mAttributes = CollectionUtil.makeMap();
+   private Map<String,RbcAttribute> mAttributes;
 
-   /**
-    * A HashMap to resolve prefixed
-    */
-   private Map<String,URI> prefixes = CollectionUtil.makeMap();
-
-   public RDFDataDescriptor(Vector<RbcAttribute> attributes) {
-      // TODO Auto-generated constructor stub
+   public RDFDataDescriptor(URI targetType, String targetAttributeName) {
+      this(targetType, targetAttributeName, CollectionUtil.<String,RbcAttribute>makeMap());
+   }
+   
+   public RDFDataDescriptor(URI targetType, String targetAttributeName, Map<String,RbcAttribute> attributes) {
+      mTargetType = targetType;
+      mTargetAttributeName = targetAttributeName;
+      mAttributes = attributes;
+      
+      mPrefixes = CollectionUtil.makeMap();
    }
 
 
-   public void addAttribute(String attributeName, RbcAttribute attribute ) {
+   public void addAttribute(String attributeName, RbcAttribute attribute) {
       mAttributes.put(attributeName, attribute);
-      attribute_count++;
    }
-
 
    public Collection<RbcAttribute> getAttributes() {
       return  mAttributes.values();
    }
 
    public void setTargetAttribute(String attrib) {
-      this.targetAttributeName = attrib;
+      this.mTargetAttributeName = attrib;
    }
 
    public RbcAttribute getTargetAttribute() {
-      return  mAttributes.get(targetAttributeName);
+      return mAttributes.get(mTargetAttributeName);
    }
-   public void setRDFdataSourceName(String name) {
-      this.RDFdataSourceName = name;
-   }
-   public void addPrefix(String prefix,  URI resolved) {
-      prefixes.put(prefix, resolved);
+   
+   public void addPrefix(String prefix, URI resolved) {
+      mPrefixes.put(prefix, resolved);
    }
 
-   /* (non-Javadoc)
-    * @see airldm2.core.DataDescriptor#getDataName()
-    */
    @Override
    public String getDataName() {
-      return RDFdataSourceName;
+      return null;
    }
 
-   /* (non-Javadoc)
-    * @see airldm2.core.DataDescriptor#getProperty(java.lang.String)
-    */
    @Override
    public String getProperty(String key) {
-      // TODO Auto-generated method stub
       return null;
    }
 
-   /* (non-Javadoc)
-    * @see airldm2.core.DataDescriptor#getAttributeCount()
-    */
    @Override
    public int getAttributeCount() {
-
-      return  attribute_count;
+      return mAttributes.size();
    }
 
-   /* (non-Javadoc)
-    * @see airldm2.core.DataDescriptor#getClassLabels()
-    */
    @Override
    public String[] getClassLabels() {
-      // TODO Auto-generated method stub
       return null;
    }
-
-
+   
 }

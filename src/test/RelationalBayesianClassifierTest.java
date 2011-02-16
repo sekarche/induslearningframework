@@ -1,9 +1,8 @@
 package test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import java.net.URI;
-import java.util.Vector;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -12,8 +11,8 @@ import airldm2.classifiers.rl.RelationalBayesianClassifier;
 import airldm2.core.LDInstances;
 import airldm2.core.SSDataSource;
 import airldm2.core.rl.RDFDataDescriptor;
+import airldm2.core.rl.RDFDataDescriptorParser;
 import airldm2.core.rl.RDFDataSource;
-import airldm2.core.rl.RbcAttribute;
 
 public class RelationalBayesianClassifierTest {
    private static final double EPSILON = 0.00001;
@@ -24,8 +23,7 @@ public class RelationalBayesianClassifierTest {
 
    @Test
    public void testWithTrainInDBTestInDB() throws Exception {
-      Vector<RbcAttribute> attributes = getAttributeDesc();
-      RDFDataDescriptor desc = new RDFDataDescriptor(attributes);
+      RDFDataDescriptor desc = RDFDataDescriptorParser.parse("moviesDesc.txt");
       
       String trainContext = ":train";
       SSDataSource trainSource = new RDFDataSource(trainContext);
@@ -44,11 +42,6 @@ public class RelationalBayesianClassifierTest {
       URI test1 = URI.create("http://data.linkedmdb.org/resource/film/2723");
       double label = rbc.classifyInstance(testInstances, test1);
       assertEquals(1.0, label, EPSILON);
-   }
-
-   private Vector<RbcAttribute> getAttributeDesc() {
-      // TODO Auto-generated method stub
-      return null;
    }
 
 }
