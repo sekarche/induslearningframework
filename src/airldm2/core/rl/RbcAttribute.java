@@ -1,6 +1,6 @@
 package airldm2.core.rl;
-import java.util.Vector;
 import java.net.URI;
+import java.util.List;
 
 /**
  * 
@@ -24,28 +24,26 @@ public class RbcAttribute {
    /**
     * Enum specifying how to aggregate values for a 1->n relationship
     */
-   public enum ValueAggregator{INDEPENDENT_VAL,AVG,DEFAULT,COUNT };
+   public enum ValueAggregator { INDEPENDENT_VAL, COUNT, MODE, AVG, MIN, MAX }
    
    /**
     * Enum specifying what is the datatype of the target value to be predicted
     */
-   public enum ValueType{NOMINAL,ENUMERATED,BINNED,DEGREE};
-   
+   public enum ValueType { NOMINAL, ENUMERATED, BINNED }
    
    private ValueType mValueType;
    private ValueAggregator mAggregatorType;
    
    /*The bins to use if value type is binned*/
-   Vector<BinnedType> mBins;
+   List<BinnedType> mBins;
    
+   List<URI> mProperties;
    
-   Vector<URI> mProperties;
-   
-   RbcAttribute(Vector<URI> props) {
+   public RbcAttribute(List<URI> props) {
       this.mProperties = props;
    }
    
-   public ValueAggregator  getAggregatoraType(){
+   public ValueAggregator getAggregatoraType(){
       return mAggregatorType;
    }
    public ValueType getValueType(){

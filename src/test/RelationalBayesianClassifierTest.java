@@ -23,7 +23,7 @@ public class RelationalBayesianClassifierTest {
 
    @Test
    public void testWithTrainInDBTestInDB() throws Exception {
-      RDFDataDescriptor desc = RDFDataDescriptorParser.parse("moviesDesc.txt");
+      RDFDataDescriptor desc = RDFDataDescriptorParser.parse("rbc_example/moviesDesc.txt");
       
       String trainContext = ":train";
       SSDataSource trainSource = new RDFDataSource(trainContext);
