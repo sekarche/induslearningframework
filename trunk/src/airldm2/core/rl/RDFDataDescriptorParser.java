@@ -38,11 +38,11 @@ public class RDFDataDescriptorParser {
          } else if (line.startsWith(TARGET)) {
             targetAttributeName = line.substring(TARGET.length());
          } else if (line.startsWith(ATTRIBUTE)) {
-            String attributeName = line.substring(ATTRIBUTE.length());
-            String propChain = in.readLine();
-            String valueType = in.readLine();
-            String aggregatorType = in.readLine();
-            RbcAttribute attribute = parseAttribute(propChain, valueType, aggregatorType);
+            String attributeName = line.substring(ATTRIBUTE.length()).trim();
+            String propLine = in.readLine().trim();
+            String valueLine = in.readLine().trim();
+            String aggregatorLine = in.readLine().trim();
+            RbcAttribute attribute = parseAttribute(propLine, valueLine, aggregatorLine);
             attributes.put(attributeName, attribute);
          }
       }
