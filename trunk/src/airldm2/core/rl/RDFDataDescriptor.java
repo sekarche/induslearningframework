@@ -1,15 +1,11 @@
-/**
- * RDFDataDescriptor.java<br>
- * TODO Write description for RDFDataDescriptor.java.
- *
- * $Header: $
- */
-
 package airldm2.core.rl;
 
 import java.net.URI;
 import java.util.Collection;
 import java.util.Map;
+
+import org.apache.commons.lang.builder.ToStringBuilder;
+import org.apache.commons.lang.builder.ToStringStyle;
 
 import airldm2.core.DataDescriptor;
 import airldm2.util.CollectionUtil;
@@ -76,6 +72,11 @@ public class RDFDataDescriptor implements DataDescriptor {
    @Override
    public String[] getClassLabels() {
       return null;
+   }
+   
+   @Override
+   public String toString() {
+      return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE);
    }
    
 }

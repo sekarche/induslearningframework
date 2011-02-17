@@ -4,8 +4,12 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.net.URI;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
+import airldm2.core.rl.RbcAttribute.ValueAggregator;
+import airldm2.core.rl.RbcAttribute.ValueType;
 import airldm2.exceptions.RDFDataDescriptorFormatException;
 import airldm2.util.CollectionUtil;
 
@@ -51,14 +55,35 @@ public class RDFDataDescriptorParser {
       return new RDFDataDescriptor(targetType, targetAttributeName, attributes);
    }
 
-   private static RbcAttribute parseAttribute(String propChain, String valueType, String aggregatorType) {
-//      http://data.linkedmdb.org/resource/movie/film/actor,http://xmlns.com/foaf/0.1/page,http://rdf.freebase.com/ns/people.person.birth_year
-//         BINNED=MIN-1940,1940-60,1960_MAX
-//         aggregator=AVG
+   private static RbcAttribute parseAttribute(String propLine, String valueLine, String aggregatorLine) throws RDFDataDescriptorFormatException {
+      String[] propStrs = propLine.split(",");
+      List<URI> props = CollectionUtil.makeList();
+      for (String propStr : propStrs) {
+         props.add(URI.create(propStr.trim()));
+      }
       
+      if (!aggregatorLine.startsWith(AGGREGATOR))
+         throw new RDFDataDescriptorFormatException("Aggregator is not defined properly: " + aggregatorLine);
       
+      ValueAggregator aggregator = ValueAggregator.valueOf(aggregatorLine.substring(AGGREGATOR.length()).trim());
       
-      return null;//new RbcAttribute();
+      String[] valueStrs = valueLine.split("=");
+      ValueType valueType = ValueType.valueOf(valueStrs[0]);
+      String[] possibleValues = valueStrs[1].split(",");
+      
+      RbcAttribute attribute = new RbcAttribute(props, valueType, aggregator);
+      if (valueType == ValueType.BINNED) {
+         double[] cutPoints = new double[possibleValues.length];
+         for (int i = 0; i < possibleValues.length; i++) {
+            cutPoints[i] = Double.parseDouble(possibleValues[i]);
+         }
+         BinnedType bins = new BinnedType(cutPoints);
+         attribute.setBins(bins);
+      } else {
+         attribute.setPossibleValues(Arrays.asList(possibleValues));
+      }
+      
+      return attribute;
    }
    
 }

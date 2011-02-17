@@ -1,0 +1,58 @@
+SPARQL QUERIES
+attribute_1
+
+"SELECT (COUNT(*) AS ?count) WHERE { 
+?x rdf:type movie .
+?x http://data.linkedmdb.org/resource/movie/openingreceipt ?y .
+FILTER (?y < 2000000) }"
+
+attribute_2
+
+"SELECT (COUNT(*) AS ?count)
+WHERE {
+   FILTER (?aveage <= 1940)
+
+   {
+   SELECT ?prj (AVG(?b) as ?aveage)
+   WHERE { ?x rdf:type movie .
+   	?x http://data.linkedmdb.org/resource/movie/film/actor ?y .
+   	?y foaf:page ?z .
+   	?z fb:people.person.birth_year ?b .}
+   GROUP BY ?x
+   }
+}"
+
+attribute_3
+
+,foaf:page,fb:people.person.gender=
+"SELECT (COUNT(*) AS ?count) WHERE { 
+?x rdf:type movie .
+?x http://data.linkedmdb.org/resource/movie/film/actor ?y .
+?y foaf:page ?z .
+?z fb:people.person.gender http://rdf.freebase.com/ns/en.male .
+}"
+
+
+attribute_4@
+"SELECT (COUNT(*) AS ?count) WHERE { 
+?x rdf:type movie .
+?x http://data.linkedmdb.org/resource/movie/rating PG (USA) .
+}"
+
+
+attribute_5@
+
+"SELECT (COUNT(*) AS ?count)
+WHERE {
+   FILTER (?degree <= 1)
+
+   {
+   SELECT (COUNT(*) AS ?degree)
+   WHERE { ?x rdf:type movie .
+   	?x http://data.linkedmdb.org/resource/movie/film/director ?y .
+   	?y foaf:page ?z .
+   	?z fb:award.award_winner.awards_won ?d .}
+   }
+}"
+
+MISSING VALUES
