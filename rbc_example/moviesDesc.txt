@@ -6,11 +6,17 @@
 % @attribute name
 % [URI(s) separated by commas]
 % [NOMINAL|ENUMERATED|BINNED]=[values separated by commas]
-% aggregator=[INDEPENDENT_VAL|COUNT|MODE|AVG|MIN|MAX]
+% aggregator=[NONE|INDEPENDENT_VAL|COUNT|MODE|AVG|MIN|MAX]
 %
 %Remark: Number is always binned
-%Remark:If BINNED Option the format is range (of integers) seperated by commas e.g. MIN-15, 15-30, 30-45, 45-MAX   (MAX and MIN are Key words. It is assumed that the 
-%Remark: AVG,MIN,MAX are applicable to NUMBER datatype only.
+%Remark:If BINNED Option the format is range (of integers) seperated by commas
+% Example: 3,5,10
+% Bin index:
+%  (-infty, 3) = 0
+%  [3, 5) = 1
+%  [5, 10) = 2
+%  [10, +infty) = 3
+%Remark:It is assumed that the AVG,MIN,MAX are applicable to NUMBER datatype only.
 %TODO add prefix support
 
 @targetType http://data.linkedmdb.org/resource/movie/film
@@ -19,12 +25,12 @@
 
 @attribute openingreceipt
 http://data.linkedmdb.org/resource/movie/openingreceipt
-BINNED=MIN-2000000,2000001-MAX
+BINNED=2000000
 aggregator=NONE
 
 @attribute actorBirth
 http://data.linkedmdb.org/resource/movie/film/actor,http://xmlns.com/foaf/0.1/page,http://rdf.freebase.com/ns/people.person.birth_year
-BINNED=MIN-1940,1940-60,1960_MAX
+BINNED=1940,1960
 aggregator=AVG
 
 @attribute actorGender
@@ -34,74 +40,5 @@ aggregator=INDEPENDENT_VAL
 
 @attribute directorAward
 http://data.linkedmdb.org/resource/movie/film/director,http://xmlns.com/foaf/0.1/page,http://rdf.freebase.com/ns/award.award_winner.awards_won
-BINNED=MIN-1,2-MAX
+BINNED=2
 aggregator=COUNT
-
-
-
-
-
-
-
-
-
-SPARQL QUERIES
-attribute_1
-
-"SELECT (COUNT(*) AS ?count) WHERE { 
-?x rdf:type movie .
-?x http://data.linkedmdb.org/resource/movie/openingreceipt ?y .
-FILTER (?y < 2000000) }"
-
-attribute_2
-
-"SELECT (COUNT(*) AS ?count)
-WHERE {
-   FILTER (?aveage <= 1940)
-
-   {
-   SELECT ?prj (AVG(?b) as ?aveage)
-   WHERE { ?x rdf:type movie .
-   	?x http://data.linkedmdb.org/resource/movie/film/actor ?y .
-   	?y foaf:page ?z .
-   	?z fb:people.person.birth_year ?b .}
-   GROUP BY ?x
-   }
-}"
-
-attribute_3
-
-,foaf:page,fb:people.person.gender=
-"SELECT (COUNT(*) AS ?count) WHERE { 
-?x rdf:type movie .
-?x http://data.linkedmdb.org/resource/movie/film/actor ?y .
-?y foaf:page ?z .
-?z fb:people.person.gender http://rdf.freebase.com/ns/en.male .
-}"
-
-
-attribute_4@
-"SELECT (COUNT(*) AS ?count) WHERE { 
-?x rdf:type movie .
-?x http://data.linkedmdb.org/resource/movie/rating PG (USA) .
-}"
-
-
-attribute_5@
-
-"SELECT (COUNT(*) AS ?count)
-WHERE {
-   FILTER (?degree <= 1)
-
-   {
-   SELECT (COUNT(*) AS ?degree)
-   WHERE { ?x rdf:type movie .
-   	?x http://data.linkedmdb.org/resource/movie/film/director ?y .
-   	?y foaf:page ?z .
-   	?z fb:award.award_winner.awards_won ?d .}
-   }
-}"
-
-MISSING VALUES
-
-111.52K
