@@ -78,4 +78,13 @@ public class RDFDataSource implements SSDataSource {
    public void setRelationName(String relationName) {
    }
 
+   public ISufficentStatistic getSufficientStatistic(RbcAttribute target, int targetValueIndex, RbcAttribute feature, int featureValueIndex) {
+      return null;
+   }
+
+   public ISufficentStatistic getSufficientStatistic(RbcAttribute target, int targetValueIndex) {
+      // TODO Auto-generated method stub
+      return null;
+   }
+
 }

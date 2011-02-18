@@ -1,8 +1,10 @@
 package airldm2.core.rl;
 
 import java.net.URI;
-import java.util.Collection;
+import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
@@ -26,6 +28,8 @@ public class RDFDataDescriptor implements DataDescriptor {
     * A HashMap of attributes indexed by attribute name
     */
    private Map<String,RbcAttribute> mAttributes;
+   
+   private List<RbcAttribute> cNonTargetAttributeList;
 
    public RDFDataDescriptor(URI targetType, String targetAttributeName) {
       this(targetType, targetAttributeName, CollectionUtil.<String,RbcAttribute>makeMap());
@@ -35,19 +39,19 @@ public class RDFDataDescriptor implements DataDescriptor {
       mTargetType = targetType;
       mTargetAttributeName = targetAttributeName;
       mAttributes = attributes;
+      prepareList();
    }
 
-
-   public void addAttribute(String attributeName, RbcAttribute attribute) {
-      mAttributes.put(attributeName, attribute);
+   private void prepareList() {
+      cNonTargetAttributeList = CollectionUtil.makeList();
+      for (Entry<String, RbcAttribute> entry : mAttributes.entrySet()) {
+         if (mTargetAttributeName.equals(entry.getKey())) continue;
+         getAttributeList().add(entry.getValue());
+      }
    }
 
-   public Collection<RbcAttribute> getAttributes() {
-      return  mAttributes.values();
-   }
-
-   public void setTargetAttribute(String attrib) {
-      this.mTargetAttributeName = attrib;
+   public List<RbcAttribute> getAttributeList() {
+      return cNonTargetAttributeList;
    }
 
    public RbcAttribute getTargetAttribute() {
