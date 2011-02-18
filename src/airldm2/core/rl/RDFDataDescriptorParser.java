@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.Map;
 
 import airldm2.core.rl.RbcAttribute.ValueAggregator;
-import airldm2.core.rl.RbcAttribute.ValueType;
 import airldm2.exceptions.RDFDataDescriptorFormatException;
 import airldm2.util.CollectionUtil;
 
@@ -42,7 +41,7 @@ public class RDFDataDescriptorParser {
             String propLine = in.readLine().trim();
             String valueLine = in.readLine().trim();
             String aggregatorLine = in.readLine().trim();
-            RbcAttribute attribute = parseAttribute(propLine, valueLine, aggregatorLine);
+            RbcAttribute attribute = parseAttribute(attributeName, propLine, valueLine, aggregatorLine);
             attributes.put(attributeName, attribute);
          }
       }
@@ -55,7 +54,7 @@ public class RDFDataDescriptorParser {
       return new RDFDataDescriptor(targetType, targetAttributeName, attributes);
    }
 
-   private static RbcAttribute parseAttribute(String propLine, String valueLine, String aggregatorLine) throws RDFDataDescriptorFormatException {
+   private static RbcAttribute parseAttribute(String name, String propLine, String valueLine, String aggregatorLine) throws RDFDataDescriptorFormatException {
       String[] propStrs = propLine.split(",");
       List<URI> props = CollectionUtil.makeList();
       for (String propStr : propStrs) {
@@ -68,20 +67,21 @@ public class RDFDataDescriptorParser {
       ValueAggregator aggregator = ValueAggregator.valueOf(aggregatorLine.substring(AGGREGATOR.length()).trim());
       
       String[] valueStrs = valueLine.split("=");
-      ValueType valueType = ValueType.valueOf(valueStrs[0]);
       String[] possibleValues = valueStrs[1].split(",");
-      
-      RbcAttribute attribute = new RbcAttribute(props, valueType, aggregator);
-      if (valueType == ValueType.BINNED) {
+      ValueType valueType = null;
+      if ("BINNED".equalsIgnoreCase(valueStrs[0])) {
          double[] cutPoints = new double[possibleValues.length];
          for (int i = 0; i < possibleValues.length; i++) {
             cutPoints[i] = Double.parseDouble(possibleValues[i]);
          }
-         BinnedType bins = new BinnedType(cutPoints);
-         attribute.setBins(bins);
+         valueType = new BinnedType(cutPoints);
+      } else if ("NOMINAL".equalsIgnoreCase(valueStrs[0])) {
+         valueType = new NominalType(Arrays.asList(possibleValues));
       } else {
-         attribute.setPossibleValues(Arrays.asList(possibleValues));
+         throw new RDFDataDescriptorFormatException("Value type " + valueStrs[0] + " is not supported.");
       }
+      
+      RbcAttribute attribute = new RbcAttribute(name, props, valueType, aggregator);
       
       return attribute;
    }

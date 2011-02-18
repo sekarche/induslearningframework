@@ -2,7 +2,7 @@ package airldm2.core.rl;
 
 import java.util.Arrays;
 
-public class BinnedType {
+public class BinnedType implements ValueType {
    
    /**
     * Example:
@@ -18,10 +18,6 @@ public class BinnedType {
    public BinnedType(double[] cutPoints) {
       mCutPoints = cutPoints;      
    }
-   
-   public int size() {
-      return mCutPoints.length + 1;
-   }
 
    public int getBinIndex(double v) {
       for (int i = 0; i < mCutPoints.length; i++) {
@@ -29,13 +25,14 @@ public class BinnedType {
       }
       return mCutPoints.length;
    }
-   
-   public double[] getCutPoints() {
-      return mCutPoints;
-   }
-   
+      
    @Override
    public String toString() {
       return Arrays.toString(mCutPoints);
+   }
+
+   @Override
+   public int domainSize() {
+      return mCutPoints.length + 1;
    }
 }

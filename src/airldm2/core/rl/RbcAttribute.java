@@ -26,49 +26,28 @@ public class RbcAttribute {
     */
    public enum ValueAggregator { NONE, INDEPENDENT_VAL, COUNT, MODE, AVG, MIN, MAX }
    
-   //TODO: this may be promoted into classes (carrying different types of possible values)
-   /**
-    * Enum specifying what is the datatype of the target value to be predicted
-    */
-   public enum ValueType { NOMINAL, ENUMERATED, BINNED }
-   
+   private String mName;
    private List<URI> mProperties;
    private ValueType mValueType;
    private ValueAggregator mAggregatorType;
    
-   /*The bins to use if value type is BINNED*/
-   private BinnedType mBins;
-   /*possible values if value type is not BINNED*/
-   private List<String> mPossibleValues;
-   
-   public RbcAttribute(List<URI> props, ValueType valueType, ValueAggregator aggregatorType) {
+   public RbcAttribute(String name, List<URI> props, ValueType valueType, ValueAggregator aggregatorType) {
+      mName = name;
       mProperties = props;
       mValueType = valueType;
       mAggregatorType = aggregatorType;
    }
       
+   public List<URI> getProperties() {
+      return mProperties;
+   }
+
    public ValueAggregator getAggregatoraType(){
       return mAggregatorType;
    }
    
    public ValueType getValueType(){
       return mValueType;
-   }
-
-   public void setBins(BinnedType bins) {
-      mBins = bins;
-   }
-
-   public BinnedType getBins() {
-      return mBins;
-   }
-
-   public void setPossibleValues(List<String> possibleValues) {
-      mPossibleValues = possibleValues;
-   }
-
-   public List<String> getPossibleValues() {
-      return mPossibleValues;
    }
    
    @Override
