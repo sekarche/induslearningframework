@@ -27,12 +27,30 @@ public class BinnedType implements ValueType {
    }
       
    @Override
+   public int domainSize() {
+      return mCutPoints.length + 1;
+   }
+
+   @Override
+   public String makeFilter(String varName, int valueIndex) {
+      StringBuilder b = new StringBuilder();
+      
+      if (valueIndex == 0) {
+         b.append(varName).append(" < ").append(mCutPoints[valueIndex]);
+      } else if (valueIndex == mCutPoints.length) {
+         b.append(varName).append(" >= ").append(mCutPoints[valueIndex - 1]);
+      } else {
+         b.append(varName).append(" >= ").append(mCutPoints[valueIndex - 1]);
+         b.append(" && ");
+         b.append(varName).append(" < ").append(mCutPoints[valueIndex]);
+      }
+      
+      return b.toString();
+   }
+
+   @Override
    public String toString() {
       return Arrays.toString(mCutPoints);
    }
 
-   @Override
-   public int domainSize() {
-      return mCutPoints.length + 1;
-   }
 }

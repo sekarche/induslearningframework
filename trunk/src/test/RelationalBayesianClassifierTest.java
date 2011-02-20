@@ -13,6 +13,8 @@ import airldm2.core.SSDataSource;
 import airldm2.core.rl.RDFDataDescriptor;
 import airldm2.core.rl.RDFDataDescriptorParser;
 import airldm2.core.rl.RDFDataSource;
+import airldm2.database.rdf.SuffStatQueryConstructor;
+import airldm2.database.rdf.SuffStatQueryParameter;
 
 public class RelationalBayesianClassifierTest {
    private static final double EPSILON = 0.00001;

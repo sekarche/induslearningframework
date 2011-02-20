@@ -4,7 +4,6 @@ import java.net.URI;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Set;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
@@ -50,6 +49,10 @@ public class RDFDataDescriptor implements DataDescriptor {
       }
    }
 
+   public URI getTargetType() {
+      return mTargetType;
+   }
+   
    public List<RbcAttribute> getAttributeList() {
       return cNonTargetAttributeList;
    }

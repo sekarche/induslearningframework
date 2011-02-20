@@ -1,37 +1,53 @@
 SPARQL QUERIES
 attribute_1
 
-"SELECT (COUNT(*) AS ?count) WHERE { 
-?x rdf:type movie .
-?x http://data.linkedmdb.org/resource/movie/openingreceipt ?y .
-FILTER (?y < 2000000) }"
+SELECT COUNT(*) WHERE { 
+?x rdf:type <http://data.linkedmdb.org/resource/movie/film> .
+?x <http://data.linkedmdb.org/resource/movie/openingreceipt> ?y .
+FILTER (?y < 2000000)
+}
+
 
 attribute_2
 
-"SELECT (COUNT(*) AS ?count)
-WHERE {
+SELECT COUNT(*) WHERE {
    FILTER (?aveage <= 1940)
 
    {
-   SELECT ?prj (AVG(?b) as ?aveage)
-   WHERE { ?x rdf:type movie .
-   	?x http://data.linkedmdb.org/resource/movie/film/actor ?y .
-   	?y foaf:page ?z .
-   	?z fb:people.person.birth_year ?b .}
+   SELECT (AVG(?b) as ?aveage)
+   WHERE { ?x rdf:type <http://data.linkedmdb.org/resource/movie/film> .
+   	?x <http://data.linkedmdb.org/resource/movie/actor> ?y .
+   	?y <http://xmlns.com/foaf/0.1/page> ?z .
+   	?z <http://rdf.freebase.com/ns/people.person.birth_year> ?b .
+   }
    GROUP BY ?x
    }
-}"
+}
+
+
+SELECT COUNT(*) WHERE {
+   FILTER (?aveage <= 1.75)
+
+   {
+   SELECT (AVG(?b) as ?aveage)
+   WHERE { ?x rdf:type <http://data.linkedmdb.org/resource/movie/film> .
+   	?x <http://data.linkedmdb.org/resource/movie/actor> ?y .
+   	?y <http://xmlns.com/foaf/0.1/page> ?z .
+   	?z <http://rdf.freebase.com/ns/people.person.height_meters> ?b .}
+   GROUP BY ?x
+   }
+}
+
+
 
 attribute_3
 
-,foaf:page,fb:people.person.gender=
-"SELECT (COUNT(*) AS ?count) WHERE { 
-?x rdf:type movie .
-?x http://data.linkedmdb.org/resource/movie/film/actor ?y .
-?y foaf:page ?z .
-?z fb:people.person.gender http://rdf.freebase.com/ns/en.male .
-}"
-
+SELECT COUNT(*) WHERE {
+  ?x rdf:type <http://data.linkedmdb.org/resource/movie/film> .
+  ?x <http://data.linkedmdb.org/resource/movie/actor> ?y .
+  ?y <http://xmlns.com/foaf/0.1/page> ?z .
+  ?z <http://rdf.freebase.com/ns/people.person.gender> <http://rdf.freebase.com/ns/en.male> .
+}
 
 attribute_4@
 "SELECT (COUNT(*) AS ?count) WHERE { 
@@ -42,17 +58,20 @@ attribute_4@
 
 attribute_5@
 
-"SELECT (COUNT(*) AS ?count)
-WHERE {
+SELECT COUNT(*) WHERE {
    FILTER (?degree <= 1)
 
    {
-   SELECT (COUNT(*) AS ?degree)
-   WHERE { ?x rdf:type movie .
-   	?x http://data.linkedmdb.org/resource/movie/film/director ?y .
-   	?y foaf:page ?z .
-   	?z fb:award.award_winner.awards_won ?d .}
+   SELECT (COUNT(?d) AS ?degree) WHERE {
+        ?x rdf:type <http://data.linkedmdb.org/resource/movie/film> .
+   	OPTIONAL {
+	?x <http://data.linkedmdb.org/resource/movie/actor> ?y .
+   	?y <http://xmlns.com/foaf/0.1/page> ?z .
+   	?z <http://rdf.freebase.com/ns/award.award_winner.awards_won> ?d .
+	}
    }
-}"
+   GROUP BY ?x
+   }
+}
 
 MISSING VALUES
