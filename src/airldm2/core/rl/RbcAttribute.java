@@ -24,7 +24,7 @@ public class RbcAttribute {
    /**
     * Enum specifying how to aggregate values for a 1->n relationship
     */
-   public enum ValueAggregator { NONE, INDEPENDENT_VAL, COUNT, MODE, AVG, MIN, MAX }
+   public enum ValueAggregator { NONE, INDEPENDENT_VAL, COUNT, AVG, MIN, MAX }
    
    private String mName;
    private List<URI> mProperties;
@@ -42,7 +42,7 @@ public class RbcAttribute {
       return mProperties;
    }
 
-   public ValueAggregator getAggregatoraType(){
+   public ValueAggregator getAggregatorType(){
       return mAggregatorType;
    }
    

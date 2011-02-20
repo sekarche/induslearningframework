@@ -12,6 +12,8 @@ import virtuoso.sesame2.driver.VirtuosoRepository;
 import airldm2.constants.Constants;
 import airldm2.core.ISufficentStatistic;
 import airldm2.core.SSDataSource;
+import airldm2.database.rdf.SuffStatQueryConstructor;
+import airldm2.database.rdf.SuffStatQueryParameter;
 import airldm2.exceptions.RTConfigException;
 import airldm2.util.AttribValuePair;
 
@@ -78,12 +80,8 @@ public class RDFDataSource implements SSDataSource {
    public void setRelationName(String relationName) {
    }
 
-   public ISufficentStatistic getSufficientStatistic(RbcAttribute target, int targetValueIndex, RbcAttribute feature, int featureValueIndex) {
-      return null;
-   }
-
-   public ISufficentStatistic getSufficientStatistic(RbcAttribute target, int targetValueIndex) {
-      // TODO Auto-generated method stub
+   public ISufficentStatistic getSufficientStatistic(SuffStatQueryParameter queryParam) {
+      String query = new SuffStatQueryConstructor(mDefaultContext, queryParam).createQuery();
       return null;
    }
 

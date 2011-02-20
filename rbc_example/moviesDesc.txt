@@ -5,8 +5,8 @@
 %
 % @attribute name
 % [URI(s) separated by commas]
-% [NOMINAL|BINNED]=[values separated by commas]
-% aggregator=[NONE|INDEPENDENT_VAL|COUNT|MODE|AVG|MIN|MAX]
+% [NOMINAL|ENUM|BINNED]=[values separated by commas]
+% aggregator=[NONE|INDEPENDENT_VAL|COUNT|AVG|MIN|MAX]
 %
 %Remark: Number is always binned
 %Remark:If BINNED Option the format is range (of integers) seperated by commas
@@ -29,16 +29,16 @@ BINNED=2000000
 aggregator=NONE
 
 @attribute actorBirth
-http://data.linkedmdb.org/resource/movie/film/actor,http://xmlns.com/foaf/0.1/page,http://rdf.freebase.com/ns/people.person.birth_year
+http://data.linkedmdb.org/resource/movie/actor,http://xmlns.com/foaf/0.1/page,http://rdf.freebase.com/ns/people.person.birth_year
 BINNED=1940,1960
 aggregator=AVG
 
 @attribute actorGender
-http://data.linkedmdb.org/resource/movie/film/actor,http://xmlns.com/foaf/0.1/page,fb:people.person.gender
-NOMINAL=http://rdf.freebase.com/ns/en.male,http://rdf.freebase.com/ns/en.female
+http://data.linkedmdb.org/resource/movie/actor,http://xmlns.com/foaf/0.1/page,http://rdf.freebase.com/ns/people.person.gender
+ENUM=http://rdf.freebase.com/ns/en.male,http://rdf.freebase.com/ns/en.female
 aggregator=INDEPENDENT_VAL
 
 @attribute directorAward
-http://data.linkedmdb.org/resource/movie/film/director,http://xmlns.com/foaf/0.1/page,http://rdf.freebase.com/ns/award.award_winner.awards_won
+http://data.linkedmdb.org/resource/movie/director,http://xmlns.com/foaf/0.1/page,http://rdf.freebase.com/ns/award.award_winner.awards_won
 BINNED=2
 aggregator=COUNT

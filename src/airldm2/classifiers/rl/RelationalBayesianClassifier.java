@@ -11,6 +11,7 @@ import airldm2.core.rl.RDFDataDescriptor;
 import airldm2.core.rl.RDFDataSource;
 import airldm2.core.rl.RbcAttribute;
 import airldm2.core.rl.ValueType;
+import airldm2.database.rdf.SuffStatQueryParameter;
 
 public class RelationalBayesianClassifier extends Classifier {
 
@@ -60,7 +61,7 @@ public class RelationalBayesianClassifier extends Classifier {
          int numOfAttributeValues = currAttribute.getValueType().domainSize();
          for (int j = 0; j < numOfClassLabels; j++) {
             for (int k = 0; k < numOfAttributeValues; k++) {
-               ISufficentStatistic tempSuffStat = mDataSource.getSufficientStatistic(targetAttribute, j, currAttribute, k);
+               ISufficentStatistic tempSuffStat = mDataSource.getSufficientStatistic(new SuffStatQueryParameter(mDataDesc.getTargetType(), targetAttribute, j, currAttribute, k));
                mCounts[i][j][k] = tempSuffStat.getValue().intValue();
             }
          }
@@ -77,7 +78,7 @@ public class RelationalBayesianClassifier extends Classifier {
 
       //Explicitly ask for class count since every attribute may be INDEPENDENT_VAL
       for (int j = 0; j < numOfClassLabels; j++) {
-         ISufficentStatistic tempSuffStat = mDataSource.getSufficientStatistic(targetAttribute, j);
+         ISufficentStatistic tempSuffStat = mDataSource.getSufficientStatistic(new SuffStatQueryParameter(mDataDesc.getTargetType(), targetAttribute, j));
          mClassCounts[j] = tempSuffStat.getValue().intValue();
       }
 

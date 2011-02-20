@@ -1,12 +1,13 @@
 package airldm2.core.rl;
 
+import java.net.URI;
 import java.util.List;
 
-public class NominalType implements ValueType {
+public class EnumType implements ValueType {
 
-   private List<String> mDomain;
+   private List<URI> mDomain;
    
-   public NominalType(List<String> domain) {
+   public EnumType(List<URI> domain) {
       mDomain = domain;
    }
 
@@ -19,8 +20,9 @@ public class NominalType implements ValueType {
    public String makeFilter(String varName, int valueIndex) {
       return new StringBuilder()
          .append(varName)
-         .append(" = ")
+         .append(" = <")
          .append(mDomain.get(valueIndex))
+         .append(">")
          .toString();
    }
 
