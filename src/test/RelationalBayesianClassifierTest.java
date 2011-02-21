@@ -28,14 +28,16 @@ public class RelationalBayesianClassifierTest {
       RDFDataDescriptor desc = RDFDataDescriptorParser.parse("rbc_example/moviesDesc.txt");
       //System.out.println(desc);
       
-      String trainContext = ":train";
-      SSDataSource trainSource = new RDFDataSource(trainContext);
+      //named RDF graph that stores all training triples 
+      String trainGraph = ":train";
+      SSDataSource trainSource = new RDFDataSource(trainGraph);
       LDInstances trainInstances = new LDInstances();
       trainInstances.setDesc(desc);
       trainInstances.setDataSource(trainSource);
    
-      String testContext = ":test";
-      SSDataSource testSource = new RDFDataSource(testContext);
+      //named RDF graph that stores all test triples
+      String testGraph = ":test";
+      SSDataSource testSource = new RDFDataSource(testGraph);
       LDInstances testInstances = new LDInstances();
       testInstances.setDesc(desc);
       testInstances.setDataSource(testSource);
