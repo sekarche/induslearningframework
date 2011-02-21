@@ -26,16 +26,18 @@ SELECT COUNT(*) WHERE {
 
 
 SELECT COUNT(*) WHERE {
-   FILTER (?aveage <= 1.75)
-
    {
-   SELECT (AVG(?b) as ?aveage)
-   WHERE { ?x rdf:type <http://data.linkedmdb.org/resource/movie/film> .
+   SELECT (AVG(?b) as ?aveage) WHERE {
+    ?x rdf:type <http://data.linkedmdb.org/resource/movie/film> .
+    ?x <http://data.linkedmdb.org/resource/movie/openingreceipt> ?y .
+    FILTER (?y < 2000000)
+    
    	?x <http://data.linkedmdb.org/resource/movie/actor> ?y .
    	?y <http://xmlns.com/foaf/0.1/page> ?z .
    	?z <http://rdf.freebase.com/ns/people.person.height_meters> ?b .}
    GROUP BY ?x
    }
+   FILTER (?aveage <= 1.75)
 }
 
 
