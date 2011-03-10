@@ -1,6 +1,5 @@
 package airldm2.classifiers.rl;
 
-import java.net.URI;
 import java.util.List;
 
 import airldm2.classifiers.Classifier;
@@ -65,8 +64,8 @@ public class RelationalBayesianClassifier extends Classifier {
                ISufficentStatistic tempSuffStat = mDataSource.getSufficientStatistic(queryParam);
                mCounts[i][j][k] = tempSuffStat.getValue().intValue();
                
-               //System.out.println(queryParam);
-               //System.out.println(tempSuffStat.getValue());
+               System.out.println(queryParam);
+               System.out.println(tempSuffStat.getValue());
             }
          }
       }
@@ -102,12 +101,13 @@ public class RelationalBayesianClassifier extends Classifier {
       return null;
    }
 
-   public double classifyInstance(LDInstances instances, URI test) {
+   public double classifyInstance(AggregatedInstance instance) {
       return 0.0;
    }
    
-   public double[] distributionForInstance(LDInstances instances, URI test) {
-      
+   public double[] distributionForInstance(AggregatedInstance instance) {
+      //Watch out for IND values
+      //use log
       return null;
    }
 
