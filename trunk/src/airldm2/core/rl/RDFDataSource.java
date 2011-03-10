@@ -2,14 +2,24 @@ package airldm2.core.rl;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.List;
 import java.util.Properties;
 
+import org.openrdf.model.Literal;
+import org.openrdf.model.Value;
+import org.openrdf.query.BindingSet;
+import org.openrdf.query.MalformedQueryException;
+import org.openrdf.query.QueryEvaluationException;
+import org.openrdf.query.QueryLanguage;
+import org.openrdf.query.TupleQuery;
+import org.openrdf.query.TupleQueryResult;
 import org.openrdf.repository.Repository;
 import org.openrdf.repository.RepositoryConnection;
 import org.openrdf.repository.RepositoryException;
 
 import virtuoso.sesame2.driver.VirtuosoRepository;
 import airldm2.constants.Constants;
+import airldm2.core.DefaultSufficentStatisticImpl;
 import airldm2.core.ISufficentStatistic;
 import airldm2.core.SSDataSource;
 import airldm2.database.rdf.SuffStatQueryConstructor;
@@ -23,8 +33,8 @@ public class RDFDataSource implements SSDataSource {
    private RepositoryConnection mConn;
    private String mDefaultContext;
 
-   public RDFDataSource(String context) throws RepositoryException, RTConfigException {
-      mDefaultContext = context;
+   public RDFDataSource(String trainGraph) throws RepositoryException, RTConfigException {
+      mDefaultContext = trainGraph;
       
       final Properties defaultProps = new Properties();
       try {
@@ -80,8 +90,27 @@ public class RDFDataSource implements SSDataSource {
    public void setRelationName(String relationName) {
    }
 
-   public ISufficentStatistic getSufficientStatistic(SuffStatQueryParameter queryParam) {
+   public ISufficentStatistic getSufficientStatistic(SuffStatQueryParameter queryParam) throws RepositoryException, MalformedQueryException, QueryEvaluationException {
       String query = new SuffStatQueryConstructor(mDefaultContext, queryParam).createQuery();
+      //System.out.println(query);
+      
+      TupleQuery resultsTable = mConn.prepareTupleQuery(QueryLanguage.SPARQL, query);
+      TupleQueryResult bindings = resultsTable.evaluate();
+      if (bindings.hasNext()) {
+         BindingSet pairs = bindings.next();
+         List<String> names = bindings.getBindingNames();
+         Value[] rv = new Value[names.size()];
+         for (int i = 0; i < names.size(); i++) {
+            String name = names.get(i);
+            Value value = pairs.getValue(name);
+            rv[i] = value;
+         }
+         
+         int count = ((Literal)rv[0]).intValue();
+         ISufficentStatistic stat = new DefaultSufficentStatisticImpl(count);
+         return stat;
+      }
+      
       return null;
    }
 

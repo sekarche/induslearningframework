@@ -61,8 +61,6 @@ attribute_4@
 attribute_5@
 
 SELECT COUNT(*) WHERE {
-   FILTER (?degree <= 1)
-
    {
    SELECT (COUNT(?d) AS ?degree) WHERE {
         ?x rdf:type <http://data.linkedmdb.org/resource/movie/film> .
@@ -74,6 +72,8 @@ SELECT COUNT(*) WHERE {
    }
    GROUP BY ?x
    }
+
+   FILTER (?degree <= 1)
 }
 
 MISSING VALUES
