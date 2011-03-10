@@ -23,8 +23,8 @@ public class SuffStatQueryConstructor {
    private SuffStatQueryParameter mParam;
    private VarFactory mVarFactory;
    
-   public SuffStatQueryConstructor(String context, SuffStatQueryParameter queryParam) {
-      mContext = context;
+   public SuffStatQueryConstructor(String mDefaultContext, SuffStatQueryParameter queryParam) {
+      mContext = mDefaultContext;
       mParam = queryParam;
       mVarFactory = new VarFactory();
    }
@@ -101,11 +101,11 @@ public class SuffStatQueryConstructor {
    private String createTargetType() {
       return triple(TARGET_VAR, "rdf:type", angleBracket(mParam.TargetType));
    }
-
+   
    private static String angleBracket(URI uri) {
       return angleBracket(uri.toString());
    }
-   
+      
    private static String angleBracket(String uri) {
       return new StringBuilder().append("<").append(uri).append(">").toString();
    }

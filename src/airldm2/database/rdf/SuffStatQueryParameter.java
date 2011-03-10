@@ -2,6 +2,9 @@ package airldm2.database.rdf;
 
 import java.net.URI;
 
+import org.apache.commons.lang.builder.ToStringBuilder;
+import org.apache.commons.lang.builder.ToStringStyle;
+
 import airldm2.core.rl.RbcAttribute;
 
 public class SuffStatQueryParameter {
@@ -28,6 +31,11 @@ public class SuffStatQueryParameter {
    
    public boolean hasFeature() {
       return Feature != null;
+   }
+   
+   @Override
+   public String toString() {
+      return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE);
    }
    
 }
