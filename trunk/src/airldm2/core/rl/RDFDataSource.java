@@ -92,7 +92,7 @@ public class RDFDataSource implements SSDataSource {
 
    public ISufficentStatistic getSufficientStatistic(SuffStatQueryParameter queryParam) throws RepositoryException, MalformedQueryException, QueryEvaluationException {
       String query = new SuffStatQueryConstructor(mDefaultContext, queryParam).createQuery();
-      //System.out.println(query);
+      System.out.println(query);
       
       TupleQuery resultsTable = mConn.prepareTupleQuery(QueryLanguage.SPARQL, query);
       TupleQueryResult bindings = resultsTable.evaluate();

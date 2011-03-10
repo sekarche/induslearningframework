@@ -2,19 +2,17 @@ package test;
 
 import static org.junit.Assert.assertEquals;
 
-import java.net.URI;
-
 import org.junit.Before;
 import org.junit.Test;
 
+import airldm2.classifiers.rl.AggregatedInstance;
+import airldm2.classifiers.rl.InstanceAggregator;
 import airldm2.classifiers.rl.RelationalBayesianClassifier;
 import airldm2.core.LDInstances;
 import airldm2.core.SSDataSource;
 import airldm2.core.rl.RDFDataDescriptor;
 import airldm2.core.rl.RDFDataDescriptorParser;
 import airldm2.core.rl.RDFDataSource;
-import airldm2.database.rdf.SuffStatQueryConstructor;
-import airldm2.database.rdf.SuffStatQueryParameter;
 
 public class RelationalBayesianClassifierTest {
    private static final double EPSILON = 0.00001;
@@ -44,8 +42,9 @@ public class RelationalBayesianClassifierTest {
    
       RelationalBayesianClassifier rbc = new RelationalBayesianClassifier();
       rbc.buildClassifier(trainInstances);
-      URI test1 = URI.create("http://data.linkedmdb.org/resource/film/2723");
-      double label = rbc.classifyInstance(testInstances, test1);
+      
+      AggregatedInstance[] aggregatedInstances = InstanceAggregator.aggregate(testInstances);
+      double label = rbc.classifyInstance(aggregatedInstances[0]);
       assertEquals(1.0, label, EPSILON);
    }
 
