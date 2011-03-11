@@ -1,5 +1,7 @@
 package airldm2.util;
 
+import org.openrdf.model.URI;
+
 /**
  * Some commonly used functions
  * 
@@ -11,4 +13,13 @@ public class Utils {
       String s = st.substring(0, st.lastIndexOf(trailer));
       return s;
    }
+
+   public static String angleBracket(URI uri) {
+      return angleBracket(uri.toString());
+   }
+   
+   public static String angleBracket(String uri) {
+      return new StringBuilder().append("<").append(uri).append(">").toString();
+   }
+   
 }
