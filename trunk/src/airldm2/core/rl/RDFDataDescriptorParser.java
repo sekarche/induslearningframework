@@ -3,10 +3,13 @@ package airldm2.core.rl;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.net.URI;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+
+import org.openrdf.model.URI;
+import org.openrdf.model.ValueFactory;
+import org.openrdf.model.impl.ValueFactoryImpl;
 
 import airldm2.core.rl.RbcAttribute.ValueAggregator;
 import airldm2.exceptions.RDFDataDescriptorFormatException;
@@ -19,6 +22,8 @@ public class RDFDataDescriptorParser {
    private static final String TARGET = "@target ";
    private static final String ATTRIBUTE = "@attribute ";
    private static final String AGGREGATOR = "aggregator=";
+   
+   private static ValueFactory Factory = new ValueFactoryImpl();
    
    public static RDFDataDescriptor parse(String descFile) throws IOException, RDFDataDescriptorFormatException {
       URI targetType = null;
@@ -33,7 +38,7 @@ public class RDFDataDescriptorParser {
             continue;
 
          if (line.startsWith(TARGET_TYPE)) {
-            targetType = URI.create(line.substring(TARGET_TYPE.length()));
+            targetType = Factory.createURI(line.substring(TARGET_TYPE.length()));
          } else if (line.startsWith(TARGET)) {
             targetAttributeName = line.substring(TARGET.length());
          } else if (line.startsWith(ATTRIBUTE)) {
@@ -63,7 +68,7 @@ public class RDFDataDescriptorParser {
       String[] propStrs = propLine.split(",");
       List<URI> props = CollectionUtil.makeList();
       for (String propStr : propStrs) {
-         props.add(URI.create(propStr.trim()));
+         props.add(Factory.createURI(propStr.trim()));
       }
       
       if (!aggregatorLine.startsWith(AGGREGATOR))
@@ -96,7 +101,7 @@ public class RDFDataDescriptorParser {
       } else if ("ENUM".equalsIgnoreCase(valueStrs[0])) {
          URI[] possibleURIs = new URI[possibleValues.length];
          for (int i = 0; i < possibleValues.length; i++) {
-            possibleURIs[i] = URI.create(possibleValues[i]);
+            possibleURIs[i] = Factory.createURI(possibleValues[i]);
          }
          
          valueType = new EnumType(Arrays.asList(possibleURIs));

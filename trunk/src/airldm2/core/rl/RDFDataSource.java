@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Properties;
 
 import org.openrdf.model.Literal;
+import org.openrdf.model.URI;
 import org.openrdf.model.Value;
 import org.openrdf.query.BindingSet;
 import org.openrdf.query.MalformedQueryException;
@@ -114,6 +115,17 @@ public class RDFDataSource implements SSDataSource {
       return null;
    }
 
+   public List<URI> getTargetInstances(URI targetType) {
+      return null;
+   }
    
+   public Value getAggregation(URI instance, RbcAttribute attribute) {
+      return null;
+   }
+   
+   public int countIndependentValueAggregation(URI instance, RbcAttribute attribute, int v) {
+      
+      return 0;
+   }
    
 }
