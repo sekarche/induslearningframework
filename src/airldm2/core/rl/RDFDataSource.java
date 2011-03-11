@@ -23,6 +23,8 @@ import airldm2.constants.Constants;
 import airldm2.core.DefaultSufficentStatisticImpl;
 import airldm2.core.ISufficentStatistic;
 import airldm2.core.SSDataSource;
+import airldm2.database.rdf.AggregationQueryConstructor;
+import airldm2.database.rdf.IndependentValueAggregationQueryConstructor;
 import airldm2.database.rdf.InstanceQueryConstructor;
 import airldm2.database.rdf.SuffStatQueryConstructor;
 import airldm2.database.rdf.SuffStatQueryParameter;
@@ -122,13 +124,24 @@ public class RDFDataSource implements SSDataSource {
       return instances;
    }
    
-   public Value getAggregation(URI instance, RbcAttribute attribute) {
-      return null;
+   public Value getAggregation(URI instance, RbcAttribute attribute) throws RDFDatabaseException {
+      String query = new AggregationQueryConstructor(mDefaultContext, instance, attribute).createQuery();
+      System.out.println(query);
+      
+      List<Value[]> results = executeQuery(query);
+      if (results.isEmpty()) return null;
+      Value[] rv = results.get(0);
+      return rv[0];
    }
    
-   public int countIndependentValueAggregation(URI instance, RbcAttribute attribute, int v) {
+   public int countIndependentValueAggregation(URI instance, RbcAttribute attribute, int v) throws RDFDatabaseException {
+      String query = new IndependentValueAggregationQueryConstructor(mDefaultContext, instance, attribute, v).createQuery();
+      System.out.println(query);
       
-      return 0;
+      List<Value[]> results = executeQuery(query);
+      if (results.isEmpty()) return 0;
+      Value[] rv = results.get(0);
+      return ((Literal)rv[0]).intValue();
    }
    
    private List<Value[]> executeQuery(String query) throws RDFDatabaseException {

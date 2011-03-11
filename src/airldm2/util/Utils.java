@@ -21,5 +21,16 @@ public class Utils {
    public static String angleBracket(String uri) {
       return new StringBuilder().append("<").append(uri).append(">").toString();
    }
+
+   public static String triple(String sub, String prop, String obj) {
+      return new StringBuilder()
+         .append(sub)
+         .append(" ")
+         .append(prop)
+         .append(" ")
+         .append(obj)
+         .append(" . ")
+         .toString();
+   }
    
 }

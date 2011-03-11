@@ -1,8 +1,8 @@
 package airldm2.database.rdf;
 
-import org.openrdf.model.URI;
+import static airldm2.util.Utils.angleBracket;
 
-import airldm2.util.Utils;
+import org.openrdf.model.URI;
 
 
 public class InstanceQueryConstructor {
@@ -14,14 +14,14 @@ public class InstanceQueryConstructor {
    private String mContext;
    private URI mType;
    
-   public InstanceQueryConstructor(String mDefaultContext, URI type) {
-      mContext = mDefaultContext;
+   public InstanceQueryConstructor(String context, URI type) {
+      mContext = context;
       mType = type;
    }
 
    public String createQuery() {
-      return QUERY.replace(CONTEXT_PATTERN, Utils.angleBracket(mContext))
-                  .replace(TYPE_PATTERN, Utils.angleBracket(mType));
+      return QUERY.replace(CONTEXT_PATTERN, angleBracket(mContext))
+                  .replace(TYPE_PATTERN, angleBracket(mType));
    }
    
 }

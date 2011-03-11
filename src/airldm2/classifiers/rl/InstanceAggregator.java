@@ -4,9 +4,6 @@ import java.util.List;
 
 import org.openrdf.model.URI;
 import org.openrdf.model.Value;
-import org.openrdf.query.MalformedQueryException;
-import org.openrdf.query.QueryEvaluationException;
-import org.openrdf.repository.RepositoryException;
 
 import airldm2.core.LDInstances;
 import airldm2.core.rl.RDFDataDescriptor;
@@ -42,7 +39,7 @@ public class InstanceAggregator {
       return aggInstances;      
    }
 
-   private static int[] aggregateAttribute(RDFDataSource dataSource, URI instance, RbcAttribute attribute) {
+   private static int[] aggregateAttribute(RDFDataSource dataSource, URI instance, RbcAttribute attribute) throws RDFDatabaseException {
       ValueType valueType = attribute.getValueType();
       int[] valueIndexCount = new int[valueType.domainSize()];
       
