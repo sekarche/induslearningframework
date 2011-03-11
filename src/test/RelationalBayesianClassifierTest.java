@@ -2,6 +2,8 @@ package test;
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.List;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -43,8 +45,8 @@ public class RelationalBayesianClassifierTest {
       RelationalBayesianClassifier rbc = new RelationalBayesianClassifier();
       rbc.buildClassifier(trainInstances);
       
-      AggregatedInstance[] aggregatedInstances = InstanceAggregator.aggregate(testInstances);
-      double label = rbc.classifyInstance(aggregatedInstances[0]);
+      List<AggregatedInstance> aggregatedInstances = InstanceAggregator.aggregate(testInstances);
+      double label = rbc.classifyInstance(aggregatedInstances.get(0));
       assertEquals(1.0, label, EPSILON);
    }
 

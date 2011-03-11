@@ -1,9 +1,9 @@
 package airldm2.database.rdf;
 
-import java.net.URI;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
+import org.openrdf.model.URI;
 
 import airldm2.core.rl.RbcAttribute;
 

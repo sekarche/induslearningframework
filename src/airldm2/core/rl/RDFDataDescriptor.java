@@ -1,12 +1,12 @@
 package airldm2.core.rl;
 
-import java.net.URI;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
+import org.openrdf.model.URI;
 
 import airldm2.core.DataDescriptor;
 import airldm2.util.CollectionUtil;

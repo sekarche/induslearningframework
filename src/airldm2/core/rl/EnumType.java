@@ -1,7 +1,8 @@
 package airldm2.core.rl;
 
-import java.net.URI;
 import java.util.List;
+
+import org.openrdf.model.URI;
 
 public class EnumType implements ValueType {
 

@@ -1,7 +1,8 @@
 package airldm2.database.rdf;
 
-import java.net.URI;
 import java.util.List;
+
+import org.openrdf.model.URI;
 
 import airldm2.core.rl.RbcAttribute;
 import airldm2.core.rl.RbcAttribute.ValueAggregator;
