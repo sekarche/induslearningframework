@@ -8,6 +8,14 @@ public class AggregatedInstance {
    private int[][] mFeatureValueIndexCount;
    
    private int[] mTargetValueIndexCount;
+
+   public int[][] getFeatureValueIndexCount() {
+      return mFeatureValueIndexCount;
+   }
+
+   public int[] getTargetValueIndexCount() {
+      return mTargetValueIndexCount;
+   }
    
    
 }
