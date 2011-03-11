@@ -3,6 +3,7 @@ package airldm2.core.rl;
 import java.util.List;
 
 import org.openrdf.model.URI;
+import org.openrdf.model.Value;
 
 public class EnumType implements ValueType {
 
@@ -15,6 +16,16 @@ public class EnumType implements ValueType {
    @Override
    public int domainSize() {
       return mDomain.size();
+   }
+
+   @Override
+   public int indexOf(Value value) {
+      if (value instanceof URI) {
+         URI uri = (URI) value;
+         return mDomain.indexOf(uri);
+      }
+      
+      return -1;
    }
 
    @Override

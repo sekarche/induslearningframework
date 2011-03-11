@@ -2,6 +2,11 @@ package airldm2.core.rl;
 
 import java.util.Arrays;
 
+import org.openrdf.model.Literal;
+import org.openrdf.model.Value;
+
+import airldm2.util.ArrayUtil;
+
 public class BinnedType implements ValueType {
    
    /**
@@ -29,6 +34,17 @@ public class BinnedType implements ValueType {
    @Override
    public int domainSize() {
       return mCutPoints.length + 1;
+   }
+
+   @Override
+   public int indexOf(Value value) {
+      if (value instanceof Literal) {
+         Literal lit = (Literal) value;
+         double doubleValue = lit.doubleValue();
+         return ArrayUtil.indexOf(mCutPoints, doubleValue);
+      }
+      
+      return -1;
    }
 
    @Override
