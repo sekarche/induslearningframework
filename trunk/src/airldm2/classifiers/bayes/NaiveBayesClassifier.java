@@ -10,6 +10,7 @@ import airldm2.core.LDInstances;
 import airldm2.core.SSDataSource;
 import airldm2.core.datatypes.relational.ColumnDescriptor;
 import airldm2.core.datatypes.relational.SingleRelationDataDescriptor;
+import airldm2.util.ArrayUtil;
 import airldm2.util.AttribValuePair;
 
 public class NaiveBayesClassifier extends Classifier {
@@ -255,17 +256,7 @@ public class NaiveBayesClassifier extends Classifier {
 
    public double classifyInstance(Instance instance) {
       double[] dist = distributionForInstance(instance);
-      double index = -1;
-      double max = -1;
-
-      for (int i = 0; i < dist.length; ++i) {
-         if (dist[i] > max) {
-            max = dist[i];
-            index = i;
-         }
-      }
-
-      return index;
+      return ArrayUtil.maxIndex(dist);
    }
 
    public double[] distributionForInstance(Instance instance) {
@@ -276,7 +267,6 @@ public class NaiveBayesClassifier extends Classifier {
       // in the count structure
       double[] instVals = instance.toDoubleArray();
       double[] dist = new double[classCounts.length];
-      double sumDist = 0.0;
       Double tempDouble;
       /**
        * Set number of attributes. It can also be got from desc as int
@@ -295,13 +285,9 @@ public class NaiveBayesClassifier extends Classifier {
          }
          tempProb *= classCounts[i] / numInstances;
          dist[i] = tempProb;
-         sumDist += tempProb;
       }
 
-      // normalize
-      for (int i = 0; i < dist.length; ++i) {
-         dist[i] /= sumDist;
-      }
+      ArrayUtil.normalize(dist);
 
       return dist;
    }
