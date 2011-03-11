@@ -1,5 +1,6 @@
 package airldm2.classifiers.rl;
 
+import java.util.Arrays;
 import java.util.List;
 
 import airldm2.classifiers.Classifier;
@@ -11,6 +12,7 @@ import airldm2.core.rl.RDFDataSource;
 import airldm2.core.rl.RbcAttribute;
 import airldm2.core.rl.ValueType;
 import airldm2.database.rdf.SuffStatQueryParameter;
+import airldm2.util.ArrayUtil;
 
 public class RelationalBayesianClassifier extends Classifier {
 
@@ -102,13 +104,33 @@ public class RelationalBayesianClassifier extends Classifier {
    }
 
    public double classifyInstance(AggregatedInstance instance) {
-      return 0.0;
+      double[] dist = distributionForInstance(instance);
+      return ArrayUtil.maxIndex(dist);
    }
    
    public double[] distributionForInstance(AggregatedInstance instance) {
-      //Watch out for IND values
-      //use log
-      return null;
+      int[][] featureValueIndexCount = instance.getFeatureValueIndexCount();
+      double[] dist = new double[mClassCounts.length];
+      Arrays.fill(dist, 1.0);
+      
+      for (int c = 0; c < dist.length; c++) {
+         for (int a = 0; a < featureValueIndexCount.length; a++) {
+            for (int v = 0; v < featureValueIndexCount[a].length; v++) {
+               if (featureValueIndexCount[a][v] == 0) continue;
+               else if (featureValueIndexCount[a][v] == 1) {
+                  dist[c] *= mCounts[a][c][v] / mAttributeClassCounts[a][c];
+               } else {
+                  dist[c] *= Math.pow(mCounts[a][c][v] / mAttributeClassCounts[a][c], featureValueIndexCount[a][v]);
+               } 
+            }
+         }
+         
+         dist[c] *= mClassCounts[c] / mNumInstances;
+      }
+      
+      ArrayUtil.normalize(dist);
+
+      return dist;
    }
 
 }
