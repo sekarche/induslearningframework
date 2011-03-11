@@ -23,10 +23,13 @@ import airldm2.constants.Constants;
 import airldm2.core.DefaultSufficentStatisticImpl;
 import airldm2.core.ISufficentStatistic;
 import airldm2.core.SSDataSource;
+import airldm2.database.rdf.InstanceQueryConstructor;
 import airldm2.database.rdf.SuffStatQueryConstructor;
 import airldm2.database.rdf.SuffStatQueryParameter;
+import airldm2.exceptions.RDFDatabaseException;
 import airldm2.exceptions.RTConfigException;
 import airldm2.util.AttribValuePair;
+import airldm2.util.CollectionUtil;
 
 public class RDFDataSource implements SSDataSource {
 
@@ -91,32 +94,32 @@ public class RDFDataSource implements SSDataSource {
    public void setRelationName(String relationName) {
    }
 
-   public ISufficentStatistic getSufficientStatistic(SuffStatQueryParameter queryParam) throws RepositoryException, MalformedQueryException, QueryEvaluationException {
+   public ISufficentStatistic getSufficientStatistic(SuffStatQueryParameter queryParam) throws RDFDatabaseException {
       String query = new SuffStatQueryConstructor(mDefaultContext, queryParam).createQuery();
       System.out.println(query);
       
-      TupleQuery resultsTable = mConn.prepareTupleQuery(QueryLanguage.SPARQL, query);
-      TupleQueryResult bindings = resultsTable.evaluate();
-      if (bindings.hasNext()) {
-         BindingSet pairs = bindings.next();
-         List<String> names = bindings.getBindingNames();
-         Value[] rv = new Value[names.size()];
-         for (int i = 0; i < names.size(); i++) {
-            String name = names.get(i);
-            Value value = pairs.getValue(name);
-            rv[i] = value;
-         }
-         
-         int count = ((Literal)rv[0]).intValue();
-         ISufficentStatistic stat = new DefaultSufficentStatisticImpl(count);
-         return stat;
-      }
+      List<Value[]> results = executeQuery(query);
+      if (results.isEmpty()) return null;
+      Value[] rv = results.get(0);
       
-      return null;
+      int count = ((Literal)rv[0]).intValue();
+      ISufficentStatistic stat = new DefaultSufficentStatisticImpl(count);
+      return stat;
    }
 
-   public List<URI> getTargetInstances(URI targetType) {
-      return null;
+   public List<URI> getTargetInstances(URI targetType) throws RDFDatabaseException {
+      String query = new InstanceQueryConstructor(mDefaultContext, targetType).createQuery();
+      System.out.println(query);
+      
+      List<Value[]> results = executeQuery(query);
+      List<URI> instances = CollectionUtil.makeList();
+      for (Value[] rv : results) {
+         if (rv[0] instanceof URI) {
+            instances.add((URI) rv[0]);
+         }
+      }
+      
+      return instances;
    }
    
    public Value getAggregation(URI instance, RbcAttribute attribute) {
@@ -126,6 +129,42 @@ public class RDFDataSource implements SSDataSource {
    public int countIndependentValueAggregation(URI instance, RbcAttribute attribute, int v) {
       
       return 0;
+   }
+   
+   private List<Value[]> executeQuery(String query) throws RDFDatabaseException {
+      List<Value[]> results = CollectionUtil.makeList();
+      
+      TupleQuery resultsTable;
+      try {
+         resultsTable = mConn.prepareTupleQuery(QueryLanguage.SPARQL, query);
+      } catch (RepositoryException e) {
+         throw new RDFDatabaseException(e);
+      } catch (MalformedQueryException e) {
+         throw new RDFDatabaseException(e);
+      }
+      
+      try {
+         TupleQueryResult bindings = resultsTable.evaluate();
+         List<String> names = bindings.getBindingNames();
+         while (bindings.hasNext()) {
+            BindingSet pairs = bindings.next();
+
+            Value[] rv = new Value[names.size()];
+            for (int i = 0; i < names.size(); i++) {
+               String name = names.get(i);
+               Value value = pairs.getValue(name);
+               rv[i] = value;
+            }
+
+            results.add(rv);
+         }
+
+         bindings.close();
+      } catch (QueryEvaluationException e) {
+         throw new RDFDatabaseException(e);
+      }
+      
+      return results;
    }
    
 }

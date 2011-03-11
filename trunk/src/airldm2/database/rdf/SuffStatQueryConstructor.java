@@ -6,6 +6,7 @@ import org.openrdf.model.URI;
 
 import airldm2.core.rl.RbcAttribute;
 import airldm2.core.rl.RbcAttribute.ValueAggregator;
+import airldm2.util.Utils;
 
 
 public class SuffStatQueryConstructor {
@@ -34,7 +35,7 @@ public class SuffStatQueryConstructor {
       mVarFactory.reset();
       StringBuilder b = new StringBuilder();
       
-      b.append(QUERY_HEADER.replace(CONTEXT_PATTERN, angleBracket(mContext)));
+      b.append(QUERY_HEADER.replace(CONTEXT_PATTERN, Utils.angleBracket(mContext)));
       
       if (mParam.hasFeature()) {
          ValueAggregator featureAggType = mParam.Feature.getAggregatorType();
@@ -83,9 +84,9 @@ public class SuffStatQueryConstructor {
       StringBuilder b = new StringBuilder();
       
       List<URI> props = att.getProperties();
-      b.append(triple(TARGET_VAR, angleBracket(props.get(0)), mVarFactory.next()));
+      b.append(triple(TARGET_VAR, Utils.angleBracket(props.get(0)), mVarFactory.next()));
       for (int i = 1; i < props.size(); i++) {
-         b.append(triple(mVarFactory.current(), angleBracket(props.get(i)), mVarFactory.next()));
+         b.append(triple(mVarFactory.current(), Utils.angleBracket(props.get(i)), mVarFactory.next()));
       }
 
       return b.toString();
@@ -100,15 +101,7 @@ public class SuffStatQueryConstructor {
    }
 
    private String createTargetType() {
-      return triple(TARGET_VAR, "rdf:type", angleBracket(mParam.TargetType));
-   }
-   
-   private static String angleBracket(URI uri) {
-      return angleBracket(uri.toString());
-   }
-      
-   private static String angleBracket(String uri) {
-      return new StringBuilder().append("<").append(uri).append(">").toString();
+      return triple(TARGET_VAR, "rdf:type", Utils.angleBracket(mParam.TargetType));
    }
    
    private static String triple(String sub, String prop, String obj) {
