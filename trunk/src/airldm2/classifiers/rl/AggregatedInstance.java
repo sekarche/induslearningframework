@@ -18,9 +18,14 @@ public class AggregatedInstance {
       return mFeatureValueIndexCount;
    }
 
-   public int[] getTargetValueIndexCount() {
-      return mTargetValueIndexCount;
+   public int getLabel() {
+      for (int i = 0; i < mTargetValueIndexCount.length; i++) {
+         if (mTargetValueIndexCount[i] > 0) {
+            return i;
+         }
+      }
+      
+      return -1;
    }
-   
    
 }

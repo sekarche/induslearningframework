@@ -28,6 +28,7 @@ import airldm2.database.rdf.IndependentValueAggregationQueryConstructor;
 import airldm2.database.rdf.InstanceQueryConstructor;
 import airldm2.database.rdf.SuffStatQueryConstructor;
 import airldm2.database.rdf.SuffStatQueryParameter;
+import airldm2.database.rdf.ValueQueryConstructor;
 import airldm2.exceptions.RDFDatabaseException;
 import airldm2.exceptions.RTConfigException;
 import airldm2.util.AttribValuePair;
@@ -122,6 +123,16 @@ public class RDFDataSource implements SSDataSource {
       }
       
       return instances;
+   }
+   
+   public Value getValue(URI instance, RbcAttribute attribute) throws RDFDatabaseException {
+      String query = new ValueQueryConstructor(mDefaultContext, instance, attribute).createQuery();
+      System.out.println(query);
+      
+      List<Value[]> results = executeQuery(query);
+      if (results.isEmpty()) return null;
+      Value[] rv = results.get(0);
+      return rv[0];
    }
    
    public Value getAggregation(URI instance, RbcAttribute attribute) throws RDFDatabaseException {
