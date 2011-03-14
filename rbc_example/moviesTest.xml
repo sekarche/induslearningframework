@@ -45925,52 +45925,6 @@
 	<movie:country_id rdf:datatype="http://www.w3.org/2001/XMLSchema#int">231</movie:country_id>
 	<movie:country_iso_alpha3>HUN</movie:country_iso_alpha3>
 </movie:country>
-<movie:film rdf:about="http://data.linkedmdb.org/resource/film/1296">
-	<rdfs:label>Red Dragon</rdfs:label>
-	<owl:sameAs rdf:resource="http://dbpedia.org/resource/Red_Dragon_%28film%29"/>
-	<owl:sameAs rdf:resource="http://mpii.de/yago/resource/Red_Dragon_%28film%29"/>
-	<dc1:title>Red Dragon</dc1:title>
-	<movie:writer rdf:resource="http://data.linkedmdb.org/resource/writer/14379"/>
-	<movie:writer rdf:resource="http://data.linkedmdb.org/resource/writer/17857"/>
-	<skos:subject rdf:resource="http://data.linkedmdb.org/resource/film_subject/506"/>
-	<movie:film_subject rdf:resource="http://data.linkedmdb.org/resource/film_subject/506"/>
-	<movie:actor rdf:resource="http://data.linkedmdb.org/resource/actor/29374"/>
-	<movie:actor rdf:resource="http://data.linkedmdb.org/resource/actor/30061"/>
-	<movie:actor rdf:resource="http://data.linkedmdb.org/resource/actor/30532"/>
-	<movie:actor rdf:resource="http://data.linkedmdb.org/resource/actor/30727"/>
-	<movie:actor rdf:resource="http://data.linkedmdb.org/resource/actor/32676"/>
-	<movie:actor rdf:resource="http://data.linkedmdb.org/resource/actor/32888"/>
-	<movie:actor rdf:resource="http://data.linkedmdb.org/resource/actor/33397"/>
-	<movie:actor rdf:resource="http://data.linkedmdb.org/resource/actor/34376"/>
-	<movie:actor rdf:resource="http://data.linkedmdb.org/resource/actor/38825"/>
-	<movie:actor rdf:resource="http://data.linkedmdb.org/resource/actor/43098"/>
-	<movie:director rdf:resource="http://data.linkedmdb.org/resource/director/8760"/>
-	<movie:prequel rdf:resource="http://data.linkedmdb.org/resource/film/1175"/>
-	<movie:film_cut rdf:resource="http://data.linkedmdb.org/resource/film_cut/5146"/>
-	<movie:editor rdf:resource="http://data.linkedmdb.org/resource/editor/2697"/>
-	<movie:producer rdf:resource="http://data.linkedmdb.org/resource/producer/10391"/>
-	<movie:sequel rdf:resource="http://data.linkedmdb.org/resource/film/3149"/>
-	<movie:music_contributor rdf:resource="http://data.linkedmdb.org/resource/music_contributor/4017"/>
-	<movie:performance rdf:resource="http://data.linkedmdb.org/resource/performance/24147"/>
-	<movie:performance rdf:resource="http://data.linkedmdb.org/resource/performance/24148"/>
-	<movie:performance rdf:resource="http://data.linkedmdb.org/resource/performance/24149"/>
-	<movie:performance rdf:resource="http://data.linkedmdb.org/resource/performance/24150"/>
-	<movie:performance rdf:resource="http://data.linkedmdb.org/resource/performance/24151"/>
-	<movie:performance rdf:resource="http://data.linkedmdb.org/resource/performance/24152"/>
-	<movie:performance rdf:resource="http://data.linkedmdb.org/resource/performance/24153"/>
-	<movie:performance rdf:resource="http://data.linkedmdb.org/resource/performance/78846"/>
-	<movie:performance rdf:resource="http://data.linkedmdb.org/resource/performance/89669"/>
-	<movie:performance rdf:resource="http://data.linkedmdb.org/resource/performance/142501"/>
-	<foaf:page rdf:resource="http://rdf.freebase.com/ns/guid.9202a8c04000641f800000000031d99d"/>
-	<foaf:page rdf:resource="http://www.imdb.com/title/tt0289765"/>
-	<foaf:page rdf:resource="http://www.rottentomatoes.com/alias?type=imdbid&amp;s=0289765"/>
-	<movie:runtime>124</movie:runtime>
-	<movie:initial_release_date>2002-10-04</movie:initial_release_date>
-	<dc1:date>2002-10-04</dc1:date>
-	<movie:filmid rdf:datatype="http://www.w3.org/2001/XMLSchema#int">1296</movie:filmid>
-	<dbpprop:hasPhotoCollection rdf:resource="http://www4.wiwiss.fu-berlin.de/flickrwrappr/photos/Red_Dragon_(film)"/>
-	<movie:language rdf:resource="http://www.lingvoj.org/lingvo/en"/>
-</movie:film>
 <movie:film rdf:about="http://data.linkedmdb.org/resource/film/1393">
 	<rdfs:label>But I'm a Cheerleader</rdfs:label>
 	<owl:sameAs rdf:resource="http://dbpedia.org/resource/But_I%27m_a_Cheerleader"/>
@@ -46473,64 +46427,6 @@
 	<dbpprop:hasPhotoCollection rdf:resource="http://www4.wiwiss.fu-berlin.de/flickrwrappr/photos/Glory_Road_(film)"/>
 	<movie:language rdf:resource="http://www.lingvoj.org/lingvo/en"/>
 	<movie:openingreceipt rdf:datatype="http://www.w3.org/2001/XMLSchema#int">16927589</movie:openingreceipt>
-</movie:film>
-<movie:film rdf:about="http://data.linkedmdb.org/resource/film/8005">
-	<rdfs:label>Angels and Demons</rdfs:label>
-	<dc1:title>Angels and Demons</dc1:title>
-	<movie:writer rdf:resource="http://data.linkedmdb.org/resource/writer/14766"/>
-	<movie:writer rdf:resource="http://data.linkedmdb.org/resource/writer/16351"/>
-	<skos:subject rdf:resource="http://data.linkedmdb.org/resource/film_subject/208"/>
-	<skos:subject rdf:resource="http://data.linkedmdb.org/resource/film_subject/311"/>
-	<skos:subject rdf:resource="http://data.linkedmdb.org/resource/film_subject/438"/>
-	<skos:subject rdf:resource="http://data.linkedmdb.org/resource/film_subject/454"/>
-	<movie:film_subject rdf:resource="http://data.linkedmdb.org/resource/film_subject/208"/>
-	<movie:film_subject rdf:resource="http://data.linkedmdb.org/resource/film_subject/311"/>
-	<movie:film_subject rdf:resource="http://data.linkedmdb.org/resource/film_subject/438"/>
-	<movie:film_subject rdf:resource="http://data.linkedmdb.org/resource/film_subject/454"/>
-	<movie:film_format rdf:resource="http://data.linkedmdb.org/resource/film_format/47"/>
-	<movie:actor rdf:resource="http://data.linkedmdb.org/resource/actor/9894"/>
-	<movie:actor rdf:resource="http://data.linkedmdb.org/resource/actor/10609"/>
-	<movie:actor rdf:resource="http://data.linkedmdb.org/resource/actor/29755"/>
-	<movie:actor rdf:resource="http://data.linkedmdb.org/resource/actor/30046"/>
-	<movie:actor rdf:resource="http://data.linkedmdb.org/resource/actor/32758"/>
-	<movie:actor rdf:resource="http://data.linkedmdb.org/resource/actor/32780"/>
-	<movie:actor rdf:resource="http://data.linkedmdb.org/resource/actor/43459"/>
-	<movie:actor rdf:resource="http://data.linkedmdb.org/resource/actor/43531"/>
-	<movie:actor rdf:resource="http://data.linkedmdb.org/resource/actor/43590"/>
-	<movie:actor rdf:resource="http://data.linkedmdb.org/resource/actor/53909"/>
-	<movie:director rdf:resource="http://data.linkedmdb.org/resource/director/8581"/>
-	<movie:prequel rdf:resource="http://data.linkedmdb.org/resource/film/3059"/>
-	<movie:editor rdf:resource="http://data.linkedmdb.org/resource/editor/2936"/>
-	<movie:editor rdf:resource="http://data.linkedmdb.org/resource/editor/2957"/>
-	<movie:production_company rdf:resource="http://data.linkedmdb.org/resource/production_company/11"/>
-	<movie:production_company rdf:resource="http://data.linkedmdb.org/resource/production_company/79"/>
-	<movie:production_company rdf:resource="http://data.linkedmdb.org/resource/production_company/98"/>
-	<movie:producer rdf:resource="http://data.linkedmdb.org/resource/producer/9856"/>
-	<movie:producer rdf:resource="http://data.linkedmdb.org/resource/producer/11092"/>
-	<movie:producer rdf:resource="http://data.linkedmdb.org/resource/producer/1537"/>
-	<movie:music_contributor rdf:resource="http://data.linkedmdb.org/resource/music_contributor/4299"/>
-	<movie:performance rdf:resource="http://data.linkedmdb.org/resource/performance/2523"/>
-	<movie:performance rdf:resource="http://data.linkedmdb.org/resource/performance/110486"/>
-	<movie:performance rdf:resource="http://data.linkedmdb.org/resource/performance/110487"/>
-	<movie:performance rdf:resource="http://data.linkedmdb.org/resource/performance/157082"/>
-	<movie:performance rdf:resource="http://data.linkedmdb.org/resource/performance/157083"/>
-	<movie:performance rdf:resource="http://data.linkedmdb.org/resource/performance/157084"/>
-	<movie:performance rdf:resource="http://data.linkedmdb.org/resource/performance/157085"/>
-	<movie:performance rdf:resource="http://data.linkedmdb.org/resource/performance/185503"/>
-	<movie:performance rdf:resource="http://data.linkedmdb.org/resource/performance/185504"/>
-	<movie:performance rdf:resource="http://data.linkedmdb.org/resource/performance/185505"/>
-	<movie:film_regional_release_date rdf:resource="http://data.linkedmdb.org/resource/film_regional_release_date/218"/>
-	<movie:film_story_contributor rdf:resource="http://data.linkedmdb.org/resource/film_story_contributor/406"/>
-	<movie:story_contributor rdf:resource="http://data.linkedmdb.org/resource/film_story_contributor/406"/>
-	<movie:featured_film_location rdf:resource="http://data.linkedmdb.org/resource/film_location/348"/>
-	<movie:featured_film_location rdf:resource="http://data.linkedmdb.org/resource/film_location/1372"/>
-	<foaf:page rdf:resource="http://rdf.freebase.com/ns/guid.9202a8c04000641f8000000000d27c51"/>
-	<foaf:page rdf:resource="http://www.imdb.com/title/tt0808151"/>
-	<foaf:page rdf:resource="http://www.rottentomatoes.com/alias?type=imdbid&amp;s=0808151"/>
-	<movie:initial_release_date>2008</movie:initial_release_date>
-	<dc1:date>2008</dc1:date>
-	<movie:filmid rdf:datatype="http://www.w3.org/2001/XMLSchema#int">8005</movie:filmid>
-	<movie:language rdf:resource="http://www.lingvoj.org/lingvo/en"/>
 </movie:film>
 <movie:music_contributor rdf:about="http://data.linkedmdb.org/resource/music_contributor/422">
 	<rdfs:label>Pat Irwin (Music Contributor)</rdfs:label>
@@ -47777,34 +47673,6 @@
 	<movie:actor_nytimes_id></movie:actor_nytimes_id>
 	<movie:actor_netflix_id></movie:actor_netflix_id>
 </movie:actor>
-<movie:film rdf:about="http://data.linkedmdb.org/resource/film/53956">
-	<rdfs:label>Cars 2</rdfs:label>
-	<dc1:title>Cars 2</dc1:title>
-	<movie:actor rdf:resource="http://data.linkedmdb.org/resource/actor/30594"/>
-	<movie:actor rdf:resource="http://data.linkedmdb.org/resource/actor/31505"/>
-	<movie:actor rdf:resource="http://data.linkedmdb.org/resource/actor/33316"/>
-	<movie:actor rdf:resource="http://data.linkedmdb.org/resource/actor/35640"/>
-	<movie:actor rdf:resource="http://data.linkedmdb.org/resource/actor/36514"/>
-	<movie:actor rdf:resource="http://data.linkedmdb.org/resource/actor/36976"/>
-	<movie:actor rdf:resource="http://data.linkedmdb.org/resource/actor/41763"/>
-	<movie:director rdf:resource="http://data.linkedmdb.org/resource/director/14006"/>
-	<movie:prequel rdf:resource="http://data.linkedmdb.org/resource/film/1600"/>
-	<movie:production_company rdf:resource="http://data.linkedmdb.org/resource/production_company/22"/>
-	<movie:production_company rdf:resource="http://data.linkedmdb.org/resource/production_company/31"/>
-	<movie:music_contributor rdf:resource="http://data.linkedmdb.org/resource/music_contributor/4333"/>
-	<movie:performance rdf:resource="http://data.linkedmdb.org/resource/performance/159991"/>
-	<movie:performance rdf:resource="http://data.linkedmdb.org/resource/performance/159992"/>
-	<movie:performance rdf:resource="http://data.linkedmdb.org/resource/performance/184171"/>
-	<movie:performance rdf:resource="http://data.linkedmdb.org/resource/performance/184172"/>
-	<movie:performance rdf:resource="http://data.linkedmdb.org/resource/performance/184173"/>
-	<movie:performance rdf:resource="http://data.linkedmdb.org/resource/performance/195781"/>
-	<movie:performance rdf:resource="http://data.linkedmdb.org/resource/performance/195782"/>
-	<movie:executive_producer rdf:resource="http://data.linkedmdb.org/resource/producer/11012"/>
-	<foaf:page rdf:resource="http://rdf.freebase.com/ns/guid.9202a8c04000641f800000000803f61f"/>
-	<movie:initial_release_date>2011-06-24</movie:initial_release_date>
-	<dc1:date>2011-06-24</dc1:date>
-	<movie:filmid rdf:datatype="http://www.w3.org/2001/XMLSchema#int">53956</movie:filmid>
-</movie:film>
 <movie:actor rdf:about="http://data.linkedmdb.org/resource/actor/30617">
 	<rdf:type rdf:resource="http://xmlns.com/foaf/0.1/Person"/>
 	<rdfs:label>John Hurt (Actor)</rdfs:label>

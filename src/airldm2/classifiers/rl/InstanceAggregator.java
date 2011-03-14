@@ -47,6 +47,14 @@ public class InstanceAggregator {
          for (int i = 0; i < valueIndexCount.length; i++) {
             valueIndexCount[i] = dataSource.countIndependentValueAggregation(instance, attribute, i);
          }
+         
+      } else if (attribute.getAggregatorType() == ValueAggregator.NONE) {
+         Value value = dataSource.getValue(instance, attribute);
+         int index = valueType.indexOf(value);
+         if (index >= 0) {
+            valueIndexCount[index] = 1;
+         }
+         
       } else {
          Value aggregatedValue = dataSource.getAggregation(instance, attribute);
          int index = valueType.indexOf(aggregatedValue);

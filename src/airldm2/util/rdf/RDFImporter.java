@@ -40,6 +40,7 @@ public class RDFImporter {
       
       conn.clear(context);
       conn.add(new File(file), null, RDFFormat.RDFXML, context);
+      conn.close();
    }
 
    public static void main(String[] args) throws RepositoryException, RDFParseException, RTConfigException, IOException {

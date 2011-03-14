@@ -39,7 +39,7 @@ public class IndependentValueAggregationQueryConstructor {
                                        .replace(LAST_VAR_PATTERN, mVarFactory.current()); 
       b.append(header)
        .append(chain)
-       .append("} GROUP BY ").append(angleBracket(mInstance));
+       .append("}");
       
       return b.toString();
    }

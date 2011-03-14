@@ -10,19 +10,18 @@ import org.openrdf.model.URI;
 import airldm2.core.rl.RbcAttribute;
 
 
-public class AggregationQueryConstructor {
+public class ValueQueryConstructor {
 
    private static final String CONTEXT_PATTERN = "%context%";
-   private static final String AGGREGATION_FUNCTION_PATTERN = "%aggfun%";
    private static final String LAST_VAR_PATTERN = "%lastVar%";
-   private static final String AGGREGATION_HEADER = "SELECT " + AGGREGATION_FUNCTION_PATTERN + "(" + LAST_VAR_PATTERN + ") FROM " + CONTEXT_PATTERN + " WHERE { ";
+   private static final String AGGREGATION_HEADER = "SELECT " + LAST_VAR_PATTERN + " FROM " + CONTEXT_PATTERN + " WHERE { ";
    
    private String mContext;
    private URI mInstance;
    private RbcAttribute mAttribute;
    private VarFactory mVarFactory;
       
-   public AggregationQueryConstructor(String context, URI instance, RbcAttribute attribute) {
+   public ValueQueryConstructor(String context, URI instance, RbcAttribute attribute) {
       mContext = context;
       mInstance = instance;
       mAttribute = attribute;
@@ -35,8 +34,7 @@ public class AggregationQueryConstructor {
       
       String chain = createValueChain(mAttribute);
       String header = AGGREGATION_HEADER.replace(CONTEXT_PATTERN, angleBracket(mContext))
-                                       .replace(AGGREGATION_FUNCTION_PATTERN, mAttribute.getAggregatorType().toString())
-                                       .replace(LAST_VAR_PATTERN, mVarFactory.current()); 
+                                        .replace(LAST_VAR_PATTERN, mVarFactory.current()); 
       b.append(header)
        .append(chain)
        .append("}");
