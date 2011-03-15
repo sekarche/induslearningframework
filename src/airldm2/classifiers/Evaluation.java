@@ -1,13 +1,19 @@
 package airldm2.classifiers;
 
+import java.util.List;
+
 import weka.classifiers.evaluation.ConfusionMatrix;
 import weka.classifiers.evaluation.NominalPrediction;
 import weka.core.Utils;
+import airldm2.classifiers.rl.AggregatedInstance;
+import airldm2.classifiers.rl.InstanceAggregator;
+import airldm2.classifiers.rl.RelationalBayesianClassifier;
 import airldm2.core.LDInstances;
 import airldm2.core.LDTestInstances;
 import airldm2.core.SSDataSource;
 import airldm2.core.SSDataSourceFactory;
 import airldm2.core.datatypes.relational.SingleRelationDataDescriptor;
+import airldm2.core.rl.RDFDataDescriptor;
 import airldm2.util.SimpleArffFileReader;
 
 /**
@@ -80,7 +86,7 @@ public class Evaluation {
          LDInstances trainData = new LDInstances();
          trainData.setDesc(desc);
          trainData.setDataSource(dataSource);
-         ConfusionMatrix matrix = Evaluation.evlauateModel(classifier,
+         ConfusionMatrix matrix = Evaluation.evaluateModel(classifier,
                trainData, testInst, options);
          return matrix.toString("===Confusion Matrix===");
 
@@ -88,7 +94,7 @@ public class Evaluation {
          String trainFile = Utils.getOption("trainFile", options);
          SimpleArffFileReader readTrain = new SimpleArffFileReader(trainFile);
          LDInstances trainData = readTrain.getLDInstances(true);
-         ConfusionMatrix matrix = Evaluation.evlauateModel(classifier,
+         ConfusionMatrix matrix = Evaluation.evaluateModel(classifier,
                trainData, testInst, options);
          return matrix.toString("===Confusion Matrix===");
       } else {
@@ -113,7 +119,7 @@ public class Evaluation {
 
    }
 
-   public static ConfusionMatrix evlauateModel(Classifier classifier,
+   public static ConfusionMatrix evaluateModel(Classifier classifier,
          LDInstances trainData, LDTestInstances testData, String[] options)
          throws Exception {
 
@@ -141,6 +147,26 @@ public class Evaluation {
                distribution));
       }
 
+      return wekaConfusionMatrix;
+   }
+
+   public static ConfusionMatrix evaluateRBCModel(RelationalBayesianClassifier rbc, LDInstances trainInstances, LDInstances testInstances) throws Exception {
+      RDFDataDescriptor desc = (RDFDataDescriptor) trainInstances.getDesc();
+      String[] classLabels = desc.getClassLabels();
+      ConfusionMatrix wekaConfusionMatrix = new ConfusionMatrix(classLabels);
+
+      rbc.buildClassifier(trainInstances);
+      List<AggregatedInstance> aggregatedInstances = InstanceAggregator.aggregate(testInstances);
+      for (AggregatedInstance i : aggregatedInstances) {
+         double[] distribution = rbc.distributionForInstance(i);
+         double actual = i.getLabel();
+         // return some error message if the class label is not according to the descriptor
+         if (actual == -1) {
+            System.out.println("Please check the class label of test instances match their description");
+         }
+         wekaConfusionMatrix.addPrediction(new NominalPrediction(actual, distribution));
+      }
+      
       return wekaConfusionMatrix;
    }
 

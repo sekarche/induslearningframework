@@ -125,7 +125,7 @@ public class NaiveBayesClassifierTests {
          LDInstances trainData = readTrain.getLDInstances(true);
          LDTestInstances testData = readTest.getTestInstances();
 
-         ConfusionMatrix matrix = Evaluation.evlauateModel(classifier,
+         ConfusionMatrix matrix = Evaluation.evaluateModel(classifier,
                trainData, testData, options);
          System.out.println(matrix.toString("===Confusion Matrix==="));
 
@@ -166,7 +166,7 @@ public class NaiveBayesClassifierTests {
          trainData.setDesc(desc);
          trainData.setDataSource(dataSource);
 
-         ConfusionMatrix matrix = Evaluation.evlauateModel(classifier,
+         ConfusionMatrix matrix = Evaluation.evaluateModel(classifier,
                trainData, testInst, options);
          System.out.println(matrix.toString("===Confusion Matrix==="));
 

@@ -78,12 +78,15 @@ public class RDFDataDescriptor implements DataDescriptor {
 
    @Override
    public String[] getClassLabels() {
-      return null;
+      List<String> values = getTargetAttribute().getValueType().getStringValues();
+      String[] labels = new String[values.size()];
+      values.toArray(labels);
+      return labels;
    }
    
    @Override
    public String toString() {
       return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE);
    }
-   
+
 }
