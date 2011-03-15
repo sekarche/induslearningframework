@@ -1,0 +1,4554 @@
+<?xml version="1.0"?>
+
+
+<!DOCTYPE rdf:RDF [
+    <!ENTITY foaf "http://xmlns.com/foaf/0.1/" >
+    <!ENTITY owl "http://www.w3.org/2002/07/owl#" >
+    <!ENTITY ex "http://www.examplecompany.org/" >
+    <!ENTITY xsd "http://www.w3.org/2001/XMLSchema#" >
+    <!ENTITY rdfs "http://www.w3.org/2000/01/rdf-schema#" >
+    <!ENTITY rdf "http://www.w3.org/1999/02/22-rdf-syntax-ns#" >
+]>
+
+
+<rdf:RDF xmlns="http://www.example.org/business#"
+     xml:base="http://www.example.org/business"
+     xmlns:ex="http://www.examplecompany.org/"
+     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+     xmlns:foaf="http://xmlns.com/foaf/0.1/"
+     xmlns:owl="http://www.w3.org/2002/07/owl#"
+     xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+    <owl:Ontology rdf:about="http://www.example.org/business"/>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Datatypes
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Object Properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.examplecompany.org/bossOf -->
+
+    <owl:ObjectProperty rdf:about="&ex;bossOf">
+        <rdfs:domain rdf:resource="&ex;Manager"/>
+        <rdfs:range rdf:resource="&ex;Non-Manager"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.examplecompany.org/hasTeam -->
+
+    <owl:ObjectProperty rdf:about="&ex;hasTeam">
+        <rdfs:domain rdf:resource="&ex;Project"/>
+        <rdfs:range rdf:resource="&foaf;Person"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.examplecompany.org/hates -->
+
+    <owl:ObjectProperty rdf:about="&ex;hates">
+        <rdfs:domain rdf:resource="&foaf;Person"/>
+        <rdfs:range rdf:resource="&foaf;Person"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.examplecompany.org/likes -->
+
+    <owl:ObjectProperty rdf:about="&ex;likes">
+        <rdfs:domain rdf:resource="&foaf;Person"/>
+        <rdfs:range rdf:resource="&foaf;Person"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.examplecompany.org/worksFor -->
+
+    <owl:ObjectProperty rdf:about="&ex;worksFor">
+        <rdfs:range rdf:resource="&ex;Manager"/>
+        <rdfs:domain rdf:resource="&ex;Non-Manager"/>
+        <owl:inverseOf rdf:resource="&ex;bossOf"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Data properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.examplecompany.org/hasAge -->
+
+    <owl:DatatypeProperty rdf:about="&ex;hasAge">
+        <rdfs:range rdf:resource="&xsd;int"/>
+        <rdfs:domain rdf:resource="&foaf;Person"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.examplecompany.org/hasSex -->
+
+    <owl:DatatypeProperty rdf:about="&ex;hasSex">
+        <rdfs:domain rdf:resource="&foaf;Person"/>
+        <rdfs:range>
+            <rdfs:Datatype>
+                <owl:oneOf>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="&rdf;List"/>
+                        <rdf:first rdf:datatype="&xsd;string">female</rdf:first>
+                        <rdf:rest>
+                            <rdf:Description>
+                                <rdf:type rdf:resource="&rdf;List"/>
+                                <rdf:first rdf:datatype="&xsd;string">male</rdf:first>
+                                <rdf:rest rdf:resource="&rdf;nil"/>
+                            </rdf:Description>
+                        </rdf:rest>
+                    </rdf:Description>
+                </owl:oneOf>
+            </rdfs:Datatype>
+        </rdfs:range>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.examplecompany.org/isAvailable -->
+
+    <owl:DatatypeProperty rdf:about="&ex;isAvailable">
+        <rdfs:domain rdf:resource="&foaf;Person"/>
+        <rdfs:range>
+            <rdfs:Datatype>
+                <owl:oneOf>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="&rdf;List"/>
+                        <rdf:first rdf:datatype="&xsd;string">NO</rdf:first>
+                        <rdf:rest>
+                            <rdf:Description>
+                                <rdf:type rdf:resource="&rdf;List"/>
+                                <rdf:first rdf:datatype="&xsd;string">YES</rdf:first>
+                                <rdf:rest rdf:resource="&rdf;nil"/>
+                            </rdf:Description>
+                        </rdf:rest>
+                    </rdf:Description>
+                </owl:oneOf>
+            </rdfs:Datatype>
+        </rdfs:range>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.examplecompany.org/isSuccess -->
+
+    <owl:DatatypeProperty rdf:about="&ex;isSuccess">
+        <rdfs:domain rdf:resource="&ex;Project"/>
+        <rdfs:range>
+            <rdfs:Datatype>
+                <owl:oneOf>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="&rdf;List"/>
+                        <rdf:first rdf:datatype="&xsd;string">NO</rdf:first>
+                        <rdf:rest>
+                            <rdf:Description>
+                                <rdf:type rdf:resource="&rdf;List"/>
+                                <rdf:first rdf:datatype="&xsd;string">YES</rdf:first>
+                                <rdf:rest rdf:resource="&rdf;nil"/>
+                            </rdf:Description>
+                        </rdf:rest>
+                    </rdf:Description>
+                </owl:oneOf>
+            </rdfs:Datatype>
+        </rdfs:range>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Classes
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.examplecompany.org/AdministrationEmployee -->
+
+    <owl:Class rdf:about="&ex;AdministrationEmployee">
+        <rdfs:subClassOf rdf:resource="&ex;Non-Manager"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.examplecompany.org/Board -->
+
+    <owl:Class rdf:about="&ex;Board">
+        <rdfs:subClassOf rdf:resource="&ex;Manager"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.examplecompany.org/DivisionManager -->
+
+    <owl:Class rdf:about="&ex;DivisionManager">
+        <rdfs:subClassOf rdf:resource="&ex;Manager"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.examplecompany.org/Manager -->
+
+    <owl:Class rdf:about="&ex;Manager">
+        <rdfs:subClassOf rdf:resource="&foaf;Person"/>
+        <owl:disjointWith rdf:resource="&ex;Non-Manager"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.examplecompany.org/MarketingEmployee -->
+
+    <owl:Class rdf:about="&ex;MarketingEmployee">
+        <rdfs:subClassOf rdf:resource="&ex;Non-Manager"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.examplecompany.org/Non-Manager -->
+
+    <owl:Class rdf:about="&ex;Non-Manager">
+        <rdfs:subClassOf rdf:resource="&foaf;Person"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.examplecompany.org/ProductionEmployee -->
+
+    <owl:Class rdf:about="&ex;ProductionEmployee">
+        <rdfs:subClassOf rdf:resource="&ex;Non-Manager"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.examplecompany.org/ProductionManager -->
+
+    <owl:Class rdf:about="&ex;ProductionManager">
+        <rdfs:subClassOf rdf:resource="&ex;Manager"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.examplecompany.org/Project -->
+
+    <owl:Class rdf:about="&ex;Project"/>
+    
+
+
+    <!-- http://www.examplecompany.org/SalesEmployee -->
+
+    <owl:Class rdf:about="&ex;SalesEmployee">
+        <rdfs:subClassOf rdf:resource="&ex;Non-Manager"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.examplecompany.org/SalesManager -->
+
+    <owl:Class rdf:about="&ex;SalesManager">
+        <rdfs:subClassOf rdf:resource="&ex;Manager"/>
+    </owl:Class>
+    
+
+
+    <!-- http://xmlns.com/foaf/0.1/Person -->
+
+    <owl:Class rdf:about="&foaf;Person"/>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Individuals
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.examplecompany.org/P0 -->
+
+    <owl:NamedIndividual rdf:about="&ex;P0"/>
+    
+
+
+    <!-- http://www.examplecompany.org/P1 -->
+
+    <owl:NamedIndividual rdf:about="&ex;P1">
+        <rdf:type rdf:resource="&ex;Board"/>
+        <ex:hasAge rdf:datatype="&xsd;int">47</ex:hasAge>
+        <ex:isAvailable rdf:datatype="&xsd;string">YES</ex:isAvailable>
+        <ex:hasSex rdf:datatype="&xsd;string">male</ex:hasSex>
+        <ex:bossOf rdf:resource="&ex;P15"/>
+        <ex:bossOf rdf:resource="&ex;P16"/>
+        <ex:bossOf rdf:resource="&ex;P17"/>
+        <ex:bossOf rdf:resource="&ex;P18"/>
+        <ex:bossOf rdf:resource="&ex;P19"/>
+        <ex:likes rdf:resource="&ex;P2"/>
+        <ex:bossOf rdf:resource="&ex;P20"/>
+        <ex:bossOf rdf:resource="&ex;P21"/>
+        <ex:bossOf rdf:resource="&ex;P22"/>
+        <ex:bossOf rdf:resource="&ex;P23"/>
+        <ex:bossOf rdf:resource="&ex;P24"/>
+        <ex:bossOf rdf:resource="&ex;P25"/>
+        <ex:bossOf rdf:resource="&ex;P26"/>
+        <ex:bossOf rdf:resource="&ex;P27"/>
+        <ex:bossOf rdf:resource="&ex;P28"/>
+        <ex:bossOf rdf:resource="&ex;P29"/>
+        <ex:likes rdf:resource="&ex;P3"/>
+        <ex:bossOf rdf:resource="&ex;P30"/>
+        <ex:bossOf rdf:resource="&ex;P31"/>
+        <ex:bossOf rdf:resource="&ex;P32"/>
+        <ex:bossOf rdf:resource="&ex;P33"/>
+        <ex:bossOf rdf:resource="&ex;P34"/>
+        <ex:bossOf rdf:resource="&ex;P35"/>
+        <ex:bossOf rdf:resource="&ex;P36"/>
+        <ex:bossOf rdf:resource="&ex;P37"/>
+        <ex:bossOf rdf:resource="&ex;P38"/>
+        <ex:bossOf rdf:resource="&ex;P39"/>
+        <ex:likes rdf:resource="&ex;P4"/>
+        <ex:bossOf rdf:resource="&ex;P40"/>
+        <ex:bossOf rdf:resource="&ex;P41"/>
+        <ex:bossOf rdf:resource="&ex;P42"/>
+        <ex:hates rdf:resource="&ex;P5"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/P10 -->
+
+    <owl:NamedIndividual rdf:about="&ex;P10">
+        <rdf:type rdf:resource="&ex;DivisionManager"/>
+        <ex:hasAge rdf:datatype="&xsd;int">37</ex:hasAge>
+        <ex:isAvailable rdf:datatype="&xsd;string">YES</ex:isAvailable>
+        <ex:hasSex rdf:datatype="&xsd;string">female</ex:hasSex>
+        <ex:likes rdf:resource="&ex;P11"/>
+        <ex:bossOf rdf:resource="&ex;P15"/>
+        <ex:bossOf rdf:resource="&ex;P16"/>
+        <ex:bossOf rdf:resource="&ex;P17"/>
+        <ex:bossOf rdf:resource="&ex;P18"/>
+        <ex:bossOf rdf:resource="&ex;P19"/>
+        <ex:bossOf rdf:resource="&ex;P20"/>
+        <ex:bossOf rdf:resource="&ex;P21"/>
+        <ex:bossOf rdf:resource="&ex;P22"/>
+        <ex:bossOf rdf:resource="&ex;P23"/>
+        <ex:bossOf rdf:resource="&ex;P24"/>
+        <ex:bossOf rdf:resource="&ex;P25"/>
+        <ex:bossOf rdf:resource="&ex;P26"/>
+        <ex:bossOf rdf:resource="&ex;P27"/>
+        <ex:bossOf rdf:resource="&ex;P28"/>
+        <ex:bossOf rdf:resource="&ex;P29"/>
+        <ex:bossOf rdf:resource="&ex;P30"/>
+        <ex:bossOf rdf:resource="&ex;P31"/>
+        <ex:bossOf rdf:resource="&ex;P32"/>
+        <ex:bossOf rdf:resource="&ex;P33"/>
+        <ex:bossOf rdf:resource="&ex;P34"/>
+        <ex:bossOf rdf:resource="&ex;P35"/>
+        <ex:bossOf rdf:resource="&ex;P36"/>
+        <ex:bossOf rdf:resource="&ex;P37"/>
+        <ex:bossOf rdf:resource="&ex;P38"/>
+        <ex:bossOf rdf:resource="&ex;P39"/>
+        <ex:bossOf rdf:resource="&ex;P40"/>
+        <ex:bossOf rdf:resource="&ex;P41"/>
+        <ex:bossOf rdf:resource="&ex;P42"/>
+        <ex:likes rdf:resource="&ex;P6"/>
+        <ex:likes rdf:resource="&ex;P7"/>
+        <ex:likes rdf:resource="&ex;P8"/>
+        <ex:hates rdf:resource="&ex;P9"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/P11 -->
+
+    <owl:NamedIndividual rdf:about="&ex;P11">
+        <rdf:type rdf:resource="&ex;DivisionManager"/>
+        <ex:hasAge rdf:datatype="&xsd;int">39</ex:hasAge>
+        <ex:isAvailable rdf:datatype="&xsd;string">YES</ex:isAvailable>
+        <ex:hasSex rdf:datatype="&xsd;string">male</ex:hasSex>
+        <ex:bossOf rdf:resource="&ex;P15"/>
+        <ex:bossOf rdf:resource="&ex;P16"/>
+        <ex:bossOf rdf:resource="&ex;P17"/>
+        <ex:bossOf rdf:resource="&ex;P18"/>
+        <ex:bossOf rdf:resource="&ex;P19"/>
+        <ex:bossOf rdf:resource="&ex;P20"/>
+        <ex:bossOf rdf:resource="&ex;P21"/>
+        <ex:bossOf rdf:resource="&ex;P22"/>
+        <ex:bossOf rdf:resource="&ex;P23"/>
+        <ex:bossOf rdf:resource="&ex;P24"/>
+        <ex:bossOf rdf:resource="&ex;P25"/>
+        <ex:bossOf rdf:resource="&ex;P26"/>
+        <ex:bossOf rdf:resource="&ex;P27"/>
+        <ex:bossOf rdf:resource="&ex;P28"/>
+        <ex:bossOf rdf:resource="&ex;P29"/>
+        <ex:bossOf rdf:resource="&ex;P30"/>
+        <ex:bossOf rdf:resource="&ex;P31"/>
+        <ex:bossOf rdf:resource="&ex;P32"/>
+        <ex:bossOf rdf:resource="&ex;P33"/>
+        <ex:bossOf rdf:resource="&ex;P34"/>
+        <ex:bossOf rdf:resource="&ex;P35"/>
+        <ex:bossOf rdf:resource="&ex;P36"/>
+        <ex:bossOf rdf:resource="&ex;P37"/>
+        <ex:bossOf rdf:resource="&ex;P38"/>
+        <ex:bossOf rdf:resource="&ex;P39"/>
+        <ex:bossOf rdf:resource="&ex;P40"/>
+        <ex:bossOf rdf:resource="&ex;P41"/>
+        <ex:bossOf rdf:resource="&ex;P42"/>
+        <ex:likes rdf:resource="&ex;P8"/>
+        <ex:likes rdf:resource="&ex;P9"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/P12 -->
+
+    <owl:NamedIndividual rdf:about="&ex;P12">
+        <rdf:type rdf:resource="&ex;ProductionManager"/>
+        <ex:hasAge rdf:datatype="&xsd;int">43</ex:hasAge>
+        <ex:isAvailable rdf:datatype="&xsd;string">YES</ex:isAvailable>
+        <ex:hasSex rdf:datatype="&xsd;string">male</ex:hasSex>
+        <ex:hates rdf:resource="&ex;P1"/>
+        <ex:likes rdf:resource="&ex;P10"/>
+        <ex:likes rdf:resource="&ex;P13"/>
+        <ex:hates rdf:resource="&ex;P2"/>
+        <ex:bossOf rdf:resource="&ex;P25"/>
+        <ex:bossOf rdf:resource="&ex;P26"/>
+        <ex:bossOf rdf:resource="&ex;P27"/>
+        <ex:bossOf rdf:resource="&ex;P28"/>
+        <ex:bossOf rdf:resource="&ex;P29"/>
+        <ex:bossOf rdf:resource="&ex;P30"/>
+        <ex:bossOf rdf:resource="&ex;P31"/>
+        <ex:bossOf rdf:resource="&ex;P32"/>
+        <ex:bossOf rdf:resource="&ex;P33"/>
+        <ex:bossOf rdf:resource="&ex;P34"/>
+        <ex:bossOf rdf:resource="&ex;P35"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/P13 -->
+
+    <owl:NamedIndividual rdf:about="&ex;P13">
+        <rdf:type rdf:resource="&ex;SalesManager"/>
+        <ex:hasAge rdf:datatype="&xsd;int">37</ex:hasAge>
+        <ex:isAvailable rdf:datatype="&xsd;string">YES</ex:isAvailable>
+        <ex:hasSex rdf:datatype="&xsd;string">male</ex:hasSex>
+        <ex:likes rdf:resource="&ex;P12"/>
+        <ex:bossOf rdf:resource="&ex;P36"/>
+        <ex:bossOf rdf:resource="&ex;P37"/>
+        <ex:bossOf rdf:resource="&ex;P38"/>
+        <ex:bossOf rdf:resource="&ex;P39"/>
+        <ex:hates rdf:resource="&ex;P4"/>
+        <ex:bossOf rdf:resource="&ex;P40"/>
+        <ex:bossOf rdf:resource="&ex;P41"/>
+        <ex:bossOf rdf:resource="&ex;P42"/>
+        <ex:likes rdf:resource="&ex;P6"/>
+        <ex:likes rdf:resource="&ex;P7"/>
+        <ex:likes rdf:resource="&ex;P8"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/P14 -->
+
+    <owl:NamedIndividual rdf:about="&ex;P14"/>
+    
+
+
+    <!-- http://www.examplecompany.org/P15 -->
+
+    <owl:NamedIndividual rdf:about="&ex;P15">
+        <rdf:type rdf:resource="&ex;AdministrationEmployee"/>
+        <ex:hasAge rdf:datatype="&xsd;int">27</ex:hasAge>
+        <ex:isAvailable rdf:datatype="&xsd;string">YES</ex:isAvailable>
+        <ex:hasSex rdf:datatype="&xsd;string">male</ex:hasSex>
+        <ex:worksFor rdf:resource="&ex;P1"/>
+        <ex:worksFor rdf:resource="&ex;P10"/>
+        <ex:worksFor rdf:resource="&ex;P11"/>
+        <ex:likes rdf:resource="&ex;P16"/>
+        <ex:likes rdf:resource="&ex;P17"/>
+        <ex:likes rdf:resource="&ex;P18"/>
+        <ex:worksFor rdf:resource="&ex;P2"/>
+        <ex:worksFor rdf:resource="&ex;P3"/>
+        <ex:worksFor rdf:resource="&ex;P4"/>
+        <ex:worksFor rdf:resource="&ex;P5"/>
+        <ex:worksFor rdf:resource="&ex;P6"/>
+        <ex:worksFor rdf:resource="&ex;P7"/>
+        <ex:worksFor rdf:resource="&ex;P8"/>
+        <ex:worksFor rdf:resource="&ex;P9"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/P16 -->
+
+    <owl:NamedIndividual rdf:about="&ex;P16">
+        <rdf:type rdf:resource="&ex;AdministrationEmployee"/>
+        <ex:hasAge rdf:datatype="&xsd;int">23</ex:hasAge>
+        <ex:isAvailable rdf:datatype="&xsd;string">YES</ex:isAvailable>
+        <ex:hasSex rdf:datatype="&xsd;string">female</ex:hasSex>
+        <ex:worksFor rdf:resource="&ex;P1"/>
+        <ex:worksFor rdf:resource="&ex;P10"/>
+        <ex:worksFor rdf:resource="&ex;P11"/>
+        <ex:likes rdf:resource="&ex;P15"/>
+        <ex:likes rdf:resource="&ex;P17"/>
+        <ex:likes rdf:resource="&ex;P18"/>
+        <ex:worksFor rdf:resource="&ex;P2"/>
+        <ex:worksFor rdf:resource="&ex;P3"/>
+        <ex:worksFor rdf:resource="&ex;P4"/>
+        <ex:worksFor rdf:resource="&ex;P5"/>
+        <ex:worksFor rdf:resource="&ex;P6"/>
+        <ex:worksFor rdf:resource="&ex;P7"/>
+        <ex:worksFor rdf:resource="&ex;P8"/>
+        <ex:worksFor rdf:resource="&ex;P9"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/P17 -->
+
+    <owl:NamedIndividual rdf:about="&ex;P17">
+        <rdf:type rdf:resource="&ex;AdministrationEmployee"/>
+        <ex:hasAge rdf:datatype="&xsd;int">33</ex:hasAge>
+        <ex:isAvailable rdf:datatype="&xsd;string">YES</ex:isAvailable>
+        <ex:hasSex rdf:datatype="&xsd;string">female</ex:hasSex>
+        <ex:worksFor rdf:resource="&ex;P1"/>
+        <ex:worksFor rdf:resource="&ex;P10"/>
+        <ex:worksFor rdf:resource="&ex;P11"/>
+        <ex:likes rdf:resource="&ex;P15"/>
+        <ex:likes rdf:resource="&ex;P16"/>
+        <ex:likes rdf:resource="&ex;P18"/>
+        <ex:worksFor rdf:resource="&ex;P2"/>
+        <ex:worksFor rdf:resource="&ex;P3"/>
+        <ex:worksFor rdf:resource="&ex;P4"/>
+        <ex:worksFor rdf:resource="&ex;P5"/>
+        <ex:worksFor rdf:resource="&ex;P6"/>
+        <ex:worksFor rdf:resource="&ex;P7"/>
+        <ex:worksFor rdf:resource="&ex;P8"/>
+        <ex:worksFor rdf:resource="&ex;P9"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/P18 -->
+
+    <owl:NamedIndividual rdf:about="&ex;P18">
+        <rdf:type rdf:resource="&ex;AdministrationEmployee"/>
+        <ex:hasAge rdf:datatype="&xsd;int">28</ex:hasAge>
+        <ex:isAvailable rdf:datatype="&xsd;string">YES</ex:isAvailable>
+        <ex:hasSex rdf:datatype="&xsd;string">female</ex:hasSex>
+        <ex:worksFor rdf:resource="&ex;P1"/>
+        <ex:worksFor rdf:resource="&ex;P10"/>
+        <ex:worksFor rdf:resource="&ex;P11"/>
+        <ex:likes rdf:resource="&ex;P15"/>
+        <ex:likes rdf:resource="&ex;P16"/>
+        <ex:likes rdf:resource="&ex;P17"/>
+        <ex:worksFor rdf:resource="&ex;P2"/>
+        <ex:worksFor rdf:resource="&ex;P3"/>
+        <ex:worksFor rdf:resource="&ex;P4"/>
+        <ex:worksFor rdf:resource="&ex;P5"/>
+        <ex:worksFor rdf:resource="&ex;P6"/>
+        <ex:worksFor rdf:resource="&ex;P7"/>
+        <ex:worksFor rdf:resource="&ex;P8"/>
+        <ex:worksFor rdf:resource="&ex;P9"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/P19 -->
+
+    <owl:NamedIndividual rdf:about="&ex;P19">
+        <rdf:type rdf:resource="&ex;MarketingEmployee"/>
+        <ex:hasAge rdf:datatype="&xsd;int">24</ex:hasAge>
+        <ex:isAvailable rdf:datatype="&xsd;string">YES</ex:isAvailable>
+        <ex:hasSex rdf:datatype="&xsd;string">female</ex:hasSex>
+        <ex:worksFor rdf:resource="&ex;P1"/>
+        <ex:worksFor rdf:resource="&ex;P10"/>
+        <ex:hates rdf:resource="&ex;P11"/>
+        <ex:worksFor rdf:resource="&ex;P11"/>
+        <ex:worksFor rdf:resource="&ex;P2"/>
+        <ex:likes rdf:resource="&ex;P22"/>
+        <ex:likes rdf:resource="&ex;P23"/>
+        <ex:likes rdf:resource="&ex;P24"/>
+        <ex:worksFor rdf:resource="&ex;P3"/>
+        <ex:worksFor rdf:resource="&ex;P4"/>
+        <ex:worksFor rdf:resource="&ex;P5"/>
+        <ex:worksFor rdf:resource="&ex;P6"/>
+        <ex:worksFor rdf:resource="&ex;P7"/>
+        <ex:worksFor rdf:resource="&ex;P8"/>
+        <ex:worksFor rdf:resource="&ex;P9"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/P2 -->
+
+    <owl:NamedIndividual rdf:about="&ex;P2">
+        <rdf:type rdf:resource="&ex;Board"/>
+        <ex:hasAge rdf:datatype="&xsd;int">52</ex:hasAge>
+        <ex:isAvailable rdf:datatype="&xsd;string">YES</ex:isAvailable>
+        <ex:hasSex rdf:datatype="&xsd;string">male</ex:hasSex>
+        <ex:likes rdf:resource="&ex;P1"/>
+        <ex:bossOf rdf:resource="&ex;P15"/>
+        <ex:bossOf rdf:resource="&ex;P16"/>
+        <ex:bossOf rdf:resource="&ex;P17"/>
+        <ex:bossOf rdf:resource="&ex;P18"/>
+        <ex:bossOf rdf:resource="&ex;P19"/>
+        <ex:bossOf rdf:resource="&ex;P20"/>
+        <ex:bossOf rdf:resource="&ex;P21"/>
+        <ex:bossOf rdf:resource="&ex;P22"/>
+        <ex:bossOf rdf:resource="&ex;P23"/>
+        <ex:bossOf rdf:resource="&ex;P24"/>
+        <ex:bossOf rdf:resource="&ex;P25"/>
+        <ex:bossOf rdf:resource="&ex;P26"/>
+        <ex:bossOf rdf:resource="&ex;P27"/>
+        <ex:bossOf rdf:resource="&ex;P28"/>
+        <ex:bossOf rdf:resource="&ex;P29"/>
+        <ex:likes rdf:resource="&ex;P3"/>
+        <ex:bossOf rdf:resource="&ex;P30"/>
+        <ex:bossOf rdf:resource="&ex;P31"/>
+        <ex:bossOf rdf:resource="&ex;P32"/>
+        <ex:bossOf rdf:resource="&ex;P33"/>
+        <ex:bossOf rdf:resource="&ex;P34"/>
+        <ex:bossOf rdf:resource="&ex;P35"/>
+        <ex:bossOf rdf:resource="&ex;P36"/>
+        <ex:bossOf rdf:resource="&ex;P37"/>
+        <ex:bossOf rdf:resource="&ex;P38"/>
+        <ex:bossOf rdf:resource="&ex;P39"/>
+        <ex:likes rdf:resource="&ex;P4"/>
+        <ex:bossOf rdf:resource="&ex;P40"/>
+        <ex:bossOf rdf:resource="&ex;P41"/>
+        <ex:bossOf rdf:resource="&ex;P42"/>
+        <ex:likes rdf:resource="&ex;P5"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/P20 -->
+
+    <owl:NamedIndividual rdf:about="&ex;P20">
+        <rdf:type rdf:resource="&ex;MarketingEmployee"/>
+        <ex:hasAge rdf:datatype="&xsd;int">33</ex:hasAge>
+        <ex:isAvailable rdf:datatype="&xsd;string">YES</ex:isAvailable>
+        <ex:hasSex rdf:datatype="&xsd;string">male</ex:hasSex>
+        <ex:worksFor rdf:resource="&ex;P1"/>
+        <ex:worksFor rdf:resource="&ex;P10"/>
+        <ex:hates rdf:resource="&ex;P11"/>
+        <ex:worksFor rdf:resource="&ex;P11"/>
+        <ex:likes rdf:resource="&ex;P13"/>
+        <ex:likes rdf:resource="&ex;P19"/>
+        <ex:worksFor rdf:resource="&ex;P2"/>
+        <ex:likes rdf:resource="&ex;P21"/>
+        <ex:likes rdf:resource="&ex;P22"/>
+        <ex:likes rdf:resource="&ex;P23"/>
+        <ex:likes rdf:resource="&ex;P24"/>
+        <ex:worksFor rdf:resource="&ex;P3"/>
+        <ex:worksFor rdf:resource="&ex;P4"/>
+        <ex:worksFor rdf:resource="&ex;P5"/>
+        <ex:worksFor rdf:resource="&ex;P6"/>
+        <ex:worksFor rdf:resource="&ex;P7"/>
+        <ex:worksFor rdf:resource="&ex;P8"/>
+        <ex:worksFor rdf:resource="&ex;P9"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/P21 -->
+
+    <owl:NamedIndividual rdf:about="&ex;P21">
+        <rdf:type rdf:resource="&ex;MarketingEmployee"/>
+        <ex:hasAge rdf:datatype="&xsd;int">47</ex:hasAge>
+        <ex:isAvailable rdf:datatype="&xsd;string">YES</ex:isAvailable>
+        <ex:hasSex rdf:datatype="&xsd;string">male</ex:hasSex>
+        <ex:hates rdf:resource="&ex;P1"/>
+        <ex:worksFor rdf:resource="&ex;P1"/>
+        <ex:worksFor rdf:resource="&ex;P10"/>
+        <ex:worksFor rdf:resource="&ex;P11"/>
+        <ex:worksFor rdf:resource="&ex;P2"/>
+        <ex:likes rdf:resource="&ex;P20"/>
+        <ex:likes rdf:resource="&ex;P22"/>
+        <ex:likes rdf:resource="&ex;P23"/>
+        <ex:likes rdf:resource="&ex;P24"/>
+        <ex:worksFor rdf:resource="&ex;P3"/>
+        <ex:worksFor rdf:resource="&ex;P4"/>
+        <ex:worksFor rdf:resource="&ex;P5"/>
+        <ex:worksFor rdf:resource="&ex;P6"/>
+        <ex:worksFor rdf:resource="&ex;P7"/>
+        <ex:likes rdf:resource="&ex;P7"/>
+        <ex:worksFor rdf:resource="&ex;P8"/>
+        <ex:likes rdf:resource="&ex;P8"/>
+        <ex:worksFor rdf:resource="&ex;P9"/>
+        <ex:likes rdf:resource="&ex;P9"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/P22 -->
+
+    <owl:NamedIndividual rdf:about="&ex;P22">
+        <rdf:type rdf:resource="&ex;MarketingEmployee"/>
+        <ex:hasAge rdf:datatype="&xsd;int">55</ex:hasAge>
+        <ex:isAvailable rdf:datatype="&xsd;string">YES</ex:isAvailable>
+        <ex:hasSex rdf:datatype="&xsd;string">female</ex:hasSex>
+        <ex:worksFor rdf:resource="&ex;P1"/>
+        <ex:worksFor rdf:resource="&ex;P10"/>
+        <ex:worksFor rdf:resource="&ex;P11"/>
+        <ex:likes rdf:resource="&ex;P19"/>
+        <ex:worksFor rdf:resource="&ex;P2"/>
+        <ex:likes rdf:resource="&ex;P20"/>
+        <ex:likes rdf:resource="&ex;P21"/>
+        <ex:likes rdf:resource="&ex;P29"/>
+        <ex:hates rdf:resource="&ex;P3"/>
+        <ex:worksFor rdf:resource="&ex;P3"/>
+        <ex:likes rdf:resource="&ex;P33"/>
+        <ex:worksFor rdf:resource="&ex;P4"/>
+        <ex:worksFor rdf:resource="&ex;P5"/>
+        <ex:worksFor rdf:resource="&ex;P6"/>
+        <ex:worksFor rdf:resource="&ex;P7"/>
+        <ex:worksFor rdf:resource="&ex;P8"/>
+        <ex:worksFor rdf:resource="&ex;P9"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/P23 -->
+
+    <owl:NamedIndividual rdf:about="&ex;P23">
+        <rdf:type rdf:resource="&ex;MarketingEmployee"/>
+        <ex:hasAge rdf:datatype="&xsd;int">29</ex:hasAge>
+        <ex:isAvailable rdf:datatype="&xsd;string">YES</ex:isAvailable>
+        <ex:hasSex rdf:datatype="&xsd;string">female</ex:hasSex>
+        <ex:worksFor rdf:resource="&ex;P1"/>
+        <ex:worksFor rdf:resource="&ex;P10"/>
+        <ex:worksFor rdf:resource="&ex;P11"/>
+        <ex:hates rdf:resource="&ex;P12"/>
+        <ex:likes rdf:resource="&ex;P15"/>
+        <ex:worksFor rdf:resource="&ex;P2"/>
+        <ex:likes rdf:resource="&ex;P22"/>
+        <ex:likes rdf:resource="&ex;P24"/>
+        <ex:hates rdf:resource="&ex;P26"/>
+        <ex:worksFor rdf:resource="&ex;P3"/>
+        <ex:worksFor rdf:resource="&ex;P4"/>
+        <ex:worksFor rdf:resource="&ex;P5"/>
+        <ex:worksFor rdf:resource="&ex;P6"/>
+        <ex:worksFor rdf:resource="&ex;P7"/>
+        <ex:worksFor rdf:resource="&ex;P8"/>
+        <ex:worksFor rdf:resource="&ex;P9"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/P24 -->
+
+    <owl:NamedIndividual rdf:about="&ex;P24">
+        <rdf:type rdf:resource="&ex;MarketingEmployee"/>
+        <ex:hasAge rdf:datatype="&xsd;int">43</ex:hasAge>
+        <ex:isAvailable rdf:datatype="&xsd;string">YES</ex:isAvailable>
+        <ex:hasSex rdf:datatype="&xsd;string">male</ex:hasSex>
+        <ex:worksFor rdf:resource="&ex;P1"/>
+        <ex:worksFor rdf:resource="&ex;P10"/>
+        <ex:worksFor rdf:resource="&ex;P11"/>
+        <ex:likes rdf:resource="&ex;P15"/>
+        <ex:hates rdf:resource="&ex;P19"/>
+        <ex:worksFor rdf:resource="&ex;P2"/>
+        <ex:hates rdf:resource="&ex;P21"/>
+        <ex:hates rdf:resource="&ex;P22"/>
+        <ex:likes rdf:resource="&ex;P23"/>
+        <ex:worksFor rdf:resource="&ex;P3"/>
+        <ex:worksFor rdf:resource="&ex;P4"/>
+        <ex:worksFor rdf:resource="&ex;P5"/>
+        <ex:worksFor rdf:resource="&ex;P6"/>
+        <ex:worksFor rdf:resource="&ex;P7"/>
+        <ex:worksFor rdf:resource="&ex;P8"/>
+        <ex:worksFor rdf:resource="&ex;P9"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/P25 -->
+
+    <owl:NamedIndividual rdf:about="&ex;P25">
+        <rdf:type rdf:resource="&ex;ProductionEmployee"/>
+        <ex:hasAge rdf:datatype="&xsd;int">19</ex:hasAge>
+        <ex:isAvailable rdf:datatype="&xsd;string">YES</ex:isAvailable>
+        <ex:hasSex rdf:datatype="&xsd;string">male</ex:hasSex>
+        <ex:worksFor rdf:resource="&ex;P1"/>
+        <ex:worksFor rdf:resource="&ex;P10"/>
+        <ex:worksFor rdf:resource="&ex;P11"/>
+        <ex:likes rdf:resource="&ex;P12"/>
+        <ex:worksFor rdf:resource="&ex;P12"/>
+        <ex:worksFor rdf:resource="&ex;P2"/>
+        <ex:likes rdf:resource="&ex;P26"/>
+        <ex:likes rdf:resource="&ex;P27"/>
+        <ex:likes rdf:resource="&ex;P28"/>
+        <ex:hates rdf:resource="&ex;P29"/>
+        <ex:worksFor rdf:resource="&ex;P3"/>
+        <ex:likes rdf:resource="&ex;P30"/>
+        <ex:likes rdf:resource="&ex;P31"/>
+        <ex:hates rdf:resource="&ex;P35"/>
+        <ex:worksFor rdf:resource="&ex;P4"/>
+        <ex:worksFor rdf:resource="&ex;P5"/>
+        <ex:worksFor rdf:resource="&ex;P6"/>
+        <ex:worksFor rdf:resource="&ex;P7"/>
+        <ex:worksFor rdf:resource="&ex;P8"/>
+        <ex:worksFor rdf:resource="&ex;P9"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/P26 -->
+
+    <owl:NamedIndividual rdf:about="&ex;P26">
+        <rdf:type rdf:resource="&ex;ProductionEmployee"/>
+        <ex:hasAge rdf:datatype="&xsd;int">27</ex:hasAge>
+        <ex:isAvailable rdf:datatype="&xsd;string">YES</ex:isAvailable>
+        <ex:hasSex rdf:datatype="&xsd;string">male</ex:hasSex>
+        <ex:worksFor rdf:resource="&ex;P1"/>
+        <ex:worksFor rdf:resource="&ex;P10"/>
+        <ex:worksFor rdf:resource="&ex;P11"/>
+        <ex:hates rdf:resource="&ex;P12"/>
+        <ex:worksFor rdf:resource="&ex;P12"/>
+        <ex:worksFor rdf:resource="&ex;P2"/>
+        <ex:worksFor rdf:resource="&ex;P3"/>
+        <ex:likes rdf:resource="&ex;P30"/>
+        <ex:likes rdf:resource="&ex;P31"/>
+        <ex:likes rdf:resource="&ex;P32"/>
+        <ex:likes rdf:resource="&ex;P33"/>
+        <ex:likes rdf:resource="&ex;P36"/>
+        <ex:likes rdf:resource="&ex;P37"/>
+        <ex:likes rdf:resource="&ex;P38"/>
+        <ex:likes rdf:resource="&ex;P39"/>
+        <ex:worksFor rdf:resource="&ex;P4"/>
+        <ex:likes rdf:resource="&ex;P40"/>
+        <ex:worksFor rdf:resource="&ex;P5"/>
+        <ex:worksFor rdf:resource="&ex;P6"/>
+        <ex:worksFor rdf:resource="&ex;P7"/>
+        <ex:worksFor rdf:resource="&ex;P8"/>
+        <ex:worksFor rdf:resource="&ex;P9"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/P27 -->
+
+    <owl:NamedIndividual rdf:about="&ex;P27">
+        <rdf:type rdf:resource="&ex;ProductionEmployee"/>
+        <ex:hasAge rdf:datatype="&xsd;int">33</ex:hasAge>
+        <ex:isAvailable rdf:datatype="&xsd;string">YES</ex:isAvailable>
+        <ex:hasSex rdf:datatype="&xsd;string">female</ex:hasSex>
+        <ex:worksFor rdf:resource="&ex;P1"/>
+        <ex:worksFor rdf:resource="&ex;P10"/>
+        <ex:worksFor rdf:resource="&ex;P11"/>
+        <ex:worksFor rdf:resource="&ex;P12"/>
+        <ex:worksFor rdf:resource="&ex;P2"/>
+        <ex:likes rdf:resource="&ex;P29"/>
+        <ex:worksFor rdf:resource="&ex;P3"/>
+        <ex:likes rdf:resource="&ex;P39"/>
+        <ex:worksFor rdf:resource="&ex;P4"/>
+        <ex:worksFor rdf:resource="&ex;P5"/>
+        <ex:worksFor rdf:resource="&ex;P6"/>
+        <ex:worksFor rdf:resource="&ex;P7"/>
+        <ex:likes rdf:resource="&ex;P8"/>
+        <ex:worksFor rdf:resource="&ex;P8"/>
+        <ex:worksFor rdf:resource="&ex;P9"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/P28 -->
+
+    <owl:NamedIndividual rdf:about="&ex;P28">
+        <rdf:type rdf:resource="&ex;ProductionEmployee"/>
+        <ex:hasAge rdf:datatype="&xsd;int">23</ex:hasAge>
+        <ex:isAvailable rdf:datatype="&xsd;string">YES</ex:isAvailable>
+        <ex:hasSex rdf:datatype="&xsd;string">male</ex:hasSex>
+        <ex:worksFor rdf:resource="&ex;P1"/>
+        <ex:worksFor rdf:resource="&ex;P10"/>
+        <ex:worksFor rdf:resource="&ex;P11"/>
+        <ex:hates rdf:resource="&ex;P12"/>
+        <ex:worksFor rdf:resource="&ex;P12"/>
+        <ex:worksFor rdf:resource="&ex;P2"/>
+        <ex:likes rdf:resource="&ex;P20"/>
+        <ex:likes rdf:resource="&ex;P21"/>
+        <ex:likes rdf:resource="&ex;P29"/>
+        <ex:worksFor rdf:resource="&ex;P3"/>
+        <ex:likes rdf:resource="&ex;P30"/>
+        <ex:worksFor rdf:resource="&ex;P4"/>
+        <ex:worksFor rdf:resource="&ex;P5"/>
+        <ex:worksFor rdf:resource="&ex;P6"/>
+        <ex:worksFor rdf:resource="&ex;P7"/>
+        <ex:worksFor rdf:resource="&ex;P8"/>
+        <ex:worksFor rdf:resource="&ex;P9"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/P29 -->
+
+    <owl:NamedIndividual rdf:about="&ex;P29">
+        <rdf:type rdf:resource="&ex;ProductionEmployee"/>
+        <ex:hasAge rdf:datatype="&xsd;int">29</ex:hasAge>
+        <ex:isAvailable rdf:datatype="&xsd;string">YES</ex:isAvailable>
+        <ex:hasSex rdf:datatype="&xsd;string">female</ex:hasSex>
+        <ex:worksFor rdf:resource="&ex;P1"/>
+        <ex:worksFor rdf:resource="&ex;P10"/>
+        <ex:worksFor rdf:resource="&ex;P11"/>
+        <ex:worksFor rdf:resource="&ex;P12"/>
+        <ex:hates rdf:resource="&ex;P2"/>
+        <ex:worksFor rdf:resource="&ex;P2"/>
+        <ex:likes rdf:resource="&ex;P27"/>
+        <ex:likes rdf:resource="&ex;P28"/>
+        <ex:worksFor rdf:resource="&ex;P3"/>
+        <ex:likes rdf:resource="&ex;P30"/>
+        <ex:likes rdf:resource="&ex;P31"/>
+        <ex:likes rdf:resource="&ex;P32"/>
+        <ex:likes rdf:resource="&ex;P33"/>
+        <ex:likes rdf:resource="&ex;P34"/>
+        <ex:worksFor rdf:resource="&ex;P4"/>
+        <ex:worksFor rdf:resource="&ex;P5"/>
+        <ex:worksFor rdf:resource="&ex;P6"/>
+        <ex:worksFor rdf:resource="&ex;P7"/>
+        <ex:worksFor rdf:resource="&ex;P8"/>
+        <ex:worksFor rdf:resource="&ex;P9"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/P3 -->
+
+    <owl:NamedIndividual rdf:about="&ex;P3">
+        <rdf:type rdf:resource="&ex;Board"/>
+        <ex:hasAge rdf:datatype="&xsd;int">52</ex:hasAge>
+        <ex:isAvailable rdf:datatype="&xsd;string">YES</ex:isAvailable>
+        <ex:hasSex rdf:datatype="&xsd;string">female</ex:hasSex>
+        <ex:likes rdf:resource="&ex;P1"/>
+        <ex:bossOf rdf:resource="&ex;P15"/>
+        <ex:bossOf rdf:resource="&ex;P16"/>
+        <ex:bossOf rdf:resource="&ex;P17"/>
+        <ex:bossOf rdf:resource="&ex;P18"/>
+        <ex:bossOf rdf:resource="&ex;P19"/>
+        <ex:likes rdf:resource="&ex;P2"/>
+        <ex:bossOf rdf:resource="&ex;P20"/>
+        <ex:bossOf rdf:resource="&ex;P21"/>
+        <ex:bossOf rdf:resource="&ex;P22"/>
+        <ex:bossOf rdf:resource="&ex;P23"/>
+        <ex:bossOf rdf:resource="&ex;P24"/>
+        <ex:bossOf rdf:resource="&ex;P25"/>
+        <ex:bossOf rdf:resource="&ex;P26"/>
+        <ex:bossOf rdf:resource="&ex;P27"/>
+        <ex:bossOf rdf:resource="&ex;P28"/>
+        <ex:bossOf rdf:resource="&ex;P29"/>
+        <ex:bossOf rdf:resource="&ex;P30"/>
+        <ex:bossOf rdf:resource="&ex;P31"/>
+        <ex:bossOf rdf:resource="&ex;P32"/>
+        <ex:bossOf rdf:resource="&ex;P33"/>
+        <ex:bossOf rdf:resource="&ex;P34"/>
+        <ex:bossOf rdf:resource="&ex;P35"/>
+        <ex:bossOf rdf:resource="&ex;P36"/>
+        <ex:bossOf rdf:resource="&ex;P37"/>
+        <ex:bossOf rdf:resource="&ex;P38"/>
+        <ex:bossOf rdf:resource="&ex;P39"/>
+        <ex:likes rdf:resource="&ex;P4"/>
+        <ex:bossOf rdf:resource="&ex;P40"/>
+        <ex:bossOf rdf:resource="&ex;P41"/>
+        <ex:bossOf rdf:resource="&ex;P42"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/P30 -->
+
+    <owl:NamedIndividual rdf:about="&ex;P30">
+        <rdf:type rdf:resource="&ex;ProductionEmployee"/>
+        <ex:hasAge rdf:datatype="&xsd;int">44</ex:hasAge>
+        <ex:isAvailable rdf:datatype="&xsd;string">YES</ex:isAvailable>
+        <ex:hasSex rdf:datatype="&xsd;string">male</ex:hasSex>
+        <ex:worksFor rdf:resource="&ex;P1"/>
+        <ex:worksFor rdf:resource="&ex;P10"/>
+        <ex:worksFor rdf:resource="&ex;P11"/>
+        <ex:worksFor rdf:resource="&ex;P12"/>
+        <ex:likes rdf:resource="&ex;P16"/>
+        <ex:worksFor rdf:resource="&ex;P2"/>
+        <ex:likes rdf:resource="&ex;P25"/>
+        <ex:likes rdf:resource="&ex;P26"/>
+        <ex:likes rdf:resource="&ex;P27"/>
+        <ex:likes rdf:resource="&ex;P28"/>
+        <ex:likes rdf:resource="&ex;P29"/>
+        <ex:worksFor rdf:resource="&ex;P3"/>
+        <ex:likes rdf:resource="&ex;P31"/>
+        <ex:likes rdf:resource="&ex;P32"/>
+        <ex:hates rdf:resource="&ex;P39"/>
+        <ex:worksFor rdf:resource="&ex;P4"/>
+        <ex:worksFor rdf:resource="&ex;P5"/>
+        <ex:worksFor rdf:resource="&ex;P6"/>
+        <ex:worksFor rdf:resource="&ex;P7"/>
+        <ex:worksFor rdf:resource="&ex;P8"/>
+        <ex:worksFor rdf:resource="&ex;P9"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/P31 -->
+
+    <owl:NamedIndividual rdf:about="&ex;P31">
+        <rdf:type rdf:resource="&ex;ProductionEmployee"/>
+        <ex:hasAge rdf:datatype="&xsd;int">31</ex:hasAge>
+        <ex:isAvailable rdf:datatype="&xsd;string">YES</ex:isAvailable>
+        <ex:hasSex rdf:datatype="&xsd;string">male</ex:hasSex>
+        <ex:worksFor rdf:resource="&ex;P1"/>
+        <ex:worksFor rdf:resource="&ex;P10"/>
+        <ex:worksFor rdf:resource="&ex;P11"/>
+        <ex:worksFor rdf:resource="&ex;P12"/>
+        <ex:worksFor rdf:resource="&ex;P2"/>
+        <ex:likes rdf:resource="&ex;P22"/>
+        <ex:likes rdf:resource="&ex;P23"/>
+        <ex:likes rdf:resource="&ex;P27"/>
+        <ex:likes rdf:resource="&ex;P28"/>
+        <ex:worksFor rdf:resource="&ex;P3"/>
+        <ex:likes rdf:resource="&ex;P30"/>
+        <ex:likes rdf:resource="&ex;P32"/>
+        <ex:likes rdf:resource="&ex;P35"/>
+        <ex:worksFor rdf:resource="&ex;P4"/>
+        <ex:worksFor rdf:resource="&ex;P5"/>
+        <ex:worksFor rdf:resource="&ex;P6"/>
+        <ex:worksFor rdf:resource="&ex;P7"/>
+        <ex:hates rdf:resource="&ex;P8"/>
+        <ex:worksFor rdf:resource="&ex;P8"/>
+        <ex:worksFor rdf:resource="&ex;P9"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/P32 -->
+
+    <owl:NamedIndividual rdf:about="&ex;P32">
+        <rdf:type rdf:resource="&ex;ProductionEmployee"/>
+        <ex:hasAge rdf:datatype="&xsd;int">30</ex:hasAge>
+        <ex:isAvailable rdf:datatype="&xsd;string">YES</ex:isAvailable>
+        <ex:hasSex rdf:datatype="&xsd;string">male</ex:hasSex>
+        <ex:worksFor rdf:resource="&ex;P1"/>
+        <ex:worksFor rdf:resource="&ex;P10"/>
+        <ex:worksFor rdf:resource="&ex;P11"/>
+        <ex:worksFor rdf:resource="&ex;P12"/>
+        <ex:worksFor rdf:resource="&ex;P2"/>
+        <ex:likes rdf:resource="&ex;P25"/>
+        <ex:likes rdf:resource="&ex;P26"/>
+        <ex:likes rdf:resource="&ex;P27"/>
+        <ex:likes rdf:resource="&ex;P29"/>
+        <ex:worksFor rdf:resource="&ex;P3"/>
+        <ex:likes rdf:resource="&ex;P33"/>
+        <ex:likes rdf:resource="&ex;P35"/>
+        <ex:likes rdf:resource="&ex;P38"/>
+        <ex:likes rdf:resource="&ex;P39"/>
+        <ex:worksFor rdf:resource="&ex;P4"/>
+        <ex:likes rdf:resource="&ex;P40"/>
+        <ex:worksFor rdf:resource="&ex;P5"/>
+        <ex:worksFor rdf:resource="&ex;P6"/>
+        <ex:worksFor rdf:resource="&ex;P7"/>
+        <ex:worksFor rdf:resource="&ex;P8"/>
+        <ex:worksFor rdf:resource="&ex;P9"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/P33 -->
+
+    <owl:NamedIndividual rdf:about="&ex;P33">
+        <rdf:type rdf:resource="&ex;ProductionEmployee"/>
+        <ex:hasAge rdf:datatype="&xsd;int">28</ex:hasAge>
+        <ex:isAvailable rdf:datatype="&xsd;string">YES</ex:isAvailable>
+        <ex:hasSex rdf:datatype="&xsd;string">male</ex:hasSex>
+        <ex:worksFor rdf:resource="&ex;P1"/>
+        <ex:worksFor rdf:resource="&ex;P10"/>
+        <ex:worksFor rdf:resource="&ex;P11"/>
+        <ex:worksFor rdf:resource="&ex;P12"/>
+        <ex:likes rdf:resource="&ex;P19"/>
+        <ex:worksFor rdf:resource="&ex;P2"/>
+        <ex:likes rdf:resource="&ex;P20"/>
+        <ex:likes rdf:resource="&ex;P21"/>
+        <ex:likes rdf:resource="&ex;P22"/>
+        <ex:likes rdf:resource="&ex;P23"/>
+        <ex:likes rdf:resource="&ex;P24"/>
+        <ex:likes rdf:resource="&ex;P25"/>
+        <ex:likes rdf:resource="&ex;P26"/>
+        <ex:likes rdf:resource="&ex;P27"/>
+        <ex:likes rdf:resource="&ex;P28"/>
+        <ex:likes rdf:resource="&ex;P29"/>
+        <ex:worksFor rdf:resource="&ex;P3"/>
+        <ex:likes rdf:resource="&ex;P30"/>
+        <ex:likes rdf:resource="&ex;P31"/>
+        <ex:likes rdf:resource="&ex;P32"/>
+        <ex:likes rdf:resource="&ex;P34"/>
+        <ex:likes rdf:resource="&ex;P35"/>
+        <ex:likes rdf:resource="&ex;P36"/>
+        <ex:likes rdf:resource="&ex;P37"/>
+        <ex:likes rdf:resource="&ex;P38"/>
+        <ex:likes rdf:resource="&ex;P39"/>
+        <ex:worksFor rdf:resource="&ex;P4"/>
+        <ex:worksFor rdf:resource="&ex;P5"/>
+        <ex:worksFor rdf:resource="&ex;P6"/>
+        <ex:worksFor rdf:resource="&ex;P7"/>
+        <ex:worksFor rdf:resource="&ex;P8"/>
+        <ex:worksFor rdf:resource="&ex;P9"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/P34 -->
+
+    <owl:NamedIndividual rdf:about="&ex;P34">
+        <rdf:type rdf:resource="&ex;ProductionEmployee"/>
+        <ex:hasAge rdf:datatype="&xsd;int">22</ex:hasAge>
+        <ex:isAvailable rdf:datatype="&xsd;string">YES</ex:isAvailable>
+        <ex:hasSex rdf:datatype="&xsd;string">male</ex:hasSex>
+        <ex:worksFor rdf:resource="&ex;P1"/>
+        <ex:worksFor rdf:resource="&ex;P10"/>
+        <ex:worksFor rdf:resource="&ex;P11"/>
+        <ex:worksFor rdf:resource="&ex;P12"/>
+        <ex:hates rdf:resource="&ex;P13"/>
+        <ex:worksFor rdf:resource="&ex;P2"/>
+        <ex:likes rdf:resource="&ex;P26"/>
+        <ex:worksFor rdf:resource="&ex;P3"/>
+        <ex:likes rdf:resource="&ex;P31"/>
+        <ex:likes rdf:resource="&ex;P32"/>
+        <ex:likes rdf:resource="&ex;P33"/>
+        <ex:likes rdf:resource="&ex;P35"/>
+        <ex:worksFor rdf:resource="&ex;P4"/>
+        <ex:worksFor rdf:resource="&ex;P5"/>
+        <ex:worksFor rdf:resource="&ex;P6"/>
+        <ex:worksFor rdf:resource="&ex;P7"/>
+        <ex:worksFor rdf:resource="&ex;P8"/>
+        <ex:worksFor rdf:resource="&ex;P9"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/P35 -->
+
+    <owl:NamedIndividual rdf:about="&ex;P35">
+        <rdf:type rdf:resource="&ex;ProductionEmployee"/>
+        <ex:hasAge rdf:datatype="&xsd;int">41</ex:hasAge>
+        <ex:isAvailable rdf:datatype="&xsd;string">YES</ex:isAvailable>
+        <ex:hasSex rdf:datatype="&xsd;string">female</ex:hasSex>
+        <ex:worksFor rdf:resource="&ex;P1"/>
+        <ex:worksFor rdf:resource="&ex;P10"/>
+        <ex:worksFor rdf:resource="&ex;P11"/>
+        <ex:worksFor rdf:resource="&ex;P12"/>
+        <ex:worksFor rdf:resource="&ex;P2"/>
+        <ex:worksFor rdf:resource="&ex;P3"/>
+        <ex:worksFor rdf:resource="&ex;P4"/>
+        <ex:worksFor rdf:resource="&ex;P5"/>
+        <ex:worksFor rdf:resource="&ex;P6"/>
+        <ex:worksFor rdf:resource="&ex;P7"/>
+        <ex:worksFor rdf:resource="&ex;P8"/>
+        <ex:worksFor rdf:resource="&ex;P9"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/P36 -->
+
+    <owl:NamedIndividual rdf:about="&ex;P36">
+        <rdf:type rdf:resource="&ex;SalesEmployee"/>
+        <ex:hasAge rdf:datatype="&xsd;int">28</ex:hasAge>
+        <ex:isAvailable rdf:datatype="&xsd;string">YES</ex:isAvailable>
+        <ex:hasSex rdf:datatype="&xsd;string">male</ex:hasSex>
+        <ex:worksFor rdf:resource="&ex;P1"/>
+        <ex:worksFor rdf:resource="&ex;P10"/>
+        <ex:worksFor rdf:resource="&ex;P11"/>
+        <ex:worksFor rdf:resource="&ex;P13"/>
+        <ex:worksFor rdf:resource="&ex;P2"/>
+        <ex:worksFor rdf:resource="&ex;P3"/>
+        <ex:likes rdf:resource="&ex;P37"/>
+        <ex:likes rdf:resource="&ex;P38"/>
+        <ex:likes rdf:resource="&ex;P39"/>
+        <ex:worksFor rdf:resource="&ex;P4"/>
+        <ex:likes rdf:resource="&ex;P40"/>
+        <ex:likes rdf:resource="&ex;P41"/>
+        <ex:likes rdf:resource="&ex;P42"/>
+        <ex:worksFor rdf:resource="&ex;P5"/>
+        <ex:worksFor rdf:resource="&ex;P6"/>
+        <ex:worksFor rdf:resource="&ex;P7"/>
+        <ex:worksFor rdf:resource="&ex;P8"/>
+        <ex:worksFor rdf:resource="&ex;P9"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/P37 -->
+
+    <owl:NamedIndividual rdf:about="&ex;P37">
+        <rdf:type rdf:resource="&ex;SalesEmployee"/>
+        <ex:hasAge rdf:datatype="&xsd;int">38</ex:hasAge>
+        <ex:isAvailable rdf:datatype="&xsd;string">YES</ex:isAvailable>
+        <ex:hasSex rdf:datatype="&xsd;string">male</ex:hasSex>
+        <ex:worksFor rdf:resource="&ex;P1"/>
+        <ex:worksFor rdf:resource="&ex;P10"/>
+        <ex:worksFor rdf:resource="&ex;P11"/>
+        <ex:worksFor rdf:resource="&ex;P13"/>
+        <ex:worksFor rdf:resource="&ex;P2"/>
+        <ex:worksFor rdf:resource="&ex;P3"/>
+        <ex:likes rdf:resource="&ex;P36"/>
+        <ex:likes rdf:resource="&ex;P38"/>
+        <ex:likes rdf:resource="&ex;P39"/>
+        <ex:worksFor rdf:resource="&ex;P4"/>
+        <ex:hates rdf:resource="&ex;P42"/>
+        <ex:worksFor rdf:resource="&ex;P5"/>
+        <ex:worksFor rdf:resource="&ex;P6"/>
+        <ex:worksFor rdf:resource="&ex;P7"/>
+        <ex:worksFor rdf:resource="&ex;P8"/>
+        <ex:worksFor rdf:resource="&ex;P9"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/P38 -->
+
+    <owl:NamedIndividual rdf:about="&ex;P38">
+        <rdf:type rdf:resource="&ex;SalesEmployee"/>
+        <ex:hasAge rdf:datatype="&xsd;int">44</ex:hasAge>
+        <ex:isAvailable rdf:datatype="&xsd;string">YES</ex:isAvailable>
+        <ex:hasSex rdf:datatype="&xsd;string">male</ex:hasSex>
+        <ex:worksFor rdf:resource="&ex;P1"/>
+        <ex:worksFor rdf:resource="&ex;P10"/>
+        <ex:worksFor rdf:resource="&ex;P11"/>
+        <ex:worksFor rdf:resource="&ex;P13"/>
+        <ex:worksFor rdf:resource="&ex;P2"/>
+        <ex:worksFor rdf:resource="&ex;P3"/>
+        <ex:likes rdf:resource="&ex;P36"/>
+        <ex:likes rdf:resource="&ex;P37"/>
+        <ex:likes rdf:resource="&ex;P39"/>
+        <ex:worksFor rdf:resource="&ex;P4"/>
+        <ex:hates rdf:resource="&ex;P42"/>
+        <ex:worksFor rdf:resource="&ex;P5"/>
+        <ex:worksFor rdf:resource="&ex;P6"/>
+        <ex:worksFor rdf:resource="&ex;P7"/>
+        <ex:worksFor rdf:resource="&ex;P8"/>
+        <ex:worksFor rdf:resource="&ex;P9"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/P39 -->
+
+    <owl:NamedIndividual rdf:about="&ex;P39">
+        <rdf:type rdf:resource="&ex;SalesEmployee"/>
+        <ex:hasAge rdf:datatype="&xsd;int">27</ex:hasAge>
+        <ex:isAvailable rdf:datatype="&xsd;string">YES</ex:isAvailable>
+        <ex:hasSex rdf:datatype="&xsd;string">male</ex:hasSex>
+        <ex:worksFor rdf:resource="&ex;P1"/>
+        <ex:worksFor rdf:resource="&ex;P10"/>
+        <ex:worksFor rdf:resource="&ex;P11"/>
+        <ex:worksFor rdf:resource="&ex;P13"/>
+        <ex:worksFor rdf:resource="&ex;P2"/>
+        <ex:worksFor rdf:resource="&ex;P3"/>
+        <ex:likes rdf:resource="&ex;P36"/>
+        <ex:likes rdf:resource="&ex;P37"/>
+        <ex:likes rdf:resource="&ex;P38"/>
+        <ex:worksFor rdf:resource="&ex;P4"/>
+        <ex:worksFor rdf:resource="&ex;P5"/>
+        <ex:worksFor rdf:resource="&ex;P6"/>
+        <ex:worksFor rdf:resource="&ex;P7"/>
+        <ex:worksFor rdf:resource="&ex;P8"/>
+        <ex:worksFor rdf:resource="&ex;P9"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/P4 -->
+
+    <owl:NamedIndividual rdf:about="&ex;P4">
+        <rdf:type rdf:resource="&ex;Board"/>
+        <ex:hasAge rdf:datatype="&xsd;int">39</ex:hasAge>
+        <ex:isAvailable rdf:datatype="&xsd;string">YES</ex:isAvailable>
+        <ex:hasSex rdf:datatype="&xsd;string">male</ex:hasSex>
+        <ex:likes rdf:resource="&ex;P1"/>
+        <ex:bossOf rdf:resource="&ex;P15"/>
+        <ex:bossOf rdf:resource="&ex;P16"/>
+        <ex:bossOf rdf:resource="&ex;P17"/>
+        <ex:bossOf rdf:resource="&ex;P18"/>
+        <ex:bossOf rdf:resource="&ex;P19"/>
+        <ex:likes rdf:resource="&ex;P2"/>
+        <ex:bossOf rdf:resource="&ex;P20"/>
+        <ex:bossOf rdf:resource="&ex;P21"/>
+        <ex:bossOf rdf:resource="&ex;P22"/>
+        <ex:bossOf rdf:resource="&ex;P23"/>
+        <ex:bossOf rdf:resource="&ex;P24"/>
+        <ex:bossOf rdf:resource="&ex;P25"/>
+        <ex:bossOf rdf:resource="&ex;P26"/>
+        <ex:bossOf rdf:resource="&ex;P27"/>
+        <ex:bossOf rdf:resource="&ex;P28"/>
+        <ex:bossOf rdf:resource="&ex;P29"/>
+        <ex:likes rdf:resource="&ex;P3"/>
+        <ex:bossOf rdf:resource="&ex;P30"/>
+        <ex:bossOf rdf:resource="&ex;P31"/>
+        <ex:bossOf rdf:resource="&ex;P32"/>
+        <ex:bossOf rdf:resource="&ex;P33"/>
+        <ex:bossOf rdf:resource="&ex;P34"/>
+        <ex:bossOf rdf:resource="&ex;P35"/>
+        <ex:bossOf rdf:resource="&ex;P36"/>
+        <ex:bossOf rdf:resource="&ex;P37"/>
+        <ex:bossOf rdf:resource="&ex;P38"/>
+        <ex:bossOf rdf:resource="&ex;P39"/>
+        <ex:bossOf rdf:resource="&ex;P40"/>
+        <ex:bossOf rdf:resource="&ex;P41"/>
+        <ex:bossOf rdf:resource="&ex;P42"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/P40 -->
+
+    <owl:NamedIndividual rdf:about="&ex;P40">
+        <rdf:type rdf:resource="&ex;SalesEmployee"/>
+        <ex:hasAge rdf:datatype="&xsd;int">38</ex:hasAge>
+        <ex:isAvailable rdf:datatype="&xsd;string">YES</ex:isAvailable>
+        <ex:hasSex rdf:datatype="&xsd;string">female</ex:hasSex>
+        <ex:worksFor rdf:resource="&ex;P1"/>
+        <ex:worksFor rdf:resource="&ex;P10"/>
+        <ex:worksFor rdf:resource="&ex;P11"/>
+        <ex:worksFor rdf:resource="&ex;P13"/>
+        <ex:worksFor rdf:resource="&ex;P2"/>
+        <ex:worksFor rdf:resource="&ex;P3"/>
+        <ex:worksFor rdf:resource="&ex;P4"/>
+        <ex:likes rdf:resource="&ex;P41"/>
+        <ex:likes rdf:resource="&ex;P42"/>
+        <ex:worksFor rdf:resource="&ex;P5"/>
+        <ex:worksFor rdf:resource="&ex;P6"/>
+        <ex:worksFor rdf:resource="&ex;P7"/>
+        <ex:worksFor rdf:resource="&ex;P8"/>
+        <ex:worksFor rdf:resource="&ex;P9"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/P41 -->
+
+    <owl:NamedIndividual rdf:about="&ex;P41">
+        <rdf:type rdf:resource="&ex;SalesEmployee"/>
+        <ex:hasAge rdf:datatype="&xsd;int">34</ex:hasAge>
+        <ex:isAvailable rdf:datatype="&xsd;string">YES</ex:isAvailable>
+        <ex:hasSex rdf:datatype="&xsd;string">male</ex:hasSex>
+        <ex:worksFor rdf:resource="&ex;P1"/>
+        <ex:worksFor rdf:resource="&ex;P10"/>
+        <ex:worksFor rdf:resource="&ex;P11"/>
+        <ex:worksFor rdf:resource="&ex;P13"/>
+        <ex:worksFor rdf:resource="&ex;P2"/>
+        <ex:worksFor rdf:resource="&ex;P3"/>
+        <ex:likes rdf:resource="&ex;P36"/>
+        <ex:likes rdf:resource="&ex;P37"/>
+        <ex:likes rdf:resource="&ex;P38"/>
+        <ex:likes rdf:resource="&ex;P39"/>
+        <ex:worksFor rdf:resource="&ex;P4"/>
+        <ex:likes rdf:resource="&ex;P40"/>
+        <ex:worksFor rdf:resource="&ex;P5"/>
+        <ex:worksFor rdf:resource="&ex;P6"/>
+        <ex:worksFor rdf:resource="&ex;P7"/>
+        <ex:worksFor rdf:resource="&ex;P8"/>
+        <ex:worksFor rdf:resource="&ex;P9"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/P42 -->
+
+    <owl:NamedIndividual rdf:about="&ex;P42">
+        <rdf:type rdf:resource="&ex;SalesEmployee"/>
+        <ex:hasAge rdf:datatype="&xsd;int">24</ex:hasAge>
+        <ex:isAvailable rdf:datatype="&xsd;string">YES</ex:isAvailable>
+        <ex:hasSex rdf:datatype="&xsd;string">female</ex:hasSex>
+        <ex:worksFor rdf:resource="&ex;P1"/>
+        <ex:worksFor rdf:resource="&ex;P10"/>
+        <ex:worksFor rdf:resource="&ex;P11"/>
+        <ex:worksFor rdf:resource="&ex;P13"/>
+        <ex:worksFor rdf:resource="&ex;P2"/>
+        <ex:worksFor rdf:resource="&ex;P3"/>
+        <ex:hates rdf:resource="&ex;P36"/>
+        <ex:hates rdf:resource="&ex;P38"/>
+        <ex:likes rdf:resource="&ex;P39"/>
+        <ex:worksFor rdf:resource="&ex;P4"/>
+        <ex:likes rdf:resource="&ex;P40"/>
+        <ex:likes rdf:resource="&ex;P41"/>
+        <ex:worksFor rdf:resource="&ex;P5"/>
+        <ex:worksFor rdf:resource="&ex;P6"/>
+        <ex:worksFor rdf:resource="&ex;P7"/>
+        <ex:worksFor rdf:resource="&ex;P8"/>
+        <ex:worksFor rdf:resource="&ex;P9"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/P5 -->
+
+    <owl:NamedIndividual rdf:about="&ex;P5">
+        <rdf:type rdf:resource="&ex;Board"/>
+        <ex:hasAge rdf:datatype="&xsd;int">45</ex:hasAge>
+        <ex:isAvailable rdf:datatype="&xsd;string">YES</ex:isAvailable>
+        <ex:hasSex rdf:datatype="&xsd;string">female</ex:hasSex>
+        <ex:hates rdf:resource="&ex;P1"/>
+        <ex:bossOf rdf:resource="&ex;P15"/>
+        <ex:bossOf rdf:resource="&ex;P16"/>
+        <ex:bossOf rdf:resource="&ex;P17"/>
+        <ex:bossOf rdf:resource="&ex;P18"/>
+        <ex:bossOf rdf:resource="&ex;P19"/>
+        <ex:hates rdf:resource="&ex;P2"/>
+        <ex:bossOf rdf:resource="&ex;P20"/>
+        <ex:bossOf rdf:resource="&ex;P21"/>
+        <ex:bossOf rdf:resource="&ex;P22"/>
+        <ex:bossOf rdf:resource="&ex;P23"/>
+        <ex:bossOf rdf:resource="&ex;P24"/>
+        <ex:bossOf rdf:resource="&ex;P25"/>
+        <ex:bossOf rdf:resource="&ex;P26"/>
+        <ex:bossOf rdf:resource="&ex;P27"/>
+        <ex:bossOf rdf:resource="&ex;P28"/>
+        <ex:bossOf rdf:resource="&ex;P29"/>
+        <ex:bossOf rdf:resource="&ex;P30"/>
+        <ex:bossOf rdf:resource="&ex;P31"/>
+        <ex:bossOf rdf:resource="&ex;P32"/>
+        <ex:bossOf rdf:resource="&ex;P33"/>
+        <ex:bossOf rdf:resource="&ex;P34"/>
+        <ex:bossOf rdf:resource="&ex;P35"/>
+        <ex:bossOf rdf:resource="&ex;P36"/>
+        <ex:bossOf rdf:resource="&ex;P37"/>
+        <ex:bossOf rdf:resource="&ex;P38"/>
+        <ex:bossOf rdf:resource="&ex;P39"/>
+        <ex:bossOf rdf:resource="&ex;P40"/>
+        <ex:bossOf rdf:resource="&ex;P41"/>
+        <ex:bossOf rdf:resource="&ex;P42"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/P6 -->
+
+    <owl:NamedIndividual rdf:about="&ex;P6">
+        <rdf:type rdf:resource="&ex;DivisionManager"/>
+        <ex:hasAge rdf:datatype="&xsd;int">32</ex:hasAge>
+        <ex:isAvailable rdf:datatype="&xsd;string">YES</ex:isAvailable>
+        <ex:hasSex rdf:datatype="&xsd;string">female</ex:hasSex>
+        <ex:likes rdf:resource="&ex;P11"/>
+        <ex:bossOf rdf:resource="&ex;P15"/>
+        <ex:bossOf rdf:resource="&ex;P16"/>
+        <ex:bossOf rdf:resource="&ex;P17"/>
+        <ex:bossOf rdf:resource="&ex;P18"/>
+        <ex:bossOf rdf:resource="&ex;P19"/>
+        <ex:bossOf rdf:resource="&ex;P20"/>
+        <ex:bossOf rdf:resource="&ex;P21"/>
+        <ex:bossOf rdf:resource="&ex;P22"/>
+        <ex:bossOf rdf:resource="&ex;P23"/>
+        <ex:bossOf rdf:resource="&ex;P24"/>
+        <ex:bossOf rdf:resource="&ex;P25"/>
+        <ex:bossOf rdf:resource="&ex;P26"/>
+        <ex:bossOf rdf:resource="&ex;P27"/>
+        <ex:bossOf rdf:resource="&ex;P28"/>
+        <ex:bossOf rdf:resource="&ex;P29"/>
+        <ex:bossOf rdf:resource="&ex;P30"/>
+        <ex:bossOf rdf:resource="&ex;P31"/>
+        <ex:bossOf rdf:resource="&ex;P32"/>
+        <ex:bossOf rdf:resource="&ex;P33"/>
+        <ex:bossOf rdf:resource="&ex;P34"/>
+        <ex:bossOf rdf:resource="&ex;P35"/>
+        <ex:bossOf rdf:resource="&ex;P36"/>
+        <ex:bossOf rdf:resource="&ex;P37"/>
+        <ex:bossOf rdf:resource="&ex;P38"/>
+        <ex:bossOf rdf:resource="&ex;P39"/>
+        <ex:bossOf rdf:resource="&ex;P40"/>
+        <ex:bossOf rdf:resource="&ex;P41"/>
+        <ex:bossOf rdf:resource="&ex;P42"/>
+        <ex:likes rdf:resource="&ex;P7"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/P7 -->
+
+    <owl:NamedIndividual rdf:about="&ex;P7">
+        <rdf:type rdf:resource="&ex;DivisionManager"/>
+        <ex:hasAge rdf:datatype="&xsd;int">36</ex:hasAge>
+        <ex:isAvailable rdf:datatype="&xsd;string">YES</ex:isAvailable>
+        <ex:hasSex rdf:datatype="&xsd;string">male</ex:hasSex>
+        <ex:likes rdf:resource="&ex;P11"/>
+        <ex:bossOf rdf:resource="&ex;P15"/>
+        <ex:bossOf rdf:resource="&ex;P16"/>
+        <ex:bossOf rdf:resource="&ex;P17"/>
+        <ex:bossOf rdf:resource="&ex;P18"/>
+        <ex:bossOf rdf:resource="&ex;P19"/>
+        <ex:bossOf rdf:resource="&ex;P20"/>
+        <ex:bossOf rdf:resource="&ex;P21"/>
+        <ex:bossOf rdf:resource="&ex;P22"/>
+        <ex:bossOf rdf:resource="&ex;P23"/>
+        <ex:bossOf rdf:resource="&ex;P24"/>
+        <ex:bossOf rdf:resource="&ex;P25"/>
+        <ex:bossOf rdf:resource="&ex;P26"/>
+        <ex:bossOf rdf:resource="&ex;P27"/>
+        <ex:bossOf rdf:resource="&ex;P28"/>
+        <ex:bossOf rdf:resource="&ex;P29"/>
+        <ex:bossOf rdf:resource="&ex;P30"/>
+        <ex:bossOf rdf:resource="&ex;P31"/>
+        <ex:bossOf rdf:resource="&ex;P32"/>
+        <ex:bossOf rdf:resource="&ex;P33"/>
+        <ex:bossOf rdf:resource="&ex;P34"/>
+        <ex:bossOf rdf:resource="&ex;P35"/>
+        <ex:bossOf rdf:resource="&ex;P36"/>
+        <ex:bossOf rdf:resource="&ex;P37"/>
+        <ex:bossOf rdf:resource="&ex;P38"/>
+        <ex:bossOf rdf:resource="&ex;P39"/>
+        <ex:bossOf rdf:resource="&ex;P40"/>
+        <ex:bossOf rdf:resource="&ex;P41"/>
+        <ex:bossOf rdf:resource="&ex;P42"/>
+        <ex:likes rdf:resource="&ex;P6"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/P8 -->
+
+    <owl:NamedIndividual rdf:about="&ex;P8">
+        <rdf:type rdf:resource="&ex;DivisionManager"/>
+        <ex:hasAge rdf:datatype="&xsd;int">48</ex:hasAge>
+        <ex:isAvailable rdf:datatype="&xsd;string">YES</ex:isAvailable>
+        <ex:hasSex rdf:datatype="&xsd;string">male</ex:hasSex>
+        <ex:likes rdf:resource="&ex;P10"/>
+        <ex:likes rdf:resource="&ex;P11"/>
+        <ex:bossOf rdf:resource="&ex;P15"/>
+        <ex:bossOf rdf:resource="&ex;P16"/>
+        <ex:bossOf rdf:resource="&ex;P17"/>
+        <ex:bossOf rdf:resource="&ex;P18"/>
+        <ex:bossOf rdf:resource="&ex;P19"/>
+        <ex:bossOf rdf:resource="&ex;P20"/>
+        <ex:bossOf rdf:resource="&ex;P21"/>
+        <ex:bossOf rdf:resource="&ex;P22"/>
+        <ex:bossOf rdf:resource="&ex;P23"/>
+        <ex:bossOf rdf:resource="&ex;P24"/>
+        <ex:bossOf rdf:resource="&ex;P25"/>
+        <ex:bossOf rdf:resource="&ex;P26"/>
+        <ex:bossOf rdf:resource="&ex;P27"/>
+        <ex:bossOf rdf:resource="&ex;P28"/>
+        <ex:bossOf rdf:resource="&ex;P29"/>
+        <ex:bossOf rdf:resource="&ex;P30"/>
+        <ex:bossOf rdf:resource="&ex;P31"/>
+        <ex:bossOf rdf:resource="&ex;P32"/>
+        <ex:bossOf rdf:resource="&ex;P33"/>
+        <ex:bossOf rdf:resource="&ex;P34"/>
+        <ex:bossOf rdf:resource="&ex;P35"/>
+        <ex:bossOf rdf:resource="&ex;P36"/>
+        <ex:bossOf rdf:resource="&ex;P37"/>
+        <ex:bossOf rdf:resource="&ex;P38"/>
+        <ex:bossOf rdf:resource="&ex;P39"/>
+        <ex:bossOf rdf:resource="&ex;P40"/>
+        <ex:bossOf rdf:resource="&ex;P41"/>
+        <ex:bossOf rdf:resource="&ex;P42"/>
+        <ex:likes rdf:resource="&ex;P6"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/P9 -->
+
+    <owl:NamedIndividual rdf:about="&ex;P9">
+        <rdf:type rdf:resource="&ex;DivisionManager"/>
+        <ex:hasAge rdf:datatype="&xsd;int">29</ex:hasAge>
+        <ex:isAvailable rdf:datatype="&xsd;string">YES</ex:isAvailable>
+        <ex:hasSex rdf:datatype="&xsd;string">male</ex:hasSex>
+        <ex:bossOf rdf:resource="&ex;P15"/>
+        <ex:bossOf rdf:resource="&ex;P16"/>
+        <ex:bossOf rdf:resource="&ex;P17"/>
+        <ex:bossOf rdf:resource="&ex;P18"/>
+        <ex:bossOf rdf:resource="&ex;P19"/>
+        <ex:bossOf rdf:resource="&ex;P20"/>
+        <ex:bossOf rdf:resource="&ex;P21"/>
+        <ex:bossOf rdf:resource="&ex;P22"/>
+        <ex:bossOf rdf:resource="&ex;P23"/>
+        <ex:bossOf rdf:resource="&ex;P24"/>
+        <ex:bossOf rdf:resource="&ex;P25"/>
+        <ex:bossOf rdf:resource="&ex;P26"/>
+        <ex:bossOf rdf:resource="&ex;P27"/>
+        <ex:bossOf rdf:resource="&ex;P28"/>
+        <ex:bossOf rdf:resource="&ex;P29"/>
+        <ex:bossOf rdf:resource="&ex;P30"/>
+        <ex:bossOf rdf:resource="&ex;P31"/>
+        <ex:bossOf rdf:resource="&ex;P32"/>
+        <ex:bossOf rdf:resource="&ex;P33"/>
+        <ex:bossOf rdf:resource="&ex;P34"/>
+        <ex:bossOf rdf:resource="&ex;P35"/>
+        <ex:bossOf rdf:resource="&ex;P36"/>
+        <ex:bossOf rdf:resource="&ex;P37"/>
+        <ex:bossOf rdf:resource="&ex;P38"/>
+        <ex:bossOf rdf:resource="&ex;P39"/>
+        <ex:bossOf rdf:resource="&ex;P40"/>
+        <ex:bossOf rdf:resource="&ex;P41"/>
+        <ex:bossOf rdf:resource="&ex;P42"/>
+        <ex:likes rdf:resource="&ex;P6"/>
+        <ex:likes rdf:resource="&ex;P7"/>
+        <ex:hates rdf:resource="&ex;P8"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR0 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR0">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>YES</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P12"/>
+        <ex:hasTeam rdf:resource="&ex;P13"/>
+        <ex:hasTeam rdf:resource="&ex;P14"/>
+        <ex:hasTeam rdf:resource="&ex;P22"/>
+        <ex:hasTeam rdf:resource="&ex;P31"/>
+        <ex:hasTeam rdf:resource="&ex;P40"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR1 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR1">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>NO</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P0"/>
+        <ex:hasTeam rdf:resource="&ex;P1"/>
+        <ex:hasTeam rdf:resource="&ex;P29"/>
+        <ex:hasTeam rdf:resource="&ex;P33"/>
+        <ex:hasTeam rdf:resource="&ex;P34"/>
+        <ex:hasTeam rdf:resource="&ex;P35"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR10 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR10">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>YES</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P11"/>
+        <ex:hasTeam rdf:resource="&ex;P34"/>
+        <ex:hasTeam rdf:resource="&ex;P5"/>
+        <ex:hasTeam rdf:resource="&ex;P6"/>
+        <ex:hasTeam rdf:resource="&ex;P7"/>
+        <ex:hasTeam rdf:resource="&ex;P9"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR100 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR100">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>YES</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P0"/>
+        <ex:hasTeam rdf:resource="&ex;P12"/>
+        <ex:hasTeam rdf:resource="&ex;P23"/>
+        <ex:hasTeam rdf:resource="&ex;P4"/>
+        <ex:hasTeam rdf:resource="&ex;P41"/>
+        <ex:hasTeam rdf:resource="&ex;P9"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR101 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR101">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>NO</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P12"/>
+        <ex:hasTeam rdf:resource="&ex;P19"/>
+        <ex:hasTeam rdf:resource="&ex;P22"/>
+        <ex:hasTeam rdf:resource="&ex;P26"/>
+        <ex:hasTeam rdf:resource="&ex;P34"/>
+        <ex:hasTeam rdf:resource="&ex;P39"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR102 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR102">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>NO</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P1"/>
+        <ex:hasTeam rdf:resource="&ex;P13"/>
+        <ex:hasTeam rdf:resource="&ex;P18"/>
+        <ex:hasTeam rdf:resource="&ex;P28"/>
+        <ex:hasTeam rdf:resource="&ex;P29"/>
+        <ex:hasTeam rdf:resource="&ex;P39"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR103 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR103">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>NO</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P14"/>
+        <ex:hasTeam rdf:resource="&ex;P17"/>
+        <ex:hasTeam rdf:resource="&ex;P22"/>
+        <ex:hasTeam rdf:resource="&ex;P3"/>
+        <ex:hasTeam rdf:resource="&ex;P36"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR104 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR104">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>NO</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P18"/>
+        <ex:hasTeam rdf:resource="&ex;P28"/>
+        <ex:hasTeam rdf:resource="&ex;P30"/>
+        <ex:hasTeam rdf:resource="&ex;P33"/>
+        <ex:hasTeam rdf:resource="&ex;P39"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR105 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR105">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>NO</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P12"/>
+        <ex:hasTeam rdf:resource="&ex;P17"/>
+        <ex:hasTeam rdf:resource="&ex;P19"/>
+        <ex:hasTeam rdf:resource="&ex;P20"/>
+        <ex:hasTeam rdf:resource="&ex;P26"/>
+        <ex:hasTeam rdf:resource="&ex;P34"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR106 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR106">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>NO</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P11"/>
+        <ex:hasTeam rdf:resource="&ex;P14"/>
+        <ex:hasTeam rdf:resource="&ex;P20"/>
+        <ex:hasTeam rdf:resource="&ex;P26"/>
+        <ex:hasTeam rdf:resource="&ex;P27"/>
+        <ex:hasTeam rdf:resource="&ex;P28"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR107 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR107">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>YES</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P14"/>
+        <ex:hasTeam rdf:resource="&ex;P2"/>
+        <ex:hasTeam rdf:resource="&ex;P41"/>
+        <ex:hasTeam rdf:resource="&ex;P6"/>
+        <ex:hasTeam rdf:resource="&ex;P7"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR108 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR108">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>NO</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P17"/>
+        <ex:hasTeam rdf:resource="&ex;P20"/>
+        <ex:hasTeam rdf:resource="&ex;P24"/>
+        <ex:hasTeam rdf:resource="&ex;P29"/>
+        <ex:hasTeam rdf:resource="&ex;P33"/>
+        <ex:hasTeam rdf:resource="&ex;P9"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR109 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR109">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>NO</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P1"/>
+        <ex:hasTeam rdf:resource="&ex;P17"/>
+        <ex:hasTeam rdf:resource="&ex;P2"/>
+        <ex:hasTeam rdf:resource="&ex;P22"/>
+        <ex:hasTeam rdf:resource="&ex;P26"/>
+        <ex:hasTeam rdf:resource="&ex;P35"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR11 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR11">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>NO</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P10"/>
+        <ex:hasTeam rdf:resource="&ex;P11"/>
+        <ex:hasTeam rdf:resource="&ex;P17"/>
+        <ex:hasTeam rdf:resource="&ex;P25"/>
+        <ex:hasTeam rdf:resource="&ex;P38"/>
+        <ex:hasTeam rdf:resource="&ex;P40"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR110 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR110">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>NO</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P22"/>
+        <ex:hasTeam rdf:resource="&ex;P23"/>
+        <ex:hasTeam rdf:resource="&ex;P24"/>
+        <ex:hasTeam rdf:resource="&ex;P27"/>
+        <ex:hasTeam rdf:resource="&ex;P32"/>
+        <ex:hasTeam rdf:resource="&ex;P41"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR111 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR111">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>NO</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P0"/>
+        <ex:hasTeam rdf:resource="&ex;P22"/>
+        <ex:hasTeam rdf:resource="&ex;P33"/>
+        <ex:hasTeam rdf:resource="&ex;P34"/>
+        <ex:hasTeam rdf:resource="&ex;P40"/>
+        <ex:hasTeam rdf:resource="&ex;P8"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR112 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR112">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>NO</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P1"/>
+        <ex:hasTeam rdf:resource="&ex;P18"/>
+        <ex:hasTeam rdf:resource="&ex;P22"/>
+        <ex:hasTeam rdf:resource="&ex;P31"/>
+        <ex:hasTeam rdf:resource="&ex;P34"/>
+        <ex:hasTeam rdf:resource="&ex;P35"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR113 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR113">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>YES</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P17"/>
+        <ex:hasTeam rdf:resource="&ex;P3"/>
+        <ex:hasTeam rdf:resource="&ex;P32"/>
+        <ex:hasTeam rdf:resource="&ex;P40"/>
+        <ex:hasTeam rdf:resource="&ex;P6"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR114 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR114">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>YES</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P1"/>
+        <ex:hasTeam rdf:resource="&ex;P16"/>
+        <ex:hasTeam rdf:resource="&ex;P24"/>
+        <ex:hasTeam rdf:resource="&ex;P4"/>
+        <ex:hasTeam rdf:resource="&ex;P6"/>
+        <ex:hasTeam rdf:resource="&ex;P8"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR115 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR115">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>NO</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P10"/>
+        <ex:hasTeam rdf:resource="&ex;P24"/>
+        <ex:hasTeam rdf:resource="&ex;P28"/>
+        <ex:hasTeam rdf:resource="&ex;P33"/>
+        <ex:hasTeam rdf:resource="&ex;P38"/>
+        <ex:hasTeam rdf:resource="&ex;P6"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR116 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR116">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>NO</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P24"/>
+        <ex:hasTeam rdf:resource="&ex;P34"/>
+        <ex:hasTeam rdf:resource="&ex;P39"/>
+        <ex:hasTeam rdf:resource="&ex;P5"/>
+        <ex:hasTeam rdf:resource="&ex;P7"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR117 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR117">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>YES</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P11"/>
+        <ex:hasTeam rdf:resource="&ex;P14"/>
+        <ex:hasTeam rdf:resource="&ex;P17"/>
+        <ex:hasTeam rdf:resource="&ex;P29"/>
+        <ex:hasTeam rdf:resource="&ex;P34"/>
+        <ex:hasTeam rdf:resource="&ex;P9"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR118 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR118">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>NO</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P13"/>
+        <ex:hasTeam rdf:resource="&ex;P22"/>
+        <ex:hasTeam rdf:resource="&ex;P26"/>
+        <ex:hasTeam rdf:resource="&ex;P31"/>
+        <ex:hasTeam rdf:resource="&ex;P33"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR119 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR119">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>NO</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P15"/>
+        <ex:hasTeam rdf:resource="&ex;P24"/>
+        <ex:hasTeam rdf:resource="&ex;P33"/>
+        <ex:hasTeam rdf:resource="&ex;P34"/>
+        <ex:hasTeam rdf:resource="&ex;P37"/>
+        <ex:hasTeam rdf:resource="&ex;P7"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR12 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR12">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>YES</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P14"/>
+        <ex:hasTeam rdf:resource="&ex;P18"/>
+        <ex:hasTeam rdf:resource="&ex;P2"/>
+        <ex:hasTeam rdf:resource="&ex;P24"/>
+        <ex:hasTeam rdf:resource="&ex;P38"/>
+        <ex:hasTeam rdf:resource="&ex;P8"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR120 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR120">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>YES</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P2"/>
+        <ex:hasTeam rdf:resource="&ex;P21"/>
+        <ex:hasTeam rdf:resource="&ex;P31"/>
+        <ex:hasTeam rdf:resource="&ex;P33"/>
+        <ex:hasTeam rdf:resource="&ex;P4"/>
+        <ex:hasTeam rdf:resource="&ex;P7"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR121 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR121">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>NO</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P12"/>
+        <ex:hasTeam rdf:resource="&ex;P13"/>
+        <ex:hasTeam rdf:resource="&ex;P17"/>
+        <ex:hasTeam rdf:resource="&ex;P31"/>
+        <ex:hasTeam rdf:resource="&ex;P35"/>
+        <ex:hasTeam rdf:resource="&ex;P41"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR122 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR122">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>YES</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P10"/>
+        <ex:hasTeam rdf:resource="&ex;P19"/>
+        <ex:hasTeam rdf:resource="&ex;P2"/>
+        <ex:hasTeam rdf:resource="&ex;P31"/>
+        <ex:hasTeam rdf:resource="&ex;P36"/>
+        <ex:hasTeam rdf:resource="&ex;P7"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR123 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR123">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>NO</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P16"/>
+        <ex:hasTeam rdf:resource="&ex;P17"/>
+        <ex:hasTeam rdf:resource="&ex;P7"/>
+        <ex:hasTeam rdf:resource="&ex;P8"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR124 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR124">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>NO</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P1"/>
+        <ex:hasTeam rdf:resource="&ex;P10"/>
+        <ex:hasTeam rdf:resource="&ex;P24"/>
+        <ex:hasTeam rdf:resource="&ex;P31"/>
+        <ex:hasTeam rdf:resource="&ex;P34"/>
+        <ex:hasTeam rdf:resource="&ex;P35"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR125 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR125">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>YES</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P20"/>
+        <ex:hasTeam rdf:resource="&ex;P33"/>
+        <ex:hasTeam rdf:resource="&ex;P35"/>
+        <ex:hasTeam rdf:resource="&ex;P4"/>
+        <ex:hasTeam rdf:resource="&ex;P5"/>
+        <ex:hasTeam rdf:resource="&ex;P6"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR126 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR126">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>NO</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P12"/>
+        <ex:hasTeam rdf:resource="&ex;P13"/>
+        <ex:hasTeam rdf:resource="&ex;P17"/>
+        <ex:hasTeam rdf:resource="&ex;P18"/>
+        <ex:hasTeam rdf:resource="&ex;P32"/>
+        <ex:hasTeam rdf:resource="&ex;P39"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR127 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR127">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>NO</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P10"/>
+        <ex:hasTeam rdf:resource="&ex;P17"/>
+        <ex:hasTeam rdf:resource="&ex;P20"/>
+        <ex:hasTeam rdf:resource="&ex;P22"/>
+        <ex:hasTeam rdf:resource="&ex;P38"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR128 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR128">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>NO</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P10"/>
+        <ex:hasTeam rdf:resource="&ex;P15"/>
+        <ex:hasTeam rdf:resource="&ex;P24"/>
+        <ex:hasTeam rdf:resource="&ex;P28"/>
+        <ex:hasTeam rdf:resource="&ex;P34"/>
+        <ex:hasTeam rdf:resource="&ex;P5"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR129 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR129">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>YES</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P10"/>
+        <ex:hasTeam rdf:resource="&ex;P11"/>
+        <ex:hasTeam rdf:resource="&ex;P33"/>
+        <ex:hasTeam rdf:resource="&ex;P39"/>
+        <ex:hasTeam rdf:resource="&ex;P9"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR13 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR13">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>NO</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P11"/>
+        <ex:hasTeam rdf:resource="&ex;P12"/>
+        <ex:hasTeam rdf:resource="&ex;P21"/>
+        <ex:hasTeam rdf:resource="&ex;P31"/>
+        <ex:hasTeam rdf:resource="&ex;P33"/>
+        <ex:hasTeam rdf:resource="&ex;P41"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR130 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR130">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>NO</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P1"/>
+        <ex:hasTeam rdf:resource="&ex;P34"/>
+        <ex:hasTeam rdf:resource="&ex;P35"/>
+        <ex:hasTeam rdf:resource="&ex;P37"/>
+        <ex:hasTeam rdf:resource="&ex;P39"/>
+        <ex:hasTeam rdf:resource="&ex;P4"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR131 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR131">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>NO</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P18"/>
+        <ex:hasTeam rdf:resource="&ex;P25"/>
+        <ex:hasTeam rdf:resource="&ex;P27"/>
+        <ex:hasTeam rdf:resource="&ex;P31"/>
+        <ex:hasTeam rdf:resource="&ex;P40"/>
+        <ex:hasTeam rdf:resource="&ex;P7"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR132 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR132">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>YES</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P10"/>
+        <ex:hasTeam rdf:resource="&ex;P18"/>
+        <ex:hasTeam rdf:resource="&ex;P19"/>
+        <ex:hasTeam rdf:resource="&ex;P38"/>
+        <ex:hasTeam rdf:resource="&ex;P5"/>
+        <ex:hasTeam rdf:resource="&ex;P7"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR133 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR133">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>YES</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P1"/>
+        <ex:hasTeam rdf:resource="&ex;P14"/>
+        <ex:hasTeam rdf:resource="&ex;P18"/>
+        <ex:hasTeam rdf:resource="&ex;P24"/>
+        <ex:hasTeam rdf:resource="&ex;P38"/>
+        <ex:hasTeam rdf:resource="&ex;P7"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR134 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR134">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>NO</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P15"/>
+        <ex:hasTeam rdf:resource="&ex;P21"/>
+        <ex:hasTeam rdf:resource="&ex;P31"/>
+        <ex:hasTeam rdf:resource="&ex;P41"/>
+        <ex:hasTeam rdf:resource="&ex;P6"/>
+        <ex:hasTeam rdf:resource="&ex;P8"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR135 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR135">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>YES</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P10"/>
+        <ex:hasTeam rdf:resource="&ex;P16"/>
+        <ex:hasTeam rdf:resource="&ex;P2"/>
+        <ex:hasTeam rdf:resource="&ex;P9"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR136 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR136">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>NO</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P12"/>
+        <ex:hasTeam rdf:resource="&ex;P23"/>
+        <ex:hasTeam rdf:resource="&ex;P24"/>
+        <ex:hasTeam rdf:resource="&ex;P26"/>
+        <ex:hasTeam rdf:resource="&ex;P31"/>
+        <ex:hasTeam rdf:resource="&ex;P4"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR137 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR137">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>YES</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P18"/>
+        <ex:hasTeam rdf:resource="&ex;P33"/>
+        <ex:hasTeam rdf:resource="&ex;P6"/>
+        <ex:hasTeam rdf:resource="&ex;P8"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR138 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR138">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>YES</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P10"/>
+        <ex:hasTeam rdf:resource="&ex;P12"/>
+        <ex:hasTeam rdf:resource="&ex;P25"/>
+        <ex:hasTeam rdf:resource="&ex;P29"/>
+        <ex:hasTeam rdf:resource="&ex;P33"/>
+        <ex:hasTeam rdf:resource="&ex;P9"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR139 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR139">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>YES</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P0"/>
+        <ex:hasTeam rdf:resource="&ex;P14"/>
+        <ex:hasTeam rdf:resource="&ex;P22"/>
+        <ex:hasTeam rdf:resource="&ex;P25"/>
+        <ex:hasTeam rdf:resource="&ex;P37"/>
+        <ex:hasTeam rdf:resource="&ex;P4"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR14 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR14">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>NO</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P15"/>
+        <ex:hasTeam rdf:resource="&ex;P21"/>
+        <ex:hasTeam rdf:resource="&ex;P30"/>
+        <ex:hasTeam rdf:resource="&ex;P6"/>
+        <ex:hasTeam rdf:resource="&ex;P8"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR140 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR140">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>YES</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P0"/>
+        <ex:hasTeam rdf:resource="&ex;P1"/>
+        <ex:hasTeam rdf:resource="&ex;P19"/>
+        <ex:hasTeam rdf:resource="&ex;P3"/>
+        <ex:hasTeam rdf:resource="&ex;P33"/>
+        <ex:hasTeam rdf:resource="&ex;P38"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR141 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR141">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>YES</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P0"/>
+        <ex:hasTeam rdf:resource="&ex;P25"/>
+        <ex:hasTeam rdf:resource="&ex;P32"/>
+        <ex:hasTeam rdf:resource="&ex;P6"/>
+        <ex:hasTeam rdf:resource="&ex;P8"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR142 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR142">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>YES</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P13"/>
+        <ex:hasTeam rdf:resource="&ex;P20"/>
+        <ex:hasTeam rdf:resource="&ex;P23"/>
+        <ex:hasTeam rdf:resource="&ex;P34"/>
+        <ex:hasTeam rdf:resource="&ex;P5"/>
+        <ex:hasTeam rdf:resource="&ex;P6"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR143 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR143">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>YES</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P18"/>
+        <ex:hasTeam rdf:resource="&ex;P2"/>
+        <ex:hasTeam rdf:resource="&ex;P3"/>
+        <ex:hasTeam rdf:resource="&ex;P32"/>
+        <ex:hasTeam rdf:resource="&ex;P7"/>
+        <ex:hasTeam rdf:resource="&ex;P9"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR144 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR144">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>NO</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P21"/>
+        <ex:hasTeam rdf:resource="&ex;P23"/>
+        <ex:hasTeam rdf:resource="&ex;P29"/>
+        <ex:hasTeam rdf:resource="&ex;P33"/>
+        <ex:hasTeam rdf:resource="&ex;P41"/>
+        <ex:hasTeam rdf:resource="&ex;P7"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR145 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR145">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>NO</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P21"/>
+        <ex:hasTeam rdf:resource="&ex;P28"/>
+        <ex:hasTeam rdf:resource="&ex;P33"/>
+        <ex:hasTeam rdf:resource="&ex;P40"/>
+        <ex:hasTeam rdf:resource="&ex;P5"/>
+        <ex:hasTeam rdf:resource="&ex;P8"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR146 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR146">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>NO</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P11"/>
+        <ex:hasTeam rdf:resource="&ex;P16"/>
+        <ex:hasTeam rdf:resource="&ex;P33"/>
+        <ex:hasTeam rdf:resource="&ex;P37"/>
+        <ex:hasTeam rdf:resource="&ex;P40"/>
+        <ex:hasTeam rdf:resource="&ex;P7"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR147 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR147">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>NO</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P15"/>
+        <ex:hasTeam rdf:resource="&ex;P18"/>
+        <ex:hasTeam rdf:resource="&ex;P28"/>
+        <ex:hasTeam rdf:resource="&ex;P32"/>
+        <ex:hasTeam rdf:resource="&ex;P36"/>
+        <ex:hasTeam rdf:resource="&ex;P40"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR148 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR148">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>NO</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P15"/>
+        <ex:hasTeam rdf:resource="&ex;P18"/>
+        <ex:hasTeam rdf:resource="&ex;P19"/>
+        <ex:hasTeam rdf:resource="&ex;P21"/>
+        <ex:hasTeam rdf:resource="&ex;P23"/>
+        <ex:hasTeam rdf:resource="&ex;P40"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR149 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR149">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>YES</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P25"/>
+        <ex:hasTeam rdf:resource="&ex;P34"/>
+        <ex:hasTeam rdf:resource="&ex;P38"/>
+        <ex:hasTeam rdf:resource="&ex;P5"/>
+        <ex:hasTeam rdf:resource="&ex;P8"/>
+        <ex:hasTeam rdf:resource="&ex;P9"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR15 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR15">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>NO</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P13"/>
+        <ex:hasTeam rdf:resource="&ex;P2"/>
+        <ex:hasTeam rdf:resource="&ex;P23"/>
+        <ex:hasTeam rdf:resource="&ex;P24"/>
+        <ex:hasTeam rdf:resource="&ex;P27"/>
+        <ex:hasTeam rdf:resource="&ex;P38"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR150 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR150">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>YES</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P10"/>
+        <ex:hasTeam rdf:resource="&ex;P11"/>
+        <ex:hasTeam rdf:resource="&ex;P23"/>
+        <ex:hasTeam rdf:resource="&ex;P26"/>
+        <ex:hasTeam rdf:resource="&ex;P34"/>
+        <ex:hasTeam rdf:resource="&ex;P4"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR151 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR151">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>NO</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P0"/>
+        <ex:hasTeam rdf:resource="&ex;P11"/>
+        <ex:hasTeam rdf:resource="&ex;P23"/>
+        <ex:hasTeam rdf:resource="&ex;P26"/>
+        <ex:hasTeam rdf:resource="&ex;P31"/>
+        <ex:hasTeam rdf:resource="&ex;P35"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR152 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR152">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>YES</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P13"/>
+        <ex:hasTeam rdf:resource="&ex;P19"/>
+        <ex:hasTeam rdf:resource="&ex;P40"/>
+        <ex:hasTeam rdf:resource="&ex;P5"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR153 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR153">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>YES</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P21"/>
+        <ex:hasTeam rdf:resource="&ex;P28"/>
+        <ex:hasTeam rdf:resource="&ex;P3"/>
+        <ex:hasTeam rdf:resource="&ex;P31"/>
+        <ex:hasTeam rdf:resource="&ex;P7"/>
+        <ex:hasTeam rdf:resource="&ex;P8"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR154 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR154">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>YES</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P1"/>
+        <ex:hasTeam rdf:resource="&ex;P12"/>
+        <ex:hasTeam rdf:resource="&ex;P15"/>
+        <ex:hasTeam rdf:resource="&ex;P2"/>
+        <ex:hasTeam rdf:resource="&ex;P27"/>
+        <ex:hasTeam rdf:resource="&ex;P41"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR155 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR155">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>NO</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P0"/>
+        <ex:hasTeam rdf:resource="&ex;P15"/>
+        <ex:hasTeam rdf:resource="&ex;P2"/>
+        <ex:hasTeam rdf:resource="&ex;P22"/>
+        <ex:hasTeam rdf:resource="&ex;P24"/>
+        <ex:hasTeam rdf:resource="&ex;P30"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR156 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR156">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>NO</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P10"/>
+        <ex:hasTeam rdf:resource="&ex;P22"/>
+        <ex:hasTeam rdf:resource="&ex;P34"/>
+        <ex:hasTeam rdf:resource="&ex;P37"/>
+        <ex:hasTeam rdf:resource="&ex;P38"/>
+        <ex:hasTeam rdf:resource="&ex;P41"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR157 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR157">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>NO</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P22"/>
+        <ex:hasTeam rdf:resource="&ex;P25"/>
+        <ex:hasTeam rdf:resource="&ex;P3"/>
+        <ex:hasTeam rdf:resource="&ex;P34"/>
+        <ex:hasTeam rdf:resource="&ex;P41"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR158 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR158">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>NO</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P1"/>
+        <ex:hasTeam rdf:resource="&ex;P14"/>
+        <ex:hasTeam rdf:resource="&ex;P15"/>
+        <ex:hasTeam rdf:resource="&ex;P22"/>
+        <ex:hasTeam rdf:resource="&ex;P31"/>
+        <ex:hasTeam rdf:resource="&ex;P41"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR159 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR159">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>NO</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P1"/>
+        <ex:hasTeam rdf:resource="&ex;P25"/>
+        <ex:hasTeam rdf:resource="&ex;P26"/>
+        <ex:hasTeam rdf:resource="&ex;P30"/>
+        <ex:hasTeam rdf:resource="&ex;P31"/>
+        <ex:hasTeam rdf:resource="&ex;P38"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR16 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR16">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>YES</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P14"/>
+        <ex:hasTeam rdf:resource="&ex;P25"/>
+        <ex:hasTeam rdf:resource="&ex;P35"/>
+        <ex:hasTeam rdf:resource="&ex;P7"/>
+        <ex:hasTeam rdf:resource="&ex;P9"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR160 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR160">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>NO</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P14"/>
+        <ex:hasTeam rdf:resource="&ex;P17"/>
+        <ex:hasTeam rdf:resource="&ex;P20"/>
+        <ex:hasTeam rdf:resource="&ex;P39"/>
+        <ex:hasTeam rdf:resource="&ex;P5"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR161 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR161">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>NO</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P17"/>
+        <ex:hasTeam rdf:resource="&ex;P19"/>
+        <ex:hasTeam rdf:resource="&ex;P22"/>
+        <ex:hasTeam rdf:resource="&ex;P24"/>
+        <ex:hasTeam rdf:resource="&ex;P26"/>
+        <ex:hasTeam rdf:resource="&ex;P3"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR162 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR162">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>YES</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P11"/>
+        <ex:hasTeam rdf:resource="&ex;P12"/>
+        <ex:hasTeam rdf:resource="&ex;P19"/>
+        <ex:hasTeam rdf:resource="&ex;P2"/>
+        <ex:hasTeam rdf:resource="&ex;P29"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR163 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR163">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>NO</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P10"/>
+        <ex:hasTeam rdf:resource="&ex;P13"/>
+        <ex:hasTeam rdf:resource="&ex;P19"/>
+        <ex:hasTeam rdf:resource="&ex;P20"/>
+        <ex:hasTeam rdf:resource="&ex;P21"/>
+        <ex:hasTeam rdf:resource="&ex;P32"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR164 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR164">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>NO</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P14"/>
+        <ex:hasTeam rdf:resource="&ex;P2"/>
+        <ex:hasTeam rdf:resource="&ex;P26"/>
+        <ex:hasTeam rdf:resource="&ex;P30"/>
+        <ex:hasTeam rdf:resource="&ex;P37"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR165 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR165">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>YES</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P20"/>
+        <ex:hasTeam rdf:resource="&ex;P22"/>
+        <ex:hasTeam rdf:resource="&ex;P3"/>
+        <ex:hasTeam rdf:resource="&ex;P30"/>
+        <ex:hasTeam rdf:resource="&ex;P9"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR166 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR166">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>YES</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P29"/>
+        <ex:hasTeam rdf:resource="&ex;P34"/>
+        <ex:hasTeam rdf:resource="&ex;P39"/>
+        <ex:hasTeam rdf:resource="&ex;P5"/>
+        <ex:hasTeam rdf:resource="&ex;P7"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR167 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR167">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>NO</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P26"/>
+        <ex:hasTeam rdf:resource="&ex;P30"/>
+        <ex:hasTeam rdf:resource="&ex;P33"/>
+        <ex:hasTeam rdf:resource="&ex;P41"/>
+        <ex:hasTeam rdf:resource="&ex;P6"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR168 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR168">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>YES</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P12"/>
+        <ex:hasTeam rdf:resource="&ex;P13"/>
+        <ex:hasTeam rdf:resource="&ex;P22"/>
+        <ex:hasTeam rdf:resource="&ex;P23"/>
+        <ex:hasTeam rdf:resource="&ex;P31"/>
+        <ex:hasTeam rdf:resource="&ex;P9"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR169 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR169">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>YES</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P11"/>
+        <ex:hasTeam rdf:resource="&ex;P15"/>
+        <ex:hasTeam rdf:resource="&ex;P18"/>
+        <ex:hasTeam rdf:resource="&ex;P19"/>
+        <ex:hasTeam rdf:resource="&ex;P4"/>
+        <ex:hasTeam rdf:resource="&ex;P9"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR17 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR17">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>YES</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P1"/>
+        <ex:hasTeam rdf:resource="&ex;P10"/>
+        <ex:hasTeam rdf:resource="&ex;P16"/>
+        <ex:hasTeam rdf:resource="&ex;P18"/>
+        <ex:hasTeam rdf:resource="&ex;P4"/>
+        <ex:hasTeam rdf:resource="&ex;P41"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR170 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR170">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>YES</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P13"/>
+        <ex:hasTeam rdf:resource="&ex;P14"/>
+        <ex:hasTeam rdf:resource="&ex;P24"/>
+        <ex:hasTeam rdf:resource="&ex;P34"/>
+        <ex:hasTeam rdf:resource="&ex;P4"/>
+        <ex:hasTeam rdf:resource="&ex;P41"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR171 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR171">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>NO</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P0"/>
+        <ex:hasTeam rdf:resource="&ex;P11"/>
+        <ex:hasTeam rdf:resource="&ex;P24"/>
+        <ex:hasTeam rdf:resource="&ex;P36"/>
+        <ex:hasTeam rdf:resource="&ex;P38"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR172 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR172">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>NO</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P1"/>
+        <ex:hasTeam rdf:resource="&ex;P20"/>
+        <ex:hasTeam rdf:resource="&ex;P22"/>
+        <ex:hasTeam rdf:resource="&ex;P25"/>
+        <ex:hasTeam rdf:resource="&ex;P40"/>
+        <ex:hasTeam rdf:resource="&ex;P5"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR173 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR173">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>NO</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P19"/>
+        <ex:hasTeam rdf:resource="&ex;P23"/>
+        <ex:hasTeam rdf:resource="&ex;P32"/>
+        <ex:hasTeam rdf:resource="&ex;P33"/>
+        <ex:hasTeam rdf:resource="&ex;P38"/>
+        <ex:hasTeam rdf:resource="&ex;P40"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR174 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR174">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>NO</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P14"/>
+        <ex:hasTeam rdf:resource="&ex;P19"/>
+        <ex:hasTeam rdf:resource="&ex;P2"/>
+        <ex:hasTeam rdf:resource="&ex;P25"/>
+        <ex:hasTeam rdf:resource="&ex;P29"/>
+        <ex:hasTeam rdf:resource="&ex;P39"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR175 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR175">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>YES</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P0"/>
+        <ex:hasTeam rdf:resource="&ex;P14"/>
+        <ex:hasTeam rdf:resource="&ex;P32"/>
+        <ex:hasTeam rdf:resource="&ex;P33"/>
+        <ex:hasTeam rdf:resource="&ex;P40"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR176 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR176">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>NO</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P15"/>
+        <ex:hasTeam rdf:resource="&ex;P18"/>
+        <ex:hasTeam rdf:resource="&ex;P20"/>
+        <ex:hasTeam rdf:resource="&ex;P23"/>
+        <ex:hasTeam rdf:resource="&ex;P24"/>
+        <ex:hasTeam rdf:resource="&ex;P37"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR177 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR177">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>NO</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P11"/>
+        <ex:hasTeam rdf:resource="&ex;P24"/>
+        <ex:hasTeam rdf:resource="&ex;P33"/>
+        <ex:hasTeam rdf:resource="&ex;P37"/>
+        <ex:hasTeam rdf:resource="&ex;P5"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR178 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR178">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>NO</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P17"/>
+        <ex:hasTeam rdf:resource="&ex;P21"/>
+        <ex:hasTeam rdf:resource="&ex;P31"/>
+        <ex:hasTeam rdf:resource="&ex;P39"/>
+        <ex:hasTeam rdf:resource="&ex;P40"/>
+        <ex:hasTeam rdf:resource="&ex;P9"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR179 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR179">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>NO</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P12"/>
+        <ex:hasTeam rdf:resource="&ex;P17"/>
+        <ex:hasTeam rdf:resource="&ex;P23"/>
+        <ex:hasTeam rdf:resource="&ex;P29"/>
+        <ex:hasTeam rdf:resource="&ex;P4"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR18 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR18">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>NO</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P15"/>
+        <ex:hasTeam rdf:resource="&ex;P26"/>
+        <ex:hasTeam rdf:resource="&ex;P37"/>
+        <ex:hasTeam rdf:resource="&ex;P39"/>
+        <ex:hasTeam rdf:resource="&ex;P40"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR180 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR180">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>NO</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P1"/>
+        <ex:hasTeam rdf:resource="&ex;P24"/>
+        <ex:hasTeam rdf:resource="&ex;P29"/>
+        <ex:hasTeam rdf:resource="&ex;P35"/>
+        <ex:hasTeam rdf:resource="&ex;P37"/>
+        <ex:hasTeam rdf:resource="&ex;P5"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR181 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR181">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>NO</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P20"/>
+        <ex:hasTeam rdf:resource="&ex;P21"/>
+        <ex:hasTeam rdf:resource="&ex;P34"/>
+        <ex:hasTeam rdf:resource="&ex;P37"/>
+        <ex:hasTeam rdf:resource="&ex;P39"/>
+        <ex:hasTeam rdf:resource="&ex;P5"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR182 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR182">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>NO</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P16"/>
+        <ex:hasTeam rdf:resource="&ex;P32"/>
+        <ex:hasTeam rdf:resource="&ex;P35"/>
+        <ex:hasTeam rdf:resource="&ex;P41"/>
+        <ex:hasTeam rdf:resource="&ex;P7"/>
+        <ex:hasTeam rdf:resource="&ex;P9"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR183 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR183">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>YES</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P10"/>
+        <ex:hasTeam rdf:resource="&ex;P2"/>
+        <ex:hasTeam rdf:resource="&ex;P23"/>
+        <ex:hasTeam rdf:resource="&ex;P25"/>
+        <ex:hasTeam rdf:resource="&ex;P3"/>
+        <ex:hasTeam rdf:resource="&ex;P31"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR184 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR184">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>NO</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P1"/>
+        <ex:hasTeam rdf:resource="&ex;P17"/>
+        <ex:hasTeam rdf:resource="&ex;P18"/>
+        <ex:hasTeam rdf:resource="&ex;P19"/>
+        <ex:hasTeam rdf:resource="&ex;P36"/>
+        <ex:hasTeam rdf:resource="&ex;P39"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR185 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR185">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>NO</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P1"/>
+        <ex:hasTeam rdf:resource="&ex;P31"/>
+        <ex:hasTeam rdf:resource="&ex;P32"/>
+        <ex:hasTeam rdf:resource="&ex;P33"/>
+        <ex:hasTeam rdf:resource="&ex;P38"/>
+        <ex:hasTeam rdf:resource="&ex;P41"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR186 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR186">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>NO</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P27"/>
+        <ex:hasTeam rdf:resource="&ex;P30"/>
+        <ex:hasTeam rdf:resource="&ex;P35"/>
+        <ex:hasTeam rdf:resource="&ex;P39"/>
+        <ex:hasTeam rdf:resource="&ex;P6"/>
+        <ex:hasTeam rdf:resource="&ex;P7"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR187 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR187">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>NO</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P14"/>
+        <ex:hasTeam rdf:resource="&ex;P18"/>
+        <ex:hasTeam rdf:resource="&ex;P27"/>
+        <ex:hasTeam rdf:resource="&ex;P39"/>
+        <ex:hasTeam rdf:resource="&ex;P40"/>
+        <ex:hasTeam rdf:resource="&ex;P9"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR188 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR188">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>NO</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P18"/>
+        <ex:hasTeam rdf:resource="&ex;P20"/>
+        <ex:hasTeam rdf:resource="&ex;P27"/>
+        <ex:hasTeam rdf:resource="&ex;P28"/>
+        <ex:hasTeam rdf:resource="&ex;P31"/>
+        <ex:hasTeam rdf:resource="&ex;P34"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR189 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR189">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>NO</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P11"/>
+        <ex:hasTeam rdf:resource="&ex;P16"/>
+        <ex:hasTeam rdf:resource="&ex;P23"/>
+        <ex:hasTeam rdf:resource="&ex;P24"/>
+        <ex:hasTeam rdf:resource="&ex;P29"/>
+        <ex:hasTeam rdf:resource="&ex;P38"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR19 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR19">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>NO</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P10"/>
+        <ex:hasTeam rdf:resource="&ex;P24"/>
+        <ex:hasTeam rdf:resource="&ex;P25"/>
+        <ex:hasTeam rdf:resource="&ex;P26"/>
+        <ex:hasTeam rdf:resource="&ex;P31"/>
+        <ex:hasTeam rdf:resource="&ex;P34"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR190 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR190">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>NO</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P24"/>
+        <ex:hasTeam rdf:resource="&ex;P26"/>
+        <ex:hasTeam rdf:resource="&ex;P32"/>
+        <ex:hasTeam rdf:resource="&ex;P36"/>
+        <ex:hasTeam rdf:resource="&ex;P40"/>
+        <ex:hasTeam rdf:resource="&ex;P5"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR191 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR191">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>NO</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P19"/>
+        <ex:hasTeam rdf:resource="&ex;P20"/>
+        <ex:hasTeam rdf:resource="&ex;P23"/>
+        <ex:hasTeam rdf:resource="&ex;P26"/>
+        <ex:hasTeam rdf:resource="&ex;P39"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR192 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR192">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>NO</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P17"/>
+        <ex:hasTeam rdf:resource="&ex;P2"/>
+        <ex:hasTeam rdf:resource="&ex;P20"/>
+        <ex:hasTeam rdf:resource="&ex;P29"/>
+        <ex:hasTeam rdf:resource="&ex;P33"/>
+        <ex:hasTeam rdf:resource="&ex;P4"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR193 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR193">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>NO</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P0"/>
+        <ex:hasTeam rdf:resource="&ex;P25"/>
+        <ex:hasTeam rdf:resource="&ex;P27"/>
+        <ex:hasTeam rdf:resource="&ex;P34"/>
+        <ex:hasTeam rdf:resource="&ex;P38"/>
+        <ex:hasTeam rdf:resource="&ex;P5"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR194 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR194">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>NO</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P16"/>
+        <ex:hasTeam rdf:resource="&ex;P31"/>
+        <ex:hasTeam rdf:resource="&ex;P34"/>
+        <ex:hasTeam rdf:resource="&ex;P37"/>
+        <ex:hasTeam rdf:resource="&ex;P41"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR195 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR195">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>YES</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P0"/>
+        <ex:hasTeam rdf:resource="&ex;P2"/>
+        <ex:hasTeam rdf:resource="&ex;P23"/>
+        <ex:hasTeam rdf:resource="&ex;P3"/>
+        <ex:hasTeam rdf:resource="&ex;P39"/>
+        <ex:hasTeam rdf:resource="&ex;P41"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR196 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR196">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>NO</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P19"/>
+        <ex:hasTeam rdf:resource="&ex;P3"/>
+        <ex:hasTeam rdf:resource="&ex;P32"/>
+        <ex:hasTeam rdf:resource="&ex;P38"/>
+        <ex:hasTeam rdf:resource="&ex;P40"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR197 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR197">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>NO</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P14"/>
+        <ex:hasTeam rdf:resource="&ex;P24"/>
+        <ex:hasTeam rdf:resource="&ex;P25"/>
+        <ex:hasTeam rdf:resource="&ex;P27"/>
+        <ex:hasTeam rdf:resource="&ex;P38"/>
+        <ex:hasTeam rdf:resource="&ex;P40"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR198 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR198">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>NO</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P16"/>
+        <ex:hasTeam rdf:resource="&ex;P21"/>
+        <ex:hasTeam rdf:resource="&ex;P26"/>
+        <ex:hasTeam rdf:resource="&ex;P28"/>
+        <ex:hasTeam rdf:resource="&ex;P29"/>
+        <ex:hasTeam rdf:resource="&ex;P31"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR199 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR199">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>NO</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P17"/>
+        <ex:hasTeam rdf:resource="&ex;P21"/>
+        <ex:hasTeam rdf:resource="&ex;P28"/>
+        <ex:hasTeam rdf:resource="&ex;P30"/>
+        <ex:hasTeam rdf:resource="&ex;P37"/>
+        <ex:hasTeam rdf:resource="&ex;P4"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR2 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR2">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>NO</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P12"/>
+        <ex:hasTeam rdf:resource="&ex;P15"/>
+        <ex:hasTeam rdf:resource="&ex;P21"/>
+        <ex:hasTeam rdf:resource="&ex;P23"/>
+        <ex:hasTeam rdf:resource="&ex;P35"/>
+        <ex:hasTeam rdf:resource="&ex;P40"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR20 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR20">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>YES</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P0"/>
+        <ex:hasTeam rdf:resource="&ex;P14"/>
+        <ex:hasTeam rdf:resource="&ex;P15"/>
+        <ex:hasTeam rdf:resource="&ex;P2"/>
+        <ex:hasTeam rdf:resource="&ex;P20"/>
+        <ex:hasTeam rdf:resource="&ex;P9"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR21 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR21">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>YES</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P10"/>
+        <ex:hasTeam rdf:resource="&ex;P13"/>
+        <ex:hasTeam rdf:resource="&ex;P20"/>
+        <ex:hasTeam rdf:resource="&ex;P37"/>
+        <ex:hasTeam rdf:resource="&ex;P6"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR22 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR22">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>YES</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P2"/>
+        <ex:hasTeam rdf:resource="&ex;P37"/>
+        <ex:hasTeam rdf:resource="&ex;P38"/>
+        <ex:hasTeam rdf:resource="&ex;P5"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR23 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR23">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>YES</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P0"/>
+        <ex:hasTeam rdf:resource="&ex;P13"/>
+        <ex:hasTeam rdf:resource="&ex;P18"/>
+        <ex:hasTeam rdf:resource="&ex;P20"/>
+        <ex:hasTeam rdf:resource="&ex;P3"/>
+        <ex:hasTeam rdf:resource="&ex;P8"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR24 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR24">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>NO</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P15"/>
+        <ex:hasTeam rdf:resource="&ex;P24"/>
+        <ex:hasTeam rdf:resource="&ex;P30"/>
+        <ex:hasTeam rdf:resource="&ex;P37"/>
+        <ex:hasTeam rdf:resource="&ex;P39"/>
+        <ex:hasTeam rdf:resource="&ex;P41"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR25 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR25">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>YES</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P1"/>
+        <ex:hasTeam rdf:resource="&ex;P23"/>
+        <ex:hasTeam rdf:resource="&ex;P38"/>
+        <ex:hasTeam rdf:resource="&ex;P39"/>
+        <ex:hasTeam rdf:resource="&ex;P4"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR26 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR26">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>YES</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P1"/>
+        <ex:hasTeam rdf:resource="&ex;P12"/>
+        <ex:hasTeam rdf:resource="&ex;P31"/>
+        <ex:hasTeam rdf:resource="&ex;P41"/>
+        <ex:hasTeam rdf:resource="&ex;P5"/>
+        <ex:hasTeam rdf:resource="&ex;P7"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR27 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR27">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>YES</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P27"/>
+        <ex:hasTeam rdf:resource="&ex;P36"/>
+        <ex:hasTeam rdf:resource="&ex;P37"/>
+        <ex:hasTeam rdf:resource="&ex;P6"/>
+        <ex:hasTeam rdf:resource="&ex;P7"/>
+        <ex:hasTeam rdf:resource="&ex;P9"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR28 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR28">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>YES</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P23"/>
+        <ex:hasTeam rdf:resource="&ex;P25"/>
+        <ex:hasTeam rdf:resource="&ex;P30"/>
+        <ex:hasTeam rdf:resource="&ex;P4"/>
+        <ex:hasTeam rdf:resource="&ex;P8"/>
+        <ex:hasTeam rdf:resource="&ex;P9"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR29 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR29">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>NO</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P18"/>
+        <ex:hasTeam rdf:resource="&ex;P19"/>
+        <ex:hasTeam rdf:resource="&ex;P22"/>
+        <ex:hasTeam rdf:resource="&ex;P23"/>
+        <ex:hasTeam rdf:resource="&ex;P41"/>
+        <ex:hasTeam rdf:resource="&ex;P7"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR3 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR3">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>NO</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P20"/>
+        <ex:hasTeam rdf:resource="&ex;P25"/>
+        <ex:hasTeam rdf:resource="&ex;P35"/>
+        <ex:hasTeam rdf:resource="&ex;P38"/>
+        <ex:hasTeam rdf:resource="&ex;P5"/>
+        <ex:hasTeam rdf:resource="&ex;P6"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR30 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR30">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>NO</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P14"/>
+        <ex:hasTeam rdf:resource="&ex;P30"/>
+        <ex:hasTeam rdf:resource="&ex;P36"/>
+        <ex:hasTeam rdf:resource="&ex;P37"/>
+        <ex:hasTeam rdf:resource="&ex;P38"/>
+        <ex:hasTeam rdf:resource="&ex;P6"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR31 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR31">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>YES</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P14"/>
+        <ex:hasTeam rdf:resource="&ex;P17"/>
+        <ex:hasTeam rdf:resource="&ex;P2"/>
+        <ex:hasTeam rdf:resource="&ex;P26"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR32 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR32">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>NO</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P19"/>
+        <ex:hasTeam rdf:resource="&ex;P23"/>
+        <ex:hasTeam rdf:resource="&ex;P29"/>
+        <ex:hasTeam rdf:resource="&ex;P34"/>
+        <ex:hasTeam rdf:resource="&ex;P38"/>
+        <ex:hasTeam rdf:resource="&ex;P4"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR33 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR33">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>YES</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P10"/>
+        <ex:hasTeam rdf:resource="&ex;P14"/>
+        <ex:hasTeam rdf:resource="&ex;P24"/>
+        <ex:hasTeam rdf:resource="&ex;P4"/>
+        <ex:hasTeam rdf:resource="&ex;P40"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR34 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR34">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>NO</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P14"/>
+        <ex:hasTeam rdf:resource="&ex;P25"/>
+        <ex:hasTeam rdf:resource="&ex;P30"/>
+        <ex:hasTeam rdf:resource="&ex;P36"/>
+        <ex:hasTeam rdf:resource="&ex;P38"/>
+        <ex:hasTeam rdf:resource="&ex;P6"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR35 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR35">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>NO</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P19"/>
+        <ex:hasTeam rdf:resource="&ex;P2"/>
+        <ex:hasTeam rdf:resource="&ex;P31"/>
+        <ex:hasTeam rdf:resource="&ex;P35"/>
+        <ex:hasTeam rdf:resource="&ex;P37"/>
+        <ex:hasTeam rdf:resource="&ex;P9"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR36 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR36">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>NO</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P14"/>
+        <ex:hasTeam rdf:resource="&ex;P15"/>
+        <ex:hasTeam rdf:resource="&ex;P21"/>
+        <ex:hasTeam rdf:resource="&ex;P27"/>
+        <ex:hasTeam rdf:resource="&ex;P33"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR37 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR37">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>YES</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P0"/>
+        <ex:hasTeam rdf:resource="&ex;P11"/>
+        <ex:hasTeam rdf:resource="&ex;P16"/>
+        <ex:hasTeam rdf:resource="&ex;P29"/>
+        <ex:hasTeam rdf:resource="&ex;P5"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR38 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR38">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>YES</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P25"/>
+        <ex:hasTeam rdf:resource="&ex;P37"/>
+        <ex:hasTeam rdf:resource="&ex;P39"/>
+        <ex:hasTeam rdf:resource="&ex;P4"/>
+        <ex:hasTeam rdf:resource="&ex;P5"/>
+        <ex:hasTeam rdf:resource="&ex;P9"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR39 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR39">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>YES</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P11"/>
+        <ex:hasTeam rdf:resource="&ex;P12"/>
+        <ex:hasTeam rdf:resource="&ex;P17"/>
+        <ex:hasTeam rdf:resource="&ex;P2"/>
+        <ex:hasTeam rdf:resource="&ex;P22"/>
+        <ex:hasTeam rdf:resource="&ex;P37"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR4 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR4">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>NO</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P0"/>
+        <ex:hasTeam rdf:resource="&ex;P24"/>
+        <ex:hasTeam rdf:resource="&ex;P31"/>
+        <ex:hasTeam rdf:resource="&ex;P37"/>
+        <ex:hasTeam rdf:resource="&ex;P4"/>
+        <ex:hasTeam rdf:resource="&ex;P41"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR40 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR40">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>NO</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P1"/>
+        <ex:hasTeam rdf:resource="&ex;P34"/>
+        <ex:hasTeam rdf:resource="&ex;P35"/>
+        <ex:hasTeam rdf:resource="&ex;P38"/>
+        <ex:hasTeam rdf:resource="&ex;P40"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR41 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR41">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>NO</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P14"/>
+        <ex:hasTeam rdf:resource="&ex;P20"/>
+        <ex:hasTeam rdf:resource="&ex;P25"/>
+        <ex:hasTeam rdf:resource="&ex;P35"/>
+        <ex:hasTeam rdf:resource="&ex;P4"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR42 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR42">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>YES</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P0"/>
+        <ex:hasTeam rdf:resource="&ex;P12"/>
+        <ex:hasTeam rdf:resource="&ex;P13"/>
+        <ex:hasTeam rdf:resource="&ex;P27"/>
+        <ex:hasTeam rdf:resource="&ex;P7"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR43 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR43">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>NO</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P11"/>
+        <ex:hasTeam rdf:resource="&ex;P16"/>
+        <ex:hasTeam rdf:resource="&ex;P23"/>
+        <ex:hasTeam rdf:resource="&ex;P25"/>
+        <ex:hasTeam rdf:resource="&ex;P41"/>
+        <ex:hasTeam rdf:resource="&ex;P5"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR44 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR44">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>YES</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P13"/>
+        <ex:hasTeam rdf:resource="&ex;P14"/>
+        <ex:hasTeam rdf:resource="&ex;P15"/>
+        <ex:hasTeam rdf:resource="&ex;P2"/>
+        <ex:hasTeam rdf:resource="&ex;P24"/>
+        <ex:hasTeam rdf:resource="&ex;P32"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR45 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR45">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>NO</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P17"/>
+        <ex:hasTeam rdf:resource="&ex;P30"/>
+        <ex:hasTeam rdf:resource="&ex;P38"/>
+        <ex:hasTeam rdf:resource="&ex;P39"/>
+        <ex:hasTeam rdf:resource="&ex;P40"/>
+        <ex:hasTeam rdf:resource="&ex;P5"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR46 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR46">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>YES</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P0"/>
+        <ex:hasTeam rdf:resource="&ex;P24"/>
+        <ex:hasTeam rdf:resource="&ex;P3"/>
+        <ex:hasTeam rdf:resource="&ex;P35"/>
+        <ex:hasTeam rdf:resource="&ex;P40"/>
+        <ex:hasTeam rdf:resource="&ex;P9"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR47 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR47">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>NO</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P1"/>
+        <ex:hasTeam rdf:resource="&ex;P21"/>
+        <ex:hasTeam rdf:resource="&ex;P22"/>
+        <ex:hasTeam rdf:resource="&ex;P28"/>
+        <ex:hasTeam rdf:resource="&ex;P41"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR48 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR48">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>YES</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P1"/>
+        <ex:hasTeam rdf:resource="&ex;P11"/>
+        <ex:hasTeam rdf:resource="&ex;P18"/>
+        <ex:hasTeam rdf:resource="&ex;P34"/>
+        <ex:hasTeam rdf:resource="&ex;P9"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR49 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR49">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>YES</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P13"/>
+        <ex:hasTeam rdf:resource="&ex;P17"/>
+        <ex:hasTeam rdf:resource="&ex;P33"/>
+        <ex:hasTeam rdf:resource="&ex;P34"/>
+        <ex:hasTeam rdf:resource="&ex;P4"/>
+        <ex:hasTeam rdf:resource="&ex;P7"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR5 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR5">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>YES</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P0"/>
+        <ex:hasTeam rdf:resource="&ex;P26"/>
+        <ex:hasTeam rdf:resource="&ex;P28"/>
+        <ex:hasTeam rdf:resource="&ex;P33"/>
+        <ex:hasTeam rdf:resource="&ex;P8"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR50 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR50">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>YES</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P12"/>
+        <ex:hasTeam rdf:resource="&ex;P20"/>
+        <ex:hasTeam rdf:resource="&ex;P4"/>
+        <ex:hasTeam rdf:resource="&ex;P6"/>
+        <ex:hasTeam rdf:resource="&ex;P8"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR51 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR51">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>NO</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P10"/>
+        <ex:hasTeam rdf:resource="&ex;P30"/>
+        <ex:hasTeam rdf:resource="&ex;P33"/>
+        <ex:hasTeam rdf:resource="&ex;P35"/>
+        <ex:hasTeam rdf:resource="&ex;P36"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR52 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR52">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>NO</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P18"/>
+        <ex:hasTeam rdf:resource="&ex;P21"/>
+        <ex:hasTeam rdf:resource="&ex;P23"/>
+        <ex:hasTeam rdf:resource="&ex;P3"/>
+        <ex:hasTeam rdf:resource="&ex;P31"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR53 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR53">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>NO</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P19"/>
+        <ex:hasTeam rdf:resource="&ex;P22"/>
+        <ex:hasTeam rdf:resource="&ex;P23"/>
+        <ex:hasTeam rdf:resource="&ex;P27"/>
+        <ex:hasTeam rdf:resource="&ex;P33"/>
+        <ex:hasTeam rdf:resource="&ex;P37"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR54 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR54">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>NO</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P16"/>
+        <ex:hasTeam rdf:resource="&ex;P2"/>
+        <ex:hasTeam rdf:resource="&ex;P21"/>
+        <ex:hasTeam rdf:resource="&ex;P29"/>
+        <ex:hasTeam rdf:resource="&ex;P30"/>
+        <ex:hasTeam rdf:resource="&ex;P37"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR55 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR55">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>NO</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P12"/>
+        <ex:hasTeam rdf:resource="&ex;P16"/>
+        <ex:hasTeam rdf:resource="&ex;P28"/>
+        <ex:hasTeam rdf:resource="&ex;P32"/>
+        <ex:hasTeam rdf:resource="&ex;P36"/>
+        <ex:hasTeam rdf:resource="&ex;P4"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR56 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR56">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>NO</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P12"/>
+        <ex:hasTeam rdf:resource="&ex;P17"/>
+        <ex:hasTeam rdf:resource="&ex;P25"/>
+        <ex:hasTeam rdf:resource="&ex;P29"/>
+        <ex:hasTeam rdf:resource="&ex;P31"/>
+        <ex:hasTeam rdf:resource="&ex;P32"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR57 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR57">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>NO</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P19"/>
+        <ex:hasTeam rdf:resource="&ex;P21"/>
+        <ex:hasTeam rdf:resource="&ex;P23"/>
+        <ex:hasTeam rdf:resource="&ex;P24"/>
+        <ex:hasTeam rdf:resource="&ex;P26"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR58 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR58">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>NO</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P17"/>
+        <ex:hasTeam rdf:resource="&ex;P32"/>
+        <ex:hasTeam rdf:resource="&ex;P38"/>
+        <ex:hasTeam rdf:resource="&ex;P39"/>
+        <ex:hasTeam rdf:resource="&ex;P41"/>
+        <ex:hasTeam rdf:resource="&ex;P9"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR59 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR59">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>NO</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P1"/>
+        <ex:hasTeam rdf:resource="&ex;P12"/>
+        <ex:hasTeam rdf:resource="&ex;P22"/>
+        <ex:hasTeam rdf:resource="&ex;P30"/>
+        <ex:hasTeam rdf:resource="&ex;P38"/>
+        <ex:hasTeam rdf:resource="&ex;P41"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR6 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR6">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>NO</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P19"/>
+        <ex:hasTeam rdf:resource="&ex;P21"/>
+        <ex:hasTeam rdf:resource="&ex;P24"/>
+        <ex:hasTeam rdf:resource="&ex;P30"/>
+        <ex:hasTeam rdf:resource="&ex;P4"/>
+        <ex:hasTeam rdf:resource="&ex;P7"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR60 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR60">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>NO</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P10"/>
+        <ex:hasTeam rdf:resource="&ex;P20"/>
+        <ex:hasTeam rdf:resource="&ex;P25"/>
+        <ex:hasTeam rdf:resource="&ex;P26"/>
+        <ex:hasTeam rdf:resource="&ex;P27"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR61 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR61">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>NO</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P23"/>
+        <ex:hasTeam rdf:resource="&ex;P31"/>
+        <ex:hasTeam rdf:resource="&ex;P37"/>
+        <ex:hasTeam rdf:resource="&ex;P39"/>
+        <ex:hasTeam rdf:resource="&ex;P41"/>
+        <ex:hasTeam rdf:resource="&ex;P9"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR62 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR62">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>NO</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P1"/>
+        <ex:hasTeam rdf:resource="&ex;P21"/>
+        <ex:hasTeam rdf:resource="&ex;P22"/>
+        <ex:hasTeam rdf:resource="&ex;P24"/>
+        <ex:hasTeam rdf:resource="&ex;P39"/>
+        <ex:hasTeam rdf:resource="&ex;P6"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR63 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR63">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>NO</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P12"/>
+        <ex:hasTeam rdf:resource="&ex;P19"/>
+        <ex:hasTeam rdf:resource="&ex;P27"/>
+        <ex:hasTeam rdf:resource="&ex;P28"/>
+        <ex:hasTeam rdf:resource="&ex;P30"/>
+        <ex:hasTeam rdf:resource="&ex;P40"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR64 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR64">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>YES</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P0"/>
+        <ex:hasTeam rdf:resource="&ex;P2"/>
+        <ex:hasTeam rdf:resource="&ex;P27"/>
+        <ex:hasTeam rdf:resource="&ex;P40"/>
+        <ex:hasTeam rdf:resource="&ex;P8"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR65 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR65">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>NO</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P0"/>
+        <ex:hasTeam rdf:resource="&ex;P21"/>
+        <ex:hasTeam rdf:resource="&ex;P27"/>
+        <ex:hasTeam rdf:resource="&ex;P29"/>
+        <ex:hasTeam rdf:resource="&ex;P30"/>
+        <ex:hasTeam rdf:resource="&ex;P33"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR66 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR66">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>NO</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P15"/>
+        <ex:hasTeam rdf:resource="&ex;P19"/>
+        <ex:hasTeam rdf:resource="&ex;P20"/>
+        <ex:hasTeam rdf:resource="&ex;P34"/>
+        <ex:hasTeam rdf:resource="&ex;P5"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR67 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR67">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>NO</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P15"/>
+        <ex:hasTeam rdf:resource="&ex;P18"/>
+        <ex:hasTeam rdf:resource="&ex;P22"/>
+        <ex:hasTeam rdf:resource="&ex;P23"/>
+        <ex:hasTeam rdf:resource="&ex;P38"/>
+        <ex:hasTeam rdf:resource="&ex;P9"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR68 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR68">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>NO</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P29"/>
+        <ex:hasTeam rdf:resource="&ex;P30"/>
+        <ex:hasTeam rdf:resource="&ex;P32"/>
+        <ex:hasTeam rdf:resource="&ex;P39"/>
+        <ex:hasTeam rdf:resource="&ex;P8"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR69 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR69">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>YES</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P1"/>
+        <ex:hasTeam rdf:resource="&ex;P19"/>
+        <ex:hasTeam rdf:resource="&ex;P2"/>
+        <ex:hasTeam rdf:resource="&ex;P35"/>
+        <ex:hasTeam rdf:resource="&ex;P5"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR7 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR7">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>NO</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P14"/>
+        <ex:hasTeam rdf:resource="&ex;P15"/>
+        <ex:hasTeam rdf:resource="&ex;P17"/>
+        <ex:hasTeam rdf:resource="&ex;P28"/>
+        <ex:hasTeam rdf:resource="&ex;P33"/>
+        <ex:hasTeam rdf:resource="&ex;P5"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR70 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR70">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>YES</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P12"/>
+        <ex:hasTeam rdf:resource="&ex;P4"/>
+        <ex:hasTeam rdf:resource="&ex;P5"/>
+        <ex:hasTeam rdf:resource="&ex;P8"/>
+        <ex:hasTeam rdf:resource="&ex;P9"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR71 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR71">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>YES</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P13"/>
+        <ex:hasTeam rdf:resource="&ex;P21"/>
+        <ex:hasTeam rdf:resource="&ex;P25"/>
+        <ex:hasTeam rdf:resource="&ex;P41"/>
+        <ex:hasTeam rdf:resource="&ex;P9"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR72 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR72">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>YES</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P0"/>
+        <ex:hasTeam rdf:resource="&ex;P32"/>
+        <ex:hasTeam rdf:resource="&ex;P37"/>
+        <ex:hasTeam rdf:resource="&ex;P38"/>
+        <ex:hasTeam rdf:resource="&ex;P7"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR73 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR73">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>NO</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P1"/>
+        <ex:hasTeam rdf:resource="&ex;P14"/>
+        <ex:hasTeam rdf:resource="&ex;P22"/>
+        <ex:hasTeam rdf:resource="&ex;P24"/>
+        <ex:hasTeam rdf:resource="&ex;P31"/>
+        <ex:hasTeam rdf:resource="&ex;P37"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR74 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR74">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>NO</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P13"/>
+        <ex:hasTeam rdf:resource="&ex;P20"/>
+        <ex:hasTeam rdf:resource="&ex;P22"/>
+        <ex:hasTeam rdf:resource="&ex;P25"/>
+        <ex:hasTeam rdf:resource="&ex;P3"/>
+        <ex:hasTeam rdf:resource="&ex;P32"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR75 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR75">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>NO</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P18"/>
+        <ex:hasTeam rdf:resource="&ex;P19"/>
+        <ex:hasTeam rdf:resource="&ex;P21"/>
+        <ex:hasTeam rdf:resource="&ex;P25"/>
+        <ex:hasTeam rdf:resource="&ex;P36"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR76 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR76">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>NO</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P11"/>
+        <ex:hasTeam rdf:resource="&ex;P26"/>
+        <ex:hasTeam rdf:resource="&ex;P30"/>
+        <ex:hasTeam rdf:resource="&ex;P31"/>
+        <ex:hasTeam rdf:resource="&ex;P33"/>
+        <ex:hasTeam rdf:resource="&ex;P38"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR77 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR77">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>YES</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P1"/>
+        <ex:hasTeam rdf:resource="&ex;P17"/>
+        <ex:hasTeam rdf:resource="&ex;P2"/>
+        <ex:hasTeam rdf:resource="&ex;P23"/>
+        <ex:hasTeam rdf:resource="&ex;P36"/>
+        <ex:hasTeam rdf:resource="&ex;P4"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR78 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR78">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>YES</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P14"/>
+        <ex:hasTeam rdf:resource="&ex;P21"/>
+        <ex:hasTeam rdf:resource="&ex;P26"/>
+        <ex:hasTeam rdf:resource="&ex;P38"/>
+        <ex:hasTeam rdf:resource="&ex;P5"/>
+        <ex:hasTeam rdf:resource="&ex;P7"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR79 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR79">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>NO</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P15"/>
+        <ex:hasTeam rdf:resource="&ex;P22"/>
+        <ex:hasTeam rdf:resource="&ex;P33"/>
+        <ex:hasTeam rdf:resource="&ex;P38"/>
+        <ex:hasTeam rdf:resource="&ex;P8"/>
+        <ex:hasTeam rdf:resource="&ex;P9"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR8 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR8">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>NO</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P21"/>
+        <ex:hasTeam rdf:resource="&ex;P23"/>
+        <ex:hasTeam rdf:resource="&ex;P25"/>
+        <ex:hasTeam rdf:resource="&ex;P4"/>
+        <ex:hasTeam rdf:resource="&ex;P40"/>
+        <ex:hasTeam rdf:resource="&ex;P9"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR80 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR80">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>NO</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P14"/>
+        <ex:hasTeam rdf:resource="&ex;P21"/>
+        <ex:hasTeam rdf:resource="&ex;P22"/>
+        <ex:hasTeam rdf:resource="&ex;P33"/>
+        <ex:hasTeam rdf:resource="&ex;P35"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR81 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR81">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>NO</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P28"/>
+        <ex:hasTeam rdf:resource="&ex;P35"/>
+        <ex:hasTeam rdf:resource="&ex;P39"/>
+        <ex:hasTeam rdf:resource="&ex;P6"/>
+        <ex:hasTeam rdf:resource="&ex;P9"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR82 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR82">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>NO</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P19"/>
+        <ex:hasTeam rdf:resource="&ex;P23"/>
+        <ex:hasTeam rdf:resource="&ex;P26"/>
+        <ex:hasTeam rdf:resource="&ex;P3"/>
+        <ex:hasTeam rdf:resource="&ex;P31"/>
+        <ex:hasTeam rdf:resource="&ex;P5"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR83 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR83">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>YES</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P0"/>
+        <ex:hasTeam rdf:resource="&ex;P17"/>
+        <ex:hasTeam rdf:resource="&ex;P18"/>
+        <ex:hasTeam rdf:resource="&ex;P3"/>
+        <ex:hasTeam rdf:resource="&ex;P36"/>
+        <ex:hasTeam rdf:resource="&ex;P6"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR84 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR84">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>NO</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P17"/>
+        <ex:hasTeam rdf:resource="&ex;P29"/>
+        <ex:hasTeam rdf:resource="&ex;P33"/>
+        <ex:hasTeam rdf:resource="&ex;P35"/>
+        <ex:hasTeam rdf:resource="&ex;P40"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR85 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR85">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>YES</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P1"/>
+        <ex:hasTeam rdf:resource="&ex;P12"/>
+        <ex:hasTeam rdf:resource="&ex;P25"/>
+        <ex:hasTeam rdf:resource="&ex;P27"/>
+        <ex:hasTeam rdf:resource="&ex;P38"/>
+        <ex:hasTeam rdf:resource="&ex;P4"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR86 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR86">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>NO</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P14"/>
+        <ex:hasTeam rdf:resource="&ex;P17"/>
+        <ex:hasTeam rdf:resource="&ex;P21"/>
+        <ex:hasTeam rdf:resource="&ex;P32"/>
+        <ex:hasTeam rdf:resource="&ex;P35"/>
+        <ex:hasTeam rdf:resource="&ex;P36"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR87 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR87">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>NO</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P19"/>
+        <ex:hasTeam rdf:resource="&ex;P33"/>
+        <ex:hasTeam rdf:resource="&ex;P36"/>
+        <ex:hasTeam rdf:resource="&ex;P37"/>
+        <ex:hasTeam rdf:resource="&ex;P41"/>
+        <ex:hasTeam rdf:resource="&ex;P9"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR88 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR88">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>YES</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P1"/>
+        <ex:hasTeam rdf:resource="&ex;P27"/>
+        <ex:hasTeam rdf:resource="&ex;P33"/>
+        <ex:hasTeam rdf:resource="&ex;P36"/>
+        <ex:hasTeam rdf:resource="&ex;P4"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR89 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR89">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>NO</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P15"/>
+        <ex:hasTeam rdf:resource="&ex;P18"/>
+        <ex:hasTeam rdf:resource="&ex;P30"/>
+        <ex:hasTeam rdf:resource="&ex;P33"/>
+        <ex:hasTeam rdf:resource="&ex;P4"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR9 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR9">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>NO</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P15"/>
+        <ex:hasTeam rdf:resource="&ex;P18"/>
+        <ex:hasTeam rdf:resource="&ex;P20"/>
+        <ex:hasTeam rdf:resource="&ex;P37"/>
+        <ex:hasTeam rdf:resource="&ex;P39"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR90 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR90">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>NO</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P17"/>
+        <ex:hasTeam rdf:resource="&ex;P23"/>
+        <ex:hasTeam rdf:resource="&ex;P25"/>
+        <ex:hasTeam rdf:resource="&ex;P28"/>
+        <ex:hasTeam rdf:resource="&ex;P8"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR91 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR91">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>YES</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P10"/>
+        <ex:hasTeam rdf:resource="&ex;P23"/>
+        <ex:hasTeam rdf:resource="&ex;P29"/>
+        <ex:hasTeam rdf:resource="&ex;P37"/>
+        <ex:hasTeam rdf:resource="&ex;P5"/>
+        <ex:hasTeam rdf:resource="&ex;P7"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR92 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR92">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>NO</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P11"/>
+        <ex:hasTeam rdf:resource="&ex;P16"/>
+        <ex:hasTeam rdf:resource="&ex;P17"/>
+        <ex:hasTeam rdf:resource="&ex;P24"/>
+        <ex:hasTeam rdf:resource="&ex;P27"/>
+        <ex:hasTeam rdf:resource="&ex;P3"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR93 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR93">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>YES</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P10"/>
+        <ex:hasTeam rdf:resource="&ex;P21"/>
+        <ex:hasTeam rdf:resource="&ex;P31"/>
+        <ex:hasTeam rdf:resource="&ex;P36"/>
+        <ex:hasTeam rdf:resource="&ex;P6"/>
+        <ex:hasTeam rdf:resource="&ex;P8"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR94 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR94">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>YES</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P12"/>
+        <ex:hasTeam rdf:resource="&ex;P14"/>
+        <ex:hasTeam rdf:resource="&ex;P2"/>
+        <ex:hasTeam rdf:resource="&ex;P23"/>
+        <ex:hasTeam rdf:resource="&ex;P31"/>
+        <ex:hasTeam rdf:resource="&ex;P4"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR95 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR95">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>NO</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P11"/>
+        <ex:hasTeam rdf:resource="&ex;P13"/>
+        <ex:hasTeam rdf:resource="&ex;P22"/>
+        <ex:hasTeam rdf:resource="&ex;P26"/>
+        <ex:hasTeam rdf:resource="&ex;P32"/>
+        <ex:hasTeam rdf:resource="&ex;P38"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR96 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR96">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>NO</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P18"/>
+        <ex:hasTeam rdf:resource="&ex;P22"/>
+        <ex:hasTeam rdf:resource="&ex;P24"/>
+        <ex:hasTeam rdf:resource="&ex;P3"/>
+        <ex:hasTeam rdf:resource="&ex;P34"/>
+        <ex:hasTeam rdf:resource="&ex;P39"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR97 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR97">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>NO</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P13"/>
+        <ex:hasTeam rdf:resource="&ex;P16"/>
+        <ex:hasTeam rdf:resource="&ex;P18"/>
+        <ex:hasTeam rdf:resource="&ex;P26"/>
+        <ex:hasTeam rdf:resource="&ex;P32"/>
+        <ex:hasTeam rdf:resource="&ex;P40"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR98 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR98">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>NO</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P16"/>
+        <ex:hasTeam rdf:resource="&ex;P20"/>
+        <ex:hasTeam rdf:resource="&ex;P26"/>
+        <ex:hasTeam rdf:resource="&ex;P34"/>
+        <ex:hasTeam rdf:resource="&ex;P5"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.examplecompany.org/PR99 -->
+
+    <owl:NamedIndividual rdf:about="&ex;PR99">
+        <rdf:type rdf:resource="&ex;Project"/>
+        <ex:isSuccess>YES</ex:isSuccess>
+        <ex:hasTeam rdf:resource="&ex;P11"/>
+        <ex:hasTeam rdf:resource="&ex;P13"/>
+        <ex:hasTeam rdf:resource="&ex;P19"/>
+        <ex:hasTeam rdf:resource="&ex;P29"/>
+        <ex:hasTeam rdf:resource="&ex;P34"/>
+    </owl:NamedIndividual>
+</rdf:RDF>
+
+
+
+<!-- Generated by the OWL API (version 3.2.2.1789) http://owlapi.sourceforge.net -->
+
