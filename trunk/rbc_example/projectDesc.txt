@@ -1,0 +1,49 @@
+%Prelimanary Grammar
+% @targetType URI(a rdf type)
+%
+% @target attribute_name
+%
+% @attribute name
+% [URI(s) separated by commas]
+% [NOMINAL|ENUM|BINNED]=[values separated by commas]
+% aggregator=[NONE|INDEPENDENT_VAL|COUNT|AVG|MIN|MAX]
+%
+%Remark: Number is always binned
+%Remark:If BINNED Option the format is range (of integers) seperated by commas
+% Example: 3,5,10
+% Bin index:
+%  (-infty, 3) = 0
+%  [3, 5) = 1
+%  [5, 10) = 2
+%  [10, +infty) = 3
+%
+% Example: 5
+% Bin index:
+%  (-infty, 5) = 0
+%  [5, +infty) = 1
+%Remark:It is assumed that the AVG,MIN,MAX are applicable to NUMBER datatype only.
+%TODO add prefix support
+
+@targetType http://www.examplecompany.org/Project
+
+@target isSuccess
+
+@attribute isSuccess
+http://www.examplecompany.org/isSuccess
+NOMINAL=YES,NO
+aggregator=NONE
+
+@attribute teamManagers
+http://www.examplecompany.org/hasTeam,http://www.w3.org/1999/02/22-rdf-syntax-ns#type,http://www.w3.org/2000/01/rdf-schema#subClassOf
+ENUM=http://www.examplecompany.org/Manager,http://www.examplecompany.org/Non-Manager
+aggregator=INDEPENDENT_VAL
+
+@attribute teamAge
+http://www.examplecompany.org/hasTeam,http://www.examplecompany.org/hasAge
+BINNED=20,30,40,50
+aggregator=AVG
+
+@attribute teamGender
+http://www.examplecompany.org/hasTeam,http://www.examplecompany.org/hasSex
+NOMINAL=female,male
+aggregator=INDEPENDENT_VAL
