@@ -24,4 +24,12 @@ public class CollectionUtil {
 	public static <T> Set<T> asSet(T... a) {
 		return new HashSet<T>(Arrays.asList(a));
 	}
+
+   public static <T> List<String> toStringList(List<T> as) {
+      List<String> strings = makeList();
+      for (T a : as) {
+         strings.add(a.toString());
+      }
+      return strings;
+   }
 }

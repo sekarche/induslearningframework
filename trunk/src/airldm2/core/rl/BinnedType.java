@@ -1,11 +1,13 @@
 package airldm2.core.rl;
 
 import java.util.Arrays;
+import java.util.List;
 
 import org.openrdf.model.Literal;
 import org.openrdf.model.Value;
 
 import airldm2.util.ArrayUtil;
+import airldm2.util.CollectionUtil;
 
 public class BinnedType implements ValueType {
    
@@ -67,6 +69,16 @@ public class BinnedType implements ValueType {
    @Override
    public String toString() {
       return Arrays.toString(mCutPoints);
+   }
+
+   @Override
+   public List<String> getStringValues() {
+      List<String> strings = CollectionUtil.makeList();
+      for (int i = 0; i < mCutPoints.length; i++) {
+         strings.add(String.valueOf(mCutPoints[i]));
+      }
+      strings.add("INF");
+      return strings;
    }
 
 }

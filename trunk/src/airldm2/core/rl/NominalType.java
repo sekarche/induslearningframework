@@ -26,9 +26,15 @@ public class NominalType implements ValueType {
    public String makeFilter(String varName, int valueIndex) {
       return new StringBuilder()
          .append(varName)
-         .append(" = ")
+         .append(" = \"")
          .append(mDomain.get(valueIndex))
+         .append("\"")
          .toString();
+   }
+
+   @Override
+   public List<String> getStringValues() {
+      return mDomain;
    }
 
 }

@@ -99,7 +99,7 @@ public class RDFDataSource implements SSDataSource {
 
    public ISufficentStatistic getSufficientStatistic(SuffStatQueryParameter queryParam) throws RDFDatabaseException {
       String query = new SuffStatQueryConstructor(mDefaultContext, queryParam).createQuery();
-      System.out.println(query);
+      //System.out.println(query);
       
       List<Value[]> results = executeQuery(query);
       if (results.isEmpty()) return null;
@@ -112,7 +112,7 @@ public class RDFDataSource implements SSDataSource {
 
    public List<URI> getTargetInstances(URI targetType) throws RDFDatabaseException {
       String query = new InstanceQueryConstructor(mDefaultContext, targetType).createQuery();
-      System.out.println(query);
+      //System.out.println(query);
       
       List<Value[]> results = executeQuery(query);
       List<URI> instances = CollectionUtil.makeList();
@@ -127,7 +127,7 @@ public class RDFDataSource implements SSDataSource {
    
    public Value getValue(URI instance, RbcAttribute attribute) throws RDFDatabaseException {
       String query = new ValueQueryConstructor(mDefaultContext, instance, attribute).createQuery();
-      System.out.println(query);
+      //System.out.println(query);
       
       List<Value[]> results = executeQuery(query);
       if (results.isEmpty()) return null;
@@ -137,7 +137,7 @@ public class RDFDataSource implements SSDataSource {
    
    public Value getAggregation(URI instance, RbcAttribute attribute) throws RDFDatabaseException {
       String query = new AggregationQueryConstructor(mDefaultContext, instance, attribute).createQuery();
-      System.out.println(query);
+      //System.out.println(query);
       
       List<Value[]> results = executeQuery(query);
       if (results.isEmpty()) return null;
@@ -147,7 +147,7 @@ public class RDFDataSource implements SSDataSource {
    
    public int countIndependentValueAggregation(URI instance, RbcAttribute attribute, int v) throws RDFDatabaseException {
       String query = new IndependentValueAggregationQueryConstructor(mDefaultContext, instance, attribute, v).createQuery();
-      System.out.println(query);
+      //System.out.println(query);
       
       List<Value[]> results = executeQuery(query);
       if (results.isEmpty()) return 0;

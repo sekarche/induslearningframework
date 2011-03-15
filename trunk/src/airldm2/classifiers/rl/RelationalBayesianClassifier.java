@@ -37,7 +37,6 @@ public class RelationalBayesianClassifier extends Classifier {
       List<RbcAttribute> nonTargetAttributes = mDataDesc.getAttributeList();
       RbcAttribute targetAttribute = mDataDesc.getTargetAttribute();
 
-
       ValueType targetAttributeType = targetAttribute.getValueType();
       int numOfClassLabels = targetAttributeType.domainSize();
       mClassCounts = new double[numOfClassLabels];
@@ -66,8 +65,8 @@ public class RelationalBayesianClassifier extends Classifier {
                ISufficentStatistic tempSuffStat = mDataSource.getSufficientStatistic(queryParam);
                mCounts[i][j][k] = tempSuffStat.getValue().intValue();
                
-               System.out.println(queryParam);
-               System.out.println(tempSuffStat.getValue());
+               //System.out.println(queryParam);
+               //System.out.println(tempSuffStat.getValue());
             }
          }
       }

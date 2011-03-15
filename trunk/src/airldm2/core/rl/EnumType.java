@@ -5,6 +5,8 @@ import java.util.List;
 import org.openrdf.model.URI;
 import org.openrdf.model.Value;
 
+import airldm2.util.CollectionUtil;
+
 public class EnumType implements ValueType {
 
    private List<URI> mDomain;
@@ -36,6 +38,11 @@ public class EnumType implements ValueType {
          .append(mDomain.get(valueIndex))
          .append(">")
          .toString();
+   }
+
+   @Override
+   public List<String> getStringValues() {
+      return CollectionUtil.toStringList(mDomain);
    }
 
 }
