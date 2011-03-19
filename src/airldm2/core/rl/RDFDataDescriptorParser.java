@@ -32,20 +32,16 @@ public class RDFDataDescriptorParser {
       
       BufferedReader in = new BufferedReader(new FileReader(descFile));
       String line;
-      while ((line = in.readLine()) != null) {
-         line = line.trim();
-         if (line.startsWith(COMMENT_CHAR) || line.isEmpty()) 
-            continue;
-
+      while ((line = readContentLine(in)) != null) {
          if (line.startsWith(TARGET_TYPE)) {
             targetType = Factory.createURI(line.substring(TARGET_TYPE.length()));
          } else if (line.startsWith(TARGET)) {
             targetAttributeName = line.substring(TARGET.length());
          } else if (line.startsWith(ATTRIBUTE)) {
             String attributeName = line.substring(ATTRIBUTE.length()).trim();
-            String propLine = in.readLine().trim();
-            String valueLine = in.readLine().trim();
-            String aggregatorLine = in.readLine().trim();
+            String propLine = readContentLine(in);
+            String valueLine = readContentLine(in);
+            String aggregatorLine = readContentLine(in);
             RbcAttribute attribute = parseAttribute(attributeName, propLine, valueLine, aggregatorLine);
             attributes.put(attributeName, attribute);
          }
@@ -62,6 +58,19 @@ public class RDFDataDescriptorParser {
       }
       
       return new RDFDataDescriptor(targetType, targetAttributeName, attributes);
+   }
+   
+   private static String readContentLine(BufferedReader in) throws IOException {
+      String line;
+      while ((line = in.readLine()) != null) {
+         line = line.trim();
+         if (line.startsWith(COMMENT_CHAR) || line.isEmpty()) 
+            continue;
+         else
+            return line; 
+      }
+      
+      return null;
    }
 
    private static RbcAttribute parseAttribute(String name, String propLine, String valueLine, String aggregatorLine) throws RDFDataDescriptorFormatException {
