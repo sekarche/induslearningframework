@@ -38,6 +38,10 @@ public class RbcAttribute {
       mAggregatorType = aggregatorType;
    }
       
+   public String getName() {
+      return mName;
+   }
+   
    public List<URI> getProperties() {
       return mProperties;
    }
@@ -54,5 +58,5 @@ public class RbcAttribute {
    public String toString() {
       return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE);
    }
-   
+
 }
