@@ -29,8 +29,8 @@ Load RDF graphs using script
 4. rdf_loader_run ();
 
 
-Load RDF graphs using Java API
-==============================
+Load RDF graphs using an importer
+=================================
 
 1. Run airldm2.util.rdf.RDFImporter <graph IRI> <RDF file name in XML format>
 

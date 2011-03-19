@@ -1,0 +1,6 @@
+- sesame-2.3.2 depends on httpclient 3.1, but higher version of httpclient is not compatible.
+- httpclient depends on
+commons-codec
+commons-logging
+httpcore
+(see http://hc.apache.org/httpcomponents-client-ga/httpclient/dependencies.html)
