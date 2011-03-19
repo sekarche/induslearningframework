@@ -33,8 +33,18 @@ http://data.linkedmdb.org/resource/movie/openingreceipt
 BINNED=2000000
 aggregator=NONE
 
+@attribute genre
+http://data.linkedmdb.org/resource/movie/genre
+ENUM=??
+aggregator=INDEPENDENT_VAL
+
+@attribute runtime
+http://data.linkedmdb.org/resource/movie/runtime
+BINNED=80,100,120,140,160
+aggregator=NONE
+
 @attribute actorBirth
-http://data.linkedmdb.org/resource/movie/actor,http://xmlns.com/foaf/0.1/page,http://rdf.freebase.com/ns/people.person.birth_year
+http://data.linkedmdb.org/resource/movie/actor,http://xmlns.com/foaf/0.1/page,http://rdf.freebase.com/ns/people.person.year_of_birth
 BINNED=1940,1960
 aggregator=AVG
 
@@ -45,5 +55,10 @@ aggregator=INDEPENDENT_VAL
 
 @attribute directorAward
 http://data.linkedmdb.org/resource/movie/director,http://xmlns.com/foaf/0.1/page,http://rdf.freebase.com/ns/award.award_winner.awards_won
+BINNED=2
+aggregator=COUNT
+
+@attribute producerAward
+http://data.linkedmdb.org/resource/movie/producer,http://xmlns.com/foaf/0.1/page,http://rdf.freebase.com/ns/award.award_winner.awards_won
 BINNED=2
 aggregator=COUNT
