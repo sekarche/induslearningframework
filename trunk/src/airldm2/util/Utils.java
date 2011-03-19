@@ -9,9 +9,19 @@ import org.openrdf.model.URI;
  * 
  */
 public class Utils {
+   
    public static String removeTrailing(String st, String trailer) {
       String s = st.substring(0, st.lastIndexOf(trailer));
       return s;
+   }
+   
+   public static String[] trim(String[] strs) {
+      for (int i = 0; i < strs.length; i++) {
+         if (strs[i] != null) {
+            strs[i] = strs[i].trim();
+         }
+      }
+      return strs;
    }
 
    public static String angleBracket(URI uri) {

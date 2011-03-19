@@ -50,9 +50,13 @@ public class InstanceAggregator {
          
       } else if (attribute.getAggregatorType() == ValueAggregator.NONE) {
          Value value = dataSource.getValue(instance, attribute);
-         int index = valueType.indexOf(value);
-         if (index >= 0) {
-            valueIndexCount[index] = 1;
+         if (value == null) {
+            System.err.println("Missing " + attribute.getName() + " value for instance " + instance);
+         } else {
+            int index = valueType.indexOf(value);
+            if (index >= 0) {
+               valueIndexCount[index] = 1;
+            }
          }
          
       } else {

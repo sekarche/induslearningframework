@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rdf:RDF
+	xmlns:owl="http://www.w3.org/2002/07/owl#"
+	xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+	xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+	xmlns:small=":small/">
+<small:Instance>
+	<small:label>A</small:label>
+	<small:prop1 rdf:nodeID="b1"/>
+</small:Instance>
+<rdf:Description rdf:nodeID="b1">
+	<small:prop2>i1</small:prop2>
+	<small:prop2>i2</small:prop2>
+	<small:prop2>i3</small:prop2>
+	<small:prop3 rdf:datatype="http://www.w3.org/2001/XMLSchema#int">20</small:prop3>
+	<small:prop3 rdf:datatype="http://www.w3.org/2001/XMLSchema#int">40</small:prop3>
+</rdf:Description>
+
+<small:Instance>
+	<small:label>A</small:label>
+	<small:prop1 rdf:nodeID="b21"/>
+	<small:prop1 rdf:nodeID="b22"/>
+</small:Instance>
+<rdf:Description rdf:nodeID="b21">
+	<small:prop2>i3</small:prop2>
+	<small:prop3 rdf:datatype="http://www.w3.org/2001/XMLSchema#int">20</small:prop3>
+</rdf:Description>
+<rdf:Description rdf:nodeID="b22">
+	<small:prop2>i3</small:prop2>
+	<small:prop3 rdf:datatype="http://www.w3.org/2001/XMLSchema#int">20</small:prop3>
+</rdf:Description>
+
+<small:Instance>
+	<small:label>B</small:label>
+	<small:prop1 rdf:nodeID="b3"/>
+</small:Instance>
+<rdf:Description rdf:nodeID="b3">
+	<small:prop3 rdf:datatype="http://www.w3.org/2001/XMLSchema#int">0</small:prop3>
+	<small:prop3 rdf:datatype="http://www.w3.org/2001/XMLSchema#int">100</small:prop3>
+</rdf:Description>
+
+<small:Instance>
+	<small:label>B</small:label>
+	<small:prop1 rdf:nodeID="b4"/>
+</small:Instance>
+<rdf:Description rdf:nodeID="b4">
+	<small:prop2>i2</small:prop2>
+</rdf:Description>
+
+<small:Instance>
+	<small:label>C</small:label>
+	<small:prop1 rdf:nodeID="b51"/>
+	<small:prop1 rdf:nodeID="b52"/>
+	<small:prop1 rdf:nodeID="b53"/>
+</small:Instance>
+<rdf:Description rdf:nodeID="b51">
+	<small:prop2>i2</small:prop2>
+</rdf:Description>
+<rdf:Description rdf:nodeID="b52">
+	<small:prop2>i2</small:prop2>
+</rdf:Description>
+<rdf:Description rdf:nodeID="b53">
+	<small:prop2>i2</small:prop2>
+</rdf:Description>
+</rdf:RDF>

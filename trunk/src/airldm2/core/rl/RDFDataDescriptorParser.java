@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -14,6 +15,7 @@ import org.openrdf.model.impl.ValueFactoryImpl;
 import airldm2.core.rl.RbcAttribute.ValueAggregator;
 import airldm2.exceptions.RDFDataDescriptorFormatException;
 import airldm2.util.CollectionUtil;
+import airldm2.util.Utils;
 
 public class RDFDataDescriptorParser {
 
@@ -28,7 +30,7 @@ public class RDFDataDescriptorParser {
    public static RDFDataDescriptor parse(String descFile) throws IOException, RDFDataDescriptorFormatException {
       URI targetType = null;
       String targetAttributeName = null;
-      Map<String,RbcAttribute> attributes = CollectionUtil.makeMap();
+      Map<String,RbcAttribute> attributes = new LinkedHashMap<String,RbcAttribute>();
       
       BufferedReader in = new BufferedReader(new FileReader(descFile));
       String line;
@@ -74,10 +76,10 @@ public class RDFDataDescriptorParser {
    }
 
    private static RbcAttribute parseAttribute(String name, String propLine, String valueLine, String aggregatorLine) throws RDFDataDescriptorFormatException {
-      String[] propStrs = propLine.split(",");
+      String[] propStrs = Utils.trim(propLine.split(","));
       List<URI> props = CollectionUtil.makeList();
       for (String propStr : propStrs) {
-         props.add(Factory.createURI(propStr.trim()));
+         props.add(Factory.createURI(propStr));
       }
       
       if (!aggregatorLine.startsWith(AGGREGATOR))
@@ -85,8 +87,8 @@ public class RDFDataDescriptorParser {
       
       ValueAggregator aggregator = ValueAggregator.valueOf(aggregatorLine.substring(AGGREGATOR.length()).trim());
       
-      String[] valueStrs = valueLine.split("=");
-      String[] possibleValues = valueStrs[1].split(",");
+      String[] valueStrs = Utils.trim(valueLine.split("="));
+      String[] possibleValues = Utils.trim(valueStrs[1].split(","));
       ValueType valueType = null;
       if ("BINNED".equalsIgnoreCase(valueStrs[0])) {
          double[] cutPoints = new double[possibleValues.length];

@@ -52,5 +52,8 @@
 	<classpathentry kind="lib" path="lib/virtuoso/virt_sesame2.jar"/>
 	<classpathentry kind="lib" path="lib/virtuoso/virtjdbc3.jar"/>
 	<classpathentry kind="lib" path="lib/virtuoso/virtjdbc3ssl.jar"/>
+	<classpathentry kind="lib" path="lib/apache/httpclient/commons-codec-1.3.jar"/>
+	<classpathentry kind="lib" path="lib/apache/httpclient/commons-httpclient-3.1.jar"/>
+	<classpathentry kind="lib" path="lib/apache/httpclient/commons-logging-1.1.1.jar"/>
 	<classpathentry kind="output" path="classes"/>
 </classpath>

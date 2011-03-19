@@ -132,4 +132,16 @@ public class RelationalBayesianClassifier extends Classifier {
       return dist;
    }
 
+   public double[][][] getCountsForTest() {
+      return mCounts;
+   }
+   
+   public double[][] getAttributeClassCountsForTest() {
+      return mAttributeClassCounts;
+   }
+
+   public double[] getClassCountsForTest() {
+      return mClassCounts;
+   }
+   
 }
