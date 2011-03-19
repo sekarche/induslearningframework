@@ -17,6 +17,7 @@ import org.openrdf.query.TupleQueryResult;
 import org.openrdf.repository.Repository;
 import org.openrdf.repository.RepositoryConnection;
 import org.openrdf.repository.RepositoryException;
+import org.openrdf.repository.http.HTTPRepository;
 
 import virtuoso.sesame2.driver.VirtuosoRepository;
 import airldm2.constants.Constants;
@@ -52,13 +53,23 @@ public class RDFDataSource implements SSDataSource {
          throw new RTConfigException("Error reading " + Constants.RDFSTORE_PROPERTIES_RESOURCE_PATH, e);
       }
 
-      String url = defaultProps.getProperty("DataSource.url");
-      if (url != null) url = url.trim();
+      mRepository = loadRepository(defaultProps);
+      mRepository.initialize();
+      mConn = mRepository.getConnection();
+   }
+
+   private Repository loadRepository(Properties defaultProps) {
+      String sparqlEndpointURL = defaultProps.getProperty("DataSource.sparqlEndpoint");
+      if (sparqlEndpointURL != null) {
+         return new HTTPRepository(sparqlEndpointURL, mDefaultContext);
+      }
+      
+      String localURL = defaultProps.getProperty("DataSource.url");
+      if (localURL != null) localURL = localURL.trim();
       String username = defaultProps.getProperty("DataSource.username");
       String password = defaultProps.getProperty("DataSource.password");
 
-      mRepository = new VirtuosoRepository(url, username, password);
-      mConn = mRepository.getConnection();
+      return new VirtuosoRepository(localURL, username, password);
    }
 
    @Override
@@ -99,7 +110,7 @@ public class RDFDataSource implements SSDataSource {
 
    public ISufficentStatistic getSufficientStatistic(SuffStatQueryParameter queryParam) throws RDFDatabaseException {
       String query = new SuffStatQueryConstructor(mDefaultContext, queryParam).createQuery();
-      //System.out.println(query);
+      System.out.println(query);
       
       List<Value[]> results = executeQuery(query);
       if (results.isEmpty()) return null;
