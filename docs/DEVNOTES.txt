@@ -1,6 +1,13 @@
+1. Library for connecting to SPARQL endpoints
 - sesame-2.3.2 depends on httpclient 3.1, but higher version of httpclient is not compatible.
 - httpclient depends on
-commons-codec
-commons-logging
-httpcore
-(see http://hc.apache.org/httpcomponents-client-ga/httpclient/dependencies.html)
+	commons-codec
+	commons-logging
+	httpcore
+	(see http://hc.apache.org/httpcomponents-client-ga/httpclient/dependencies.html)
+	
+2. SPARQL endpoint requirements
+- Has to support SPARQL 1.1+
+- Reminder: for numerical attributes using AVG/MIN/MAX aggregation,
+	the RDF node has to declare a numerical type, e.g. rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+  Otherwise SPARQL select statements will not pick them up
