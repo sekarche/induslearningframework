@@ -14,3 +14,11 @@ Notes for RDF(Relational) Features
 - Reminder: for numerical attributes using AVG/MIN/MAX aggregation,
 	the RDF node has to declare a numerical type, e.g. rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
   Otherwise SPARQL select statements will not pick them up
+
+3. SPARQL endpoint errors
+  Few non-standard SPARQL servers return errors when we try to pose a query to them.
+  One reason is explained in http://www.openrdf.org/forum/mvnforum/viewthread?thread=1527
+  In this case the server only recognizes "application/x-www-form-urlencoded" as the request content type,
+  but Sesame sends "application/x-www-form-urlencoded; charset=utf-8", resulting an
+  HTTP ERROR: 415 Must be application/x-www-form-urlencoded
+
