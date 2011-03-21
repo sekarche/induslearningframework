@@ -140,11 +140,10 @@ public class Evaluation {
          // return some error message if the class label is not according
          // to the descriptor
          if (actual == -1) {
-            System.out
-                  .println("Please check the class label of  test instances match their description");
+            System.err.println("Please check the class label of test instances match their description");
+            continue;
          }
-         wekaConfusionMatrix.addPrediction(new NominalPrediction(actual,
-               distribution));
+         wekaConfusionMatrix.addPrediction(new NominalPrediction(actual, distribution));
       }
 
       return wekaConfusionMatrix;
@@ -162,7 +161,8 @@ public class Evaluation {
          double actual = i.getLabel();
          // return some error message if the class label is not according to the descriptor
          if (actual == -1) {
-            System.out.println("Please check the class label of test instances match their description");
+            System.err.println("Please check the class label of test instances match their description");
+            continue;
          }
          wekaConfusionMatrix.addPrediction(new NominalPrediction(actual, distribution));
       }
