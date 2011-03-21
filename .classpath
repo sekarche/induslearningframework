@@ -41,7 +41,6 @@
 	<classpathentry kind="lib" path="lib/jena-2.6.4/icu4j-3.4.4.jar"/>
 	<classpathentry kind="lib" path="lib/jena-2.6.4/iri-0.8.jar"/>
 	<classpathentry kind="lib" path="lib/jena-2.6.4/jena-2.6.4-tests.jar"/>
-	<classpathentry kind="lib" path="lib/jena-2.6.4/jena-2.6.4.jar"/>
 	<classpathentry kind="lib" path="lib/jena-2.6.4/lucene-core-2.3.1.jar"/>
 	<classpathentry kind="lib" path="lib/jena-2.6.4/slf4j-api-1.5.8.jar"/>
 	<classpathentry kind="lib" path="lib/jena-2.6.4/slf4j-log4j12-1.5.8.jar"/>
@@ -55,5 +54,6 @@
 	<classpathentry kind="lib" path="lib/apache/httpclient/commons-codec-1.3.jar"/>
 	<classpathentry kind="lib" path="lib/apache/httpclient/commons-httpclient-3.1.jar"/>
 	<classpathentry kind="lib" path="lib/apache/httpclient/commons-logging-1.1.1.jar"/>
+	<classpathentry kind="lib" path="lib/jena-2.6.4/jena-2.6.4.jar"/>
 	<classpathentry kind="output" path="classes"/>
 </classpath>
