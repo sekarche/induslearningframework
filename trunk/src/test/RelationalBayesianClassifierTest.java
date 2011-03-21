@@ -14,6 +14,8 @@ import airldm2.core.SSDataSource;
 import airldm2.core.rl.RDFDataDescriptor;
 import airldm2.core.rl.RDFDataDescriptorParser;
 import airldm2.core.rl.RDFDataSource;
+import airldm2.database.rdf.RDFDatabaseConnection;
+import airldm2.database.rdf.RDFDatabaseConnectionFactory;
 
 public class RelationalBayesianClassifierTest {
    
@@ -26,8 +28,9 @@ public class RelationalBayesianClassifierTest {
       RDFDataDescriptor desc = RDFDataDescriptorParser.parse("rbc_example/smallDesc.txt");
       //System.out.println(desc);
       
+      RDFDatabaseConnection conn = RDFDatabaseConnectionFactory.makeFromConfig();
       //named RDF graph that stores all training triples 
-      SSDataSource trainSource = new RDFDataSource(":small");
+      SSDataSource trainSource = new RDFDataSource(conn, ":small");
       LDInstances trainInstances = new LDInstances();
       trainInstances.setDesc(desc);
       trainInstances.setDataSource(trainSource);
@@ -72,18 +75,25 @@ public class RelationalBayesianClassifierTest {
       testWithTrainInDBTestInDB("rbc_example/projectDesc.txt", ":projectTrain", ":projectTest");
    }
    
+   @Test
+   public void testNCIHints() throws Exception {
+      //http://logd.tw.rpi.edu/sparql
+      //testWithTrainInDBTestInDB("rbc_example/nci_hints.txt", "http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/version/2010-Jun-09", "http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/version/2010-Jun-09");
+   }
+   
    private void testWithTrainInDBTestInDB(String descFile, String trainGraph, String testGraph) throws Exception {
       RDFDataDescriptor desc = RDFDataDescriptorParser.parse(descFile);
       //System.out.println(desc);
       
+      RDFDatabaseConnection conn = RDFDatabaseConnectionFactory.makeFromConfig();
       //named RDF graph that stores all training triples 
-      SSDataSource trainSource = new RDFDataSource(trainGraph);
+      SSDataSource trainSource = new RDFDataSource(conn, trainGraph);
       LDInstances trainInstances = new LDInstances();
       trainInstances.setDesc(desc);
       trainInstances.setDataSource(trainSource);
    
       //named RDF graph that stores all test triples
-      SSDataSource testSource = new RDFDataSource(testGraph);
+      SSDataSource testSource = new RDFDataSource(conn, testGraph);
       LDInstances testInstances = new LDInstances();
       testInstances.setDesc(desc);
       testInstances.setDataSource(testSource);
