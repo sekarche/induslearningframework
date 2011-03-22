@@ -6,6 +6,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import airldm2.core.SSDataSource;
 import airldm2.core.rl.RDFDataDescriptor;
 import airldm2.core.rl.RDFDataDescriptorParser;
 import airldm2.core.rl.RDFDataSource;
@@ -13,6 +14,7 @@ import airldm2.core.rl.RbcAttribute;
 import airldm2.core.rl.ValueType;
 import airldm2.database.rdf.RDFDatabaseConnection;
 import airldm2.database.rdf.RDFDatabaseConnectionFactory;
+import airldm2.database.rdf.VirtuosoConnection;
 import explore.RDFDataDescriptorEnhancer;
 
 public class RDFDataDescriptorEnhancerTest {
@@ -46,6 +48,18 @@ public class RDFDataDescriptorEnhancerTest {
       RDFDataSource source = new RDFDataSource(conn, ":small");
       RDFDataDescriptorEnhancer enhancer = new RDFDataDescriptorEnhancer(source);
       enhancer.fillDomain("rbc_example/smallDescIncomplete.txt", "rbc_example/smallDescFilled.txt");
+   }
+   
+   @Test
+   public void testNCIHintsOnFile() throws Exception {
+      final String HINTS_DESC = "rbc_example/nci_hintsDescIncomplete.txt";
+      final String HINTS_DESC_FILLED = "rbc_example/nci_hintsDesc.txt";
+      final String LOGD_SPARQL = "http://logd.tw.rpi.edu/sparql";
+      
+      RDFDatabaseConnection conn = new VirtuosoConnection(LOGD_SPARQL);
+      RDFDataSource source = new RDFDataSource(conn);
+      RDFDataDescriptorEnhancer enhancer = new RDFDataDescriptorEnhancer(source);
+      enhancer.fillDomain(HINTS_DESC, HINTS_DESC_FILLED);
    }
    
 }

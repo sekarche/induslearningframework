@@ -90,7 +90,7 @@ public class RelationalBayesianClassifierTest {
       trainInstances.setDataSource(trainSource);
    
       RelationalBayesianClassifier rbc = new RelationalBayesianClassifier();
-      //rbc.buildClassifier(trainInstances);
+      rbc.buildClassifier(trainInstances);
    }
    
    private void testWithTrainInDBTestInDB(String descFile, String trainGraph, String testGraph) throws Exception {
