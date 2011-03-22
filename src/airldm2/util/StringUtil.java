@@ -1,5 +1,7 @@
 package airldm2.util;
 
+import java.util.List;
+
 import org.openrdf.model.URI;
 
 /**
@@ -8,7 +10,7 @@ import org.openrdf.model.URI;
  * @author neeraj
  * 
  */
-public class Utils {
+public class StringUtil {
    
    public static String removeTrailing(String st, String trailer) {
       String s = st.substring(0, st.lastIndexOf(trailer));
@@ -46,6 +48,30 @@ public class Utils {
    public static String makeContextPart(String context) {
       if (context == null) return "";
       else return "FROM " + angleBracket(context);
+   }
+   
+   public static String toCSV(double[] as) {
+      StringBuilder b = new StringBuilder();
+      
+      for (int i = 0; i < as.length - 1; i++) {
+         b.append(as[i]);
+         b.append(",");
+      }
+      b.append(as[as.length - 1]);
+      
+      return b.toString();
+   }
+   
+   public static String toCSV(List<String> as) {
+      StringBuilder b = new StringBuilder();
+      
+      for (int i = 0; i < as.size() - 1; i++) {
+         b.append(as.get(i));
+         b.append(",");
+      }
+      b.append(as.get(as.size() - 1));
+      
+      return b.toString();
    }
    
 }

@@ -1,8 +1,8 @@
 package airldm2.database.rdf;
 
-import static airldm2.util.Utils.angleBracket;
-import static airldm2.util.Utils.makeContextPart;
-import static airldm2.util.Utils.triple;
+import static airldm2.util.StringUtil.angleBracket;
+import static airldm2.util.StringUtil.makeContextPart;
+import static airldm2.util.StringUtil.triple;
 
 import java.util.List;
 

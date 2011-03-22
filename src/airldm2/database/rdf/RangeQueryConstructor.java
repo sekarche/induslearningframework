@@ -10,50 +10,49 @@ import org.openrdf.model.URI;
 
 import airldm2.core.rl.RbcAttribute;
 
-public class AggregationQueryConstructor {
 
-   private static final String CONTEXT_PATTERN = "%context%";
-   private static final String AGGREGATION_FUNCTION_PATTERN = "%aggfun%";
+public class RangeQueryConstructor {
+
+   private static final String TARGET_VAR = "?tar";
    private static final String LAST_VAR_PATTERN = "%lastVar%";
-   private static final String AGGREGATION_HEADER = "SELECT " + AGGREGATION_FUNCTION_PATTERN + "(" + LAST_VAR_PATTERN + ") " + CONTEXT_PATTERN + " WHERE { ";
-
+   private static final String CONTEXT_PATTERN = "%context%";
+   private static final String TYPE_PATTERN = "%type%";
+   private static final String QUERY_HEADER = "SELECT DISTINCT " + LAST_VAR_PATTERN + " " + CONTEXT_PATTERN + " WHERE { " + TARGET_VAR + " rdf:type " + TYPE_PATTERN + " . ";
+    
    private String mContextPart;
-   private URI mInstance;
+   private URI mType;
    private RbcAttribute mAttribute;
    private VarFactory mVarFactory;
-
-   public AggregationQueryConstructor(String context, URI instance, RbcAttribute attribute) {
+   
+   public RangeQueryConstructor(String context, URI type, RbcAttribute attribute) {
       mContextPart = makeContextPart(context);
-      mInstance = instance;
+      mType = type;
       mAttribute = attribute;
       mVarFactory = new VarFactory();
    }
 
    public String createQuery() {
-      mVarFactory.reset();
       StringBuilder b = new StringBuilder();
-
+      
       String chain = createValueChain(mAttribute);
-      String header = AGGREGATION_HEADER.replace(CONTEXT_PATTERN, mContextPart)
-      .replace(AGGREGATION_FUNCTION_PATTERN, mAttribute.getAggregatorType().toString())
-      .replace(LAST_VAR_PATTERN, mVarFactory.current()); 
-      b.append(header)
-      .append(chain)
-      .append("}");
-
+      b.append(QUERY_HEADER.replace(LAST_VAR_PATTERN, mVarFactory.current())
+                           .replace(CONTEXT_PATTERN, mContextPart)
+                           .replace(TYPE_PATTERN, angleBracket(mType)));
+      b.append(chain);
+      b.append("} ORDER BY ").append(mVarFactory.current());
       return b.toString();
    }
-
+   
    private String createValueChain(RbcAttribute att) {
       StringBuilder b = new StringBuilder();
-
+      
       List<URI> props = att.getProperties();
-      b.append(triple(angleBracket(mInstance), angleBracket(props.get(0)), mVarFactory.next()));
+      b.append(triple(TARGET_VAR, angleBracket(props.get(0)), mVarFactory.next()));
       for (int i = 1; i < props.size(); i++) {
          b.append(triple(mVarFactory.current(), angleBracket(props.get(i)), mVarFactory.next()));
       }
 
       return b.toString();
    }
-
+   
 }

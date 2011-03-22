@@ -1,0 +1,13 @@
+@targetType :small/Instance
+
+@target label
+
+@attribute label
+:small/label
+NOMINAL=?
+aggregator=NONE
+
+@attribute ind
+:small/prop1,:small/prop2
+NOMINAL=?
+aggregator=INDEPENDENT_VAL

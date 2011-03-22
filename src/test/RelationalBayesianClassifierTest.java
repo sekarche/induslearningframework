@@ -68,7 +68,7 @@ public class RelationalBayesianClassifierTest {
    
    @Test
    public void testMovies() throws Exception {
-      testWithTrainInDBTestInDB("rbc_example/moviesDesc.txt", ":moviesTrain", ":moviesTest");
+      testWithTrainInDBTestInDB("rbc_example/moviesDesc.txt", ":movies", ":movies");
    }
    
    @Test

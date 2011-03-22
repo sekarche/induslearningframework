@@ -1,5 +1,7 @@
 package airldm2.core.rl;
 
+import java.io.IOException;
+import java.io.Writer;
 import java.util.Arrays;
 import java.util.List;
 
@@ -8,8 +10,11 @@ import org.openrdf.model.Value;
 
 import airldm2.util.ArrayUtil;
 import airldm2.util.CollectionUtil;
+import airldm2.util.StringUtil;
 
 public class BinnedType implements ValueType {
+   
+   public static String NAME = "BINNED";
    
    /**
     * Example:
@@ -79,6 +84,13 @@ public class BinnedType implements ValueType {
       }
       strings.add("INF");
       return strings;
+   }
+
+   @Override
+   public void write(Writer out) throws IOException {
+      out.write(NAME);
+      out.write("=");
+      out.write(StringUtil.toCSV(mCutPoints));
    }
 
 }

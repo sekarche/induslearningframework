@@ -82,7 +82,7 @@ public class LDInstance {
       for (String val : values) {
          result += val + Constants.COMMA;
       }
-      result = airldm2.util.Utils.removeTrailing(result, Constants.COMMA);
+      result = airldm2.util.StringUtil.removeTrailing(result, Constants.COMMA);
       return result;
    }
 

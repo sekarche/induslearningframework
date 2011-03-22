@@ -34,7 +34,7 @@ public class RelationalBayesianClassifier extends Classifier {
       mDataDesc = (RDFDataDescriptor) instances.getDesc();
       mDataSource = (RDFDataSource) instances.getDataSource();
       
-      List<RbcAttribute> nonTargetAttributes = mDataDesc.getAttributeList();
+      List<RbcAttribute> nonTargetAttributes = mDataDesc.getNonTargetAttributeList();
       RbcAttribute targetAttribute = mDataDesc.getTargetAttribute();
 
       ValueType targetAttributeType = targetAttribute.getValueType();

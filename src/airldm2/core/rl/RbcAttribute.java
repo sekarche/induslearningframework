@@ -1,9 +1,14 @@
 package airldm2.core.rl;
+import java.io.IOException;
+import java.io.Writer;
 import java.util.List;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 import org.openrdf.model.URI;
+
+import airldm2.util.CollectionUtil;
+import airldm2.util.StringUtil;
 
 /**
  * 
@@ -54,9 +59,29 @@ public class RbcAttribute {
       return mValueType;
    }
    
+   public void setValueType(ValueType v) {
+      mValueType = v;
+   }
+
    @Override
    public String toString() {
       return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE);
+   }
+
+   public void write(Writer out) throws IOException {
+      out.write(RDFDataDescriptorParser.ATTRIBUTE);
+      out.write(mName);
+      out.write("\n");
+      
+      out.write(StringUtil.toCSV(CollectionUtil.toStringList(mProperties)));
+      out.write("\n");
+      
+      mValueType.write(out);
+      out.write("\n");
+      
+      out.write(RDFDataDescriptorParser.AGGREGATOR);
+      out.write(mAggregatorType.toString());
+      out.write("\n");
    }
 
 }
