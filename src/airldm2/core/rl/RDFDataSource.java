@@ -26,6 +26,10 @@ public class RDFDataSource implements SSDataSource {
    private RDFDatabaseConnection mConn;
    private String mDefaultContext;
 
+   public RDFDataSource(RDFDatabaseConnection conn) {
+      this(conn, null);
+   }
+   
    public RDFDataSource(RDFDatabaseConnection conn, String defaultContext) {
       mConn = conn;
       mDefaultContext = defaultContext;

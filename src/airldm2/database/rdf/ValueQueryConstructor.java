@@ -1,6 +1,7 @@
 package airldm2.database.rdf;
 
 import static airldm2.util.Utils.angleBracket;
+import static airldm2.util.Utils.makeContextPart;
 import static airldm2.util.Utils.triple;
 
 import java.util.List;
@@ -14,15 +15,15 @@ public class ValueQueryConstructor {
 
    private static final String CONTEXT_PATTERN = "%context%";
    private static final String LAST_VAR_PATTERN = "%lastVar%";
-   private static final String AGGREGATION_HEADER = "SELECT " + LAST_VAR_PATTERN + " FROM " + CONTEXT_PATTERN + " WHERE { ";
+   private static final String AGGREGATION_HEADER = "SELECT " + LAST_VAR_PATTERN + " " + CONTEXT_PATTERN + " WHERE { ";
    
-   private String mContext;
+   private String mContextPart;
    private URI mInstance;
    private RbcAttribute mAttribute;
    private VarFactory mVarFactory;
       
    public ValueQueryConstructor(String context, URI instance, RbcAttribute attribute) {
-      mContext = context;
+      mContextPart = makeContextPart(context);
       mInstance = instance;
       mAttribute = attribute;
       mVarFactory = new VarFactory();
@@ -33,7 +34,7 @@ public class ValueQueryConstructor {
       StringBuilder b = new StringBuilder();
       
       String chain = createValueChain(mAttribute);
-      String header = AGGREGATION_HEADER.replace(CONTEXT_PATTERN, angleBracket(mContext))
+      String header = AGGREGATION_HEADER.replace(CONTEXT_PATTERN, mContextPart)
                                         .replace(LAST_VAR_PATTERN, mVarFactory.current()); 
       b.append(header)
        .append(chain)
