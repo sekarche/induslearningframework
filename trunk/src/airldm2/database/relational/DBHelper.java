@@ -245,7 +245,7 @@ public class DBHelper {
 
    private static String removeTrailing(String st, String trailer) {
       // make call to utils to do this
-      return airldm2.util.Utils.removeTrailing(st, trailer);
+      return airldm2.util.StringUtil.removeTrailing(st, trailer);
 
    }
 

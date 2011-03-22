@@ -13,6 +13,7 @@ import airldm2.database.rdf.AggregationQueryConstructor;
 import airldm2.database.rdf.IndependentValueAggregationQueryConstructor;
 import airldm2.database.rdf.InstanceQueryConstructor;
 import airldm2.database.rdf.RDFDatabaseConnection;
+import airldm2.database.rdf.RangeQueryConstructor;
 import airldm2.database.rdf.SuffStatQueryConstructor;
 import airldm2.database.rdf.SuffStatQueryParameter;
 import airldm2.database.rdf.ValueQueryConstructor;
@@ -127,6 +128,19 @@ public class RDFDataSource implements SSDataSource {
       if (results.isEmpty()) return 0;
       Value[] rv = results.get(0);
       return ((Literal)rv[0]).intValue();
+   }
+
+   public List<Value> getRangeof(URI targetType, RbcAttribute attribute) throws RDFDatabaseException {
+      String query = new RangeQueryConstructor(mDefaultContext, targetType, attribute).createQuery();
+      //System.out.println(query);
+      
+      List<Value[]> results = mConn.executeQuery(query);
+      List<Value> range = CollectionUtil.makeList();
+      for (Value[] rv : results) {
+         range.add(rv[0]);
+      }
+      
+      return range;
    }
    
 }

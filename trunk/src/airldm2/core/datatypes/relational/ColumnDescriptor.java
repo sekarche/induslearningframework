@@ -135,7 +135,7 @@ public class ColumnDescriptor {
       for (String name : possibleValues) {
          result += name + Constants.COMMA;
       }
-      result = airldm2.util.Utils.removeTrailing(result, Constants.COMMA);
+      result = airldm2.util.StringUtil.removeTrailing(result, Constants.COMMA);
       return result;
    }
 

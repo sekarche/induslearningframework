@@ -1,11 +1,17 @@
 package airldm2.core.rl;
 
+import java.io.IOException;
+import java.io.Writer;
 import java.util.List;
 
 import org.openrdf.model.Value;
 
+import airldm2.util.StringUtil;
+
 public class NominalType implements ValueType {
 
+   public static String NAME = "NOMINAL";
+   
    private List<String> mDomain;
    
    public NominalType(List<String> domain) {
@@ -35,6 +41,13 @@ public class NominalType implements ValueType {
    @Override
    public List<String> getStringValues() {
       return mDomain;
+   }
+
+   @Override
+   public void write(Writer out) throws IOException {
+      out.write(NAME);
+      out.write("=");
+      out.write(StringUtil.toCSV(mDomain));
    }
 
 }

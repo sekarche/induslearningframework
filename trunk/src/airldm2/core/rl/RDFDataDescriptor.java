@@ -1,5 +1,8 @@
 package airldm2.core.rl;
 
+import java.io.IOException;
+import java.io.Writer;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -45,7 +48,7 @@ public class RDFDataDescriptor implements DataDescriptor {
       cNonTargetAttributeList = CollectionUtil.makeList();
       for (Entry<String, RbcAttribute> entry : mAttributes.entrySet()) {
          if (mTargetAttributeName.equals(entry.getKey())) continue;
-         getAttributeList().add(entry.getValue());
+         getNonTargetAttributeList().add(entry.getValue());
       }
    }
 
@@ -53,12 +56,16 @@ public class RDFDataDescriptor implements DataDescriptor {
       return mTargetType;
    }
    
-   public List<RbcAttribute> getAttributeList() {
+   public List<RbcAttribute> getNonTargetAttributeList() {
       return cNonTargetAttributeList;
    }
 
    public RbcAttribute getTargetAttribute() {
       return mAttributes.get(mTargetAttributeName);
+   }
+   
+   public Collection<RbcAttribute> getAllAttributes() {
+      return mAttributes.values();
    }
    
    @Override
@@ -87,6 +94,21 @@ public class RDFDataDescriptor implements DataDescriptor {
    @Override
    public String toString() {
       return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE);
+   }
+
+   public void write(Writer out) throws IOException {
+      out.write(RDFDataDescriptorParser.TARGET_TYPE);
+      out.write(mTargetType.stringValue());
+      out.write("\n\n");
+      
+      out.write(RDFDataDescriptorParser.TARGET);
+      out.write(mTargetAttributeName);
+      out.write("\n\n");
+      
+      for (RbcAttribute a : mAttributes.values()) {
+         a.write(out);
+         out.write("\n");
+      }
    }
 
 }

@@ -1,14 +1,19 @@
 package airldm2.core.rl;
 
+import java.io.IOException;
+import java.io.Writer;
 import java.util.List;
 
 import org.openrdf.model.URI;
 import org.openrdf.model.Value;
 
 import airldm2.util.CollectionUtil;
+import airldm2.util.StringUtil;
 
 public class EnumType implements ValueType {
 
+   public static String NAME = "ENUM";
+   
    private List<URI> mDomain;
    
    public EnumType(List<URI> domain) {
@@ -43,6 +48,13 @@ public class EnumType implements ValueType {
    @Override
    public List<String> getStringValues() {
       return CollectionUtil.toStringList(mDomain);
+   }
+
+   @Override
+   public void write(Writer out) throws IOException {
+      out.write(NAME);
+      out.write("=");
+      out.write(StringUtil.toCSV(getStringValues()));
    }
 
 }

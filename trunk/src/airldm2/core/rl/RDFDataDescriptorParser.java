@@ -15,15 +15,15 @@ import org.openrdf.model.impl.ValueFactoryImpl;
 import airldm2.core.rl.RbcAttribute.ValueAggregator;
 import airldm2.exceptions.RDFDataDescriptorFormatException;
 import airldm2.util.CollectionUtil;
-import airldm2.util.Utils;
+import airldm2.util.StringUtil;
 
 public class RDFDataDescriptorParser {
 
-   private static final String COMMENT_CHAR = "%";
-   private static final String TARGET_TYPE = "@targetType ";
-   private static final String TARGET = "@target ";
-   private static final String ATTRIBUTE = "@attribute ";
-   private static final String AGGREGATOR = "aggregator=";
+   public static final String COMMENT_CHAR = "%";
+   public static final String TARGET_TYPE = "@targetType ";
+   public static final String TARGET = "@target ";
+   public static final String ATTRIBUTE = "@attribute ";
+   public static final String AGGREGATOR = "aggregator=";
    
    private static ValueFactory Factory = new ValueFactoryImpl();
    
@@ -76,7 +76,7 @@ public class RDFDataDescriptorParser {
    }
 
    private static RbcAttribute parseAttribute(String name, String propLine, String valueLine, String aggregatorLine) throws RDFDataDescriptorFormatException {
-      String[] propStrs = Utils.trim(propLine.split(","));
+      String[] propStrs = StringUtil.trim(propLine.split(","));
       List<URI> props = CollectionUtil.makeList();
       for (String propStr : propStrs) {
          props.add(Factory.createURI(propStr));
@@ -87,44 +87,46 @@ public class RDFDataDescriptorParser {
       
       ValueAggregator aggregator = ValueAggregator.valueOf(aggregatorLine.substring(AGGREGATOR.length()).trim());
       
-      String[] valueStrs = Utils.trim(valueLine.split("="));
-      String[] possibleValues = Utils.trim(valueStrs[1].split(","));
       ValueType valueType = null;
-      if ("BINNED".equalsIgnoreCase(valueStrs[0])) {
-         double[] cutPoints = new double[possibleValues.length];
-         for (int i = 0; i < possibleValues.length; i++) {
-            cutPoints[i] = Double.parseDouble(possibleValues[i]);
+      String[] valueStrs = StringUtil.trim(valueLine.split("="));
+      if (!"?".equals(valueStrs[1].trim())) {
+         String[] possibleValues = StringUtil.trim(valueStrs[1].split(","));
+         if (BinnedType.NAME.equalsIgnoreCase(valueStrs[0])) {
+            double[] cutPoints = new double[possibleValues.length];
+            for (int i = 0; i < possibleValues.length; i++) {
+               cutPoints[i] = Double.parseDouble(possibleValues[i]);
+            }
+            valueType = new BinnedType(cutPoints);
+            
+            if (aggregator == ValueAggregator.INDEPENDENT_VAL) {
+               throw new RDFDataDescriptorFormatException(ValueAggregator.INDEPENDENT_VAL + " must be a Nominal type.");
+            }
+         } else if (NominalType.NAME.equalsIgnoreCase(valueStrs[0])) {
+            valueType = new NominalType(Arrays.asList(possibleValues));
+            
+            if (aggregator == ValueAggregator.AVG ||
+                  aggregator == ValueAggregator.COUNT ||
+                  aggregator == ValueAggregator.MAX ||
+                  aggregator == ValueAggregator.MIN) {
+               throw new RDFDataDescriptorFormatException("Aggregator " + aggregator + " can not be a Nominal type.");
+            }
+         } else if (EnumType.NAME.equalsIgnoreCase(valueStrs[0])) {
+            URI[] possibleURIs = new URI[possibleValues.length];
+            for (int i = 0; i < possibleValues.length; i++) {
+               possibleURIs[i] = Factory.createURI(possibleValues[i]);
+            }
+            
+            valueType = new EnumType(Arrays.asList(possibleURIs));
+            
+            if (aggregator == ValueAggregator.AVG ||
+                  aggregator == ValueAggregator.COUNT ||
+                  aggregator == ValueAggregator.MAX ||
+                  aggregator == ValueAggregator.MIN) {
+               throw new RDFDataDescriptorFormatException("Aggregator " + aggregator + " can not be an Enum type.");
+            }
+         } else {
+            throw new RDFDataDescriptorFormatException("Value type " + valueStrs[0] + " is not supported.");
          }
-         valueType = new BinnedType(cutPoints);
-         
-         if (aggregator == ValueAggregator.INDEPENDENT_VAL) {
-            throw new RDFDataDescriptorFormatException(ValueAggregator.INDEPENDENT_VAL + " must be a Nominal type.");
-         }
-      } else if ("NOMINAL".equalsIgnoreCase(valueStrs[0])) {
-         valueType = new NominalType(Arrays.asList(possibleValues));
-         
-         if (aggregator == ValueAggregator.AVG ||
-               aggregator == ValueAggregator.COUNT ||
-               aggregator == ValueAggregator.MAX ||
-               aggregator == ValueAggregator.MIN) {
-            throw new RDFDataDescriptorFormatException("Aggregator " + aggregator + " can not be a Nominal type.");
-         }
-      } else if ("ENUM".equalsIgnoreCase(valueStrs[0])) {
-         URI[] possibleURIs = new URI[possibleValues.length];
-         for (int i = 0; i < possibleValues.length; i++) {
-            possibleURIs[i] = Factory.createURI(possibleValues[i]);
-         }
-         
-         valueType = new EnumType(Arrays.asList(possibleURIs));
-         
-         if (aggregator == ValueAggregator.AVG ||
-               aggregator == ValueAggregator.COUNT ||
-               aggregator == ValueAggregator.MAX ||
-               aggregator == ValueAggregator.MIN) {
-            throw new RDFDataDescriptorFormatException("Aggregator " + aggregator + " can not be an Enum type.");
-         }
-      } else {
-         throw new RDFDataDescriptorFormatException("Value type " + valueStrs[0] + " is not supported.");
       }
       
       RbcAttribute attribute = new RbcAttribute(name, props, valueType, aggregator);

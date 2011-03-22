@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Set;
 
 public class CollectionUtil {
+   
 	public static <T> List<T> makeList() {
 		return new ArrayList<T>();
 	}
@@ -32,4 +33,5 @@ public class CollectionUtil {
       }
       return strings;
    }
+   
 }
