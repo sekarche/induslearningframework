@@ -24,7 +24,7 @@ public class InstanceAggregator {
       List<AggregatedInstance> aggInstances = CollectionUtil.makeList();
       for (URI instanceURI : instanceURIs) {
          RbcAttribute targetAttribute = dataDesc.getTargetAttribute();
-         List<RbcAttribute> nonTargetAttributes = dataDesc.getAttributeList();
+         List<RbcAttribute> nonTargetAttributes = dataDesc.getNonTargetAttributeList();
          
          int[] targetValueIndexCount = aggregateAttribute(dataSource, instanceURI, targetAttribute);
          int[][] featureValueIndexCount = new int[nonTargetAttributes.size()][];
