@@ -16,6 +16,7 @@ import airldm2.core.rl.RDFDataDescriptorParser;
 import airldm2.core.rl.RDFDataSource;
 import airldm2.database.rdf.RDFDatabaseConnection;
 import airldm2.database.rdf.RDFDatabaseConnectionFactory;
+import airldm2.database.rdf.VirtuosoConnection;
 
 public class RelationalBayesianClassifierTest {
    
@@ -77,8 +78,19 @@ public class RelationalBayesianClassifierTest {
    
    @Test
    public void testNCIHints() throws Exception {
-      //http://logd.tw.rpi.edu/sparql
-      //testWithTrainInDBTestInDB("rbc_example/nci_hints.txt", "http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/version/2010-Jun-09", "http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/version/2010-Jun-09");
+      final String HINTS_DESC = "rbc_example/nci_hintsDesc.txt";
+      final String LOGD_SPARQL = "http://logd.tw.rpi.edu/sparql";
+      
+      RDFDataDescriptor desc = RDFDataDescriptorParser.parse(HINTS_DESC);
+      RDFDatabaseConnection conn = new VirtuosoConnection(LOGD_SPARQL);
+      //named RDF graph that stores all training triples 
+      SSDataSource trainSource = new RDFDataSource(conn);
+      LDInstances trainInstances = new LDInstances();
+      trainInstances.setDesc(desc);
+      trainInstances.setDataSource(trainSource);
+   
+      RelationalBayesianClassifier rbc = new RelationalBayesianClassifier();
+      //rbc.buildClassifier(trainInstances);
    }
    
    private void testWithTrainInDBTestInDB(String descFile, String trainGraph, String testGraph) throws Exception {

@@ -43,4 +43,9 @@ public class Utils {
          .toString();
    }
    
+   public static String makeContextPart(String context) {
+      if (context == null) return "";
+      else return "FROM " + angleBracket(context);
+   }
+   
 }

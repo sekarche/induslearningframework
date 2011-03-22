@@ -1,6 +1,7 @@
 package airldm2.database.rdf;
 
 import static airldm2.util.Utils.angleBracket;
+import static airldm2.util.Utils.makeContextPart;
 import static airldm2.util.Utils.triple;
 
 import java.util.List;
@@ -16,18 +17,18 @@ public class SuffStatQueryConstructor {
    private static final String TARGET_VAR = "?tar";
    private static final String AGGREGATION_VAR = "?agg";
    private static final String CONTEXT_PATTERN = "%context%";
-   private static final String QUERY_HEADER = "SELECT COUNT(*) FROM " + CONTEXT_PATTERN + " WHERE { ";
+   private static final String QUERY_HEADER = "SELECT COUNT(*) " + CONTEXT_PATTERN + " WHERE { ";
    private static final String QUERY_FOOTER = " }";
    private static final String AGGREGATION_FUNCTION_PATTERN = "%aggfun%";
    private static final String LAST_VAR_PATTERN = "%lastVar%";
    private static final String AGGREGATION_HEADER = "SELECT (" + AGGREGATION_FUNCTION_PATTERN + "(" + LAST_VAR_PATTERN + ") AS " + AGGREGATION_VAR + ") WHERE { ";
    
-   private String mContext;
+   private String mContextPart;
    private SuffStatQueryParameter mParam;
    private VarFactory mVarFactory;
    
-   public SuffStatQueryConstructor(String mDefaultContext, SuffStatQueryParameter queryParam) {
-      mContext = mDefaultContext;
+   public SuffStatQueryConstructor(String context, SuffStatQueryParameter queryParam) {
+      mContextPart = makeContextPart(context);
       mParam = queryParam;
       mVarFactory = new VarFactory();
    }
@@ -36,7 +37,7 @@ public class SuffStatQueryConstructor {
       mVarFactory.reset();
       StringBuilder b = new StringBuilder();
       
-      b.append(QUERY_HEADER.replace(CONTEXT_PATTERN, angleBracket(mContext)));
+      b.append(QUERY_HEADER.replace(CONTEXT_PATTERN, mContextPart));
       
       if (mParam.hasFeature()) {
          ValueAggregator featureAggType = mParam.Feature.getAggregatorType();
