@@ -18,7 +18,7 @@ public class RelationalBayesianClassifier extends Classifier {
 
    private RDFDataSource mDataSource;
    private RDFDataDescriptor mDataDesc;
-   private double mNumInstances;
+   private int mNumInstances;
 
    //[attribute name][class value][attribute value]
    private double[][][] mCounts;
@@ -71,8 +71,11 @@ public class RelationalBayesianClassifier extends Classifier {
          }
       }
       
-      //Laplace Correction for mCounts
-      ArrayUtil.add(mCounts, 1);
+      //Explicitly ask for class count since every attribute may be INDEPENDENT_VAL
+      for (int j = 0; j < numOfClassLabels; j++) {
+         ISufficentStatistic tempSuffStat = mDataSource.getSufficientStatistic(new SuffStatQueryParameter(mDataDesc.getTargetType(), targetAttribute, j));
+         mClassCounts[j] = tempSuffStat.getValue().intValue();
+      }
       
       //Cache mAttributeClassCounts for optimization (for classification)
       for (int i = 0; i < numAttributes; i++) {
@@ -82,18 +85,9 @@ public class RelationalBayesianClassifier extends Classifier {
             }
          }
       }
-
-      //Explicitly ask for class count since every attribute may be INDEPENDENT_VAL
-      for (int j = 0; j < numOfClassLabels; j++) {
-         ISufficentStatistic tempSuffStat = mDataSource.getSufficientStatistic(new SuffStatQueryParameter(mDataDesc.getTargetType(), targetAttribute, j));
-         mClassCounts[j] = tempSuffStat.getValue().intValue();
-      }
-
-      //Laplace Correction for mClassCounts
-      ArrayUtil.add(mClassCounts, 1);
       
       for (int i = 0; i < numOfClassLabels; i++) {
-         mNumInstances += mClassCounts[i];
+         mNumInstances += (int) mClassCounts[i];
       }
    }
    
@@ -121,16 +115,20 @@ public class RelationalBayesianClassifier extends Classifier {
       for (int c = 0; c < dist.length; c++) {
          for (int a = 0; a < featureValueIndexCount.length; a++) {
             for (int v = 0; v < featureValueIndexCount[a].length; v++) {
+               //With Laplace correction
+               double pVpC = (mCounts[a][c][v] + 1) / (mAttributeClassCounts[a][c] + mCounts[a][c].length);
+               
                if (featureValueIndexCount[a][v] == 0) continue;
                else if (featureValueIndexCount[a][v] == 1) {
-                  dist[c] *= mCounts[a][c][v] / mAttributeClassCounts[a][c];
+                  dist[c] *= pVpC;
                } else {
-                  dist[c] *= Math.pow(mCounts[a][c][v] / mAttributeClassCounts[a][c], featureValueIndexCount[a][v]);
+                  dist[c] *= Math.pow(pVpC, featureValueIndexCount[a][v]);
                } 
             }
          }
          
-         dist[c] *= mClassCounts[c] / getNumInstances();
+       //With Laplace correction
+         dist[c] *= (mClassCounts[c] + 1) / (mNumInstances + mClassCounts.length);
       }
       
       ArrayUtil.normalize(dist);
@@ -151,7 +149,7 @@ public class RelationalBayesianClassifier extends Classifier {
    }
 
    public int getNumInstances() {
-      return (int) mNumInstances;
+      return mNumInstances;
    }
    
 }

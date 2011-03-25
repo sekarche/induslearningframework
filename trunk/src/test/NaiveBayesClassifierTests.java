@@ -136,10 +136,8 @@ public class NaiveBayesClassifierTests {
           */
 
       } catch (Exception e) {
-
-         Assert.fail("Error reading instances or buildDing classifier:"
-               + e.getMessage());
          e.printStackTrace();
+         Assert.fail("Error reading instances or building classifier:" + e.getMessage());         
       }
 
    }

@@ -56,5 +56,13 @@ public class ArrayUtil {
          a[i] += shift;
       }
    }
+
+   public static int[] castToInt(double[] aDouble) {
+      int[] aInt = new int[aDouble.length];
+      for (int i = 0; i < aInt.length; i++) {
+         aInt[i] = (int) aDouble[i];
+      }
+      return aInt;
+   }
    
 }

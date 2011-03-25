@@ -38,36 +38,35 @@ public class RelationalBayesianClassifierTest {
       RelationalBayesianClassifier rbc = new RelationalBayesianClassifier();
       rbc.buildClassifier(trainInstances);
       
-      //With Laplace Correction
       double[][][] counts = rbc.getCountsForTest();
       System.out.println(Arrays.deepToString(counts));
       Assert.assertTrue(Arrays.deepEquals(
-         new double[][][] {
-            { {2, 2, 4}, {1, 2, 1}, {1, 4, 1} },
-            { {1, 3, 1}, {3, 1, 1}, {1, 2, 1} },
-            { {1, 2, 2, 1}, {1, 1, 1, 2}, {1, 1, 1, 1} },
-            { {1, 3, 1, 1}, {2, 1, 1, 1}, {1, 1, 1, 1} },
-            { {1, 2, 1, 2}, {1, 1, 1, 2}, {1, 1, 1, 1} },
-         }
-         , counts));
-      
+            new double[][][] {
+               { {1, 1, 3}, {0, 1, 0}, {0, 3, 0} },
+               { {0, 2, 0}, {2, 0, 0}, {0, 1, 0} },
+               { {0, 1, 1, 0}, {0, 0, 0, 1}, {0, 0, 0, 0} },
+               { {0, 2, 0, 0}, {1, 0, 0, 0}, {0, 0, 0, 0} },
+               { {0, 1, 0, 1}, {0, 0, 0, 1}, {0, 0, 0, 0} },
+            }
+            , counts));
+         
       double[][] attributeClassCounts = rbc.getAttributeClassCountsForTest();
       Assert.assertTrue(Arrays.deepEquals(
             new double[][] {
-               {8, 4, 6},
-               {5, 5, 4},
-               {6, 5, 4},
-               {6, 5, 4},
-               {6, 5, 4},
+               {5, 1, 3},
+               {2, 2, 1},
+               {2, 1, 0},
+               {2, 1, 0},
+               {2, 1, 0},
             }
             , attributeClassCounts));
          
       double[] classCounts = rbc.getClassCountsForTest();
       Assert.assertTrue(Arrays.equals(
-            new double[] {3, 3, 2}
+            new double[] {2, 2, 1}
             , classCounts));
       
-      Assert.assertEquals(8, rbc.getNumInstances());
+      Assert.assertEquals(5, rbc.getNumInstances());
    }
    
    @Test
