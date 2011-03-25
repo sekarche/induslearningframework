@@ -18,7 +18,7 @@ public class RelationalBayesianClassifier extends Classifier {
 
    private RDFDataSource mDataSource;
    private RDFDataDescriptor mDataDesc;
-   private int mNumInstances;
+   private double mNumInstances;
 
    //[attribute name][class value][attribute value]
    private double[][][] mCounts;
@@ -71,6 +71,9 @@ public class RelationalBayesianClassifier extends Classifier {
          }
       }
       
+      //Laplace Correction for mCounts
+      ArrayUtil.add(mCounts, 1);
+      
       //Cache mAttributeClassCounts for optimization (for classification)
       for (int i = 0; i < numAttributes; i++) {
          for (int j = 0; j < numOfClassLabels; j++) {
@@ -86,6 +89,9 @@ public class RelationalBayesianClassifier extends Classifier {
          mClassCounts[j] = tempSuffStat.getValue().intValue();
       }
 
+      //Laplace Correction for mClassCounts
+      ArrayUtil.add(mClassCounts, 1);
+      
       for (int i = 0; i < numOfClassLabels; i++) {
          mNumInstances += mClassCounts[i];
       }
@@ -124,7 +130,7 @@ public class RelationalBayesianClassifier extends Classifier {
             }
          }
          
-         dist[c] *= mClassCounts[c] / mNumInstances;
+         dist[c] *= mClassCounts[c] / getNumInstances();
       }
       
       ArrayUtil.normalize(dist);
@@ -142,6 +148,10 @@ public class RelationalBayesianClassifier extends Classifier {
 
    public double[] getClassCountsForTest() {
       return mClassCounts;
+   }
+
+   public int getNumInstances() {
+      return (int) mNumInstances;
    }
    
 }

@@ -6,7 +6,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import airldm2.core.SSDataSource;
 import airldm2.core.rl.RDFDataDescriptor;
 import airldm2.core.rl.RDFDataDescriptorParser;
 import airldm2.core.rl.RDFDataSource;
@@ -50,7 +49,8 @@ public class RDFDataDescriptorEnhancerTest {
       enhancer.fillDomain("rbc_example/smallDescIncomplete.txt", "rbc_example/smallDescFilled.txt");
    }
    
-   @Test
+   //Connects to a remote SPARQL - turn on only when needed
+   //@Test
    public void testNCIHintsOnFile() throws Exception {
       final String HINTS_DESC = "rbc_example/nci_hintsDescIncomplete.txt";
       final String HINTS_DESC_FILLED = "rbc_example/nci_hintsDesc.txt";
