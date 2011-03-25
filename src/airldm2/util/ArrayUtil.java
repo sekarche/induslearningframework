@@ -43,4 +43,18 @@ public class ArrayUtil {
       return i;
    }
    
+   public static void add(double[][][] a, double shift) {
+      for (int i = 0; i < a.length; i++) {
+         for (int j = 0; j < a[i].length; j++) {
+            add(a[i][j], shift);
+         }
+      }
+   }
+   
+   public static void add(double[] a, double shift) {
+      for (int i = 0; i < a.length; i++) {
+         a[i] += shift;
+      }
+   }
+   
 }

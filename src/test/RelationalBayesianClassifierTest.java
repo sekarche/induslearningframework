@@ -25,9 +25,8 @@ public class RelationalBayesianClassifierTest {
    }
    
    @Test
-   public void testSmall() throws Exception {
+   public void testSmallWithExactCounts() throws Exception {
       RDFDataDescriptor desc = RDFDataDescriptorParser.parse("rbc_example/smallDesc.txt");
-      //System.out.println(desc);
       
       RDFDatabaseConnection conn = RDFDatabaseConnectionFactory.makeFromConfig();
       //named RDF graph that stores all training triples 
@@ -38,32 +37,37 @@ public class RelationalBayesianClassifierTest {
    
       RelationalBayesianClassifier rbc = new RelationalBayesianClassifier();
       rbc.buildClassifier(trainInstances);
+      
+      //With Laplace Correction
       double[][][] counts = rbc.getCountsForTest();
+      System.out.println(Arrays.deepToString(counts));
       Assert.assertTrue(Arrays.deepEquals(
          new double[][][] {
-            { {1, 1, 3}, {0, 1, 0}, {0, 3, 0} },
-            { {0, 2, 0}, {2, 0, 0}, {0, 1, 0} },
-            { {0, 1, 1, 0}, {0, 0, 0, 1}, {0, 0, 0, 0} },
-            { {0, 2, 0, 0}, {1, 0, 0, 0}, {0, 0, 0, 0} },
-            { {0, 1, 0, 1}, {0, 0, 0, 1}, {0, 0, 0, 0} },
+            { {2, 2, 4}, {1, 2, 1}, {1, 4, 1} },
+            { {1, 3, 1}, {3, 1, 1}, {1, 2, 1} },
+            { {1, 2, 2, 1}, {1, 1, 1, 2}, {1, 1, 1, 1} },
+            { {1, 3, 1, 1}, {2, 1, 1, 1}, {1, 1, 1, 1} },
+            { {1, 2, 1, 2}, {1, 1, 1, 2}, {1, 1, 1, 1} },
          }
          , counts));
       
       double[][] attributeClassCounts = rbc.getAttributeClassCountsForTest();
       Assert.assertTrue(Arrays.deepEquals(
             new double[][] {
-               {5, 1, 3},
-               {2, 2, 1},
-               {2, 1, 0},
-               {2, 1, 0},
-               {2, 1, 0},
+               {8, 4, 6},
+               {5, 5, 4},
+               {6, 5, 4},
+               {6, 5, 4},
+               {6, 5, 4},
             }
             , attributeClassCounts));
          
       double[] classCounts = rbc.getClassCountsForTest();
       Assert.assertTrue(Arrays.equals(
-            new double[] {2, 2, 1}
+            new double[] {3, 3, 2}
             , classCounts));
+      
+      Assert.assertEquals(8, rbc.getNumInstances());
    }
    
    @Test
@@ -76,7 +80,8 @@ public class RelationalBayesianClassifierTest {
       testWithTrainInDBTestInDB("rbc_example/projectDesc.txt", ":projectTrain", ":projectTest");
    }
    
-   @Test
+   //Connects to a remote SPARQL - turn on only when needed
+   //@Test
    public void testNCIHints() throws Exception {
       final String HINTS_DESC = "rbc_example/nci_hintsDesc.txt";
       final String LOGD_SPARQL = "http://logd.tw.rpi.edu/sparql";
