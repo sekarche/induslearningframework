@@ -14,6 +14,10 @@ import airldm2.core.SSDataSource;
 import airldm2.core.SSDataSourceFactory;
 import airldm2.core.datatypes.relational.SingleRelationDataDescriptor;
 import airldm2.core.rl.RDFDataDescriptor;
+import airldm2.core.rl.RDFDataDescriptorParser;
+import airldm2.core.rl.RDFDataSource;
+import airldm2.database.rdf.RDFDatabaseConnection;
+import airldm2.database.rdf.RDFDatabaseConnectionFactory;
 import airldm2.util.SimpleArffFileReader;
 
 /**
@@ -26,8 +30,7 @@ import airldm2.util.SimpleArffFileReader;
  */
 public class Evaluation {
 
-   public static String evaluateModel(Classifier classifier, String[] options)
-         throws Exception {
+   public static String evaluateModel(Classifier classifier, String[] options) throws Exception {
 
       boolean trainFileInArff = Utils.getFlag("a", options);
       boolean trainFileInDB = Utils.getFlag("b", options);
@@ -149,6 +152,29 @@ public class Evaluation {
       return wekaConfusionMatrix;
    }
 
+   public static ConfusionMatrix evaluateRBCModel(RelationalBayesianClassifier rbc, String[] options) throws Exception {
+      String descFile = Utils.getOption("desc", options);
+      String trainGraph = Utils.getOption("trainGraph", options);
+      String testGraph = Utils.getOption("testGraph", options);
+      
+      RDFDataDescriptor desc = RDFDataDescriptorParser.parse(descFile);
+      
+      RDFDatabaseConnection conn = RDFDatabaseConnectionFactory.makeFromConfig();
+      //named RDF graph that stores all training triples 
+      SSDataSource trainSource = new RDFDataSource(conn, trainGraph);
+      LDInstances trainInstances = new LDInstances();
+      trainInstances.setDesc(desc);
+      trainInstances.setDataSource(trainSource);
+   
+      //named RDF graph that stores all test triples
+      SSDataSource testSource = new RDFDataSource(conn, testGraph);
+      LDInstances testInstances = new LDInstances();
+      testInstances.setDesc(desc);
+      testInstances.setDataSource(testSource);
+      
+      return evaluateRBCModel(rbc, trainInstances, testInstances);
+   }
+   
    public static ConfusionMatrix evaluateRBCModel(RelationalBayesianClassifier rbc, LDInstances trainInstances, LDInstances testInstances) throws Exception {
       RDFDataDescriptor desc = (RDFDataDescriptor) trainInstances.getDesc();
       String[] classLabels = desc.getClassLabels();
