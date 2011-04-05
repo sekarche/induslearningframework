@@ -3,7 +3,9 @@ package airldm2.classifiers.rl;
 import java.util.Arrays;
 import java.util.List;
 
+import weka.classifiers.evaluation.ConfusionMatrix;
 import airldm2.classifiers.Classifier;
+import airldm2.classifiers.Evaluation;
 import airldm2.core.ISufficentStatistic;
 import airldm2.core.LDInstance;
 import airldm2.core.LDInstances;
@@ -150,6 +152,17 @@ public class RelationalBayesianClassifier extends Classifier {
 
    public int getNumInstances() {
       return mNumInstances;
+   }
+   
+   public static void main(String[] args) {
+      try {
+         RelationalBayesianClassifier rbc = new RelationalBayesianClassifier();
+         ConfusionMatrix matrix = Evaluation.evaluateRBCModel(rbc, args);
+         System.out.println(matrix.toString("===Confusion Matrix==="));
+      } catch (Exception e) {
+         System.out.println(e.getMessage());
+         e.printStackTrace();
+      }
    }
    
 }
