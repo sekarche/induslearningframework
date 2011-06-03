@@ -129,7 +129,7 @@ public class RDFDataDescriptorParser {
          }
       }
       
-      RbcAttribute attribute = new RbcAttribute(name, props, valueType, aggregator);
+      RbcAttribute attribute = new RbcAttribute(name, new PropertyChain(props), valueType, aggregator);
       
       return attribute;
    }

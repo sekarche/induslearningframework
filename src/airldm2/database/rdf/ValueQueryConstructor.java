@@ -46,7 +46,7 @@ public class ValueQueryConstructor {
    private String createValueChain(RbcAttribute att) {
       StringBuilder b = new StringBuilder();
       
-      List<URI> props = att.getProperties();
+      List<URI> props = att.getProperties().getList();
       b.append(triple(angleBracket(mInstance), angleBracket(props.get(0)), mVarFactory.next()));
       for (int i = 1; i < props.size(); i++) {
          b.append(triple(mVarFactory.current(), angleBracket(props.get(i)), mVarFactory.next()));

@@ -10,6 +10,7 @@ import airldm2.core.DefaultSufficentStatisticImpl;
 import airldm2.core.ISufficentStatistic;
 import airldm2.core.SSDataSource;
 import airldm2.database.rdf.AggregationQueryConstructor;
+import airldm2.database.rdf.CrawlPropertyQueryConstructor;
 import airldm2.database.rdf.IndependentValueAggregationQueryConstructor;
 import airldm2.database.rdf.InstanceQueryConstructor;
 import airldm2.database.rdf.RDFDatabaseConnection;
@@ -130,7 +131,7 @@ public class RDFDataSource implements SSDataSource {
       return ((Literal)rv[0]).intValue();
    }
 
-   public List<Value> getRangeof(URI targetType, RbcAttribute attribute) throws RDFDatabaseException {
+   public List<Value> getRangeOf(URI targetType, RbcAttribute attribute) throws RDFDatabaseException {
       String query = new RangeQueryConstructor(mDefaultContext, targetType, attribute).createQuery();
       //System.out.println(query);
       
@@ -141,6 +142,21 @@ public class RDFDataSource implements SSDataSource {
       }
       
       return range;
+   }
+
+   public List<URI> getPropertiesOf(URI targetType, PropertyChain propChain) throws RDFDatabaseException {
+      String query = new CrawlPropertyQueryConstructor(mDefaultContext, targetType, propChain).createQuery();
+      //System.out.println(query);
+      
+      List<Value[]> results = mConn.executeQuery(query);
+      List<URI> instances = CollectionUtil.makeList();
+      for (Value[] rv : results) {
+         if (rv[0] instanceof URI) {
+            instances.add((URI) rv[0]);
+         }
+      }
+      
+      return instances;
    }
    
 }
