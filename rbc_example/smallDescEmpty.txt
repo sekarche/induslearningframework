@@ -1,0 +1,8 @@
+@targetType :small/Instance
+
+@target label
+
+@attribute label
+:small/label
+NOMINAL=A,B,C
+aggregator=NONE
