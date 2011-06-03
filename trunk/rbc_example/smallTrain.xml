@@ -7,6 +7,7 @@
 <small:Instance>
 	<small:label>A</small:label>
 	<small:prop1 rdf:nodeID="b1"/>
+	<small:prop4 rdf:resource=":small/male"/>
 </small:Instance>
 <rdf:Description rdf:nodeID="b1">
 	<small:prop2>i1</small:prop2>
@@ -20,6 +21,7 @@
 	<small:label>A</small:label>
 	<small:prop1 rdf:nodeID="b21"/>
 	<small:prop1 rdf:nodeID="b22"/>
+	<small:prop4 rdf:resource=":small/female"/>
 </small:Instance>
 <rdf:Description rdf:nodeID="b21">
 	<small:prop2>i3</small:prop2>
@@ -33,6 +35,7 @@
 <small:Instance>
 	<small:label>B</small:label>
 	<small:prop1 rdf:nodeID="b3"/>
+	<small:prop4 rdf:resource=":small/male"/>
 </small:Instance>
 <rdf:Description rdf:nodeID="b3">
 	<small:prop3 rdf:datatype="http://www.w3.org/2001/XMLSchema#int">0</small:prop3>
@@ -42,6 +45,7 @@
 <small:Instance>
 	<small:label>B</small:label>
 	<small:prop1 rdf:nodeID="b4"/>
+	<small:prop4 rdf:resource=":small/female"/>
 </small:Instance>
 <rdf:Description rdf:nodeID="b4">
 	<small:prop2>i2</small:prop2>
@@ -52,6 +56,7 @@
 	<small:prop1 rdf:nodeID="b51"/>
 	<small:prop1 rdf:nodeID="b52"/>
 	<small:prop1 rdf:nodeID="b53"/>
+	<small:prop4 rdf:resource=":small/male"/>
 </small:Instance>
 <rdf:Description rdf:nodeID="b51">
 	<small:prop2>i2</small:prop2>

@@ -2,6 +2,7 @@ package airldm2.util;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -13,6 +14,10 @@ public class CollectionUtil {
 	public static <T> List<T> makeList() {
 		return new ArrayList<T>();
 	}
+	
+	public static <T> List<T> makeList(Collection<T> as) {
+      return new ArrayList<T>(as);
+   }
 	
 	public static <T> Set<T> makeSet() {
 		return new HashSet<T>();

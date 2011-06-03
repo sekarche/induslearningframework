@@ -44,7 +44,7 @@ public class RDFDataDescriptorEnhancer {
    public void fillDomain(URI targetType, RbcAttribute a) throws RDFDatabaseException {
       if (a.getValueType() != null) return;
       
-      List<Value> range = mDataSource.getRangeof(targetType, a);
+      List<Value> range = mDataSource.getRangeOf(targetType, a);
       boolean allURIs = true;
       for (Value v : range) {
          if (!(v instanceof URI)) {

@@ -32,13 +32,13 @@ public class RbcAttribute {
    public enum ValueAggregator { NONE, INDEPENDENT_VAL, COUNT, AVG, MIN, MAX }
    
    private String mName;
-   private List<URI> mProperties;
+   private PropertyChain mPropertyChain;
    private ValueType mValueType;
    private ValueAggregator mAggregatorType;
    
-   public RbcAttribute(String name, List<URI> props, ValueType valueType, ValueAggregator aggregatorType) {
+   public RbcAttribute(String name, PropertyChain props, ValueType valueType, ValueAggregator aggregatorType) {
       mName = name;
-      mProperties = props;
+      mPropertyChain = props;
       mValueType = valueType;
       mAggregatorType = aggregatorType;
    }
@@ -47,8 +47,8 @@ public class RbcAttribute {
       return mName;
    }
    
-   public List<URI> getProperties() {
-      return mProperties;
+   public PropertyChain getProperties() {
+      return mPropertyChain;
    }
 
    public ValueAggregator getAggregatorType(){
@@ -73,7 +73,7 @@ public class RbcAttribute {
       out.write(mName);
       out.write("\n");
       
-      out.write(StringUtil.toCSV(CollectionUtil.toStringList(mProperties)));
+      out.write(StringUtil.toCSV(CollectionUtil.toStringList(mPropertyChain.getList())));
       out.write("\n");
       
       mValueType.write(out);
