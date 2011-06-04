@@ -9,8 +9,9 @@ import airldm2.core.rl.RDFDataSource;
 import airldm2.database.rdf.RDFDatabaseConnection;
 import airldm2.database.rdf.RDFDatabaseConnectionFactory;
 import explore.RDFFeatureCrawler;
+import explore.RDFFeatureSelector;
 
-public class RDFFeatureCrawlerTest {
+public class RDFFeatureSelectorTest {
 
    @Before
    public void setUp() {
@@ -23,15 +24,10 @@ public class RDFFeatureCrawlerTest {
       RDFDatabaseConnection conn = RDFDatabaseConnectionFactory.makeFromConfig();
       RDFDataSource source = new RDFDataSource(conn, ":small");
       RDFFeatureCrawler crawler = new RDFFeatureCrawler(source);
-      crawler.crawl(desc, 2);      
-   }
+      crawler.crawl(desc, 2);    
       
-   @Test
-   public void testSmallOnFile() throws Exception {
-      RDFDatabaseConnection conn = RDFDatabaseConnectionFactory.makeFromConfig();
-      RDFDataSource source = new RDFDataSource(conn, ":small");
-      RDFFeatureCrawler crawler = new RDFFeatureCrawler(source);
-      crawler.crawl("rbc_example/smallDescEmpty.txt", "rbc_example/smallDescFilled.txt", 2);
+      RDFFeatureSelector selector = new RDFFeatureSelector(source);
+      selector.select(desc, 5);
    }
-   
+
 }

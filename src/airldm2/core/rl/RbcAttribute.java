@@ -60,6 +60,10 @@ public class RbcAttribute {
    public void setValueType(ValueType v) {
       mValueType = v;
    }
+   
+   public int getDomainSize() {
+      return getValueType().domainSize();
+   }
 
    @Override
    public String toString() {

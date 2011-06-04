@@ -60,7 +60,7 @@ public class RDFFeatureCrawler {
             allAttributes.addAll(attributes);
          }
       }
-      System.out.println(allAttributes);
+      //System.out.println(allAttributes);
       return allAttributes;
    }
 
