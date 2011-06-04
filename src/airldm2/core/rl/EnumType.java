@@ -51,6 +51,11 @@ public class EnumType implements ValueType {
    }
 
    @Override
+   public String toString() {
+      return NAME + "=" + StringUtil.toCSV(getStringValues());
+   }
+   
+   @Override
    public void write(Writer out) throws IOException {
       out.write(NAME);
       out.write("=");

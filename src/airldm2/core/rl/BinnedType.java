@@ -2,7 +2,6 @@ package airldm2.core.rl;
 
 import java.io.IOException;
 import java.io.Writer;
-import java.util.Arrays;
 import java.util.List;
 
 import org.openrdf.model.Literal;
@@ -71,9 +70,8 @@ public class BinnedType implements ValueType {
       return b.toString();
    }
 
-   @Override
    public String toString() {
-      return Arrays.toString(mCutPoints);
+      return NAME + "=" + StringUtil.toCSV(mCutPoints);
    }
 
    @Override

@@ -36,7 +36,7 @@ public class VirtuosoConnection implements RDFDatabaseConnection {
    }
 
    @Override
-   public List<Value[]> executeQuery(String query) throws RDFDatabaseException {
+   public SPARQLQueryResult executeQuery(String query) throws RDFDatabaseException {
       List<Value[]> results = CollectionUtil.makeList();
       
       TupleQuery resultsTable;
@@ -69,7 +69,7 @@ public class VirtuosoConnection implements RDFDatabaseConnection {
          throw new RDFDatabaseException(e);
       }
       
-      return results;
+      return new SPARQLQueryResult(results);
    }
    
 }

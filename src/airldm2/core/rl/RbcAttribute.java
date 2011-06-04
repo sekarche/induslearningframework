@@ -1,11 +1,9 @@
 package airldm2.core.rl;
 import java.io.IOException;
 import java.io.Writer;
-import java.util.List;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
-import org.openrdf.model.URI;
 
 import airldm2.util.CollectionUtil;
 import airldm2.util.StringUtil;

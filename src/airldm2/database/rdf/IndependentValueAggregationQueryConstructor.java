@@ -2,9 +2,6 @@ package airldm2.database.rdf;
 
 import static airldm2.util.StringUtil.angleBracket;
 import static airldm2.util.StringUtil.makeContextPart;
-import static airldm2.util.StringUtil.triple;
-
-import java.util.List;
 
 import org.openrdf.model.URI;
 
@@ -35,26 +32,14 @@ public class IndependentValueAggregationQueryConstructor {
       mVarFactory.reset();
       StringBuilder b = new StringBuilder();
       
-      String chain = createValueChain(mAttribute);
+      String chain = QueryUtil.createValueChain(mAttribute.getProperties(), angleBracket(mInstance), mVarFactory);
+      String filter = createValueFilter(mVarFactory.current(), mAttribute, mValueIndex);
       String header = AGGREGATION_HEADER.replace(CONTEXT_PATTERN, mContextPart)
                                        .replace(LAST_VAR_PATTERN, mVarFactory.current()); 
       b.append(header)
        .append(chain)
+       .append(filter)
        .append("}");
-      
-      return b.toString();
-   }
-   
-   private String createValueChain(RbcAttribute att) {
-      StringBuilder b = new StringBuilder();
-      
-      List<URI> props = att.getProperties().getList();
-      b.append(triple(angleBracket(mInstance), angleBracket(props.get(0)), mVarFactory.next()));
-      for (int i = 1; i < props.size(); i++) {
-         b.append(triple(mVarFactory.current(), angleBracket(props.get(i)), mVarFactory.next()));
-      }
-
-      b.append(createValueFilter(mVarFactory.current(), mAttribute, mValueIndex));
       
       return b.toString();
    }

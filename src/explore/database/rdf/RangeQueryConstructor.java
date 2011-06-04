@@ -1,14 +1,13 @@
-package airldm2.database.rdf;
+package explore.database.rdf;
 
 import static airldm2.util.StringUtil.angleBracket;
 import static airldm2.util.StringUtil.makeContextPart;
-import static airldm2.util.StringUtil.triple;
-
-import java.util.List;
 
 import org.openrdf.model.URI;
 
-import airldm2.core.rl.RbcAttribute;
+import airldm2.core.rl.PropertyChain;
+import airldm2.database.rdf.QueryUtil;
+import airldm2.database.rdf.VarFactory;
 
 
 public class RangeQueryConstructor {
@@ -21,37 +20,25 @@ public class RangeQueryConstructor {
     
    private String mContextPart;
    private URI mType;
-   private RbcAttribute mAttribute;
+   private PropertyChain mPropChain;
    private VarFactory mVarFactory;
    
-   public RangeQueryConstructor(String context, URI type, RbcAttribute attribute) {
+   public RangeQueryConstructor(String context, URI type, PropertyChain propChain) {
       mContextPart = makeContextPart(context);
       mType = type;
-      mAttribute = attribute;
+      mPropChain = propChain;
       mVarFactory = new VarFactory();
    }
 
    public String createQuery() {
       StringBuilder b = new StringBuilder();
       
-      String chain = createValueChain(mAttribute);
+      String chain = QueryUtil.createValueChain(mPropChain, TARGET_VAR, mVarFactory);
       b.append(QUERY_HEADER.replace(LAST_VAR_PATTERN, mVarFactory.current())
                            .replace(CONTEXT_PATTERN, mContextPart)
                            .replace(TYPE_PATTERN, angleBracket(mType)));
       b.append(chain);
       b.append("} ORDER BY ").append(mVarFactory.current());
-      return b.toString();
-   }
-   
-   private String createValueChain(RbcAttribute att) {
-      StringBuilder b = new StringBuilder();
-      
-      List<URI> props = att.getProperties().getList();
-      b.append(triple(TARGET_VAR, angleBracket(props.get(0)), mVarFactory.next()));
-      for (int i = 1; i < props.size(); i++) {
-         b.append(triple(mVarFactory.current(), angleBracket(props.get(i)), mVarFactory.next()));
-      }
-
       return b.toString();
    }
    
