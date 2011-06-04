@@ -30,7 +30,7 @@ public class JenaConnection implements RDFDatabaseConnection {
    }
    
    @Override
-   public List<Value[]> executeQuery(String query) throws RDFDatabaseException {
+   public SPARQLQueryResult executeQuery(String query) throws RDFDatabaseException {
       List<Value[]> out = CollectionUtil.makeList();
 
       QueryExecution ex = QueryExecutionFactory.sparqlService(mSparqlEndpointURL, query);
@@ -46,7 +46,7 @@ public class JenaConnection implements RDFDatabaseConnection {
          out.add(values);
       }
 
-      return out;
+      return new SPARQLQueryResult(out);
    }
    
    private Value convertValue(com.hp.hpl.jena.rdf.model.RDFNode value) {

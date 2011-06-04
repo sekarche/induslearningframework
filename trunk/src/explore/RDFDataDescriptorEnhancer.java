@@ -14,6 +14,7 @@ import airldm2.core.rl.RDFDataDescriptor;
 import airldm2.core.rl.RDFDataDescriptorParser;
 import airldm2.core.rl.RDFDataSource;
 import airldm2.core.rl.RbcAttribute;
+import airldm2.database.rdf.SPARQLQueryResult;
 import airldm2.exceptions.RDFDataDescriptorFormatException;
 import airldm2.exceptions.RDFDatabaseException;
 import airldm2.util.CollectionUtil;
@@ -44,7 +45,8 @@ public class RDFDataDescriptorEnhancer {
    public void fillDomain(URI targetType, RbcAttribute a) throws RDFDatabaseException {
       if (a.getValueType() != null) return;
       
-      List<Value> range = mDataSource.getRangeOf(targetType, a);
+      SPARQLQueryResult result = mDataSource.getRangeOf(targetType, a.getProperties());
+      List<Value> range = result.getValueList();
       boolean allURIs = true;
       for (Value v : range) {
          if (!(v instanceof URI)) {

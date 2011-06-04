@@ -1,4 +1,4 @@
-package airldm2.database.rdf;
+package explore.database.rdf;
 
 import static airldm2.util.StringUtil.angleBracket;
 import static airldm2.util.StringUtil.makeContextPart;
@@ -9,6 +9,7 @@ import java.util.List;
 import org.openrdf.model.URI;
 
 import airldm2.core.rl.PropertyChain;
+import airldm2.database.rdf.VarFactory;
 
 
 public class CrawlPropertyQueryConstructor {

@@ -3,11 +3,6 @@ package airldm2.database.rdf;
 import static airldm2.util.StringUtil.angleBracket;
 import static airldm2.util.StringUtil.makeContextPart;
 import static airldm2.util.StringUtil.triple;
-
-import java.util.List;
-
-import org.openrdf.model.URI;
-
 import airldm2.core.rl.RbcAttribute;
 import airldm2.core.rl.RbcAttribute.ValueAggregator;
 
@@ -83,15 +78,7 @@ public class SuffStatQueryConstructor {
    }
 
    private String createValueChain(RbcAttribute att) {
-      StringBuilder b = new StringBuilder();
-      
-      List<URI> props = att.getProperties().getList();
-      b.append(triple(TARGET_VAR, angleBracket(props.get(0)), mVarFactory.next()));
-      for (int i = 1; i < props.size(); i++) {
-         b.append(triple(mVarFactory.current(), angleBracket(props.get(i)), mVarFactory.next()));
-      }
-
-      return b.toString();
+      return QueryUtil.createValueChain(att.getProperties(), TARGET_VAR, mVarFactory);
    }
 
    private String createValueFilter(String var, RbcAttribute att, int valueIndex) {

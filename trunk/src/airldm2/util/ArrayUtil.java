@@ -14,6 +14,18 @@ public class ArrayUtil {
       }
    }
 
+   public static int maxIndex(int[] a) {
+      int currentMax = a[0];
+      int currentMaxIndex = 0;
+      for (int i = 1; i < a.length; i++) {
+         if (a[i] > currentMax) {
+            currentMax = a[i];
+            currentMaxIndex = i;
+         }
+      }
+      return currentMaxIndex;
+   }
+   
    public static int maxIndex(double[] a) {
       double currentMax = a[0];
       int currentMaxIndex = 0;

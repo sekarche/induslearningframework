@@ -44,6 +44,11 @@ public class NominalType implements ValueType {
    }
 
    @Override
+   public String toString() {
+      return NAME + "=" + StringUtil.toCSV(mDomain);
+   }
+
+   @Override
    public void write(Writer out) throws IOException {
       out.write(NAME);
       out.write("=");
