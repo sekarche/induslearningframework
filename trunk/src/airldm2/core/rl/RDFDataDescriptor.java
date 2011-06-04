@@ -60,6 +60,14 @@ public class RDFDataDescriptor implements DataDescriptor {
       return cNonTargetAttributeList;
    }
 
+   public void clearNonTargetAttributes() {
+      RbcAttribute targetAttribute = mAttributes.get(mTargetAttributeName);
+      
+      mAttributes.clear();
+      cNonTargetAttributeList.clear();
+      mAttributes.put(mTargetAttributeName, targetAttribute);
+   }
+   
    public void addNonTargetAttributes(List<RbcAttribute> as) {
       for (RbcAttribute a : as) {
          addNonTargetAttribute(a);

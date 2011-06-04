@@ -3,15 +3,45 @@ package airldm2.util;
 public class ArrayUtil {
 
    public static void normalize(double[] a) {
-      double sum = 0.0;
-      for (int i = 0; i < a.length; i++) {
-         sum += a[i];
-      }
+      double sum = sum(a);
       if (sum <= 0.0) return;
       
+      divide(a, sum);
+   }
+
+   public static double[][] normalize(double[][] a) {
+      double sum = sum(a);
+      if (sum <= 0.0) return null;
+      
+      double[][] result = copy(a);
+      divide(result, sum);
+      return result;
+   }
+   
+   public static void divide(double[][] a, double v) {
       for (int i = 0; i < a.length; i++) {
-         a[i] /= sum;
+         divide(a[i], v);
       }
+   }
+
+   public static void divide(double[] a, double v) {
+      for (int i = 0; i < a.length; i++) {
+         a[i] /= v;
+      }
+   }
+
+   private static double[][] copy(double[][] a) {
+      double[][] result = new double[a.length][];
+      for (int i = 0; i < result.length; i++) {
+         result[i] = copy(a[i]);
+      }
+      return result;
+   }
+
+   private static double[] copy(double[] a) {
+      double[] result = new double[a.length];
+      System.arraycopy(a, 0, result, 0, a.length);
+      return result;
    }
 
    public static int maxIndex(int[] a) {
@@ -55,17 +85,21 @@ public class ArrayUtil {
       return i;
    }
    
-   public static void add(double[][][] a, double shift) {
+   public static void add(double[][][] a, double v) {
       for (int i = 0; i < a.length; i++) {
-         for (int j = 0; j < a[i].length; j++) {
-            add(a[i][j], shift);
-         }
+         add(a[i], v);
       }
    }
    
-   public static void add(double[] a, double shift) {
+   public static void add(double[][] a, double v) {
       for (int i = 0; i < a.length; i++) {
-         a[i] += shift;
+         add(a[i], v);
+      }
+   }
+   
+   public static void add(double[] a, double v) {
+      for (int i = 0; i < a.length; i++) {
+         a[i] += v;
       }
    }
 
@@ -75,6 +109,42 @@ public class ArrayUtil {
          aInt[i] = (int) aDouble[i];
       }
       return aInt;
+   }
+   
+   public static double[] sumDimension(double[][] matrix, int dim) {
+      if (dim == 1) {
+         double[] sum = new double[matrix[0].length];
+         for (int s = 0; s < sum.length; s++) {
+            for (int i = 0; i < matrix.length; i++) {
+               sum[s] += matrix[i][s];
+            }
+         }
+         return sum;
+      } else if (dim == 2) {
+         double[] sum = new double[matrix.length];
+         for (int s = 0; s < sum.length; s++) {
+            for (int i = 0; i < matrix[0].length; i++) {
+               sum[s] += matrix[s][i];
+            }
+         }
+         return sum;
+      } else return null;
+   }
+
+   public static double sum(double[][] a) {
+      double sum = 0.0;
+      for (int i = 0; i < a.length; i++) {
+         sum += sum(a[i]);
+      }
+      return sum;
+   }
+
+   public static double sum(double[] a) {
+      double sum = 0.0;
+      for (int i = 0; i < a.length; i++) {
+         sum += a[i];
+      }
+      return sum;
    }
    
 }

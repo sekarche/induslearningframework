@@ -12,7 +12,6 @@ import airldm2.core.LDInstances;
 import airldm2.core.rl.RDFDataDescriptor;
 import airldm2.core.rl.RDFDataSource;
 import airldm2.core.rl.RbcAttribute;
-import airldm2.core.rl.ValueType;
 import airldm2.database.rdf.SuffStatQueryParameter;
 import airldm2.util.ArrayUtil;
 
@@ -39,8 +38,7 @@ public class RelationalBayesianClassifier extends Classifier {
       List<RbcAttribute> nonTargetAttributes = mDataDesc.getNonTargetAttributeList();
       RbcAttribute targetAttribute = mDataDesc.getTargetAttribute();
 
-      ValueType targetAttributeType = targetAttribute.getValueType();
-      int numOfClassLabels = targetAttributeType.domainSize();
+      int numOfClassLabels = targetAttribute.getDomainSize();
       mClassCounts = new double[numOfClassLabels];
 
       int numAttributes = nonTargetAttributes.size();
@@ -52,7 +50,7 @@ public class RelationalBayesianClassifier extends Classifier {
       
       // find possible values for each attribute and allocate memory
       for (int i = 0; i < numAttributes; i++) {
-         int numValuesCurrAttrib = nonTargetAttributes.get(i).getValueType().domainSize();
+         int numValuesCurrAttrib = nonTargetAttributes.get(i).getDomainSize();
          for (int j = 0; j < numOfClassLabels; j++) {
             mCounts[i][j] = new double[numValuesCurrAttrib];
          }
@@ -60,7 +58,7 @@ public class RelationalBayesianClassifier extends Classifier {
 
       for (int i = 0; i < numAttributes; i++) {
          RbcAttribute currAttribute = nonTargetAttributes.get(i);
-         int numOfAttributeValues = currAttribute.getValueType().domainSize();
+         int numOfAttributeValues = currAttribute.getDomainSize();
          for (int j = 0; j < numOfClassLabels; j++) {
             for (int k = 0; k < numOfAttributeValues; k++) {
                SuffStatQueryParameter queryParam = new SuffStatQueryParameter(mDataDesc.getTargetType(), targetAttribute, j, currAttribute, k);
