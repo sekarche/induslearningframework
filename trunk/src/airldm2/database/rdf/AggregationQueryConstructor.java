@@ -30,7 +30,7 @@ public class AggregationQueryConstructor {
       mVarFactory.reset();
       StringBuilder b = new StringBuilder();
 
-      String chain = QueryUtil.createValueChain(mAttribute.getProperties(), angleBracket(mInstance), mVarFactory);
+      String chain = QueryUtil.createValueChain(mAttribute.getPropertyChain(), angleBracket(mInstance), mVarFactory);
       String header = AGGREGATION_HEADER.replace(CONTEXT_PATTERN, mContextPart)
       .replace(AGGREGATION_FUNCTION_PATTERN, mAttribute.getAggregatorType().toString())
       .replace(LAST_VAR_PATTERN, mVarFactory.current()); 

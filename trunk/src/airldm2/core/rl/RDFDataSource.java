@@ -80,11 +80,12 @@ public class RDFDataSource implements SSDataSource {
 
    public ISufficentStatistic getSufficientStatistic(SuffStatQueryParameter queryParam) throws RDFDatabaseException {
       String query = new SuffStatQueryConstructor(mDefaultContext, queryParam).createQuery();
-      System.out.println(query);
+      //System.out.println(query);
       
       SPARQLQueryResult results = mConn.executeQuery(query);
       if (results.isEmpty()) return null;
       ISufficentStatistic stat = new DefaultSufficentStatisticImpl(results.getInt());
+      //System.out.println(results.getInt());
       return stat;
    }
 
@@ -162,7 +163,7 @@ public class RDFDataSource implements SSDataSource {
    }
 
    public boolean isUniqueForInstance(URI targetType, PropertyChain propChain) throws RDFDatabaseException {
-      String query = new NestedAggregationQueryConstructor(mDefaultContext, targetType, propChain, Aggregator.MAX, Aggregator.COUNT).createQuery();
+      String query = new NestedAggregationQueryConstructor(mDefaultContext, targetType, propChain, Aggregator.MAX, Aggregator.COUNT, false).createQuery();
       //System.out.println(query);
       
       SPARQLQueryResult results = mConn.executeQuery(query);
@@ -170,7 +171,7 @@ public class RDFDataSource implements SSDataSource {
    }
 
    public double getAverageForAggregation(URI targetType, PropertyChain propChain, Aggregator inner) throws RDFDatabaseException {
-      String query = new NestedAggregationQueryConstructor(mDefaultContext, targetType, propChain, Aggregator.AVG, inner).createQuery();
+      String query = new NestedAggregationQueryConstructor(mDefaultContext, targetType, propChain, Aggregator.AVG, inner, true).createQuery();
       //System.out.println(query);
       
       SPARQLQueryResult results = mConn.executeQuery(query);

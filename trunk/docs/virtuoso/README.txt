@@ -22,11 +22,13 @@ Load RDF graphs using script
 
 2. Run %VIRTUOSO_ROOT%\bin\isql.exe in %VIRTUOSO_ROOT%\database
 
-3. ld_dir ('./', '*.xml', ':moviesTrain');
+3. load rdfloader.sql;
+
+4. ld_dir ('./', '*.xml', ':moviesTrain');
 
    (':moviesTrain' specifies the graph IRI)
 
-4. rdf_loader_run ();
+5. rdf_loader_run ();
 
 
 Load RDF graphs using an importer

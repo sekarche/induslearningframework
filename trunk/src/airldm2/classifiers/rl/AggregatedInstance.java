@@ -1,5 +1,8 @@
 package airldm2.classifiers.rl;
 
+import org.apache.commons.lang.builder.ToStringBuilder;
+import org.apache.commons.lang.builder.ToStringStyle;
+
 public class AggregatedInstance {
 
    /* mFeatureValueIndexOrCount[attribute index][value index] = count of value occurrences
@@ -26,6 +29,11 @@ public class AggregatedInstance {
       }
       
       return -1;
+   }
+   
+   @Override
+   public String toString() {
+      return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE);
    }
    
 }

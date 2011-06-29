@@ -75,8 +75,25 @@ public class RelationalBayesianClassifierTest {
    }
    
    @Test
+   public void testMovies2() throws Exception {
+      testWithTrainInDBTestInDB("rbc_example/moviesDescFilled_D.txt", "http://localhost:8890/sparql", ":default", "http://localhost:8892/sparql", ":default");
+      testWithTrainInDBTestInDB("rbc_example/moviesDescFilled_I.txt", "http://localhost:8890/sparql", ":default", "http://localhost:8892/sparql", ":default");
+   }
+   
+   @Test
+   public void testCensus() throws Exception {
+      testWithTrainInDBTestInDB("rbc_example/censusDescFilled_D.txt", "http://localhost:8890/sparql", ":census", "http://localhost:8890/sparql", ":census");
+      testWithTrainInDBTestInDB("rbc_example/censusDescFilled_I.txt", "http://localhost:8890/sparql", ":census", "http://localhost:8890/sparql", ":census");
+   }
+   
+   @Test
    public void testProject() throws Exception {
       testWithTrainInDBTestInDB("rbc_example/projectDesc.txt", ":projectTrain", ":projectTest");
+   }
+   
+   @Test
+   public void testHints() throws Exception {
+      testWithTrainInDBTestInDB("rbc_example/nci_hintsDesc.txt", ":hints", ":hintsTest");
    }
    
    //Connects to a remote SPARQL - turn on only when needed
@@ -118,6 +135,32 @@ public class RelationalBayesianClassifierTest {
       
       ConfusionMatrix matrix = Evaluation.evaluateRBCModel(rbc, trainInstances, testInstances);
       System.out.println(matrix.toString("===Confusion Matrix==="));
+      System.out.println("Accuracy = " + (1.0 - matrix.errorRate()));
+   }
+   
+   private void testWithTrainInDBTestInDB(String descFile, String trainSPARQL, String trainGraph, String testSPARQL, String testGraph) throws Exception {
+      RDFDataDescriptor desc = RDFDataDescriptorParser.parse(descFile);
+      //System.out.println(desc);
+      
+      RDFDatabaseConnection trainConn = new VirtuosoConnection(trainSPARQL);
+      //named RDF graph that stores all training triples 
+      SSDataSource trainSource = new RDFDataSource(trainConn, trainGraph);
+      LDInstances trainInstances = new LDInstances();
+      trainInstances.setDesc(desc);
+      trainInstances.setDataSource(trainSource);
+   
+      RDFDatabaseConnection testConn = new VirtuosoConnection(testSPARQL);
+      //named RDF graph that stores all test triples
+      SSDataSource testSource = new RDFDataSource(testConn, testGraph);
+      LDInstances testInstances = new LDInstances();
+      testInstances.setDesc(desc);
+      testInstances.setDataSource(testSource);
+   
+      RelationalBayesianClassifier rbc = new RelationalBayesianClassifier();
+      
+      ConfusionMatrix matrix = Evaluation.evaluateRBCModel(rbc, trainInstances, testInstances);
+      System.out.println(matrix.toString("===Confusion Matrix==="));
+      System.out.println("Accuracy = " + (1.0 - matrix.errorRate()));
    }
 
 }

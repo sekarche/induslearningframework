@@ -14,6 +14,8 @@ public class RangeTypeQueryConstructor {
 
    public enum RangeType { IRI, NUMERIC, STRING }
    
+   public static final int MIN_NUMER = Integer.MIN_VALUE;
+   
    private static final String TARGET_VAR = "?tar";
    private static final String LAST_VAR_PATTERN = "%lastVar%";
    private static final String CONTEXT_PATTERN = "%context%";
@@ -53,7 +55,7 @@ public class RangeTypeQueryConstructor {
       if (mRangeType == RangeType.IRI) {
          b.append("FILTER isIRI(").append(var).append(") ");
       } else if (mRangeType == RangeType.NUMERIC) {
-         b.append("FILTER(").append(var).append(" > -1000000) ");
+         b.append("FILTER(").append(var).append(" > " + MIN_NUMER + ") ");
       } else if (mRangeType == RangeType.STRING) {
          b.append("FILTER isLiteral(").append(var).append(") ");
       }

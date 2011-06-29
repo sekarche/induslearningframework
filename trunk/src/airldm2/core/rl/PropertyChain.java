@@ -30,12 +30,35 @@ public class PropertyChain {
       return mChain;
    }
    
-   public PropertyChain append(URI prop) {
-      List<URI> newChain = CollectionUtil.makeList(mChain);
-      newChain.add(prop);
-      return new PropertyChain(newChain);
+   public boolean contains(PropertyChain other) {
+      for (URI o : other.mChain) {
+         if (!mChain.contains(o)) return false;
+      }
+      return true;
+   }
+
+   public boolean hasURIStartsWith(URI[] uris) {
+      if (uris == null) return false;
+      
+      for (URI uri : uris) {
+         for (URI chain : mChain) {
+            if (chain.stringValue().toLowerCase().startsWith(uri.stringValue().toLowerCase())) {
+               return true;
+            }
+         }
+      }
+      return false;
    }
    
+   public boolean containsDuplicate() {
+      for (int i = 0; i < mChain.size() - 1; i++) {
+         for (int j = i + 1; j < mChain.size() - 1; j++) {
+            if (mChain.get(i).equals(mChain.get(j))) return true;
+         }
+      }
+      return false;
+   }
+
    @Override
    public boolean equals(Object other) {
       if (!(other instanceof PropertyChain)) return false;
@@ -47,5 +70,14 @@ public class PropertyChain {
    public String toString() {
       return mChain.toString();
    }
-   
+
+   public static PropertyChain make(PropertyChain propChain, URI prop) {
+      List<URI> newChain = CollectionUtil.makeList();
+      if (propChain != null) {
+         newChain.addAll(propChain.mChain);
+      }
+      newChain.add(prop);
+      return new PropertyChain(newChain);
+   }
+
 }

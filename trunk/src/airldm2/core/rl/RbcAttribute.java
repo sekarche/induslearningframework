@@ -45,7 +45,7 @@ public class RbcAttribute {
       return mName;
    }
    
-   public PropertyChain getProperties() {
+   public PropertyChain getPropertyChain() {
       return mPropertyChain;
    }
 

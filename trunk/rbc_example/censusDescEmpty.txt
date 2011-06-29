@@ -1,0 +1,8 @@
+@targetType http://www.rdfabout.com/rdf/usgov/geo/us/state
+
+@target property_crime
+
+@attribute property_crime
+http://logd.tw.rpi.edu/source/data-gov/dataset/311/vocab/raw/property_crime_rate_per_100000
+BINNED=3300
+aggregator=NONE

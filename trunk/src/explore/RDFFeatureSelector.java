@@ -1,17 +1,12 @@
 package explore;
 
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
-
-import org.apache.commons.lang.builder.ToStringBuilder;
-import org.apache.commons.lang.builder.ToStringStyle;
 
 import airldm2.core.ISufficentStatistic;
 import airldm2.core.rl.RDFDataDescriptor;
 import airldm2.core.rl.RDFDataSource;
 import airldm2.core.rl.RbcAttribute;
-import airldm2.core.rl.RbcAttribute.ValueAggregator;
 import airldm2.database.rdf.SuffStatQueryParameter;
 import airldm2.exceptions.RDFDatabaseException;
 import airldm2.util.ArrayUtil;
@@ -19,30 +14,6 @@ import airldm2.util.CollectionUtil;
 
 public class RDFFeatureSelector {
 
-   static class RbcAttributeScore implements Comparable<RbcAttributeScore> {
-      
-      public RbcAttribute Attribute;
-      public double Score;
-      
-      public RbcAttributeScore(RbcAttribute a, double score) {
-         Attribute = a;
-         Score = score;
-      }
-
-      @Override
-      public int compareTo(RbcAttributeScore o) {
-         double diff = Score - o.Score;
-         if (Math.abs(diff) < 0.00001) return 0;
-         if (diff < 0.0) return -1;
-         return 1;
-      }
-      
-      @Override
-      public String toString() {
-         return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE);
-      }
-   }
-   
    private RDFDataSource mDataSource;
    private RDFDataDescriptor cDesc;
    
@@ -54,8 +25,6 @@ public class RDFFeatureSelector {
       cDesc = desc;
       List<RbcAttribute> attributes = CollectionUtil.makeList(cDesc.getNonTargetAttributeList());
       cDesc.clearNonTargetAttributes();
-      
-      removeIndVal(attributes);
       
       List<RbcAttributeScore> scores = CollectionUtil.makeList();
       for (RbcAttribute a : attributes) {
@@ -112,15 +81,6 @@ public class RDFFeatureSelector {
       }
       
       return score;
-   }
-
-   private void removeIndVal(List<RbcAttribute> attributes) {
-      for (Iterator<RbcAttribute> it = attributes.iterator(); it.hasNext(); ) {
-         RbcAttribute a = it.next();
-         if (a.getAggregatorType() == ValueAggregator.INDEPENDENT_VAL) {
-            it.remove();
-         }
-      }
    }
 
 }
