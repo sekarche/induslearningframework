@@ -45,7 +45,7 @@ public class RDFDataDescriptorEnhancer {
    public void fillDomain(URI targetType, RbcAttribute a) throws RDFDatabaseException {
       if (a.getValueType() != null) return;
       
-      SPARQLQueryResult result = mDataSource.getRangeOf(targetType, a.getProperties());
+      SPARQLQueryResult result = mDataSource.getRangeOf(targetType, a.getPropertyChain());
       List<Value> range = result.getValueList();
       boolean allURIs = true;
       for (Value v : range) {

@@ -34,4 +34,20 @@ public class RDFFeatureCrawlerTest {
       crawler.crawl("rbc_example/smallDescEmpty.txt", "rbc_example/smallDescFilled.txt", 2);
    }
    
+   @Test
+   public void testHints() throws Exception {
+      RDFDatabaseConnection conn = RDFDatabaseConnectionFactory.makeFromConfig();
+      RDFDataSource source = new RDFDataSource(conn, ":hints");
+      RDFFeatureCrawler crawler = new RDFFeatureCrawler(source);
+      crawler.crawl("rbc_example/nci_hintsDescEmpty.txt", "rbc_example/nci_hintsDescFilled.txt", 0);
+   }
+   
+   @Test
+   public void testMovie() throws Exception {
+      RDFDatabaseConnection conn = RDFDatabaseConnectionFactory.makeFromConfig();
+      RDFDataSource source = new RDFDataSource(conn, ":default");
+      RDFFeatureCrawler crawler = new RDFFeatureCrawler(source);
+      crawler.crawl("rbc_example/moviesDescEmpty.txt", "rbc_example/moviesDescFilled.txt", 4);      
+   }
+   
 }

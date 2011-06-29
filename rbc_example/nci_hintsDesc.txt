@@ -1,54 +1,88 @@
 @targetType http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/vocab/Case
 
-@target feel_nervous
+@target smoking_status
 
-@attribute feel_nervous
-http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/vocab/enhancement/2/feel_nervous
-ENUM=http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/value-of/feel_nervous/A_little_of_the_time,http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/value-of/feel_nervous/All_of_the_time,http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/value-of/feel_nervous/Don_t_know,http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/value-of/feel_nervous/Most_of_the_time,http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/value-of/feel_nervous/None_of_the_time,http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/value-of/feel_nervous/Refused,http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/value-of/feel_nervous/Some_of_the_time
+@attribute smoking_status
+http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/vocab/enhancement/2/smoking_status
+ENUM=http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/value-of/smoking_status/-1,http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/value-of/smoking_status/Current,http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/value-of/smoking_status/Former,http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/value-of/smoking_status/Never
 aggregator=NONE
 
-@attribute gender
+@attribute [http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/vocab/enhancement/2/gender]1
 http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/vocab/enhancement/2/gender
 ENUM=http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/value-of/gender/Female,http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/value-of/gender/Male
 aggregator=NONE
 
-@attribute age_group
+@attribute [http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/vocab/enhancement/2/age_group_version_b]1
 http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/vocab/enhancement/2/age_group_version_b
-ENUM=http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/value-of/age_group_version_b/18-34,http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/value-of/age_group_version_b/18_34,http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/value-of/age_group_version_b/35-49,http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/value-of/age_group_version_b/35_49,http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/value-of/age_group_version_b/45_exact_age_refused,http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/value-of/age_group_version_b/45_exact_age_unknown,http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/value-of/age_group_version_b/50-64,http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/value-of/age_group_version_b/50_64,http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/value-of/age_group_version_b/65-74,http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/value-of/age_group_version_b/65_74,http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/value-of/age_group_version_b/75,http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/value-of/age_group_version_b/Not_Ascertained
+ENUM=http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/value-of/age_group_version_b/18-34,http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/value-of/age_group_version_b/35-49,http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/value-of/age_group_version_b/45_exact_age_refused,http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/value-of/age_group_version_b/45_exact_age_unknown,http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/value-of/age_group_version_b/50-64,http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/value-of/age_group_version_b/65-74,http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/value-of/age_group_version_b/75
 aggregator=NONE
 
-@attribute census_division
-http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/vocab/enhancement/2/census_division
-ENUM=http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/value-of/census_division/East_North_Central,http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/value-of/census_division/East_South_Central,http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/value-of/census_division/Middle_Atlantic,http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/value-of/census_division/Mountain,http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/value-of/census_division/New_England,http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/value-of/census_division/Pacific,http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/value-of/census_division/South_Atlantic,http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/value-of/census_division/West_North_Central,http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/value-of/census_division/West_South_Central
+@attribute [http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/vocab/enhancement/2/race_ethnicity]1
+http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/vocab/enhancement/2/race_ethnicity
+ENUM=http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/value-of/race_ethnicity/-1,http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/value-of/race_ethnicity/Don_t_Know,http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/value-of/race_ethnicity/Hispanic,http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/value-of/race_ethnicity/Non-Hispanic_American_Indian_or_Alaska_Native,http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/value-of/race_ethnicity/Non-Hispanic_Asian,http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/value-of/race_ethnicity/Non-Hispanic_Black_or_African_American,http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/value-of/race_ethnicity/Non-Hispanic_Multiple_Races_Mentioned,http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/value-of/race_ethnicity/Non-Hispanic_Native_Hawaiian_or_other_Pacific_Islander,http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/value-of/race_ethnicity/Non-Hispanic_White,http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/value-of/race_ethnicity/Refused
 aggregator=NONE
 
-@attribute marital_status
-http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/vocab/enhancement/2/marital_status
-ENUM=http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/value-of/marital_status/A_member_of_an_unmarried_couple,http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/value-of/marital_status/Divorced,http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/value-of/marital_status/Don_t_know,http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/value-of/marital_status/Married,http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/value-of/marital_status/Never_been_married,http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/value-of/marital_status/Refused,http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/value-of/marital_status/Separated,http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/value-of/marital_status/Widowed
+@attribute [http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/vocab/enhancement/2/annual_household_income_version_b]1
+http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/vocab/enhancement/2/annual_household_income_version_b
+ENUM=http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/value-of/annual_household_income_version_b/-1,http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/value-of/annual_household_income_version_b/25_000,http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/value-of/annual_household_income_version_b/25_000_to_35_000,http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/value-of/annual_household_income_version_b/35_000_to_50_000,http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/value-of/annual_household_income_version_b/50_000_to_75_000,http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/value-of/annual_household_income_version_b/75_000,http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/value-of/annual_household_income_version_b/Don_t_Know,http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/value-of/annual_household_income_version_b/Refused
 aggregator=NONE
 
-@attribute highest_level_of_school_completed
+@attribute [http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/vocab/enhancement/2/highest_level_of_school_completed]1
 http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/vocab/enhancement/2/highest_level_of_school_completed
 ENUM=http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/value-of/highest_level_of_school_completed/College_Graduate,http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/value-of/highest_level_of_school_completed/Don_t_Know,http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/value-of/highest_level_of_school_completed/High_School_Graduate,http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/value-of/highest_level_of_school_completed/Less_than_High_School,http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/value-of/highest_level_of_school_completed/Refused,http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/value-of/highest_level_of_school_completed/Some_College
 aggregator=NONE
 
-@attribute annual_household_income
-http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/vocab/enhancement/2/annual_household_income_version_b
-ENUM=http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/value-of/annual_household_income_version_b/-1,http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/value-of/annual_household_income_version_b/1,http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/value-of/annual_household_income_version_b/25_000,http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/value-of/annual_household_income_version_b/25_000_to_35_000,http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/value-of/annual_household_income_version_b/35_000_to_50_000,http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/value-of/annual_household_income_version_b/50_000_to_75_000,http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/value-of/annual_household_income_version_b/75_000,http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/value-of/annual_household_income_version_b/Don_t_Know,http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/value-of/annual_household_income_version_b/Refused
+@attribute [http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/vocab/enhancement/2/census_region]1
+http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/vocab/enhancement/2/census_region
+ENUM=http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/value-of/census_region/Midwest,http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/value-of/census_region/Northeast,http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/value-of/census_region/South,http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/value-of/census_region/West
 aggregator=NONE
 
-@attribute smoked_100_cigarettes
-http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/vocab/enhancement/2/smoked_100_cigarettes
+@attribute [http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/vocab/enhancement/2/census_division]1
+http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/vocab/enhancement/2/census_division
+ENUM=http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/value-of/census_division/East_North_Central,http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/value-of/census_division/East_South_Central,http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/value-of/census_division/Middle_Atlantic,http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/value-of/census_division/Mountain,http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/value-of/census_division/New_England,http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/value-of/census_division/Pacific,http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/value-of/census_division/South_Atlantic,http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/value-of/census_division/West_North_Central,http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/value-of/census_division/West_South_Central
+aggregator=NONE
+
+@attribute [http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/vocab/enhancement/2/hispanic_or_latino]1
+http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/vocab/enhancement/2/hispanic_or_latino
 NOMINAL=Don't Know,Refused,0,1
 aggregator=NONE
 
-@attribute smoking_status
-http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/vocab/enhancement/2/smoking_status
-ENUM=http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/value-of/smoking_status/-1,http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/value-of/smoking_status/1,http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/value-of/smoking_status/Current,http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/value-of/smoking_status/Former,http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/value-of/smoking_status/Never
+@attribute [http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/vocab/enhancement/2/marital_status]1
+http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/vocab/enhancement/2/marital_status
+ENUM=http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/value-of/marital_status/A_member_of_an_unmarried_couple,http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/value-of/marital_status/Divorced,http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/value-of/marital_status/Don_t_know,http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/value-of/marital_status/Married,http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/value-of/marital_status/Never_been_married,http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/value-of/marital_status/Refused,http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/value-of/marital_status/Separated,http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/value-of/marital_status/Widowed
 aggregator=NONE
 
-@attribute smoking_frequency
-http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/vocab/enhancement/2/smoking_frequency
-ENUM=http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/value-of/smoking_frequency/Don_t_know,http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/value-of/smoking_frequency/Every_day,http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/value-of/smoking_frequency/Not_at_all,http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/value-of/smoking_frequency/Refused,http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/value-of/smoking_frequency/Some_days
+@attribute [http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/vocab/enhancement/2/serious_psychological_distress]1
+http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/vocab/enhancement/2/serious_psychological_distress
+NOMINAL=Don't Know,Refused,0,1
 aggregator=NONE
 
+@attribute [http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/vocab/enhancement/2/feel_sad]1
+http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/vocab/enhancement/2/feel_sad
+ENUM=http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/value-of/feel_sad/A_little_of_the_time,http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/value-of/feel_sad/All_of_the_time,http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/value-of/feel_sad/Don_t_know,http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/value-of/feel_sad/Most_of_the_time,http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/value-of/feel_sad/None_of_the_time,http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/value-of/feel_sad/Refused,http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/value-of/feel_sad/Some_of_the_time
+aggregator=NONE
+
+@attribute [http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/vocab/enhancement/2/feel_nervous]1
+http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/vocab/enhancement/2/feel_nervous
+ENUM=http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/value-of/feel_nervous/A_little_of_the_time,http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/value-of/feel_nervous/All_of_the_time,http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/value-of/feel_nervous/Don_t_know,http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/value-of/feel_nervous/Most_of_the_time,http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/value-of/feel_nervous/None_of_the_time,http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/value-of/feel_nervous/Refused,http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/value-of/feel_nervous/Some_of_the_time
+aggregator=NONE
+
+@attribute [http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/vocab/enhancement/2/feel_restless]1
+http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/vocab/enhancement/2/feel_restless
+ENUM=http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/value-of/feel_restless/A_little_of_the_time,http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/value-of/feel_restless/All_of_the_time,http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/value-of/feel_restless/Don_t_know,http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/value-of/feel_restless/Most_of_the_time,http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/value-of/feel_restless/None_of_the_time,http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/value-of/feel_restless/Refused,http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/value-of/feel_restless/Some_of_the_time
+aggregator=NONE
+
+@attribute [http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/vocab/enhancement/2/feel_hopeless]1
+http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/vocab/enhancement/2/feel_hopeless
+ENUM=http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/value-of/feel_hopeless/A_little_of_the_time,http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/value-of/feel_hopeless/All_of_the_time,http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/value-of/feel_hopeless/Don_t_know,http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/value-of/feel_hopeless/Most_of_the_time,http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/value-of/feel_hopeless/None_of_the_time,http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/value-of/feel_hopeless/Refused,http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/value-of/feel_hopeless/Some_of_the_time
+aggregator=NONE
+
+@attribute [http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/vocab/enhancement/2/feel_effort]1
+http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/vocab/enhancement/2/feel_effort
+ENUM=http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/value-of/feel_effort/A_little_of_the_time,http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/value-of/feel_effort/All_of_the_time,http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/value-of/feel_effort/Don_t_know,http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/value-of/feel_effort/Most_of_the_time,http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/value-of/feel_effort/None_of_the_time,http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/value-of/feel_effort/Refused,http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/value-of/feel_effort/Some_of_the_time
+aggregator=NONE
+
+@attribute [http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/vocab/enhancement/2/feel_worthless]1
+http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/vocab/enhancement/2/feel_worthless
+ENUM=http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/value-of/feel_worthless/A_little_of_the_time,http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/value-of/feel_worthless/All_of_the_time,http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/value-of/feel_worthless/Don_t_know,http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/value-of/feel_worthless/Most_of_the_time,http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/value-of/feel_worthless/None_of_the_time,http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/value-of/feel_worthless/Refused,http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/value-of/feel_worthless/Some_of_the_time
+aggregator=NONE

@@ -14,7 +14,7 @@ aggregator=NONE
 
 @attribute actorBirth
 http://data.linkedmdb.org/resource/movie/actor,http://xmlns.com/foaf/0.1/page,http://rdf.freebase.com/ns/people.person.year_of_birth
-BINNED=1940,1960
+BINNED=1940,1960,1980
 aggregator=AVG
 
 @attribute actorGender
@@ -22,12 +22,37 @@ http://data.linkedmdb.org/resource/movie/actor,http://xmlns.com/foaf/0.1/page,ht
 ENUM=http://rdf.freebase.com/ns/en.male,http://rdf.freebase.com/ns/en.female
 aggregator=INDEPENDENT_VAL
 
+@attribute actorAward
+http://data.linkedmdb.org/resource/movie/actor,http://xmlns.com/foaf/0.1/page,http://rdf.freebase.com/ns/award.award_winner.awards_won
+BINNED=2,4,6,8
+aggregator=COUNT
+
+@attribute directorBirth
+http://data.linkedmdb.org/resource/movie/director,http://xmlns.com/foaf/0.1/page,http://rdf.freebase.com/ns/people.person.year_of_birth
+BINNED=1940,1960,1980
+aggregator=AVG
+
+@attribute directorGender
+http://data.linkedmdb.org/resource/movie/director,http://xmlns.com/foaf/0.1/page,http://rdf.freebase.com/ns/people.person.gender
+ENUM=http://rdf.freebase.com/ns/en.male,http://rdf.freebase.com/ns/en.female
+aggregator=INDEPENDENT_VAL
+
 @attribute directorAward
 http://data.linkedmdb.org/resource/movie/director,http://xmlns.com/foaf/0.1/page,http://rdf.freebase.com/ns/award.award_winner.awards_won
-BINNED=2
+BINNED=2,4,6,8
 aggregator=COUNT
+
+@attribute producerBirth
+http://data.linkedmdb.org/resource/movie/producer,http://xmlns.com/foaf/0.1/page,http://rdf.freebase.com/ns/people.person.year_of_birth
+BINNED=1940,1960,1980
+aggregator=AVG
+
+@attribute producerGender
+http://data.linkedmdb.org/resource/movie/producer,http://xmlns.com/foaf/0.1/page,http://rdf.freebase.com/ns/people.person.gender
+ENUM=http://rdf.freebase.com/ns/en.male,http://rdf.freebase.com/ns/en.female
+aggregator=INDEPENDENT_VAL
 
 @attribute producerAward
 http://data.linkedmdb.org/resource/movie/producer,http://xmlns.com/foaf/0.1/page,http://rdf.freebase.com/ns/award.award_winner.awards_won
-BINNED=2
+BINNED=2,4,6,8
 aggregator=COUNT

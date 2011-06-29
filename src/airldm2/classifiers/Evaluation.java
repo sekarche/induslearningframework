@@ -195,5 +195,25 @@ public class Evaluation {
       
       return wekaConfusionMatrix;
    }
+   
+   public static ConfusionMatrix evaluateBuiltRBCModel(RelationalBayesianClassifier rbc, LDInstances testInstances) throws Exception {
+      RDFDataDescriptor desc = (RDFDataDescriptor) testInstances.getDesc();
+      String[] classLabels = desc.getClassLabels();
+      ConfusionMatrix wekaConfusionMatrix = new ConfusionMatrix(classLabels);
+
+      List<AggregatedInstance> aggregatedInstances = InstanceAggregator.aggregate(testInstances);
+      for (AggregatedInstance i : aggregatedInstances) {
+         double[] distribution = rbc.distributionForInstance(i);
+         double actual = i.getLabel();
+         // return some error message if the class label is not according to the descriptor
+         if (actual == -1) {
+            System.err.println("Please check the class label of test instances match their description");
+            continue;
+         }
+         wekaConfusionMatrix.addPrediction(new NominalPrediction(actual, distribution));
+      }
+      
+      return wekaConfusionMatrix;
+   }
 
 }

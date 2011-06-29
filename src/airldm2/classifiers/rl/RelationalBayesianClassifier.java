@@ -115,11 +115,12 @@ public class RelationalBayesianClassifier extends Classifier {
       for (int c = 0; c < dist.length; c++) {
          for (int a = 0; a < featureValueIndexCount.length; a++) {
             for (int v = 0; v < featureValueIndexCount[a].length; v++) {
+               if (featureValueIndexCount[a][v] == 0) continue;
+               
                //With Laplace correction
                double pVpC = (mCounts[a][c][v] + 1) / (mAttributeClassCounts[a][c] + mCounts[a][c].length);
                
-               if (featureValueIndexCount[a][v] == 0) continue;
-               else if (featureValueIndexCount[a][v] == 1) {
+               if (featureValueIndexCount[a][v] == 1) {
                   dist[c] *= pVpC;
                } else {
                   dist[c] *= Math.pow(pVpC, featureValueIndexCount[a][v]);
@@ -132,7 +133,6 @@ public class RelationalBayesianClassifier extends Classifier {
       }
       
       ArrayUtil.normalize(dist);
-
       return dist;
    }
 

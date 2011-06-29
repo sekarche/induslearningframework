@@ -78,7 +78,7 @@ public class SuffStatQueryConstructor {
    }
 
    private String createValueChain(RbcAttribute att) {
-      return QueryUtil.createValueChain(att.getProperties(), TARGET_VAR, mVarFactory);
+      return QueryUtil.createValueChain(att.getPropertyChain(), TARGET_VAR, mVarFactory);
    }
 
    private String createValueFilter(String var, RbcAttribute att, int valueIndex) {

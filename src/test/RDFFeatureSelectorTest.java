@@ -29,5 +29,18 @@ public class RDFFeatureSelectorTest {
       RDFFeatureSelector selector = new RDFFeatureSelector(source);
       selector.select(desc, 5);
    }
+   
+   @Test
+   public void testHints() throws Exception {
+      RDFDataDescriptor desc = RDFDataDescriptorParser.parse("rbc_example/nci_hintsDescEmpty.txt");
+      
+      RDFDatabaseConnection conn = RDFDatabaseConnectionFactory.makeFromConfig();
+      RDFDataSource source = new RDFDataSource(conn, ":hints");
+      RDFFeatureCrawler crawler = new RDFFeatureCrawler(source);
+      crawler.crawl(desc, 0);    
+      
+      RDFFeatureSelector selector = new RDFFeatureSelector(source);
+      selector.select(desc, 10);
+   }
 
 }

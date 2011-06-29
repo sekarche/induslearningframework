@@ -39,14 +39,14 @@ public class CrawlPropertyQueryConstructor {
       b.append(QUERY_HEADER.replace(CONTEXT_PATTERN, mContextPart)
                            .replace(TYPE_PATTERN, angleBracket(mType)));
       b.append(chain);
-      b.append("}");
+      b.append("} ORDER BY ").append(PROPERTY_VAR);
       return b.toString();
    }
    
    private String createValueChain() {
       StringBuilder b = new StringBuilder();
       
-      if (mPropertyChain.isEmpty()) {
+      if (mPropertyChain == null || mPropertyChain.isEmpty()) {
          b.append(triple(TARGET_VAR, PROPERTY_VAR, mVarFactory.next()));
          b.append("FILTER(" + PROPERTY_VAR + " != rdf:type) ");
       } else {

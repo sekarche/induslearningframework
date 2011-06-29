@@ -137,13 +137,16 @@ public class RDFFeatureCrawler {
       List<PropertyChain> currentDepth = crawlNextDepth(new PropertyChain());
       allPropertyChains.addAll(currentDepth);
       for (int i = 0; i < cMaxDepth; i++) {
+         List<PropertyChain> nextDepth = CollectionUtil.makeList();
          for (PropertyChain c : currentDepth) {
-            currentDepth = crawlNextDepth(c);
+            nextDepth.addAll(crawlNextDepth(c));
          }
-         allPropertyChains.addAll(currentDepth);
+         allPropertyChains.addAll(nextDepth);
+         
+         currentDepth = nextDepth;
       }      
       
-      allPropertyChains.remove(cDesc.getTargetAttribute().getProperties());
+      allPropertyChains.remove(cDesc.getTargetAttribute().getPropertyChain());
       return allPropertyChains;
    }
    
@@ -151,8 +154,9 @@ public class RDFFeatureCrawler {
       List<URI> props = mDataSource.getPropertiesOf(cDesc.getTargetType(), propChain);
       List<PropertyChain> nextDepth = CollectionUtil.makeList();
       for (URI prop : props) {
-         nextDepth.add(propChain.append(prop));
+         nextDepth.add(PropertyChain.make(propChain, prop));
       }
+      System.out.println(nextDepth);
       return nextDepth;
    }
    

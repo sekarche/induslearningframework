@@ -1,0 +1,8 @@
+@targetType http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/vocab/Case
+
+@target smoking_status
+
+@attribute smoking_status
+http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/vocab/enhancement/2/smoking_status
+ENUM=http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/value-of/smoking_status/-1,http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/value-of/smoking_status/Current,http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/value-of/smoking_status/Former,http://logd.tw.rpi.edu/source/nci-nih-gov/dataset/hints-2003-2005/value-of/smoking_status/Never
+aggregator=NONE

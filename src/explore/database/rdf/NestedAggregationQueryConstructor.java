@@ -28,13 +28,15 @@ public class NestedAggregationQueryConstructor {
    private VarFactory mVarFactory;
    private Aggregator mAggOuter;
    private Aggregator mAggInner;
+   private boolean mNumericFilter;
    
-   public NestedAggregationQueryConstructor(String context, URI type, PropertyChain propChain, Aggregator outer, Aggregator inner) {
+   public NestedAggregationQueryConstructor(String context, URI type, PropertyChain propChain, Aggregator outer, Aggregator inner, boolean numericFilter) {
       mContextPart = makeContextPart(context);
       mType = type;
       mPropChain = propChain;
       mAggOuter = outer;
       mAggInner = inner;
+      mNumericFilter = numericFilter;
       mVarFactory = new VarFactory();
    }
 
@@ -48,6 +50,9 @@ public class NestedAggregationQueryConstructor {
                            .replace(AGG_OUTER_PATTERN, mAggOuter.toString())
                            .replace(AGG_INNER_PATTERN, mAggInner.toString()));
       b.append(chain);
+      if (mNumericFilter) {
+         b.append("FILTER (").append(mVarFactory.current()).append(" > " + RangeTypeQueryConstructor.MIN_NUMER + ") ");
+      }
       b.append("} GROUP BY ").append(TARGET_VAR).append(" } }");
       return b.toString();
    }

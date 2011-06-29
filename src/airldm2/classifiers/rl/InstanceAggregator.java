@@ -26,10 +26,17 @@ public class InstanceAggregator {
          RbcAttribute targetAttribute = dataDesc.getTargetAttribute();
          List<RbcAttribute> nonTargetAttributes = dataDesc.getNonTargetAttributeList();
          
-         int[] targetValueIndexCount = aggregateAttribute(dataSource, instanceURI, targetAttribute);
-         int[][] featureValueIndexCount = new int[nonTargetAttributes.size()][];
-         for (int i = 0; i < nonTargetAttributes.size(); i++) {
-            featureValueIndexCount[i] = aggregateAttribute(dataSource, instanceURI, nonTargetAttributes.get(i));
+         int[] targetValueIndexCount = null;
+         int[][] featureValueIndexCount = null;
+         try {
+            targetValueIndexCount = aggregateAttribute(dataSource, instanceURI, targetAttribute);
+            featureValueIndexCount = new int[nonTargetAttributes.size()][];
+            for (int i = 0; i < nonTargetAttributes.size(); i++) {
+               featureValueIndexCount[i] = aggregateAttribute(dataSource, instanceURI, nonTargetAttributes.get(i));
+            }
+         } catch (IllegalArgumentException ex) {
+            System.err.print(".");
+            continue;
          }
          
          AggregatedInstance aggInstance = new AggregatedInstance(featureValueIndexCount, targetValueIndexCount);
@@ -51,7 +58,8 @@ public class InstanceAggregator {
       } else if (attribute.getAggregatorType() == ValueAggregator.NONE) {
          Value value = dataSource.getValue(instance, attribute);
          if (value == null) {
-            System.err.println("Missing " + attribute.getName() + " value for instance " + instance);
+            //throw new IllegalArgumentException("Missing " + attribute.getName() + " value for instance " + instance);
+            //System.err.println("Missing " + attribute.getName() + " value for instance " + instance);
          } else {
             int index = valueType.indexOf(value);
             if (index >= 0) {
