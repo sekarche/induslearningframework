@@ -1,0 +1,8 @@
+@targetType http://data.linkedmdb.org/resource/movie/film
+
+@target openingreceipt
+
+@attribute openingreceipt
+http://data.linkedmdb.org/resource/movie/openingreceipt
+BINNED=8000000
+aggregator=NONE

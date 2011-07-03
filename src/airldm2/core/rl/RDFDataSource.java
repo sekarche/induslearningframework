@@ -171,7 +171,8 @@ public class RDFDataSource implements SSDataSource {
    }
 
    public double getAverageForAggregation(URI targetType, PropertyChain propChain, Aggregator inner) throws RDFDatabaseException {
-      String query = new NestedAggregationQueryConstructor(mDefaultContext, targetType, propChain, Aggregator.AVG, inner, true).createQuery();
+      boolean needsNumericFilter = !Aggregator.COUNT.equals(inner);
+      String query = new NestedAggregationQueryConstructor(mDefaultContext, targetType, propChain, Aggregator.AVG, inner, needsNumericFilter).createQuery();
       //System.out.println(query);
       
       SPARQLQueryResult results = mConn.executeQuery(query);
