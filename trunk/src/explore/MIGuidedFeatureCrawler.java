@@ -28,11 +28,12 @@ import airldm2.util.ArrayUtil;
 import airldm2.util.CollectionUtil;
 import explore.database.rdf.NestedAggregationQueryConstructor.Aggregator;
 import explore.database.rdf.RangeTypeQueryConstructor.RangeType;
-import explore.tree.OpenNodeVisitor;
-import explore.tree.PropertyTree;
-import explore.tree.TreeNode;
+import explore.mitree.OpenNodeVisitor;
+import explore.mitree.PropertyTree;
+import explore.mitree.RbcAttributeScore;
+import explore.mitree.TreeNode;
 
-public class RDFGuidedFeatureCrawler {
+public class MIGuidedFeatureCrawler {
 
    private static final int MAX_PROPERTY_RANGE_FOR_FEATURE = 10;
    private static final double SCORE_THRESHOLD = 0.005;
@@ -41,7 +42,7 @@ public class RDFGuidedFeatureCrawler {
    private RDFDataDescriptor cDesc;
    private URI[] mExclusion;
    
-   public RDFGuidedFeatureCrawler(RDFDataSource dataSource) {
+   public MIGuidedFeatureCrawler(RDFDataSource dataSource) {
       mDataSource = dataSource;
    }
    

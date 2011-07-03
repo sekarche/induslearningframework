@@ -26,6 +26,10 @@ public class CollectionUtil {
 	public static <K,V> Map<K,V> makeMap() {
 		return new HashMap<K,V>();
 	}
+	
+	public static <K,V> Map<K,V> makeMap(Map<K,V> as) {
+      return new HashMap<K,V>(as);
+   }
 
 	public static <T> Set<T> asSet(T... a) {
 		return new HashSet<T>(Arrays.asList(a));

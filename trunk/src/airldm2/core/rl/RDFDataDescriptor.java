@@ -59,6 +59,10 @@ public class RDFDataDescriptor implements DataDescriptor {
    public List<RbcAttribute> getNonTargetAttributeList() {
       return cNonTargetAttributeList;
    }
+   
+   public int getNonTargetAttributeCount() {
+      return cNonTargetAttributeList.size();
+   }
 
    public void clearNonTargetAttributes() {
       RbcAttribute targetAttribute = mAttributes.get(mTargetAttributeName);
@@ -128,6 +132,11 @@ public class RDFDataDescriptor implements DataDescriptor {
          a.write(out);
          out.write("\n");
       }
+   }
+
+   public RDFDataDescriptor copy() {
+      RDFDataDescriptor copy = new RDFDataDescriptor(mTargetType, mTargetAttributeName, CollectionUtil.makeMap(mAttributes));
+      return copy;
    }
 
 }

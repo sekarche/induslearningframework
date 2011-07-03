@@ -30,13 +30,13 @@ import airldm2.database.rdf.RDFDatabaseConnection;
 import airldm2.database.rdf.RDFDatabaseConnectionFactory;
 import airldm2.database.rdf.VirtuosoConnection;
 import airldm2.util.CollectionUtil;
-import explore.RDFGuidedFeatureCrawler;
-import explore.tree.BFS;
-import explore.tree.BestScore;
-import explore.tree.IterativeBestScore;
-import explore.tree.OpenNodeVisitor;
+import explore.MIGuidedFeatureCrawler;
+import explore.mitree.BFS;
+import explore.mitree.BestScore;
+import explore.mitree.IterativeBestScore;
+import explore.mitree.OpenNodeVisitor;
 
-public class CrawlerExperiment {
+public class CrawlerExperimentMI {
    
    private RepositoryConnection Census;
    private ValueFactory ValueFac = new ValueFactoryImpl();
@@ -44,14 +44,14 @@ public class CrawlerExperiment {
    private URI STATE = ValueFac.createURI("http://www.rdfabout.com/rdf/usgov/geo/us/state");
    
    public static void main(String[] args) throws Exception {
-      //new CrawlerExperiment().runCensus();
-      new CrawlerExperiment().runMovie();
+      //new CrawlerExperimentMI().runCensus();
+      new CrawlerExperimentMI().runMovie();
    }
 
    private void runMovie() throws Exception {
       RDFDatabaseConnection conn = RDFDatabaseConnectionFactory.makeFromConfig();
       RDFDataSource source = new RDFDataSource(conn, ":default");
-      RDFGuidedFeatureCrawler crawler = new RDFGuidedFeatureCrawler(source);
+      MIGuidedFeatureCrawler crawler = new MIGuidedFeatureCrawler(source);
       //crawler.setExclusion(new URI[] {new ValueFactoryImpl().createURI("http://logd.tw.rpi.edu/source/data-gov/dataset/311/vocab/")});
       
       final String trainSPARQL = "http://localhost:8890/sparql";
@@ -98,7 +98,7 @@ public class CrawlerExperiment {
       
       RDFDatabaseConnection conn = RDFDatabaseConnectionFactory.makeFromConfig();
       RDFDataSource source = new RDFDataSource(conn, ":census");
-      RDFGuidedFeatureCrawler crawler = new RDFGuidedFeatureCrawler(source);
+      MIGuidedFeatureCrawler crawler = new MIGuidedFeatureCrawler(source);
       crawler.setExclusion(new URI[] {new ValueFactoryImpl().createURI("http://logd.tw.rpi.edu/source/data-gov/dataset/311/vocab/")});
       
       final String SPARQL = "http://localhost:8890/sparql";

@@ -1,0 +1,8 @@
+@targetType http://www.rdfabout.com/rdf/usgov/geo/us/state
+
+@target violent_crime
+
+@attribute violent_crime
+http://logd.tw.rpi.edu/source/data-gov/dataset/311/vocab/raw/violent_crime_rate_per_100000
+BINNED=400
+aggregator=NONE
