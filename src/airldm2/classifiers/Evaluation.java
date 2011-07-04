@@ -1,11 +1,10 @@
 package airldm2.classifiers;
 
-import java.util.List;
-
 import weka.classifiers.evaluation.ConfusionMatrix;
 import weka.classifiers.evaluation.NominalPrediction;
 import weka.core.Utils;
 import airldm2.classifiers.rl.AggregatedInstance;
+import airldm2.classifiers.rl.AggregatedInstances;
 import airldm2.classifiers.rl.InstanceAggregator;
 import airldm2.classifiers.rl.RelationalBayesianClassifier;
 import airldm2.core.LDInstances;
@@ -181,8 +180,8 @@ public class Evaluation {
       ConfusionMatrix wekaConfusionMatrix = new ConfusionMatrix(classLabels);
 
       rbc.buildClassifier(trainInstances);
-      List<AggregatedInstance> aggregatedInstances = InstanceAggregator.aggregate(testInstances);
-      for (AggregatedInstance i : aggregatedInstances) {
+      AggregatedInstances aggregatedInstances = InstanceAggregator.aggregateAll(testInstances);
+      for (AggregatedInstance i : aggregatedInstances.getInstances()) {
          double[] distribution = rbc.distributionForInstance(i);
          double actual = i.getLabel();
          // return some error message if the class label is not according to the descriptor
@@ -198,11 +197,15 @@ public class Evaluation {
    
    public static ConfusionMatrix evaluateBuiltRBCModel(RelationalBayesianClassifier rbc, LDInstances testInstances) throws Exception {
       RDFDataDescriptor desc = (RDFDataDescriptor) testInstances.getDesc();
+      AggregatedInstances aggregatedInstances = InstanceAggregator.aggregateAll(testInstances);
+      return evaluateBuiltRBCModel(rbc, desc, aggregatedInstances);
+   }
+
+   public static ConfusionMatrix evaluateBuiltRBCModel(RelationalBayesianClassifier rbc, RDFDataDescriptor desc, AggregatedInstances aggregatedInstances) throws Exception {
       String[] classLabels = desc.getClassLabels();
       ConfusionMatrix wekaConfusionMatrix = new ConfusionMatrix(classLabels);
 
-      List<AggregatedInstance> aggregatedInstances = InstanceAggregator.aggregate(testInstances);
-      for (AggregatedInstance i : aggregatedInstances) {
+      for (AggregatedInstance i : aggregatedInstances.getInstances()) {
          double[] distribution = rbc.distributionForInstance(i);
          double actual = i.getLabel();
          // return some error message if the class label is not according to the descriptor

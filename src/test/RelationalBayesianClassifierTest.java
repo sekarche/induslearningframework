@@ -1,6 +1,7 @@
 package test;
 
 import java.util.Arrays;
+import java.util.List;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -8,6 +9,8 @@ import org.junit.Test;
 
 import weka.classifiers.evaluation.ConfusionMatrix;
 import airldm2.classifiers.Evaluation;
+import airldm2.classifiers.rl.ClassCount;
+import airldm2.classifiers.rl.ClassValueCount;
 import airldm2.classifiers.rl.RelationalBayesianClassifier;
 import airldm2.core.LDInstances;
 import airldm2.core.SSDataSource;
@@ -38,33 +41,33 @@ public class RelationalBayesianClassifierTest {
       RelationalBayesianClassifier rbc = new RelationalBayesianClassifier();
       rbc.buildClassifier(trainInstances);
       
-      double[][][] counts = rbc.getCountsForTest();
-      System.out.println(Arrays.deepToString(counts));
-      Assert.assertTrue(Arrays.deepEquals(
-            new double[][][] {
-               { {1, 1, 3}, {0, 1, 0}, {0, 3, 0} },
-               { {0, 2, 0}, {2, 0, 0}, {0, 1, 0} },
-               { {0, 1, 1, 0}, {0, 0, 0, 1}, {0, 0, 0, 0} },
-               { {0, 2, 0, 0}, {1, 0, 0, 0}, {0, 0, 0, 0} },
-               { {0, 1, 0, 1}, {0, 0, 0, 1}, {0, 0, 0, 0} },
-            }
-            , counts));
+      List<ClassValueCount> counts = rbc.getCountsForTest();
+      List<ClassValueCount> expected = Arrays.asList(new ClassValueCount[] {
+               new ClassValueCount(new double[][]{ {1, 1, 3}, {0, 1, 0}, {0, 3, 0} }),
+               new ClassValueCount(new double[][]{ {0, 2, 0}, {2, 0, 0}, {0, 1, 0} }),
+               new ClassValueCount(new double[][]{ {0, 1, 1, 0}, {0, 0, 0, 1}, {0, 0, 0, 0} }),
+               new ClassValueCount(new double[][]{ {0, 2, 0, 0}, {1, 0, 0, 0}, {0, 0, 0, 0} }),
+               new ClassValueCount(new double[][]{ {0, 1, 0, 1}, {0, 0, 0, 1}, {0, 0, 0, 0} }),
+            });
+      for (int i = 0; i < expected.size(); i++) {
+         System.out.println(counts.get(i));
+         Assert.assertEquals(expected.get(i), counts.get(i));
+      }
          
-      double[][] attributeClassCounts = rbc.getAttributeClassCountsForTest();
-      Assert.assertTrue(Arrays.deepEquals(
-            new double[][] {
-               {5, 1, 3},
-               {2, 2, 1},
-               {2, 1, 0},
-               {2, 1, 0},
-               {2, 1, 0},
-            }
-            , attributeClassCounts));
-         
-      double[] classCounts = rbc.getClassCountsForTest();
-      Assert.assertTrue(Arrays.equals(
-            new double[] {2, 2, 1}
-            , classCounts));
+      List<ClassCount> attributeClassCounts = rbc.getAttributeClassCountsForTest();
+      List<ClassCount> attExpected = Arrays.asList(new ClassCount[] {
+            new ClassCount(new double[]{5, 1, 3}),
+            new ClassCount(new double[]{2, 2, 1}),
+            new ClassCount(new double[]{2, 1, 0}),
+            new ClassCount(new double[]{2, 1, 0}),
+            new ClassCount(new double[]{2, 1, 0}),
+         });
+      for (int i = 0; i < attExpected.size(); i++) {
+         Assert.assertEquals(attExpected.get(i), attributeClassCounts.get(i));
+      }
+      
+      ClassCount classCounts = rbc.getClassCountsForTest();
+      Assert.assertEquals(new ClassCount(new double[] {2, 2, 1}), classCounts);
       
       Assert.assertEquals(5, rbc.getNumInstances());
    }

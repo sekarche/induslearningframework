@@ -46,15 +46,13 @@ public class CrawlerExperimentClassifier {
       final String emptyDescFile = "exp_movie/moviesDescEmpty.txt";
       
       BufferedWriter out = new BufferedWriter(new FileWriter("exp_movie/result.txt"));
+      ClassifierGuidedFeatureCrawler crawler = new ClassifierGuidedFeatureCrawler(mTrainData, mTuneData, emptyDescFile);
       
-      for (int n = 5; n <= 50; n += 5) {
+      for (int n = 5; n <= 100; n += 5) {
          out.write("" + n); out.newLine();
          
-         //Crawl
-         ClassifierGuidedFeatureCrawler crawler = new ClassifierGuidedFeatureCrawler(mTrainData, mTuneData);
-         
          String desc = "exp_movie/moviesDescFilled_RBC" + n + ".txt";
-         RelationalBayesianClassifier rbc = crawler.crawl(emptyDescFile, desc, n);
+         RelationalBayesianClassifier rbc = crawler.crawlAndWriteDesc(desc, n);
          
          //Test
          ConfusionMatrix mat = test(desc, rbc);

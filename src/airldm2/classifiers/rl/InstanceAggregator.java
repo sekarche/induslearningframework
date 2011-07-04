@@ -15,38 +15,65 @@ import airldm2.exceptions.RDFDatabaseException;
 import airldm2.util.CollectionUtil;
 
 public class InstanceAggregator {
-
-   public static List<AggregatedInstance> aggregate(LDInstances instances) throws RDFDatabaseException {
+   
+   public static AggregatedInstances init(LDInstances instances) throws RDFDatabaseException {
       RDFDataSource dataSource = (RDFDataSource) instances.getDataSource();
       RDFDataDescriptor dataDesc = (RDFDataDescriptor) instances.getDesc();
       
       List<URI> instanceURIs = dataSource.getTargetInstances(dataDesc.getTargetType());
+      AggregatedInstances ais = new AggregatedInstances(instanceURIs);
+      
       List<AggregatedInstance> aggInstances = CollectionUtil.makeList();
       for (URI instanceURI : instanceURIs) {
          RbcAttribute targetAttribute = dataDesc.getTargetAttribute();
-         List<RbcAttribute> nonTargetAttributes = dataDesc.getNonTargetAttributeList();
          
-         int[] targetValueIndexCount = null;
-         int[][] featureValueIndexCount = null;
+         ValueIndexCount targetValueIndexCount = null;
          try {
             targetValueIndexCount = aggregateAttribute(dataSource, instanceURI, targetAttribute);
-            featureValueIndexCount = new int[nonTargetAttributes.size()][];
-            for (int i = 0; i < nonTargetAttributes.size(); i++) {
-               featureValueIndexCount[i] = aggregateAttribute(dataSource, instanceURI, nonTargetAttributes.get(i));
-            }
          } catch (IllegalArgumentException ex) {
             System.err.print(".");
             continue;
          }
          
-         AggregatedInstance aggInstance = new AggregatedInstance(featureValueIndexCount, targetValueIndexCount);
+         AggregatedInstance aggInstance = new AggregatedInstance(targetValueIndexCount);
          aggInstances.add(aggInstance);
       }
       
-      return aggInstances;      
+      ais.setInstances(aggInstances);
+      return ais;
    }
 
-   private static int[] aggregateAttribute(RDFDataSource dataSource, URI instance, RbcAttribute attribute) throws RDFDatabaseException {
+   public static AggregatedInstances aggregateAll(LDInstances instances) throws RDFDatabaseException {
+      AggregatedInstances ais = init(instances);
+      
+      RDFDataSource dataSource = (RDFDataSource) instances.getDataSource();
+      RDFDataDescriptor dataDesc = (RDFDataDescriptor) instances.getDesc();
+      List<RbcAttribute> nonTargetAttributes = dataDesc.getNonTargetAttributeList();
+      
+      for (RbcAttribute att : nonTargetAttributes) {
+         List<ValueIndexCount> indexCounts = aggregateAttributeForInstances(dataSource, ais.getURIs(), att);
+         ais.addAttribute(indexCounts);
+      }
+            
+      return ais;      
+   }
+
+   public static List<ValueIndexCount> aggregateAttributeForInstances(RDFDataSource dataSource, List<URI> instances, RbcAttribute att) throws RDFDatabaseException {
+      List<ValueIndexCount> indexCounts = CollectionUtil.makeList();
+      for (URI instanceURI : instances) {
+         try {
+            ValueIndexCount indexCount = aggregateAttribute(dataSource, instanceURI, att);
+            indexCounts.add(indexCount);
+         } catch (IllegalArgumentException ex) {
+            System.err.print(".");
+            continue;
+         }
+      }
+      
+      return indexCounts;
+   }
+   
+   private static ValueIndexCount aggregateAttribute(RDFDataSource dataSource, URI instance, RbcAttribute attribute) throws RDFDatabaseException {
       ValueType valueType = attribute.getValueType();
       int[] valueIndexCount = new int[valueType.domainSize()];
       
@@ -75,7 +102,7 @@ public class InstanceAggregator {
          }
       }
       
-      return valueIndexCount;
+      return new ValueIndexCount(valueIndexCount);
    }
    
 }

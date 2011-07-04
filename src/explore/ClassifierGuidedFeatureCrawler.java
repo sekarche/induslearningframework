@@ -2,14 +2,18 @@ package explore;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.util.List;
 
 import org.openrdf.model.URI;
 
 import weka.classifiers.evaluation.ConfusionMatrix;
-
 import airldm2.classifiers.Evaluation;
+import airldm2.classifiers.rl.AggregatedInstances;
+import airldm2.classifiers.rl.ClassValueCount;
+import airldm2.classifiers.rl.InstanceAggregator;
 import airldm2.classifiers.rl.RelationalBayesianClassifier;
+import airldm2.classifiers.rl.ValueIndexCount;
 import airldm2.core.LDInstances;
 import airldm2.core.rl.BinnedType;
 import airldm2.core.rl.EnumType;
@@ -22,6 +26,7 @@ import airldm2.core.rl.RbcAttribute;
 import airldm2.core.rl.RbcAttribute.ValueAggregator;
 import airldm2.core.rl.ValueType;
 import airldm2.database.rdf.SPARQLQueryResult;
+import airldm2.exceptions.RDFDataDescriptorFormatException;
 import airldm2.exceptions.RDFDatabaseException;
 import airldm2.util.CollectionUtil;
 import explore.database.rdf.NestedAggregationQueryConstructor.Aggregator;
@@ -40,72 +45,75 @@ public class ClassifierGuidedFeatureCrawler {
    private final LDInstances mTuneInstances;
    
    private RDFDataDescriptor cDesc;
+   private RelationalBayesianClassifier cRBC;
+   private AggregatedInstances cTuneAggInstances;
+   private PropertyTree cPropertyTree;
    private URI[] mExclusion;
+
    
-   public ClassifierGuidedFeatureCrawler(RDFDataSource trainData, RDFDataSource tuneData) {
+   public ClassifierGuidedFeatureCrawler(RDFDataSource trainData, RDFDataSource tuneData, String inDescFile) throws Exception {
       mTrainData = trainData;
       mTuneData = tuneData;
       mTrainInstances = new LDInstances();
       mTrainInstances.setDataSource(trainData);
       mTuneInstances = new LDInstances();
       mTuneInstances.setDataSource(mTuneData);
+      cDesc = RDFDataDescriptorParser.parse(inDescFile);
+      mTrainInstances.setDesc(cDesc);
+      mTuneInstances.setDesc(cDesc);
+      cRBC = new RelationalBayesianClassifier();
+      //Empty classifier to initialize data source and descriptor
+      cRBC.buildClassifier(mTrainInstances);
+      cTuneAggInstances = InstanceAggregator.init(mTuneInstances);
+      cPropertyTree = new PropertyTree();
    }
 
    public void setExclusion(URI[] exclusion) {
       mExclusion = exclusion;
    }
 
-   public RelationalBayesianClassifier crawl(String inDescFile, String outDescFile, int crawlSize) throws Exception {
-      RDFDataDescriptor desc = RDFDataDescriptorParser.parse(inDescFile);
-      RelationalBayesianClassifier rbc = crawl(desc, crawlSize);
+   public RelationalBayesianClassifier crawlAndWriteDesc(String outDescFile, int crawlSize) throws Exception {
+      RelationalBayesianClassifier rbc = crawl(crawlSize);
       BufferedWriter out = new BufferedWriter(new FileWriter(outDescFile));
-      desc.write(out);
+      cDesc.write(out);
       out.close();
       return rbc;
    }
    
-   public RelationalBayesianClassifier crawl(RDFDataDescriptor desc, int crawlSize) throws Exception {
-      cDesc = desc;
-      //mTrainInstances.setDesc(cDesc);
-      PropertyTree tree = new PropertyTree();
-      //RelationalBayesianClassifier rbc = new RelationalBayesianClassifier();
-      
-      while (tree.attributeSize() < crawlSize) {
-         TreeNode n = tree.getNextNodeToExpand();
+   public RelationalBayesianClassifier crawl(int crawlSize) throws Exception {
+      while (cPropertyTree.attributeSize() < crawlSize) {
+         TreeNode n = cPropertyTree.getNextNodeToExpand();
          if (n == null) break;
          
          RbcAttribute att = n.getAttribute();
          if (att != null) {
             cDesc.addNonTargetAttribute(att);
-            //rbc.buildClassifier(mTrainInstances);
+            cRBC.addAttributeCounts(n.getRBCCount());
+            cTuneAggInstances.addAttribute(n.getValueIndexCountForTuneInstances());
          }
          
          List<PropertyChain> childrenProp = crawlChildren(n.getPropertyChain());
          List<RbcAttribute> childrenAtt = makeAttributes(childrenProp);
+         List<ClassValueCount> childrenRBCCounts = makeRBCCounts(childrenAtt);
+         List<List<ValueIndexCount>> valueIndexCountForAttributes = makeAggregateAttributeForTuneData(childrenAtt);
          
-         tree.expand(n, childrenAtt);
-         tree.print();
-         tree.accept(new TreeVisitor() {
+         cPropertyTree.expand(n, childrenAtt, childrenRBCCounts, valueIndexCountForAttributes);
+
+         //tree.print();
+         if (childrenAtt.isEmpty()) continue;
+         cPropertyTree.accept(new TreeVisitor() {
 
             @Override
             public void visit(TreeNode node) {
                if (!node.isOpen()) return;
                
-               RbcAttribute att = node.getAttribute();
-               RDFDataDescriptor descCopy = cDesc.copy();
-               mTrainInstances.setDesc(descCopy);
-               descCopy.addNonTargetAttribute(att);
-               RelationalBayesianClassifier rbc = new RelationalBayesianClassifier();
-               try {
-                  rbc.buildClassifier(mTrainInstances);
-               } catch (Exception e) {
-                  e.printStackTrace();
-               }
-               
-               mTuneInstances.setDesc(descCopy);
+               cRBC.addAttributeCounts(node.getRBCCount());
+               List<ValueIndexCount> valueIndexCountForTuneInstances = node.getValueIndexCountForTuneInstances();
+               cTuneAggInstances.addAttribute(valueIndexCountForTuneInstances);
+
                double score = 0.0;
                try {
-                  ConfusionMatrix matrix = Evaluation.evaluateBuiltRBCModel(rbc, mTuneInstances);
+                  ConfusionMatrix matrix = Evaluation.evaluateBuiltRBCModel(cRBC, cDesc, cTuneAggInstances);
                   score = 1.0 - matrix.errorRate();
                } catch (Exception e) {
                   e.printStackTrace();
@@ -113,16 +121,16 @@ public class ClassifierGuidedFeatureCrawler {
                
                node.setScore(score);
                System.out.println(score + ": " + node.getPropertyChain());
+               
+               cRBC.removeLastAttributeCounts();
+               cTuneAggInstances.removeLastAttribute();
             }
             
          });
       }
       //tree.print();
       
-      mTrainInstances.setDesc(cDesc);
-      RelationalBayesianClassifier rbc = new RelationalBayesianClassifier();
-      rbc.buildClassifier(mTrainInstances);
-      return rbc;
+      return cRBC;
    }
    
    private List<PropertyChain> crawlChildren(PropertyChain propChain) throws RDFDatabaseException {
@@ -228,4 +236,23 @@ public class ClassifierGuidedFeatureCrawler {
       return allAttributes;
    }
    
+   private List<ClassValueCount> makeRBCCounts(List<RbcAttribute> childrenAtt) throws RDFDatabaseException {
+      List<ClassValueCount> allCounts = CollectionUtil.makeList();
+      for (RbcAttribute att : childrenAtt) {
+         ClassValueCount counts = cRBC.getCounts(att);
+         allCounts.add(counts);
+      }
+      return allCounts;
+   }
+
+   private List<List<ValueIndexCount>> makeAggregateAttributeForTuneData(List<RbcAttribute> childrenAtt) throws RDFDatabaseException {
+      List<List<ValueIndexCount>> indexCountForAttribute = CollectionUtil.makeList();
+      for (RbcAttribute att : childrenAtt) {
+         List<ValueIndexCount> indexCounts = InstanceAggregator.aggregateAttributeForInstances(mTuneData, cTuneAggInstances.getURIs(), att);
+         indexCountForAttribute.add(indexCounts);
+         System.out.println(att.getPropertyChain());
+      }
+      return indexCountForAttribute;
+   }
+
 }

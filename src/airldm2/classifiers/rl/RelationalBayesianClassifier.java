@@ -13,7 +13,9 @@ import airldm2.core.rl.RDFDataDescriptor;
 import airldm2.core.rl.RDFDataSource;
 import airldm2.core.rl.RbcAttribute;
 import airldm2.database.rdf.SuffStatQueryParameter;
+import airldm2.exceptions.RDFDatabaseException;
 import airldm2.util.ArrayUtil;
+import airldm2.util.CollectionUtil;
 
 public class RelationalBayesianClassifier extends Classifier {
 
@@ -22,14 +24,14 @@ public class RelationalBayesianClassifier extends Classifier {
    private int mNumInstances;
 
    //[attribute name][class value][attribute value]
-   private double[][][] mCounts;
+   private List<ClassValueCount> mCounts;
    
    //[attribute name][class value]
-   private double[][] mAttributeClassCounts;
+   private List<ClassCount> mAttributeClassCounts;
    
    //[class value]
-   private double[] mClassCounts;
-   
+   private ClassCount mClassCounts;
+      
    @Override
    public void buildClassifier(LDInstances instances) throws Exception {
       mDataDesc = (RDFDataDescriptor) instances.getDesc();
@@ -38,57 +40,74 @@ public class RelationalBayesianClassifier extends Classifier {
       List<RbcAttribute> nonTargetAttributes = mDataDesc.getNonTargetAttributeList();
       RbcAttribute targetAttribute = mDataDesc.getTargetAttribute();
 
-      int numOfClassLabels = targetAttribute.getDomainSize();
-      mClassCounts = new double[numOfClassLabels];
-
+      int numOfClassLabels = targetAttribute.getDomainSize();      
       int numAttributes = nonTargetAttributes.size();
 
       // [attribute name][class label][attribute value]
-      mCounts = new double[numAttributes][numOfClassLabels][];
+      mCounts = CollectionUtil.makeList();
       // [attribute name][class value]
-      mAttributeClassCounts = new double[numAttributes][numOfClassLabels];
+      mAttributeClassCounts = CollectionUtil.makeList();
       
-      // find possible values for each attribute and allocate memory
-      for (int i = 0; i < numAttributes; i++) {
-         int numValuesCurrAttrib = nonTargetAttributes.get(i).getDomainSize();
-         for (int j = 0; j < numOfClassLabels; j++) {
-            mCounts[i][j] = new double[numValuesCurrAttrib];
-         }
-      }
-
       for (int i = 0; i < numAttributes; i++) {
          RbcAttribute currAttribute = nonTargetAttributes.get(i);
-         int numOfAttributeValues = currAttribute.getDomainSize();
-         for (int j = 0; j < numOfClassLabels; j++) {
-            for (int k = 0; k < numOfAttributeValues; k++) {
-               SuffStatQueryParameter queryParam = new SuffStatQueryParameter(mDataDesc.getTargetType(), targetAttribute, j, currAttribute, k);
-               ISufficentStatistic tempSuffStat = mDataSource.getSufficientStatistic(queryParam);
-               mCounts[i][j][k] = tempSuffStat.getValue().intValue();
-               
-               //System.out.println(queryParam);
-               //System.out.println(tempSuffStat.getValue());
-            }
-         }
+         ClassValueCount counts = getCounts(currAttribute);
+         addAttributeCounts(counts);
       }
       
       //Explicitly ask for class count since every attribute may be INDEPENDENT_VAL
+      double[] classCounts = new double[numOfClassLabels];
       for (int j = 0; j < numOfClassLabels; j++) {
          ISufficentStatistic tempSuffStat = mDataSource.getSufficientStatistic(new SuffStatQueryParameter(mDataDesc.getTargetType(), targetAttribute, j));
-         mClassCounts[j] = tempSuffStat.getValue().intValue();
+         classCounts[j] = tempSuffStat.getValue().intValue();
       }
+      mClassCounts = new ClassCount(classCounts);
       
-      //Cache mAttributeClassCounts for optimization (for classification)
-      for (int i = 0; i < numAttributes; i++) {
-         for (int j = 0; j < numOfClassLabels; j++) {
-            for (int k = 0; k < mCounts[i][j].length; k++) {
-               mAttributeClassCounts[i][j] += mCounts[i][j][k];
-            }
+      for (int i = 0; i < numOfClassLabels; i++) {
+         mNumInstances += (int) classCounts[i];
+      }
+   }
+
+   //double[class value][attribute value]
+   public ClassValueCount getCounts(RbcAttribute att) throws RDFDatabaseException {
+      RbcAttribute targetAttribute = mDataDesc.getTargetAttribute();
+      int numOfClassLabels = targetAttribute.getDomainSize();
+      int numOfAttributeValues = att.getDomainSize();
+
+      double[][] counts = new double[numOfClassLabels][numOfAttributeValues];
+      
+      for (int j = 0; j < numOfClassLabels; j++) {
+         for (int k = 0; k < numOfAttributeValues; k++) {
+            SuffStatQueryParameter queryParam = new SuffStatQueryParameter(mDataDesc.getTargetType(), targetAttribute, j, att, k);
+            ISufficentStatistic tempSuffStat = mDataSource.getSufficientStatistic(queryParam);
+            counts[j][k] = tempSuffStat.getValue().intValue();
+            
+            //System.out.println(queryParam);
+            //System.out.println(tempSuffStat.getValue());
          }
       }
       
-      for (int i = 0; i < numOfClassLabels; i++) {
-         mNumInstances += (int) mClassCounts[i];
+      return new ClassValueCount(counts);
+   }
+   
+   public void addAttributeCounts(ClassValueCount counts) {
+      RbcAttribute targetAttribute = mDataDesc.getTargetAttribute();
+      int numOfClassLabels = targetAttribute.getDomainSize();
+      
+      mCounts.add(counts);
+      
+      //Cache mAttributeClassCounts for optimization (for classification)
+      double[] attCounts = new double[numOfClassLabels];
+      for (int j = 0; j < numOfClassLabels; j++) {
+         for (int k = 0; k < counts.size(j); k++) {
+            attCounts[j] += counts.get(j, k);
+         }
       }
+      mAttributeClassCounts.add(new ClassCount(attCounts));
+   }
+
+   public void removeLastAttributeCounts() {
+      mCounts.remove(mCounts.size() - 1);
+      mAttributeClassCounts.remove(mAttributeClassCounts.size() - 1);
    }
    
    @Override
@@ -108,43 +127,50 @@ public class RelationalBayesianClassifier extends Classifier {
    }
    
    public double[] distributionForInstance(AggregatedInstance instance) {
-      int[][] featureValueIndexCount = instance.getFeatureValueIndexCount();
-      double[] dist = new double[mClassCounts.length];
+      List<ValueIndexCount> featureValueIndexCount = instance.getAttributeValueIndexCount();
+      double[] dist = new double[mClassCounts.size()];
       Arrays.fill(dist, 1.0);
       
       for (int c = 0; c < dist.length; c++) {
-         for (int a = 0; a < featureValueIndexCount.length; a++) {
-            for (int v = 0; v < featureValueIndexCount[a].length; v++) {
-               if (featureValueIndexCount[a][v] == 0) continue;
-               
+         for (int a = 0; a < featureValueIndexCount.size(); a++) {
+            ValueIndexCount valueIndexCount = featureValueIndexCount.get(a);
+            for (int v = 0; v < valueIndexCount.size(); v++) {
+               if (valueIndexCount.get(v) == 0) continue;
+               try{
+               ClassValueCount count = mCounts.get(a);
+               ClassCount attCount = mAttributeClassCounts.get(a);
                //With Laplace correction
-               double pVpC = (mCounts[a][c][v] + 1) / (mAttributeClassCounts[a][c] + mCounts[a][c].length);
+               double pVpC = (count.get(c, v) + 1) / (attCount.get(c) + count.size(c));
                
-               if (featureValueIndexCount[a][v] == 1) {
+               if (valueIndexCount.get(v) == 1) {
                   dist[c] *= pVpC;
                } else {
-                  dist[c] *= Math.pow(pVpC, featureValueIndexCount[a][v]);
+                  dist[c] *= Math.pow(pVpC, valueIndexCount.get(v));
                } 
+               }catch (ArrayIndexOutOfBoundsException ex) {
+                  System.out.println(valueIndexCount);
+                  System.out.println(mCounts.get(a));
+               }
             }
          }
          
        //With Laplace correction
-         dist[c] *= (mClassCounts[c] + 1) / (mNumInstances + mClassCounts.length);
+         dist[c] *= (mClassCounts.get(c) + 1) / (mNumInstances + mClassCounts.size());
       }
       
       ArrayUtil.normalize(dist);
       return dist;
    }
 
-   public double[][][] getCountsForTest() {
+   public List<ClassValueCount> getCountsForTest() {
       return mCounts;
    }
    
-   public double[][] getAttributeClassCountsForTest() {
+   public List<ClassCount> getAttributeClassCountsForTest() {
       return mAttributeClassCounts;
    }
 
-   public double[] getClassCountsForTest() {
+   public ClassCount getClassCountsForTest() {
       return mClassCounts;
    }
 
