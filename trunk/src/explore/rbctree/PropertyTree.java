@@ -2,6 +2,8 @@ package explore.rbctree;
 
 import java.util.List;
 
+import airldm2.classifiers.rl.ClassValueCount;
+import airldm2.classifiers.rl.ValueIndexCount;
 import airldm2.core.rl.RbcAttribute;
 
 public class PropertyTree {
@@ -27,8 +29,8 @@ public class PropertyTree {
       return v.getCount();
    }
 
-   public void expand(TreeNode n, List<RbcAttribute> childrenAtt) {
-      n.expand(childrenAtt);
+   public void expand(TreeNode n, List<RbcAttribute> childrenAtt, List<ClassValueCount> rbcCounts, List<List<ValueIndexCount>> valueIndexCountForAttributes) {
+      n.expand(childrenAtt, rbcCounts, valueIndexCountForAttributes);
    }
    
    public void print() {

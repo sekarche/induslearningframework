@@ -1,29 +1,41 @@
 package airldm2.classifiers.rl;
 
+import java.util.List;
+
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 
+import airldm2.util.CollectionUtil;
+
 public class AggregatedInstance {
 
-   /* mFeatureValueIndexOrCount[attribute index][value index] = count of value occurrences
+   /* mAttributeValueIndexOrCount[attribute index][value index] = count of value occurrences
     * If mAggregatorType != INDEPENDENT_VAL, then the sum of counts is exactly 1
     */
-   private int[][] mFeatureValueIndexCount;
+   private List<ValueIndexCount> mAttributeValueIndexCount;
    
-   private int[] mTargetValueIndexCount;
+   private ValueIndexCount mTargetValueIndexCount;
 
-   public AggregatedInstance(int[][] featureValueIndexCount, int[] targetValueIndexCount) {
-      mFeatureValueIndexCount = featureValueIndexCount;
+   public AggregatedInstance(ValueIndexCount targetValueIndexCount) {
       mTargetValueIndexCount = targetValueIndexCount;
+      mAttributeValueIndexCount = CollectionUtil.makeList();
    }
 
-   public int[][] getFeatureValueIndexCount() {
-      return mFeatureValueIndexCount;
+   public List<ValueIndexCount> getAttributeValueIndexCount() {
+      return mAttributeValueIndexCount;
+   }
+   
+   public void addAttribute(ValueIndexCount count) {
+      mAttributeValueIndexCount.add(count);
+   }
+   
+   public void removeLastAttribute() {
+      mAttributeValueIndexCount.remove(mAttributeValueIndexCount.size() - 1);
    }
 
    public int getLabel() {
-      for (int i = 0; i < mTargetValueIndexCount.length; i++) {
-         if (mTargetValueIndexCount[i] > 0) {
+      for (int i = 0; i < mTargetValueIndexCount.size(); i++) {
+         if (mTargetValueIndexCount.get(i) > 0) {
             return i;
          }
       }
