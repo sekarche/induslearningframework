@@ -38,7 +38,6 @@ public class InstanceAggregator {
          AggregatedInstance aggInstance = new AggregatedInstance(targetValueIndexCount);
          aggInstances.add(aggInstance);
       }
-      
       ais.setInstances(aggInstances);
       return ais;
    }

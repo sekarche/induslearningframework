@@ -33,7 +33,6 @@ import airldm2.util.CollectionUtil;
 import explore.MIGuidedFeatureCrawler;
 import explore.mitree.BFS;
 import explore.mitree.BestScore;
-import explore.mitree.IterativeBestScore;
 import explore.mitree.OpenNodeVisitor;
 
 public class CrawlerExperimentMI {
@@ -51,24 +50,23 @@ public class CrawlerExperimentMI {
    private void runMovie() throws Exception {
       RDFDatabaseConnection conn = RDFDatabaseConnectionFactory.makeFromConfig();
       RDFDataSource source = new RDFDataSource(conn, ":default");
-      MIGuidedFeatureCrawler crawler = new MIGuidedFeatureCrawler(source);
-      //crawler.setExclusion(new URI[] {new ValueFactoryImpl().createURI("http://logd.tw.rpi.edu/source/data-gov/dataset/311/vocab/")});
       
       final String trainSPARQL = "http://localhost:8890/sparql";
-      final String testSPARQL = "http://localhost:8892/sparql";
+      final String testSPARQL = "http://localhost:8896/sparql";
       final String graph = ":default";
       final String emptyDescFile = "exp_movie/moviesDescEmpty.txt";
       BufferedWriter out = new BufferedWriter(new FileWriter("exp_movie/result.txt"));
       
-      final String[] METHOD = new String[] {"ItrBestScore", "BFS", "BestScore"};
-      final OpenNodeVisitor[] STRATEGY = new OpenNodeVisitor[] {new IterativeBestScore(), new BFS(), new BestScore()};
+      final String[] METHOD = new String[] {"BFS", "BestScore"};
+      final OpenNodeVisitor[] STRATEGY = new OpenNodeVisitor[] {new BFS(), new BestScore()};
       for (int m = 0; m < METHOD.length; m++) {
+         MIGuidedFeatureCrawler crawler = new MIGuidedFeatureCrawler(source, emptyDescFile, STRATEGY[m]);
          out.write(METHOD[m]); out.newLine();
          
-         for (int n = 250; n <= 250; n += 50) {
+         for (int n = 5; n <= 100; n += 5) {
             //Crawl
             String desc = "exp_movie/moviesDescFilled_" + METHOD[m] + n + ".txt";
-            crawler.crawl(emptyDescFile, desc, n, 20, STRATEGY[m]);
+            crawler.crawl(desc, n, n);
             
             //Train
             RelationalBayesianClassifier rbc = train(desc, trainSPARQL, graph);
@@ -98,22 +96,22 @@ public class CrawlerExperimentMI {
       
       RDFDatabaseConnection conn = RDFDatabaseConnectionFactory.makeFromConfig();
       RDFDataSource source = new RDFDataSource(conn, ":census");
-      MIGuidedFeatureCrawler crawler = new MIGuidedFeatureCrawler(source);
-      crawler.setExclusion(new URI[] {new ValueFactoryImpl().createURI("http://logd.tw.rpi.edu/source/data-gov/dataset/311/vocab/")});
       
       final String SPARQL = "http://localhost:8890/sparql";
       final String GRAPH = ":census";
       final String emptyDescFile = "exp_census/censusDescEmpty.txt";
-      final int CROSS = 13;
+      final int CROSS = 52;
       Matrix matrix = null;
       BufferedWriter out = new BufferedWriter(new FileWriter("exp_census/result.txt"));
       
-      final String[] METHOD = new String[] {"ItrBestScore", "BFS", "BestScore"};
-      final OpenNodeVisitor[] STRATEGY = new OpenNodeVisitor[] {new IterativeBestScore(), new BFS(), new BestScore()};
+      final String[] METHOD = new String[] {"BFS", "BestScore"};
+      final OpenNodeVisitor[] STRATEGY = new OpenNodeVisitor[] {new BFS(), new BestScore()};
       for (int m = 0; m < METHOD.length; m++) {
+         MIGuidedFeatureCrawler crawler = new MIGuidedFeatureCrawler(source, emptyDescFile, STRATEGY[m]);
+         crawler.setExclusion(new URI[] {new ValueFactoryImpl().createURI("http://logd.tw.rpi.edu/source/data-gov/dataset/311/vocab/")});
          out.write(METHOD[m]); out.newLine();
          
-         for (int n = 90; n <= 90; n += 5) {
+         for (int n = 5; n <= 100; n += 5) {
             matrix = new Matrix(2, 2);
             for (int c = 0; c < CROSS; c++) {
                int testBegin = c * stateURIs.size() / CROSS;
@@ -123,7 +121,7 @@ public class CrawlerExperimentMI {
                
                //Crawl
                String desc = "exp_census/censusDescFilled_" + METHOD[m] + n + "_" + c + ".txt";
-               crawler.crawl(emptyDescFile, desc, n, n, STRATEGY[m]);
+               crawler.crawl(desc, n, n);
                
                //Train
                RelationalBayesianClassifier rbc = train(desc, SPARQL, GRAPH);

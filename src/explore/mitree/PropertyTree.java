@@ -40,8 +40,8 @@ public class PropertyTree {
       return v.getAttributes();
    }
    
-   public void expand(TreeNode n, RbcAttributeScore att, List<PropertyChain> childrenProp) {
-      n.expand(att, childrenProp);
+   public void expand(TreeNode n, List<RbcAttributeScore> attributes, List<PropertyChain> childrenProp) {
+      n.expand(attributes, childrenProp);
    }
 
    public void print() {

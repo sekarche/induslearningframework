@@ -15,22 +15,26 @@ public class TreeNode {
    
    private RbcAttribute mAttribute;
    private ClassValueCount mRBCCount;
+   private ClassValueCount mRBCCount2;
 
    private boolean isOpen;
    private double mScore;
    private int mDepth;
    private List<ValueIndexCount> mValueIndexCountForTuneInstances;
+   private List<ValueIndexCount> mValueIndexCountForTuneInstances2;
     
    public TreeNode() {
       mChildren = CollectionUtil.makeList();
       isOpen = true;
    }
    
-   public TreeNode(RbcAttribute att, ClassValueCount rbcCount, List<ValueIndexCount> valueIndexCounts) {
+   public TreeNode(RbcAttribute att, ClassValueCount rbcCount, ClassValueCount rbcCount2, List<ValueIndexCount> valueIndexCounts, List<ValueIndexCount> valueIndexCounts2) {
       this();
       mAttribute = att;
       mRBCCount = rbcCount;
+      mRBCCount2 = rbcCount2;
       mValueIndexCountForTuneInstances = valueIndexCounts;
+      mValueIndexCountForTuneInstances2 = valueIndexCounts2;
    }
 
    public void accept(TreeVisitor v) {
@@ -49,12 +53,14 @@ public class TreeNode {
       return mAttribute.getPropertyChain();
    }
 
-   public void expand(List<RbcAttribute> childrenAtt, List<ClassValueCount> rbcCounts, List<List<ValueIndexCount>> valueIndexCountForAttributes) {
+   public void expand(List<RbcAttribute> childrenAtt, List<ClassValueCount> rbcCounts, List<ClassValueCount> rbcCounts2, List<List<ValueIndexCount>> valueIndexCountForAttributes, List<List<ValueIndexCount>> valueIndexCountForAttributes2) {
       for (int i = 0; i < childrenAtt.size(); i++) {
          RbcAttribute att = childrenAtt.get(i);
          ClassValueCount rbcCount = rbcCounts.get(i);
          List<ValueIndexCount> valueIndexCounts = valueIndexCountForAttributes.get(i);
-         TreeNode child = new TreeNode(att, rbcCount, valueIndexCounts);
+         ClassValueCount rbcCount2 = rbcCounts2.get(i);
+         List<ValueIndexCount> valueIndexCounts2 = valueIndexCountForAttributes2.get(i);
+         TreeNode child = new TreeNode(att, rbcCount, rbcCount2, valueIndexCounts, valueIndexCounts2);
          child.mParent = this;
          child.mDepth = mDepth + 1;
          mChildren.add(child);         
@@ -93,6 +99,14 @@ public class TreeNode {
    
    public List<ValueIndexCount> getValueIndexCountForTuneInstances() {
       return mValueIndexCountForTuneInstances;
+   }
+
+   public ClassValueCount getRBCCount2() {
+      return mRBCCount2;
+   }
+   
+   public List<ValueIndexCount> getValueIndexCountForTuneInstances2() {
+      return mValueIndexCountForTuneInstances2;
    }
 
 }
