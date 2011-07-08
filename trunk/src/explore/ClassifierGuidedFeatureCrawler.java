@@ -2,12 +2,12 @@ package explore;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
-import java.io.IOException;
 import java.util.List;
 
 import org.openrdf.model.URI;
 
 import weka.classifiers.evaluation.ConfusionMatrix;
+import weka.core.Matrix;
 import airldm2.classifiers.Evaluation;
 import airldm2.classifiers.rl.AggregatedInstances;
 import airldm2.classifiers.rl.ClassValueCount;
@@ -26,7 +26,6 @@ import airldm2.core.rl.RbcAttribute;
 import airldm2.core.rl.RbcAttribute.ValueAggregator;
 import airldm2.core.rl.ValueType;
 import airldm2.database.rdf.SPARQLQueryResult;
-import airldm2.exceptions.RDFDataDescriptorFormatException;
 import airldm2.exceptions.RDFDatabaseException;
 import airldm2.util.CollectionUtil;
 import explore.database.rdf.NestedAggregationQueryConstructor.Aggregator;
@@ -39,32 +38,42 @@ public class ClassifierGuidedFeatureCrawler {
 
    private static final int MAX_PROPERTY_RANGE_FOR_FEATURE = 10;
    
-   private final RDFDataSource mTrainData;
+   private final RDFDataSource mSubtrainData;
    private final RDFDataSource mTuneData;
-   private final LDInstances mTrainInstances;
+   private final LDInstances mSubtrainInstances;
    private final LDInstances mTuneInstances;
    
    private RDFDataDescriptor cDesc;
    private RelationalBayesianClassifier cRBC;
+   private RelationalBayesianClassifier cSubRBC;
+   private RelationalBayesianClassifier cSubRBC2;
    private AggregatedInstances cTuneAggInstances;
+   private AggregatedInstances cTuneAggInstances2;
    private PropertyTree cPropertyTree;
    private URI[] mExclusion;
-
    
-   public ClassifierGuidedFeatureCrawler(RDFDataSource trainData, RDFDataSource tuneData, String inDescFile) throws Exception {
-      mTrainData = trainData;
+   public ClassifierGuidedFeatureCrawler(RDFDataSource trainData, RDFDataSource subtrainData, RDFDataSource tuneData, String inDescFile) throws Exception {
+      mSubtrainData = subtrainData;
       mTuneData = tuneData;
-      mTrainInstances = new LDInstances();
-      mTrainInstances.setDataSource(trainData);
+      LDInstances trainInstances = new LDInstances();
+      trainInstances.setDataSource(trainData);
+      mSubtrainInstances = new LDInstances();
+      mSubtrainInstances.setDataSource(subtrainData);
       mTuneInstances = new LDInstances();
       mTuneInstances.setDataSource(mTuneData);
       cDesc = RDFDataDescriptorParser.parse(inDescFile);
-      mTrainInstances.setDesc(cDesc);
+      trainInstances.setDesc(cDesc);
+      mSubtrainInstances.setDesc(cDesc);
       mTuneInstances.setDesc(cDesc);
-      cRBC = new RelationalBayesianClassifier();
       //Empty classifier to initialize data source and descriptor
-      cRBC.buildClassifier(mTrainInstances);
+      cRBC = new RelationalBayesianClassifier();
+      cRBC.buildClassifier(trainInstances);
+      cSubRBC = new RelationalBayesianClassifier();
+      cSubRBC.buildClassifier(mSubtrainInstances);
+      cSubRBC2 = new RelationalBayesianClassifier();
+      cSubRBC2.buildClassifier(mTuneInstances);
       cTuneAggInstances = InstanceAggregator.init(mTuneInstances);
+      cTuneAggInstances2 = InstanceAggregator.init(mSubtrainInstances);
       cPropertyTree = new PropertyTree();
    }
 
@@ -88,16 +97,23 @@ public class ClassifierGuidedFeatureCrawler {
          RbcAttribute att = n.getAttribute();
          if (att != null) {
             cDesc.addNonTargetAttribute(att);
-            cRBC.addAttributeCounts(n.getRBCCount());
+            cSubRBC.addAttributeCounts(n.getRBCCount());
             cTuneAggInstances.addAttribute(n.getValueIndexCountForTuneInstances());
+            cSubRBC2.addAttributeCounts(n.getRBCCount2());
+            cTuneAggInstances2.addAttribute(n.getValueIndexCountForTuneInstances2());
+            
+            ClassValueCount counts = cRBC.getCounts(att);
+            cRBC.addAttributeCounts(counts);
          }
          
          List<PropertyChain> childrenProp = crawlChildren(n.getPropertyChain());
          List<RbcAttribute> childrenAtt = makeAttributes(childrenProp);
          List<ClassValueCount> childrenRBCCounts = makeRBCCounts(childrenAtt);
          List<List<ValueIndexCount>> valueIndexCountForAttributes = makeAggregateAttributeForTuneData(childrenAtt);
+         List<ClassValueCount> childrenRBCCounts2 = makeRBCCounts2(childrenAtt);
+         List<List<ValueIndexCount>> valueIndexCountForAttributes2 = makeAggregateAttributeForTuneData2(childrenAtt);
          
-         cPropertyTree.expand(n, childrenAtt, childrenRBCCounts, valueIndexCountForAttributes);
+         cPropertyTree.expand(n, childrenAtt, childrenRBCCounts, childrenRBCCounts2, valueIndexCountForAttributes, valueIndexCountForAttributes2);
 
          //tree.print();
          if (childrenAtt.isEmpty()) continue;
@@ -107,14 +123,20 @@ public class ClassifierGuidedFeatureCrawler {
             public void visit(TreeNode node) {
                if (!node.isOpen()) return;
                
-               cRBC.addAttributeCounts(node.getRBCCount());
+               cSubRBC.addAttributeCounts(node.getRBCCount());
                List<ValueIndexCount> valueIndexCountForTuneInstances = node.getValueIndexCountForTuneInstances();
                cTuneAggInstances.addAttribute(valueIndexCountForTuneInstances);
 
+               cSubRBC2.addAttributeCounts(node.getRBCCount2());
+               List<ValueIndexCount> valueIndexCountForTuneInstances2 = node.getValueIndexCountForTuneInstances2();
+               cTuneAggInstances2.addAttribute(valueIndexCountForTuneInstances2);
+
+               
                double score = 0.0;
                try {
-                  ConfusionMatrix matrix = Evaluation.evaluateBuiltRBCModel(cRBC, cDesc, cTuneAggInstances);
-                  score = 1.0 - matrix.errorRate();
+                  ConfusionMatrix matrix = Evaluation.evaluateBuiltRBCModel(cSubRBC, cDesc, cTuneAggInstances);
+                  ConfusionMatrix matrix2 = Evaluation.evaluateBuiltRBCModel(cSubRBC2, cDesc, cTuneAggInstances2);
+                  score = 2.0 - matrix.errorRate() - matrix2.errorRate();
                } catch (Exception e) {
                   e.printStackTrace();
                }
@@ -122,8 +144,11 @@ public class ClassifierGuidedFeatureCrawler {
                node.setScore(score);
                System.out.println(score + ": " + node.getPropertyChain());
                
-               cRBC.removeLastAttributeCounts();
+               cSubRBC.removeLastAttributeCounts();
                cTuneAggInstances.removeLastAttribute();
+               
+               cSubRBC2.removeLastAttributeCounts();
+               cTuneAggInstances2.removeLastAttribute();
             }
             
          });
@@ -136,7 +161,7 @@ public class ClassifierGuidedFeatureCrawler {
    private List<PropertyChain> crawlChildren(PropertyChain propChain) throws RDFDatabaseException {
       final PropertyChain TARGET_CHAIN = cDesc.getTargetAttribute().getPropertyChain();
       
-      List<URI> props = mTrainData.getPropertiesOf(cDesc.getTargetType(), propChain);
+      List<URI> props = mSubtrainData.getPropertiesOf(cDesc.getTargetType(), propChain);
       List<PropertyChain> children = CollectionUtil.makeList();
       for (URI prop : props) {
          PropertyChain newChain = PropertyChain.make(propChain, prop);
@@ -160,35 +185,35 @@ public class ClassifierGuidedFeatureCrawler {
    private List<RbcAttribute> makeAttributes(PropertyChain propChain) throws RDFDatabaseException {
       List<RbcAttribute> allAttributes = CollectionUtil.makeList();
       int index = 1;
-      RangeType rangeType = mTrainData.getRangeTypeOf(cDesc.getTargetType(), propChain);
-      boolean isUnique = mTrainData.isUniqueForInstance(cDesc.getTargetType(), propChain);
+      RangeType rangeType = mSubtrainData.getRangeTypeOf(cDesc.getTargetType(), propChain);
+      boolean isUnique = mSubtrainData.isUniqueForInstance(cDesc.getTargetType(), propChain);
       
       if (rangeType == RangeType.NUMERIC) {
          double average = 0.0;
          ValueType valueType = null;
          ValueAggregator valueAgg = null;
          
-         average = mTrainData.getAverageForAggregation(cDesc.getTargetType(), propChain, Aggregator.AVG);
+         average = mSubtrainData.getAverageForAggregation(cDesc.getTargetType(), propChain, Aggregator.AVG);
          valueType = new BinnedType(new double[] { average });
          valueAgg = ValueAggregator.AVG;
          allAttributes.add(new RbcAttribute(propChain.toString() + index++, propChain, valueType, valueAgg));
          
          if (!isUnique) {
-            average = mTrainData.getAverageForAggregation(cDesc.getTargetType(), propChain, Aggregator.MIN);
+            average = mSubtrainData.getAverageForAggregation(cDesc.getTargetType(), propChain, Aggregator.MIN);
             valueType = new BinnedType(new double[] { average });
             valueAgg = ValueAggregator.MIN;
             allAttributes.add(new RbcAttribute(propChain.toString() + index++, propChain, valueType, valueAgg));
             
-            average = mTrainData.getAverageForAggregation(cDesc.getTargetType(), propChain, Aggregator.MAX);
+            average = mSubtrainData.getAverageForAggregation(cDesc.getTargetType(), propChain, Aggregator.MAX);
             valueType = new BinnedType(new double[] { average });
             valueAgg = ValueAggregator.MAX;
             allAttributes.add(new RbcAttribute(propChain.toString() + index++, propChain, valueType, valueAgg));
          }
          
       } else {
-         int rangeSize = mTrainData.getRangeSizeOf(cDesc.getTargetType(), propChain);
+         int rangeSize = mSubtrainData.getRangeSizeOf(cDesc.getTargetType(), propChain);
          if (rangeSize <= MAX_PROPERTY_RANGE_FOR_FEATURE) {
-            SPARQLQueryResult result = mTrainData.getRangeOf(cDesc.getTargetType(), propChain);
+            SPARQLQueryResult result = mSubtrainData.getRangeOf(cDesc.getTargetType(), propChain);
             
             if (isUnique) {
                if (rangeType == RangeType.IRI) {
@@ -227,7 +252,7 @@ public class ClassifierGuidedFeatureCrawler {
       }
       
       if (!isUnique) {
-         double average = mTrainData.getAverageForAggregation(cDesc.getTargetType(), propChain, Aggregator.COUNT);
+         double average = mSubtrainData.getAverageForAggregation(cDesc.getTargetType(), propChain, Aggregator.COUNT);
          ValueType valueType = new BinnedType(new double[] { average });
          ValueAggregator valueAgg = ValueAggregator.COUNT;
          allAttributes.add(new RbcAttribute(propChain.toString() + index++, propChain, valueType, valueAgg));
@@ -239,7 +264,7 @@ public class ClassifierGuidedFeatureCrawler {
    private List<ClassValueCount> makeRBCCounts(List<RbcAttribute> childrenAtt) throws RDFDatabaseException {
       List<ClassValueCount> allCounts = CollectionUtil.makeList();
       for (RbcAttribute att : childrenAtt) {
-         ClassValueCount counts = cRBC.getCounts(att);
+         ClassValueCount counts = cSubRBC.getCounts(att);
          allCounts.add(counts);
       }
       return allCounts;
@@ -249,6 +274,25 @@ public class ClassifierGuidedFeatureCrawler {
       List<List<ValueIndexCount>> indexCountForAttribute = CollectionUtil.makeList();
       for (RbcAttribute att : childrenAtt) {
          List<ValueIndexCount> indexCounts = InstanceAggregator.aggregateAttributeForInstances(mTuneData, cTuneAggInstances.getURIs(), att);
+         indexCountForAttribute.add(indexCounts);
+         System.out.println(att.getPropertyChain());
+      }
+      return indexCountForAttribute;
+   }
+
+   private List<ClassValueCount> makeRBCCounts2(List<RbcAttribute> childrenAtt) throws RDFDatabaseException {
+      List<ClassValueCount> allCounts = CollectionUtil.makeList();
+      for (RbcAttribute att : childrenAtt) {
+         ClassValueCount counts = cSubRBC2.getCounts(att);
+         allCounts.add(counts);
+      }
+      return allCounts;
+   }
+
+   private List<List<ValueIndexCount>> makeAggregateAttributeForTuneData2(List<RbcAttribute> childrenAtt) throws RDFDatabaseException {
+      List<List<ValueIndexCount>> indexCountForAttribute = CollectionUtil.makeList();
+      for (RbcAttribute att : childrenAtt) {
+         List<ValueIndexCount> indexCounts = InstanceAggregator.aggregateAttributeForInstances(mSubtrainData, cTuneAggInstances2.getURIs(), att);
          indexCountForAttribute.add(indexCounts);
          System.out.println(att.getPropertyChain());
       }

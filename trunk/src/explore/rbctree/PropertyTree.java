@@ -29,8 +29,8 @@ public class PropertyTree {
       return v.getCount();
    }
 
-   public void expand(TreeNode n, List<RbcAttribute> childrenAtt, List<ClassValueCount> rbcCounts, List<List<ValueIndexCount>> valueIndexCountForAttributes) {
-      n.expand(childrenAtt, rbcCounts, valueIndexCountForAttributes);
+   public void expand(TreeNode n, List<RbcAttribute> childrenAtt, List<ClassValueCount> rbcCounts, List<ClassValueCount> rbcCounts2, List<List<ValueIndexCount>> valueIndexCountForAttributes, List<List<ValueIndexCount>> valueIndexCountForAttributes2) {
+      n.expand(childrenAtt, rbcCounts, rbcCounts2, valueIndexCountForAttributes, valueIndexCountForAttributes2);
    }
    
    public void print() {

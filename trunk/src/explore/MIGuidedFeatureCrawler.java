@@ -41,40 +41,42 @@ public class MIGuidedFeatureCrawler {
    private RDFDataSource mDataSource;
    private RDFDataDescriptor cDesc;
    private URI[] mExclusion;
+   private String mInDescFile;
+   private PropertyTree mTree;
    
-   public MIGuidedFeatureCrawler(RDFDataSource dataSource) {
+   public MIGuidedFeatureCrawler(RDFDataSource dataSource, String inDescFile, OpenNodeVisitor expansionStrategy) {
       mDataSource = dataSource;
+      mInDescFile = inDescFile;
+      mTree = new PropertyTree(expansionStrategy);
    }
    
    public void setExclusion(URI[] exclusion) {
       mExclusion = exclusion;
    }
 
-   public void crawl(String inDescFile, String outDescFile, int crawlSize, int featureSize, OpenNodeVisitor expansionStrategy) throws IOException, RDFDataDescriptorFormatException, RDFDatabaseException {
-      RDFDataDescriptor desc = RDFDataDescriptorParser.parse(inDescFile);
-      crawl(desc, crawlSize, featureSize, expansionStrategy);
+   public void crawl(String outDescFile, int crawlSize, int featureSize) throws IOException, RDFDataDescriptorFormatException, RDFDatabaseException {
+      crawl(crawlSize, featureSize);
       BufferedWriter out = new BufferedWriter(new FileWriter(outDescFile));
-      desc.write(out);
+      cDesc.write(out);
       out.close();
    }
    
-   public void crawl(RDFDataDescriptor desc, int crawlSize, int featureSize, OpenNodeVisitor expansionStrategy) throws RDFDatabaseException {
-      cDesc = desc;
-      PropertyTree tree = new PropertyTree(expansionStrategy);
+   public void crawl(int crawlSize, int featureSize) throws RDFDatabaseException, IOException, RDFDataDescriptorFormatException {
+      cDesc = RDFDataDescriptorParser.parse(mInDescFile);
       
-      while (tree.attributeSize() < crawlSize) {
-         TreeNode n = tree.getNextNodeToExpand();
+      while (mTree.attributeSize() < crawlSize) {
+         TreeNode n = mTree.getNextNodeToExpand();
          if (n == null) break;
          
-         RbcAttributeScore attribute = makeBestAttribute(n.getPropertyChain());
          List<PropertyChain> childrenProp = crawlChildren(n.getPropertyChain());
+         List<RbcAttributeScore> attributes = makeAttributes(childrenProp);
          
          //filterLowScores(childrenAttScore);
-         tree.expand(n, attribute, childrenProp);
+         mTree.expand(n, attributes, childrenProp);
       }
       //tree.print();
       
-      List<RbcAttributeScore> allAttributeScores = tree.getAllRbcAttributeScores();
+      List<RbcAttributeScore> allAttributeScores = mTree.getAllRbcAttributeScores();
       Collections.sort(allAttributeScores);
       Collections.reverse(allAttributeScores);
       //System.out.println(allAttributeScores);
@@ -110,9 +112,9 @@ public class MIGuidedFeatureCrawler {
       List<RbcAttributeScore> allAttributes = CollectionUtil.makeList();
       for (PropertyChain p : propChains) {
          RbcAttributeScore best = makeBestAttribute(p);
-         if (best != null) {
+         //if (best != null) {
             allAttributes.add(best);
-         }
+         //}
       }
       return allAttributes;
    }
@@ -138,6 +140,9 @@ public class MIGuidedFeatureCrawler {
    
    private List<RbcAttribute> makeAttributes(PropertyChain propChain) throws RDFDatabaseException {
       List<RbcAttribute> allAttributes = CollectionUtil.makeList();
+      
+      if (propChain.isID()) return allAttributes;
+      
       int index = 1;
       RangeType rangeType = mDataSource.getRangeTypeOf(cDesc.getTargetType(), propChain);
       boolean isUnique = mDataSource.isUniqueForInstance(cDesc.getTargetType(), propChain);
@@ -205,12 +210,12 @@ public class MIGuidedFeatureCrawler {
          }
       }
       
-//      if (!isUnique) {
-//         double average = mDataSource.getAverageForAggregation(cDesc.getTargetType(), propChain, Aggregator.COUNT);
-//         ValueType valueType = new BinnedType(new double[] { average });
-//         ValueAggregator valueAgg = ValueAggregator.COUNT;
-//         allAttributes.add(new RbcAttribute(propChain.toString() + index++, propChain, valueType, valueAgg));
-//      }
+      if (!isUnique) {
+         double average = mDataSource.getAverageForAggregation(cDesc.getTargetType(), propChain, Aggregator.COUNT);
+         ValueType valueType = new BinnedType(new double[] { average });
+         ValueAggregator valueAgg = ValueAggregator.COUNT;
+         allAttributes.add(new RbcAttribute(propChain.toString() + index++, propChain, valueType, valueAgg));
+      }
       
       return allAttributes;
    }

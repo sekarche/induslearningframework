@@ -37,6 +37,11 @@ public class PropertyChain {
       return true;
    }
 
+   public boolean isID() {
+      URI uri = mChain.get(mChain.size() - 1);
+      return uri.stringValue().toLowerCase().endsWith("id");
+   }
+   
    public boolean hasURIStartsWith(URI[] uris) {
       if (uris == null) return false;
       
