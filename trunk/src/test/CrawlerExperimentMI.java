@@ -43,8 +43,8 @@ public class CrawlerExperimentMI {
    private URI STATE = ValueFac.createURI("http://www.rdfabout.com/rdf/usgov/geo/us/state");
    
    public static void main(String[] args) throws Exception {
-      //new CrawlerExperimentMI().runCensus();
-      new CrawlerExperimentMI().runMovie();
+      new CrawlerExperimentMI().runCensus();
+      //new CrawlerExperimentMI().runMovie();
    }
 
    private void runMovie() throws Exception {
@@ -63,7 +63,7 @@ public class CrawlerExperimentMI {
          MIGuidedFeatureCrawler crawler = new MIGuidedFeatureCrawler(source, emptyDescFile, STRATEGY[m]);
          out.write(METHOD[m]); out.newLine();
          
-         for (int n = 5; n <= 100; n += 5) {
+         for (int n = 1; n <= 40; n++) {
             //Crawl
             String desc = "exp_movie/moviesDescFilled_" + METHOD[m] + n + ".txt";
             crawler.crawl(desc, n, n);
@@ -100,22 +100,30 @@ public class CrawlerExperimentMI {
       final String SPARQL = "http://localhost:8890/sparql";
       final String GRAPH = ":census";
       final String emptyDescFile = "exp_census/censusDescEmpty.txt";
-      final int CROSS = 52;
-      Matrix matrix = null;
+      final int CROSS = 13;
+      final int STEPS = 20;
+      final int STEP_SIZE = 5;
+      
       BufferedWriter out = new BufferedWriter(new FileWriter("exp_census/result.txt"));
       
       final String[] METHOD = new String[] {"BFS", "BestScore"};
       final OpenNodeVisitor[] STRATEGY = new OpenNodeVisitor[] {new BFS(), new BestScore()};
       for (int m = 0; m < METHOD.length; m++) {
-         MIGuidedFeatureCrawler crawler = new MIGuidedFeatureCrawler(source, emptyDescFile, STRATEGY[m]);
-         crawler.setExclusion(new URI[] {new ValueFactoryImpl().createURI("http://logd.tw.rpi.edu/source/data-gov/dataset/311/vocab/")});
          out.write(METHOD[m]); out.newLine();
+         Matrix[] matrix = new Matrix[STEPS];
+         for (int i = 0; i < STEPS; i++) {
+            matrix[i] = new Matrix(2, 2);
+         }
          
-         for (int n = 5; n <= 100; n += 5) {
-            matrix = new Matrix(2, 2);
-            for (int c = 0; c < CROSS; c++) {
-               int testBegin = c * stateURIs.size() / CROSS;
-               int testEnd = (c+1) * stateURIs.size() / CROSS;
+         for (int c = 0; c < CROSS; c++) {
+            int testBegin = c * stateURIs.size() / CROSS;
+            int testEnd = (c+1) * stateURIs.size() / CROSS;
+            
+            MIGuidedFeatureCrawler crawler = new MIGuidedFeatureCrawler(source, emptyDescFile, STRATEGY[m]);
+            crawler.setExclusion(new URI[] {new ValueFactoryImpl().createURI("http://logd.tw.rpi.edu/source/data-gov/dataset/311/vocab/")});
+            
+            for (int i = 0; i < STEPS; i++) {
+               int n = (i+1) * STEP_SIZE;
                //Remove Test states
                removeStates(stateURIs, testBegin, testEnd);
                
@@ -134,14 +142,16 @@ public class CrawlerExperimentMI {
                //Test
                ConfusionMatrix mat = test(desc, rbc, SPARQL, GRAPH);
                out.write(mat.toString()); out.newLine();
-               matrix = matrix.add(mat);
+               matrix[i] = matrix[i].add(mat);
+               
                //Add Train states
                addInverseStates(stateURIs, testBegin, testEnd);
             }
+         }
          
-            out.write("" + n); out.newLine();
-            out.write(matrix.toString()); out.newLine();
-            out.flush();
+         for (int i = 0; i < STEPS; i++) {
+            out.write("" + ((i+1) * STEP_SIZE)); out.newLine();
+            out.write(matrix[i].toString()); out.newLine();
          }
       }
 

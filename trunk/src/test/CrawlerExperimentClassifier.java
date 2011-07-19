@@ -42,8 +42,8 @@ public class CrawlerExperimentClassifier {
    private URI STATE = ValueFac.createURI("http://www.rdfabout.com/rdf/usgov/geo/us/state");
    
    public static void main(String[] args) throws Exception {
-      new CrawlerExperimentClassifier().runMovie();
-      //new CrawlerExperimentClassifier().runCensus();
+      //new CrawlerExperimentClassifier().runMovie();
+      new CrawlerExperimentClassifier().runCensus();
    }
    
    private void setUpDataSource(String graph) throws RepositoryException {
@@ -70,7 +70,7 @@ public class CrawlerExperimentClassifier {
       BufferedWriter out = new BufferedWriter(new FileWriter("exp_movie/result.txt"));
       ClassifierGuidedFeatureCrawler crawler = new ClassifierGuidedFeatureCrawler(mTrainData, mSubtrainData, mTuneData, emptyDescFile);
       
-      for (int n = 5; n <= 100; n += 5) {
+      for (int n = 1; n <= 40; n++) {
          out.write("" + n); out.newLine();
          
          String desc = "exp_movie/moviesDescFilled_RBC" + n + ".txt";
@@ -122,7 +122,7 @@ public class CrawlerExperimentClassifier {
       final String emptyDescFile = "exp_census/censusDescEmpty.txt";
       BufferedWriter out = new BufferedWriter(new FileWriter("exp_census/result.txt"));
       
-      final int CROSS = 52;
+      final int CROSS = 13;
       final int STEPS = 20;
       final int STEP_SIZE = 5;
       Matrix[] matrix = new Matrix[STEPS];
@@ -131,7 +131,7 @@ public class CrawlerExperimentClassifier {
       }
       
       final int TEST_SIZE = stateURIs.size() / CROSS;
-      final int TUNE_SIZE = 25;
+      final int TUNE_SIZE = 24;
       
       for (int c = 0; c < CROSS; c++) {
          int testBegin = c * TEST_SIZE;

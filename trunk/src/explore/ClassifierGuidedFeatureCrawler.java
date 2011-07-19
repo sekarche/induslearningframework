@@ -90,7 +90,7 @@ public class ClassifierGuidedFeatureCrawler {
    }
    
    public RelationalBayesianClassifier crawl(int crawlSize) throws Exception {
-      while (cPropertyTree.attributeSize() < crawlSize) {
+      while (cDesc.getNonTargetAttributeCount() < crawlSize) {
          TreeNode n = cPropertyTree.getNextNodeToExpand();
          if (n == null) break;
          
@@ -251,12 +251,12 @@ public class ClassifierGuidedFeatureCrawler {
          }
       }
       
-      if (!isUnique) {
-         double average = mSubtrainData.getAverageForAggregation(cDesc.getTargetType(), propChain, Aggregator.COUNT);
-         ValueType valueType = new BinnedType(new double[] { average });
-         ValueAggregator valueAgg = ValueAggregator.COUNT;
-         allAttributes.add(new RbcAttribute(propChain.toString() + index++, propChain, valueType, valueAgg));
-      }
+//      if (!isUnique) {
+//         double average = mSubtrainData.getAverageForAggregation(cDesc.getTargetType(), propChain, Aggregator.COUNT);
+//         ValueType valueType = new BinnedType(new double[] { average });
+//         ValueAggregator valueAgg = ValueAggregator.COUNT;
+//         allAttributes.add(new RbcAttribute(propChain.toString() + index++, propChain, valueType, valueAgg));
+//      }
       
       return allAttributes;
    }
