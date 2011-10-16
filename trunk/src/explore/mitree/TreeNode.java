@@ -19,10 +19,9 @@ public class TreeNode {
       isOpen = true;
    }
    
-   public TreeNode(PropertyChain prop, RbcAttributeScore att) {
+   public TreeNode(PropertyChain prop) {
       this();
       mPropertyChain = prop;
-      mAttributeScore = att;
    }
 
    public void accept(TreeVisitor v) {
@@ -44,11 +43,11 @@ public class TreeNode {
       return mAttributeScore;
    }
 
-   public void expand(List<RbcAttributeScore> attributes, List<PropertyChain> childrenProp) {
-      for (int i = 0; i < childrenProp.size(); i++) {
-         PropertyChain p = childrenProp.get(i);
-         RbcAttributeScore rbcAttributeScore = attributes.get(i);
-         TreeNode child = new TreeNode(p, rbcAttributeScore);
+   public void expand(RbcAttributeScore attribute, List<PropertyChain> childrenProp) {
+      mAttributeScore = attribute;
+      
+      for (PropertyChain p : childrenProp) {
+         TreeNode child = new TreeNode(p);
          child.mParent = this;
          child.mDepth = mDepth + 1;
          mChildren.add(child);         

@@ -65,15 +65,13 @@ public class MIGuidedFeatureCrawler {
          TreeNode n = mTree.getNextNodeToExpand();
          if (n == null) break;
          
-         if (n.getAttributeScore() != null) {
-            cDesc.addNonTargetAttribute(n.getAttributeScore().Attribute);
+         RbcAttributeScore attribute = makeBestAttribute(n.getPropertyChain());
+         if (attribute != null) {
+            cDesc.addNonTargetAttribute(attribute.Attribute);
          }
          
          List<PropertyChain> childrenProp = crawlChildren(n.getPropertyChain());
-         List<RbcAttributeScore> attributes = makeAttributes(childrenProp);
-         
-         //filterLowScores(childrenAttScore);
-         mTree.expand(n, attributes, childrenProp);
+         mTree.expand(n, attribute, childrenProp);
       }
       //tree.print();
    }
@@ -93,26 +91,6 @@ public class MIGuidedFeatureCrawler {
       }
       return children;
    }
-   
-   private List<RbcAttributeScore> makeAttributes(List<PropertyChain> propChains) throws RDFDatabaseException {
-      List<RbcAttributeScore> allAttributes = CollectionUtil.makeList();
-      for (PropertyChain p : propChains) {
-         RbcAttributeScore best = makeBestAttribute(p);
-         //if (best != null) {
-            allAttributes.add(best);
-         //}
-      }
-      return allAttributes;
-   }
-      
-//   private List<RbcAttribute> makeAttributes(List<PropertyChain> propChains) throws RDFDatabaseException {
-//      List<RbcAttribute> allAttributes = CollectionUtil.makeList();
-//      for (PropertyChain p : propChains) {
-//         List<RbcAttribute> attributes = makeAttributes(p);
-//         allAttributes.addAll(attributes);
-//      }
-//      return allAttributes;
-//   }
    
    private RbcAttributeScore makeBestAttribute(PropertyChain propChain) throws RDFDatabaseException {
       if (propChain == null) return null;
@@ -196,12 +174,12 @@ public class MIGuidedFeatureCrawler {
          }
       }
       
-//      if (!isUnique) {
-//         double average = mDataSource.getAverageForAggregation(cDesc.getTargetType(), propChain, Aggregator.COUNT);
-//         ValueType valueType = new BinnedType(new double[] { average });
-//         ValueAggregator valueAgg = ValueAggregator.COUNT;
-//         allAttributes.add(new RbcAttribute(propChain.toString() + index++, propChain, valueType, valueAgg));
-//      }
+      if (!isUnique) {
+         double average = mDataSource.getAverageForAggregation(cDesc.getTargetType(), propChain, Aggregator.COUNT);
+         ValueType valueType = new BinnedType(new double[] { average });
+         ValueAggregator valueAgg = ValueAggregator.COUNT;
+         allAttributes.add(new RbcAttribute(propChain.toString() + index++, propChain, valueType, valueAgg));
+      }
       
       return allAttributes;
    }
