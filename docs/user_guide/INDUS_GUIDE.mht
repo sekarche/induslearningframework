@@ -1,9 +1,9 @@
 MIME-Version: 1.0
-Content-Type: multipart/related; boundary="----=_NextPart_01CC8D88.D1A657B0"
+Content-Type: multipart/related; boundary="----=_NextPart_01CC8D8D.26A31970"
 
 This document is a Single File Web Page, also known as a Web Archive file.  If you are seeing this message, your browser or editor doesn't support Web Archive files.  Please download a browser that supports Web Archive, such as Microsoft Internet Explorer.
 
-------=_NextPart_01CC8D88.D1A657B0
+------=_NextPart_01CC8D8D.26A31970
 Content-Location: file:///C:/829BACC5/INDUS_GUIDE.htm
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/html; charset="us-ascii"
@@ -22,25 +22,26 @@ xmlns=3D"http://www.w3.org/TR/REC-html40">
 <link rel=3DFile-List href=3D"INDUS_GUIDE_files/filelist.xml">
 <title>Indus Integration Framework</title>
 <o:SmartTagType namespaceuri=3D"urn:schemas-microsoft-com:office:smarttags"
- name=3D"place"/>
-<o:SmartTagType namespaceuri=3D"urn:schemas-microsoft-com:office:smarttags"
- name=3D"PersonName"/>
-<o:SmartTagType namespaceuri=3D"urn:schemas-microsoft-com:office:smarttags"
- name=3D"PlaceType"/>
-<o:SmartTagType namespaceuri=3D"urn:schemas-microsoft-com:office:smarttags"
- name=3D"PlaceName"/>
+ name=3D"country-region"/>
 <o:SmartTagType namespaceuri=3D"urn:schemas-microsoft-com:office:smarttags"
  name=3D"State"/>
 <o:SmartTagType namespaceuri=3D"urn:schemas-microsoft-com:office:smarttags"
- name=3D"country-region"/>
+ name=3D"PlaceName"/>
+<o:SmartTagType namespaceuri=3D"urn:schemas-microsoft-com:office:smarttags"
+ name=3D"PlaceType"/>
+<o:SmartTagType namespaceuri=3D"urn:schemas-microsoft-com:office:smarttags"
+ name=3D"PersonName"/>
+<o:SmartTagType namespaceuri=3D"urn:schemas-microsoft-com:office:smarttags"
+ name=3D"place"/>
 <!--[if gte mso 9]><xml>
  <o:DocumentProperties>
   <o:Author>Table of Contents</o:Author>
   <o:LastAuthor>DongnoD</o:LastAuthor>
   <o:Revision>2</o:Revision>
-  <o:TotalTime>931</o:TotalTime>
-  <o:Created>2011-10-18T16:26:00Z</o:Created>
-  <o:LastSaved>2011-10-18T16:26:00Z</o:LastSaved>
+  <o:TotalTime>954</o:TotalTime>
+  <o:LastPrinted>2011-10-18T16:57:00Z</o:LastPrinted>
+  <o:Created>2011-10-18T16:57:00Z</o:Created>
+  <o:LastSaved>2011-10-18T16:57:00Z</o:LastSaved>
   <o:Pages>1</o:Pages>
   <o:Words>8684</o:Words>
   <o:Characters>49505</o:Characters>
@@ -4146,7 +4147,7 @@ an></strong>The
 
 <p class=3DMsoNormal><span style=3D'mso-bookmark:_Toc231704940'><span
 style=3D'mso-bookmark:_Toc258254485'><span style=3D'mso-bookmark:_Toc258250=
-136'>1.
+136'>2.
 To run the Relational Bayesian classifier to learn and classify remote RDF
 stores:</span></span></span></p>
 
@@ -9192,7 +9193,7 @@ laceType>
 
 </html>
 
-------=_NextPart_01CC8D88.D1A657B0
+------=_NextPart_01CC8D8D.26A31970
 Content-Location: file:///C:/829BACC5/INDUS_GUIDE_files/header.htm
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/html; charset="us-ascii"
@@ -9213,18 +9214,18 @@ xmlns=3D"http://www.w3.org/TR/REC-html40">
 <base href=3D"file:///C:\829BACC5\INDUS_GUIDE_files\header.htm"
 id=3D"webarch_temp_base_tag">
 <![endif]><o:SmartTagType
- namespaceuri=3D"urn:schemas-microsoft-com:office:smarttags" name=3D"place"=
-/>
-<o:SmartTagType namespaceuri=3D"urn:schemas-microsoft-com:office:smarttags"
- name=3D"PersonName"/>
-<o:SmartTagType namespaceuri=3D"urn:schemas-microsoft-com:office:smarttags"
- name=3D"PlaceType"/>
-<o:SmartTagType namespaceuri=3D"urn:schemas-microsoft-com:office:smarttags"
- name=3D"PlaceName"/>
+ namespaceuri=3D"urn:schemas-microsoft-com:office:smarttags" name=3D"countr=
+y-region"/>
 <o:SmartTagType namespaceuri=3D"urn:schemas-microsoft-com:office:smarttags"
  name=3D"State"/>
 <o:SmartTagType namespaceuri=3D"urn:schemas-microsoft-com:office:smarttags"
- name=3D"country-region"/>
+ name=3D"PlaceName"/>
+<o:SmartTagType namespaceuri=3D"urn:schemas-microsoft-com:office:smarttags"
+ name=3D"PlaceType"/>
+<o:SmartTagType namespaceuri=3D"urn:schemas-microsoft-com:office:smarttags"
+ name=3D"PersonName"/>
+<o:SmartTagType namespaceuri=3D"urn:schemas-microsoft-com:office:smarttags"
+ name=3D"place"/>
 </head>
 
 <body lang=3DEN-US link=3Dblue vlink=3Dpurple>
@@ -9312,9 +9313,10 @@ sp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
 sp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nb=
 sp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>Page
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </=
+span>Page
 </span><span style=3D'mso-field-code:" PAGE   \\* MERGEFORMAT "'><span
-style=3D'font-family:Cambria;mso-no-proof:yes'>29</span></span><span
+style=3D'font-family:Cambria;mso-no-proof:yes'>2</span></span><span
 style=3D'font-family:Cambria'><o:p></o:p></span></p>
 
 </div>
@@ -9327,7 +9329,7 @@ style=3D'font-family:Cambria'><o:p></o:p></span></p>
 
 </html>
 
-------=_NextPart_01CC8D88.D1A657B0
+------=_NextPart_01CC8D8D.26A31970
 Content-Location: file:///C:/829BACC5/INDUS_GUIDE_files/filelist.xml
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/xml; charset="utf-8"
@@ -9337,4 +9339,4 @@ Content-Type: text/xml; charset="utf-8"
  <o:File HRef=3D"header.htm"/>
  <o:File HRef=3D"filelist.xml"/>
 </xml>
-------=_NextPart_01CC8D88.D1A657B0--
+------=_NextPart_01CC8D8D.26A31970--
