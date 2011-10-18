@@ -151,10 +151,33 @@ public class Evaluation {
       return wekaConfusionMatrix;
    }
 
+   private static void printRBCUsage() {
+      System.out.println("Usage:");
+      System.out.println("   -desc FILE");
+      System.out.println("      Descriptor of training and test RDF graphs");
+      System.out.println("   -trainGraph URI");
+      System.out.println("      Context URI specifying the named RDF graph of training instances");
+      System.out.println("   -testGraph URI");
+      System.out.println("      Context URI specifying the named RDF graph of test instances");
+   }
+   
    public static ConfusionMatrix evaluateRBCModel(RelationalBayesianClassifier rbc, String[] options) throws Exception {
       String descFile = Utils.getOption("desc", options);
       String trainGraph = Utils.getOption("trainGraph", options);
       String testGraph = Utils.getOption("testGraph", options);
+      
+      if ("".equals(trainGraph)) {
+         trainGraph = null;
+      }
+      
+      if ("".equals(testGraph)) {
+         testGraph = null;
+      }
+      
+      if (descFile == null || "".equals(descFile)) {
+         printRBCUsage();
+         System.exit(0);
+      }
       
       RDFDataDescriptor desc = RDFDataDescriptorParser.parse(descFile);
       
