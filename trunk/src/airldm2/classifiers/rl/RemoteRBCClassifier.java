@@ -1,4 +1,4 @@
-package airldm2.classifiers;
+package airldm2.classifiers.rl;
 
 import java.io.FileWriter;
 import java.util.List;
@@ -14,10 +14,6 @@ import org.openrdf.rio.rdfxml.util.RDFXMLPrettyWriter;
 import org.openrdf.sail.memory.MemoryStore;
 
 import weka.core.Utils;
-import airldm2.classifiers.rl.AggregatedInstance;
-import airldm2.classifiers.rl.AggregatedInstances;
-import airldm2.classifiers.rl.InstanceAggregator;
-import airldm2.classifiers.rl.RelationalBayesianClassifier;
 import airldm2.core.LDInstances;
 import airldm2.core.SSDataSource;
 import airldm2.core.rl.RDFDataDescriptor;
@@ -27,7 +23,7 @@ import airldm2.core.rl.RbcAttribute;
 import airldm2.database.rdf.RDFDatabaseConnection;
 import airldm2.database.rdf.VirtuosoConnection;
 
-public class BatchRDFClassifier {
+public class RemoteRBCClassifier {
 
    private static ValueFactory ValueFac = new ValueFactoryImpl();
    
@@ -59,9 +55,9 @@ public class BatchRDFClassifier {
    }
 
    private static void printUsage() {
-      System.out.println("BatchRDFClassifier - Batch learning and classifying remote RDF data");
+      System.out.println("RemoteRBCClassifier - Learning and classifying remote RDF data");
       System.out.println();
-      System.out.println("Usage: java -jar BatchRDFClassifier.jar [OPTIONS]");
+      System.out.println("Usage:");
       System.out.println("   -desc FILE");
       System.out.println("      Descriptor of training and test RDF graphs");
       System.out.println("   -output FILE");

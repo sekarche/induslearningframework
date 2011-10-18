@@ -1,19 +1,23 @@
                         
 
-              INDUS 0.1.1/ RELEASE NOTES
+              INDUS 0.1.2/ RELEASE NOTES
 
 This release includes beta version of INDUS application.
 
-Changes since  0.1.0 include:
+Changes since 0.1.1 include:
 
 New features:
-   First  released version
+   Support for RDF data, with Relational Bayesian Classifier
+
+
+Changes since 0.1.0 include:
+
+New features:
+   First released version
 Fixed Bugs:
-    First released version
+   First released version
   
 
-For bug reports/feature request  contact  Neeraj Koul (neeraj@cs.iastate.edu, neeraj.kaul@gmail.com)
-
- 
-
-
+For bug reports/feature request contact:
+   - Harris Lin (htlin@iastate.edu)
+   - Neeraj Koul (neeraj@iastate.edu, neeraj.kaul@gmail.com)

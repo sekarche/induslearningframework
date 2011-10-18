@@ -20,15 +20,15 @@
   	<fileset dir="lib" includes="weka-3.5.6/*.jar"/>
   	<fileset dir="lib" includes="mysql/*.jar"/>
   	<fileset dir="lib" includes="junit/*.jar"/>
+  	<!--   Jars required for RBC -->
+    <fileset dir="lib" includes="jena-2.6.4/*.jar"/>
+    <fileset dir="lib" includes="sesame/*.jar"/>
+    <fileset dir="lib" includes="virtuoso/*.jar"/>
   	<!--   Should contain the Indus Integration Framework jar -->
   	<fileset dir="lib" includes="iif/**/*.jar"/>
   	
   </path>
-<!--
-  <path id="project.base.source.files">
-    <fileset dir="${src}"/>
-  </path>
--->
+
   <!--
     Initialization 
     -->
@@ -66,11 +66,11 @@
 	<!-- Notice the jar file is jaring the classes from ${class}. This my be different
 	 from where eclipse put its class files (check project properties) -->
   <target name="jar" depends="compile">
-      <jar destfile="${dist}/ilf_0.1.1.jar" basedir="${class}">
+  	  <jar destfile="${dist}/ilf_0.1.2.jar" basedir="${class}">
         <manifest>
                   <!-- Information about the program itself -->
                   <attribute name="Implementation-Title" value="Indus Learning Framework"/>
-                  <attribute name="Implementation-Version" value="0.1.1"/>
+                  <attribute name="Implementation-Version" value="0.1.2"/>
         </manifest>
       </jar>
   </target>
@@ -82,15 +82,15 @@
     <copy todir="examples">
         <fileset dir=".">  
             <include name="sample/*.arff"/>
+        	<include name="indus_example/*"/>
             <include name="indus_example-2/*"/>
-        	<!-- Verify indus_example before including in distribution
-        	            <include name="indus_example/*"/>
-        	 -->
+        	<include name="rbc_example/*"/>
         </fileset>
  </copy>
 	<copy todir="${dist}">
 	        <fileset dir=".">  
 	            <include name="database.properties"/>
+	        	<include name="rdfstore.properties"/>
 	        </fileset>
 	 </copy>
 	
@@ -99,7 +99,7 @@
     
 <!-- Create a zip file -->
 <target name="zip" depends="copy">
-    <zip destfile="induslearningframework_0.1.1.zip">
+    <zip destfile="induslearningframework_0.1.2.zip">
         <zipfileset dir="dist" prefix=""/>
         <zipfileset dir="lib" prefix="lib"/>
       <!--  <zipfileset dir="class" prefix="class"/> -->
