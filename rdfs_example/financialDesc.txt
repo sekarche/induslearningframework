@@ -1,0 +1,16 @@
+@instance_var x
+@value_var a
+@hierarchy_var z
+
+@targetType <http://data.linkedmdb.org/resource/movie/film>
+
+@target loan
+
+@attribute loan
+NOMINAL=
+aggregator=NONE
+hierarchy=<http://data.linkedmdb.org/resource/movie/film>
+RBCOptimize=true
+{
+
+}
