@@ -1,44 +1,44 @@
 package airldm2.database.rdf;
 
-import static airldm2.util.StringUtil.angleBracket;
-import static airldm2.util.StringUtil.makeContextPart;
-
 import org.openrdf.model.URI;
 
+import airldm2.core.rl.RDFDataDescriptor;
 import airldm2.core.rl.RbcAttribute;
 
-public class AggregationQueryConstructor {
+public class AggregationQueryConstructor extends QueryConstructor {
 
    private static final String CONTEXT_PATTERN = "%context%";
    private static final String AGGREGATION_FUNCTION_PATTERN = "%aggfun%";
-   private static final String LAST_VAR_PATTERN = "%lastVar%";
-   private static final String AGGREGATION_HEADER = "SELECT " + AGGREGATION_FUNCTION_PATTERN + "(" + LAST_VAR_PATTERN + ") " + CONTEXT_PATTERN + " WHERE { ";
-
-   private String mContextPart;
+   private static final String VALUE_VAR_PATTERN = "%value_var%";
+   private static final String INSTANCE_FILTER = "%instance_filter%";
+   private static final String TARGET_GRAPH = "%target_graph%";
+   
+   private static final String QUERY = 
+      "SELECT " + AGGREGATION_FUNCTION_PATTERN + "(" + VALUE_VAR_PATTERN + ") " + CONTEXT_PATTERN + " WHERE { "
+      + INSTANCE_FILTER + " "
+      + TARGET_GRAPH
+      + " }";
+   
    private URI mInstance;
    private RbcAttribute mAttribute;
-   private VarFactory mVarFactory;
 
-   public AggregationQueryConstructor(String context, URI instance, RbcAttribute attribute) {
-      mContextPart = makeContextPart(context);
+   public AggregationQueryConstructor(RDFDataDescriptor desc, String context, URI instance, RbcAttribute attribute) {
+      super(desc, context);
       mInstance = instance;
       mAttribute = attribute;
-      mVarFactory = new VarFactory();
    }
 
    public String createQuery() {
-      mVarFactory.reset();
-      StringBuilder b = new StringBuilder();
-
-      String chain = QueryUtil.createValueChain(mAttribute.getPropertyChain(), angleBracket(mInstance), mVarFactory);
-      String header = AGGREGATION_HEADER.replace(CONTEXT_PATTERN, mContextPart)
-      .replace(AGGREGATION_FUNCTION_PATTERN, mAttribute.getAggregatorType().toString())
-      .replace(LAST_VAR_PATTERN, mVarFactory.current()); 
-      b.append(header)
-      .append(chain)
-      .append("}");
-
-      return b.toString();
+      String query;
+      
+      query = QUERY
+         .replace(CONTEXT_PATTERN, mContextPart)
+         .replace(AGGREGATION_FUNCTION_PATTERN, mAttribute.getAggregatorType().toString())
+         .replace(VALUE_VAR_PATTERN, mAttribute.getGraphPattern().getValueVar())
+         .replace(INSTANCE_FILTER, createInstanceFilter(mInstance))
+         .replace(TARGET_GRAPH, createAttributeGraph(mAttribute));
+      
+      return query;
    }
-
+   
 }

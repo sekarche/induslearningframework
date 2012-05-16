@@ -1,28 +1,29 @@
 %Descriptor Grammar
 %
-% @instance_var x
-% @value_var a
-% @hierarchy_var z
+% @instance_var ?x
+% @value_var ?a
+% @hierarchy_var ?z
 %
 % @targetType URI(a rdf type)
 %
 % @target attribute_name
 %
 % @attribute name
-% [NOMINAL|ENUM|BINNED|NUMERIC]=[?|values separated by commas]
-% aggregator=[HISTOGRAM|COUNT|SUM|AVG|MIN|MAX]
-% [hierarchy=URI]
-% [RBCOptimize=[true|false]]
+% [NOMINAL|ENUM|BINNED|NUMERIC]=[?|values separated by commas|type of distribution for numeric]
+% aggregator=[NONE|HISTOGRAM|COUNT|SUM|AVG|MIN|MAX]
+% hierarchyRoot=[URI]
 % {
 % Graph pattern
 % }
 %
+%Remark: Target attribute applies to NOMINAL and ENUM only with no aggregator
+%
 %Remark: ? applies to NOMINAL and ENUM only,
 %        in which case a query is posed to retrieve all possible values from the data source
 %
-%Remark: NUMERIC type requires no value specification
+%Remark: types of distribution for NUMERIC are [POISSON,EXPONENTIAL,GAUSSIAN]
 %
-%Remark: If BINNED Option the format is range (of integers) seperated by commas
+%Remark: If BINNED Option the format is range (of integers) separated by commas
 % Example: 3,5,10
 % Bin index:
 %  (-infty, 3) = 0
@@ -35,5 +36,5 @@
 %  (-infty, 5) = 0
 %  [5, +infty) = 1
 %
-%Remark: It is assumed that the SUM,AVG,MIN,MAX are applicable to numerical datatype only.
-%        It is assumed that the HISTOGRAM is applicable to nominal and enum datatype only.
+%Remark: The SUM,AVG,MIN,MAX are applicable to numerical datatype only.
+%        The HISTOGRAM is applicable to nominal and enum datatype only.

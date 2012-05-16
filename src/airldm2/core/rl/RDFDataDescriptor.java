@@ -23,6 +23,10 @@ import airldm2.util.CollectionUtil;
  */
 public class RDFDataDescriptor implements DataDescriptor {
 
+   private String mInstanceVar;
+   private String mValueVar;
+   private String mHierarchyVar;
+   
    private URI mTargetType;
    private String mTargetAttributeName;
 
@@ -33,11 +37,14 @@ public class RDFDataDescriptor implements DataDescriptor {
    
    private List<RbcAttribute> cNonTargetAttributeList;
 
-   public RDFDataDescriptor(URI targetType, String targetAttributeName) {
-      this(targetType, targetAttributeName, CollectionUtil.<String,RbcAttribute>makeMap());
+   public RDFDataDescriptor(String instanceVar, String valueVar, String hierarchyVar, URI targetType, String targetAttributeName) {
+      this(instanceVar, valueVar, hierarchyVar, targetType, targetAttributeName, CollectionUtil.<String,RbcAttribute>makeMap());
    }
    
-   public RDFDataDescriptor(URI targetType, String targetAttributeName, Map<String,RbcAttribute> attributes) {
+   public RDFDataDescriptor(String instanceVar, String valueVar, String hierarchyVar, URI targetType, String targetAttributeName, Map<String,RbcAttribute> attributes) {
+      mInstanceVar = instanceVar;
+      mValueVar = valueVar;
+      mHierarchyVar = hierarchyVar;
       mTargetType = targetType;
       mTargetAttributeName = targetAttributeName;
       mAttributes = attributes;
@@ -52,6 +59,18 @@ public class RDFDataDescriptor implements DataDescriptor {
       }
    }
 
+   public String getInstanceVar() {
+      return mInstanceVar;
+   }
+   
+   public String getValueVar() {
+      return mValueVar;
+   }
+   
+   public String getHierarchyVar() {
+      return mHierarchyVar;
+   }
+   
    public URI getTargetType() {
       return mTargetType;
    }
@@ -135,7 +154,7 @@ public class RDFDataDescriptor implements DataDescriptor {
    }
 
    public RDFDataDescriptor copy() {
-      RDFDataDescriptor copy = new RDFDataDescriptor(mTargetType, mTargetAttributeName, CollectionUtil.makeMap(mAttributes));
+      RDFDataDescriptor copy = new RDFDataDescriptor(mInstanceVar, mValueVar, mHierarchyVar, mTargetType, mTargetAttributeName, CollectionUtil.makeMap(mAttributes));
       return copy;
    }
 

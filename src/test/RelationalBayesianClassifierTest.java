@@ -33,7 +33,7 @@ public class RelationalBayesianClassifierTest {
       
       RDFDatabaseConnection conn = RDFDatabaseConnectionFactory.makeFromConfig();
       //named RDF graph that stores all training triples 
-      SSDataSource trainSource = new RDFDataSource(conn, ":small");
+      SSDataSource trainSource = new RDFDataSource(conn, desc, ":small");
       LDInstances trainInstances = new LDInstances();
       trainInstances.setDesc(desc);
       trainInstances.setDataSource(trainSource);
@@ -74,7 +74,7 @@ public class RelationalBayesianClassifierTest {
    
    @Test
    public void testMovies() throws Exception {
-      testWithTrainInDBTestInDB("rbc_example/moviesDesc.txt", ":movies", ":movies");
+      testWithTrainInDBTestInDB("rbc_example/moviesDesc.txt", ":moviesTrain", ":moviesTest");
    }
    
    @Test
@@ -108,7 +108,7 @@ public class RelationalBayesianClassifierTest {
       RDFDataDescriptor desc = RDFDataDescriptorParser.parse(HINTS_DESC);
       RDFDatabaseConnection conn = new VirtuosoConnection(LOGD_SPARQL);
       //named RDF graph that stores all training triples 
-      SSDataSource trainSource = new RDFDataSource(conn);
+      SSDataSource trainSource = new RDFDataSource(conn, desc);
       LDInstances trainInstances = new LDInstances();
       trainInstances.setDesc(desc);
       trainInstances.setDataSource(trainSource);
@@ -123,13 +123,13 @@ public class RelationalBayesianClassifierTest {
       
       RDFDatabaseConnection conn = RDFDatabaseConnectionFactory.makeFromConfig();
       //named RDF graph that stores all training triples 
-      SSDataSource trainSource = new RDFDataSource(conn, trainGraph);
+      SSDataSource trainSource = new RDFDataSource(conn, desc, trainGraph);
       LDInstances trainInstances = new LDInstances();
       trainInstances.setDesc(desc);
       trainInstances.setDataSource(trainSource);
    
       //named RDF graph that stores all test triples
-      SSDataSource testSource = new RDFDataSource(conn, testGraph);
+      SSDataSource testSource = new RDFDataSource(conn, desc, testGraph);
       LDInstances testInstances = new LDInstances();
       testInstances.setDesc(desc);
       testInstances.setDataSource(testSource);
@@ -147,14 +147,14 @@ public class RelationalBayesianClassifierTest {
       
       RDFDatabaseConnection trainConn = new VirtuosoConnection(trainSPARQL);
       //named RDF graph that stores all training triples 
-      SSDataSource trainSource = new RDFDataSource(trainConn, trainGraph);
+      SSDataSource trainSource = new RDFDataSource(trainConn, desc, trainGraph);
       LDInstances trainInstances = new LDInstances();
       trainInstances.setDesc(desc);
       trainInstances.setDataSource(trainSource);
    
       RDFDatabaseConnection testConn = new VirtuosoConnection(testSPARQL);
       //named RDF graph that stores all test triples
-      SSDataSource testSource = new RDFDataSource(testConn, testGraph);
+      SSDataSource testSource = new RDFDataSource(testConn, desc, testGraph);
       LDInstances testInstances = new LDInstances();
       testInstances.setDesc(desc);
       testInstances.setDataSource(testSource);

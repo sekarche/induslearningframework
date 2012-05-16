@@ -1,33 +1,60 @@
+@instance_var ?x
+@value_var ?a
+@hierarchy_var ?z
+
 @targetType :small/Instance
 
 @target label
 
 @attribute label
-:small/label
 NOMINAL=A,B,C
 aggregator=NONE
+hierarchyRoot=
+{
+?x <:small/label> ?a .
+}
 
 @attribute ind
-:small/prop1,:small/prop2
 NOMINAL=i1, i2, i3
-aggregator=INDEPENDENT_VAL
+aggregator=HISTOGRAM
+hierarchyRoot=
+{
+?x <:small/prop1> ?p1 .
+?p1 <:small/prop2> ?a .
+}
 
 @attribute count
-:small/prop1,:small/prop2
 BINNED=2,4
 aggregator=COUNT
+hierarchyRoot=
+{
+?x <:small/prop1> ?p1 .
+?p1 <:small/prop2> ?a .
+}
 
 @attribute avg
-:small/prop1,:small/prop3
 BINNED=15,25,35
 aggregator=AVG
+hierarchyRoot=
+{
+?x <:small/prop1> ?p1 .
+?p1 <:small/prop3> ?a .
+}
 
 @attribute min
-:small/prop1,:small/prop3
 BINNED=15,25,35
 aggregator=MIN
+hierarchyRoot=
+{
+?x <:small/prop1> ?p1 .
+?p1 <:small/prop3> ?a .
+}
 
 @attribute max
-:small/prop1,:small/prop3
 BINNED=15,25,35
 aggregator=MAX
+hierarchyRoot=
+{
+?x <:small/prop1> ?p1 .
+?p1 <:small/prop3> ?a .
+}

@@ -159,14 +159,14 @@ public class MIGuidedFeatureCrawler {
                   List<URI> resultList = result.getURIList();
                   if (resultList.size() >= 2) {
                      ValueType valueType = new EnumType(resultList);
-                     ValueAggregator valueAgg = ValueAggregator.INDEPENDENT_VAL;
+                     ValueAggregator valueAgg = ValueAggregator.HISTOGRAM;
                      allAttributes.add(new RbcAttribute(propChain.toString() + index++, propChain, valueType, valueAgg));
                   }
                } else if (rangeType == RangeType.STRING) {
                   List<String> resultList = result.getStringList();
                   if (resultList.size() >= 2) {
                      ValueType valueType = new NominalType(resultList);
-                     ValueAggregator valueAgg = ValueAggregator.INDEPENDENT_VAL;
+                     ValueAggregator valueAgg = ValueAggregator.HISTOGRAM;
                      allAttributes.add(new RbcAttribute(propChain.toString() + index++, propChain, valueType, valueAgg));
                   }
                }

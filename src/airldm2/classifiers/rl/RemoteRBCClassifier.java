@@ -1,7 +1,6 @@
 package airldm2.classifiers.rl;
 
 import java.io.FileWriter;
-import java.util.List;
 
 import org.openrdf.model.URI;
 import org.openrdf.model.ValueFactory;
@@ -19,7 +18,6 @@ import airldm2.core.SSDataSource;
 import airldm2.core.rl.RDFDataDescriptor;
 import airldm2.core.rl.RDFDataDescriptorParser;
 import airldm2.core.rl.RDFDataSource;
-import airldm2.core.rl.RbcAttribute;
 import airldm2.database.rdf.RDFDatabaseConnection;
 import airldm2.database.rdf.VirtuosoConnection;
 
@@ -30,6 +28,7 @@ public class RemoteRBCClassifier {
    public static void main(String[] args) throws Exception {
       String descFile = Utils.getOption("desc", args);
       String outputFile = Utils.getOption("output", args);
+      String labelProp = Utils.getOption("labelProp", args);
       String trainEndpoint = Utils.getOption("trainEndpoint", args);
       String trainGraph = Utils.getOption("trainGraph", args);
       String testEndpoint = Utils.getOption("testEndpoint", args);
@@ -45,13 +44,14 @@ public class RemoteRBCClassifier {
       
       if (descFile == null || "".equals(descFile)
             || outputFile == null || "".equals(outputFile)
+            || labelProp == null || "".equals(labelProp)
             || trainEndpoint == null || "".equals(trainEndpoint)
             || testEndpoint == null || "".equals(testEndpoint)) {
          printUsage();
          System.exit(0);
       }
       
-      run(descFile, outputFile, trainEndpoint, trainGraph, testEndpoint, testGraph);
+      run(descFile, outputFile, labelProp, trainEndpoint, trainGraph, testEndpoint, testGraph);
    }
 
    private static void printUsage() {
@@ -60,6 +60,8 @@ public class RemoteRBCClassifier {
       System.out.println("Usage:");
       System.out.println("   -desc FILE");
       System.out.println("      Descriptor of training and test RDF graphs");
+      System.out.println("   -labelProp URI");
+      System.out.println("      Property name of the classification label");
       System.out.println("   -output FILE");
       System.out.println("      Output of classifications in RDF/XML format");
       System.out.println("   -trainEndpoint URI");
@@ -72,20 +74,21 @@ public class RemoteRBCClassifier {
       System.out.println("      [OPTIONAL] Context URI specifying the named RDF graph of test instances");
    }
    
-   public static void run(String descFile, String outputFile, String trainEndpoint, String trainGraph, String testEndpoint, String testGraph) throws Exception {
+   public static void run(String descFile, String outputFile, String labelProp, String trainEndpoint, String trainGraph, String testEndpoint, String testGraph) throws Exception {
       RDFDataDescriptor desc = RDFDataDescriptorParser.parse(descFile);
+      URI label = ValueFac.createURI(labelProp);
       String[] classLabels = desc.getClassLabels();
       
       //named RDF graph that stores all training triples 
       RDFDatabaseConnection trainConn = new VirtuosoConnection(trainEndpoint);
-      SSDataSource trainSource = new RDFDataSource(trainConn, trainGraph);
+      SSDataSource trainSource = new RDFDataSource(trainConn, desc, trainGraph);
       LDInstances trainInstances = new LDInstances();
       trainInstances.setDesc(desc);
       trainInstances.setDataSource(trainSource);
       
       //named RDF graph that stores all training triples 
       RDFDatabaseConnection testConn = new VirtuosoConnection(testEndpoint);
-      SSDataSource testSource = new RDFDataSource(testConn, testGraph);
+      SSDataSource testSource = new RDFDataSource(testConn, desc, testGraph);
       LDInstances testInstances = new LDInstances();
       testInstances.setDesc(desc);
       testInstances.setDataSource(testSource);
@@ -99,13 +102,12 @@ public class RemoteRBCClassifier {
       repository.initialize();
       RepositoryConnection conn = repository.getConnection();
       
-      RbcAttribute targetAttribute = desc.getTargetAttribute();
       AggregatedInstances aggregatedInstances = InstanceAggregator.aggregateAll(testInstances);
       for (AggregatedInstance i : aggregatedInstances.getInstances()) {
          URI uri = i.getURI();
          int classification = (int) rbc.classifyInstance(i);
          
-         addClassification(conn, uri, targetAttribute, classLabels[classification]);
+         addClassification(conn, uri, label, classLabels[classification]);
       }
       
       FileWriter rdfWriter = new FileWriter(outputFile);
@@ -114,14 +116,8 @@ public class RemoteRBCClassifier {
       repository.shutDown();
    }
 
-   private static void addClassification(RepositoryConnection conn, URI subject, RbcAttribute targetAttribute, String value) throws RepositoryException {
-      List<URI> props = targetAttribute.getPropertyChain().getList();
-      if (props.size() > 1) {
-         throw new UnsupportedOperationException("Target attribute chain has more than one properties.");
-      }
-      
-      URI prop = props.get(0);
-      conn.add(subject, prop, ValueFac.createLiteral(value));
+   private static void addClassification(RepositoryConnection conn, URI subject, URI label, String value) throws RepositoryException {
+      conn.add(subject, label, ValueFac.createLiteral(value));
    }
    
 }

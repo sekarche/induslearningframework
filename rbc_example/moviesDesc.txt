@@ -1,58 +1,113 @@
+@instance_var ?x
+@value_var ?a
+@hierarchy_var ?z
+
 @targetType http://data.linkedmdb.org/resource/movie/film
 
 @target openingreceipt
 
 @attribute openingreceipt
-http://data.linkedmdb.org/resource/movie/openingreceipt
 BINNED=2000000
 aggregator=NONE
+hierarchyRoot=
+{
+?x <http://data.linkedmdb.org/resource/movie/openingreceipt> ?a .
+}
 
 @attribute runtime
-http://data.linkedmdb.org/resource/movie/runtime
 BINNED=80,100,120,140,160
 aggregator=NONE
+hierarchyRoot=
+{
+?x <http://data.linkedmdb.org/resource/movie/runtime> ?a .
+}
 
 @attribute actorBirth
-http://data.linkedmdb.org/resource/movie/actor,http://xmlns.com/foaf/0.1/page,http://rdf.freebase.com/ns/people.person.year_of_birth
 BINNED=1940,1960,1980
 aggregator=AVG
+hierarchyRoot=
+{
+?x <http://data.linkedmdb.org/resource/movie/actor> ?p1 .
+?p1 <http://xmlns.com/foaf/0.1/page> ?p2 .
+?p2 <http://rdf.freebase.com/ns/people.person.year_of_birth> ?a .
+}
 
 @attribute actorGender
-http://data.linkedmdb.org/resource/movie/actor,http://xmlns.com/foaf/0.1/page,http://rdf.freebase.com/ns/people.person.gender
 ENUM=http://rdf.freebase.com/ns/en.male,http://rdf.freebase.com/ns/en.female
-aggregator=INDEPENDENT_VAL
+aggregator=HISTOGRAM
+hierarchyRoot=
+{
+?x <http://data.linkedmdb.org/resource/movie/actor> ?p1 .
+?p1 <http://xmlns.com/foaf/0.1/page> ?p2 .
+?p2 <http://rdf.freebase.com/ns/people.person.gender> ?a .
+}
 
 @attribute actorAward
-http://data.linkedmdb.org/resource/movie/actor,http://xmlns.com/foaf/0.1/page,http://rdf.freebase.com/ns/award.award_winner.awards_won
 BINNED=2,4,6,8
 aggregator=COUNT
+hierarchyRoot=
+{
+?x <http://data.linkedmdb.org/resource/movie/actor> ?p1 .
+?p1 <http://xmlns.com/foaf/0.1/page> ?p2 .
+?p2 <http://rdf.freebase.com/ns/award.award_winner.awards_won> ?a .
+}
 
 @attribute directorBirth
-http://data.linkedmdb.org/resource/movie/director,http://xmlns.com/foaf/0.1/page,http://rdf.freebase.com/ns/people.person.year_of_birth
 BINNED=1940,1960,1980
 aggregator=AVG
+hierarchyRoot=
+{
+?x <http://data.linkedmdb.org/resource/movie/director> ?p1 .
+?p1 <http://xmlns.com/foaf/0.1/page> ?p2 .
+?p2 <http://rdf.freebase.com/ns/people.person.year_of_birth> ?a .
+}
 
 @attribute directorGender
-http://data.linkedmdb.org/resource/movie/director,http://xmlns.com/foaf/0.1/page,http://rdf.freebase.com/ns/people.person.gender
 ENUM=http://rdf.freebase.com/ns/en.male,http://rdf.freebase.com/ns/en.female
-aggregator=INDEPENDENT_VAL
+aggregator=HISTOGRAM
+hierarchyRoot=
+{
+?x <http://data.linkedmdb.org/resource/movie/director> ?p1 .
+?p1 <http://xmlns.com/foaf/0.1/page> ?p2 .
+?p2 <http://rdf.freebase.com/ns/people.person.gender> ?a .
+}
 
 @attribute directorAward
-http://data.linkedmdb.org/resource/movie/director,http://xmlns.com/foaf/0.1/page,http://rdf.freebase.com/ns/award.award_winner.awards_won
 BINNED=2,4,6,8
 aggregator=COUNT
+hierarchyRoot=
+{
+?x <http://data.linkedmdb.org/resource/movie/director> ?p1 .
+?p1 <http://xmlns.com/foaf/0.1/page> ?p2 .
+?p2 <http://rdf.freebase.com/ns/award.award_winner.awards_won> ?a .
+}
 
 @attribute producerBirth
-http://data.linkedmdb.org/resource/movie/producer,http://xmlns.com/foaf/0.1/page,http://rdf.freebase.com/ns/people.person.year_of_birth
 BINNED=1940,1960,1980
 aggregator=AVG
+hierarchyRoot=
+{
+?x <http://data.linkedmdb.org/resource/movie/producer> ?p1 .
+?p1 <http://xmlns.com/foaf/0.1/page> ?p2 .
+?p2 <http://rdf.freebase.com/ns/people.person.year_of_birth> ?a .
+}
 
 @attribute producerGender
-http://data.linkedmdb.org/resource/movie/producer,http://xmlns.com/foaf/0.1/page,http://rdf.freebase.com/ns/people.person.gender
 ENUM=http://rdf.freebase.com/ns/en.male,http://rdf.freebase.com/ns/en.female
-aggregator=INDEPENDENT_VAL
+aggregator=HISTOGRAM
+hierarchyRoot=
+{
+?x <http://data.linkedmdb.org/resource/movie/producer> ?p1 .
+?p1 <http://xmlns.com/foaf/0.1/page> ?p2 .
+?p2 <http://rdf.freebase.com/ns/people.person.gender> ?a .
+}
 
 @attribute producerAward
-http://data.linkedmdb.org/resource/movie/producer,http://xmlns.com/foaf/0.1/page,http://rdf.freebase.com/ns/award.award_winner.awards_won
 BINNED=2,4,6,8
 aggregator=COUNT
+hierarchyRoot=
+{
+?x <http://data.linkedmdb.org/resource/movie/producer> ?p1 .
+?p1 <http://xmlns.com/foaf/0.1/page> ?p2 .
+?p2 <http://rdf.freebase.com/ns/award.award_winner.awards_won> ?a .
+}

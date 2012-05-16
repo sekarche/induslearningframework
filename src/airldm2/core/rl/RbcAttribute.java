@@ -4,9 +4,7 @@ import java.io.Writer;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
-
-import airldm2.util.CollectionUtil;
-import airldm2.util.StringUtil;
+import org.openrdf.model.URI;
 
 /**
  * 
@@ -27,30 +25,36 @@ public class RbcAttribute {
    /**
     * Enum specifying how to aggregate values for a 1->n relationship
     */
-   public enum ValueAggregator { NONE, INDEPENDENT_VAL, COUNT, AVG, MIN, MAX }
+   public enum ValueAggregator { NONE, HISTOGRAM, COUNT, AVG, MIN, MAX }
    
    private String mName;
-   private PropertyChain mPropertyChain;
    private ValueType mValueType;
    private ValueAggregator mAggregatorType;
+   private URI mHierarchyRoot;
+   private GraphPattern mGraph;
    
-   public RbcAttribute(String name, PropertyChain props, ValueType valueType, ValueAggregator aggregatorType) {
+   public RbcAttribute(String name, ValueType valueType, ValueAggregator aggregatorType, URI hierarchyRoot, GraphPattern graph) {
       mName = name;
-      mPropertyChain = props;
       mValueType = valueType;
       mAggregatorType = aggregatorType;
+      mHierarchyRoot = hierarchyRoot;
+      mGraph = graph;
    }
       
    public String getName() {
       return mName;
    }
    
-   public PropertyChain getPropertyChain() {
-      return mPropertyChain;
+   public GraphPattern getGraphPattern() {
+      return mGraph;
    }
 
    public ValueAggregator getAggregatorType(){
       return mAggregatorType;
+   }
+   
+   public URI getHierarchyRoot(){
+      return mHierarchyRoot;
    }
    
    public ValueType getValueType(){
@@ -75,14 +79,18 @@ public class RbcAttribute {
       out.write(mName);
       out.write("\n");
       
-      out.write(StringUtil.toCSV(CollectionUtil.toStringList(mPropertyChain.getList())));
-      out.write("\n");
-      
       mValueType.write(out);
       out.write("\n");
       
       out.write(RDFDataDescriptorParser.AGGREGATOR);
       out.write(mAggregatorType.toString());
+      out.write("\n");
+
+      out.write(RDFDataDescriptorParser.HIERARCHY);
+      out.write(mHierarchyRoot.stringValue());
+      out.write("\n");
+      
+      out.write(mGraph.toString());
       out.write("\n");
    }
 

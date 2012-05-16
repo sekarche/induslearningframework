@@ -73,5 +73,22 @@ public class StringUtil {
       
       return b.toString();
    }
+
+   public static String appendAllVarsWith(String s, String append) {
+      StringBuilder b = new StringBuilder();
+      boolean isVar = false;
+      for (int i = 0; i < s.length(); i++) {
+         char charAtI = s.charAt(i);
+         if (charAtI == '?') {
+            isVar = true;
+         } else if (isVar && !Character.isLetterOrDigit(charAtI)) {
+            b.append(append);
+            isVar = false;
+         }
+         
+         b.append(charAtI);
+      }
+      return b.toString();
+   }
    
 }

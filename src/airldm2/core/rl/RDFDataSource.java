@@ -32,14 +32,16 @@ public class RDFDataSource implements SSDataSource {
 
    private RDFDatabaseConnection mConn;
    private String mDefaultContext;
+   private final RDFDataDescriptor mDesc;
 
-   public RDFDataSource(RDFDatabaseConnection conn) {
-      this(conn, null);
+   public RDFDataSource(RDFDatabaseConnection conn, RDFDataDescriptor desc) {
+      this(conn, desc, null);
    }
    
-   public RDFDataSource(RDFDatabaseConnection conn, String defaultContext) {
+   public RDFDataSource(RDFDatabaseConnection conn, RDFDataDescriptor desc, String defaultContext) {
       mConn = conn;
       mDefaultContext = defaultContext;
+      mDesc = desc;
    }
 
    @Override
@@ -79,43 +81,43 @@ public class RDFDataSource implements SSDataSource {
    }
 
    public ISufficentStatistic getSufficientStatistic(SuffStatQueryParameter queryParam) throws RDFDatabaseException {
-      String query = new SuffStatQueryConstructor(mDefaultContext, queryParam).createQuery();
-      //System.out.println(query);
+      String query = new SuffStatQueryConstructor(mDesc, mDefaultContext, queryParam).createQuery();
+      System.out.println(query);
       
       SPARQLQueryResult results = mConn.executeQuery(query);
       if (results.isEmpty()) return null;
       ISufficentStatistic stat = new DefaultSufficentStatisticImpl(results.getInt());
-      //System.out.println(results.getInt());
+      System.out.println(results.getInt());
       return stat;
    }
 
    public List<URI> getTargetInstances(URI targetType) throws RDFDatabaseException {
-      String query = new InstanceQueryConstructor(mDefaultContext, targetType).createQuery();
-      //System.out.println(query);
+      String query = new InstanceQueryConstructor(mDesc, mDefaultContext, targetType).createQuery();
+      System.out.println(query);
       
       SPARQLQueryResult results = mConn.executeQuery(query);
       return results.getURIList();
    }
    
    public Value getValue(URI instance, RbcAttribute attribute) throws RDFDatabaseException {
-      String query = new ValueQueryConstructor(mDefaultContext, instance, attribute).createQuery();
-      //System.out.println(query);
+      String query = new ValueQueryConstructor(mDesc, mDefaultContext, instance, attribute).createQuery();
+      System.out.println(query);
       
       SPARQLQueryResult results = mConn.executeQuery(query);
       return results.getValue();
    }
    
    public Value getAggregation(URI instance, RbcAttribute attribute) throws RDFDatabaseException {
-      String query = new AggregationQueryConstructor(mDefaultContext, instance, attribute).createQuery();
-      //System.out.println(query);
+      String query = new AggregationQueryConstructor(mDesc, mDefaultContext, instance, attribute).createQuery();
+      System.out.println(query);
       
       SPARQLQueryResult results = mConn.executeQuery(query);
       return results.getValue();
    }
    
    public int countIndependentValueAggregation(URI instance, RbcAttribute attribute, int v) throws RDFDatabaseException {
-      String query = new IndependentValueAggregationQueryConstructor(mDefaultContext, instance, attribute, v).createQuery();
-      //System.out.println(query);
+      String query = new IndependentValueAggregationQueryConstructor(mDesc, mDefaultContext, instance, attribute, v).createQuery();
+      System.out.println(query);
       
       SPARQLQueryResult results = mConn.executeQuery(query);
       if (results.isEmpty()) return 0;
@@ -124,7 +126,7 @@ public class RDFDataSource implements SSDataSource {
 
    public int getRangeSizeOf(URI targetType, PropertyChain propChain) throws RDFDatabaseException {
       String query = new RangeSizeQueryConstructor(mDefaultContext, targetType, propChain).createQuery();
-      //System.out.println(query);
+      System.out.println(query);
       
       SPARQLQueryResult results = mConn.executeQuery(query);
       if (results.isEmpty()) return 0;
@@ -133,14 +135,14 @@ public class RDFDataSource implements SSDataSource {
    
    public SPARQLQueryResult getRangeOf(URI targetType, PropertyChain propChain) throws RDFDatabaseException {
       String query = new RangeQueryConstructor(mDefaultContext, targetType, propChain).createQuery();
-      //System.out.println(query);
+      System.out.println(query);
       
       return mConn.executeQuery(query);
    }
 
    public List<URI> getPropertiesOf(URI targetType, PropertyChain propChain) throws RDFDatabaseException {
       String query = new CrawlPropertyQueryConstructor(mDefaultContext, targetType, propChain).createQuery();
-      //System.out.println(query);
+      System.out.println(query);
       
       SPARQLQueryResult results = mConn.executeQuery(query);
       return results.getURIList();
