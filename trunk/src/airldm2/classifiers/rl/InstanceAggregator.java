@@ -76,7 +76,7 @@ public class InstanceAggregator {
       ValueType valueType = attribute.getValueType();
       int[] valueIndexCount = new int[valueType.domainSize()];
       
-      if (attribute.getAggregatorType() == ValueAggregator.INDEPENDENT_VAL) {
+      if (attribute.getAggregatorType() == ValueAggregator.HISTOGRAM) {
          for (int i = 0; i < valueIndexCount.length; i++) {
             valueIndexCount[i] = dataSource.countIndependentValueAggregation(instance, attribute, i);
          }

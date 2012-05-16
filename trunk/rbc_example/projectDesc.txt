@@ -1,23 +1,43 @@
+@instance_var ?x
+@value_var ?a
+@hierarchy_var ?z
+
 @targetType http://www.examplecompany.org/Project
 
 @target isSuccess
 
 @attribute isSuccess
-http://www.examplecompany.org/isSuccess
 NOMINAL=YES,NO
 aggregator=NONE
+hierarchyRoot=
+{
+?x <http://www.examplecompany.org/isSuccess> ?a .
+}
 
 @attribute teamManagers
-http://www.examplecompany.org/hasTeam,http://www.w3.org/1999/02/22-rdf-syntax-ns#type,http://www.w3.org/2000/01/rdf-schema#subClassOf
 ENUM=http://www.examplecompany.org/Manager,http://www.examplecompany.org/Non-Manager
-aggregator=INDEPENDENT_VAL
+aggregator=HISTOGRAM
+hierarchyRoot=
+{
+?x <http://www.examplecompany.org/hasTeam> ?p1 .
+?p1 a ?p2 .
+?p2 <http://www.w3.org/2000/01/rdf-schema#subClassOf> ?a .
+}
 
 @attribute teamAge
-http://www.examplecompany.org/hasTeam,http://www.examplecompany.org/hasAge
 BINNED=20,30,40,50
 aggregator=AVG
+hierarchyRoot=
+{
+?x <http://www.examplecompany.org/hasTeam> ?p1 .
+?p1 <http://www.examplecompany.org/hasAge> ?a .
+}
 
 @attribute teamGender
-http://www.examplecompany.org/hasTeam,http://www.examplecompany.org/hasSex
 NOMINAL=female,male
-aggregator=INDEPENDENT_VAL
+aggregator=HISTOGRAM
+hierarchyRoot=
+{
+?x <http://www.examplecompany.org/hasTeam> ?p1 .
+?p1 <http://www.examplecompany.org/hasSex> ?a .
+}

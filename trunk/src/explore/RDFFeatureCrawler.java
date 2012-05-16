@@ -112,11 +112,11 @@ public class RDFFeatureCrawler {
          } else {
             if (rangeType == RangeType.IRI) {
                ValueType valueType = new EnumType(result.getURIList());
-               ValueAggregator valueAgg = ValueAggregator.INDEPENDENT_VAL;
+               ValueAggregator valueAgg = ValueAggregator.HISTOGRAM;
                allAttributes.add(new RbcAttribute(propChain.toString() + index++, propChain, valueType, valueAgg));
             } else if (rangeType == RangeType.STRING) {
                ValueType valueType = new NominalType(result.getStringList());
-               ValueAggregator valueAgg = ValueAggregator.INDEPENDENT_VAL;
+               ValueAggregator valueAgg = ValueAggregator.HISTOGRAM;
                allAttributes.add(new RbcAttribute(propChain.toString() + index++, propChain, valueType, valueAgg));
             }
          }

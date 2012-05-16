@@ -183,13 +183,13 @@ public class Evaluation {
       
       RDFDatabaseConnection conn = RDFDatabaseConnectionFactory.makeFromConfig();
       //named RDF graph that stores all training triples 
-      SSDataSource trainSource = new RDFDataSource(conn, trainGraph);
+      SSDataSource trainSource = new RDFDataSource(conn, desc, trainGraph);
       LDInstances trainInstances = new LDInstances();
       trainInstances.setDesc(desc);
       trainInstances.setDataSource(trainSource);
    
       //named RDF graph that stores all test triples
-      SSDataSource testSource = new RDFDataSource(conn, testGraph);
+      SSDataSource testSource = new RDFDataSource(conn, desc, testGraph);
       LDInstances testInstances = new LDInstances();
       testInstances.setDesc(desc);
       testInstances.setDataSource(testSource);

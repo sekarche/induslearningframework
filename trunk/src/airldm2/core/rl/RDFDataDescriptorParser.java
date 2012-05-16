@@ -5,7 +5,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.openrdf.model.URI;
@@ -14,20 +13,30 @@ import org.openrdf.model.impl.ValueFactoryImpl;
 
 import airldm2.core.rl.RbcAttribute.ValueAggregator;
 import airldm2.exceptions.RDFDataDescriptorFormatException;
-import airldm2.util.CollectionUtil;
 import airldm2.util.StringUtil;
 
 public class RDFDataDescriptorParser {
 
    public static final String COMMENT_CHAR = "%";
+   public static final String INSTANCE_VAR = "@instance_var ";
+   public static final String VALUE_VAR = "@value_var ";
+   public static final String HIERARCHY_VAR = "@hierarchy_var ";
    public static final String TARGET_TYPE = "@targetType ";
    public static final String TARGET = "@target ";
    public static final String ATTRIBUTE = "@attribute ";
    public static final String AGGREGATOR = "aggregator=";
+   public static final String HIERARCHY = "hierarchyRoot=";
    
    private static ValueFactory Factory = new ValueFactoryImpl();
+   private static String InstanceVar;
+   private static String ValueVar;
+   private static String HierarchyVar;
    
    public static RDFDataDescriptor parse(String descFile) throws IOException, RDFDataDescriptorFormatException {
+      InstanceVar = null;
+      ValueVar = null;
+      HierarchyVar = null;
+      
       URI targetType = null;
       String targetAttributeName = null;
       Map<String,RbcAttribute> attributes = new LinkedHashMap<String,RbcAttribute>();
@@ -35,16 +44,23 @@ public class RDFDataDescriptorParser {
       BufferedReader in = new BufferedReader(new FileReader(descFile));
       String line;
       while ((line = readContentLine(in)) != null) {
-         if (line.startsWith(TARGET_TYPE)) {
+         if (line.startsWith(INSTANCE_VAR)) {
+            InstanceVar = line.substring(INSTANCE_VAR.length());
+         } else if (line.startsWith(VALUE_VAR)) {
+            ValueVar = line.substring(VALUE_VAR.length());
+         } else if (line.startsWith(HIERARCHY_VAR)) {
+            HierarchyVar = line.substring(HIERARCHY_VAR.length());
+         } else if (line.startsWith(TARGET_TYPE)) {
             targetType = Factory.createURI(line.substring(TARGET_TYPE.length()));
          } else if (line.startsWith(TARGET)) {
             targetAttributeName = line.substring(TARGET.length());
          } else if (line.startsWith(ATTRIBUTE)) {
             String attributeName = line.substring(ATTRIBUTE.length()).trim();
-            String propLine = readContentLine(in);
             String valueLine = readContentLine(in);
             String aggregatorLine = readContentLine(in);
-            RbcAttribute attribute = parseAttribute(attributeName, propLine, valueLine, aggregatorLine);
+            String hierarchyLine = readContentLine(in);
+            String graphPattern = readContentLines(in, "{", "}");
+            RbcAttribute attribute = parseAttribute(attributeName, valueLine, aggregatorLine, hierarchyLine, graphPattern);
             attributes.put(attributeName, attribute);
          }
       }
@@ -59,7 +75,7 @@ public class RDFDataDescriptorParser {
          throw new UnsupportedOperationException("Aggregator on the target attribute is not supported in this version.");
       }
       
-      return new RDFDataDescriptor(targetType, targetAttributeName, attributes);
+      return new RDFDataDescriptor(InstanceVar, ValueVar, HierarchyVar, targetType, targetAttributeName, attributes);
    }
    
    private static String readContentLine(BufferedReader in) throws IOException {
@@ -74,14 +90,26 @@ public class RDFDataDescriptorParser {
       
       return null;
    }
-
-   private static RbcAttribute parseAttribute(String name, String propLine, String valueLine, String aggregatorLine) throws RDFDataDescriptorFormatException {
-      String[] propStrs = StringUtil.trim(propLine.split(","));
-      List<URI> props = CollectionUtil.makeList();
-      for (String propStr : propStrs) {
-         props.add(Factory.createURI(propStr));
+   
+   private static String readContentLines(BufferedReader in, String beginLine, String endLine) throws IOException {
+      StringBuilder content = new StringBuilder();
+      String line;
+      while ((line = in.readLine()) != null) {
+         line = line.trim();
+         if (line.startsWith(COMMENT_CHAR) || line.isEmpty() || line.equals(beginLine)) 
+            continue;
+         else if (line.equals(endLine))
+            return content.toString();
+         else {
+            content.append(line);
+            content.append(" ");
+         }
       }
       
+      return null;
+   }
+
+   private static RbcAttribute parseAttribute(String name, String valueLine, String aggregatorLine, String hierarchyLine, String graphPatternStr) throws RDFDataDescriptorFormatException {
       if (!aggregatorLine.startsWith(AGGREGATOR))
          throw new RDFDataDescriptorFormatException("Aggregator is not defined properly: " + aggregatorLine);
       
@@ -98,8 +126,8 @@ public class RDFDataDescriptorParser {
             }
             valueType = new BinnedType(cutPoints);
             
-            if (aggregator == ValueAggregator.INDEPENDENT_VAL) {
-               throw new RDFDataDescriptorFormatException(ValueAggregator.INDEPENDENT_VAL + " must be a Nominal type.");
+            if (aggregator == ValueAggregator.HISTOGRAM) {
+               throw new RDFDataDescriptorFormatException(ValueAggregator.HISTOGRAM + " must be a Nominal type.");
             }
          } else if (NominalType.NAME.equalsIgnoreCase(valueStrs[0])) {
             valueType = new NominalType(Arrays.asList(possibleValues));
@@ -129,7 +157,18 @@ public class RDFDataDescriptorParser {
          }
       }
       
-      RbcAttribute attribute = new RbcAttribute(name, new PropertyChain(props), valueType, aggregator);
+      URI hierarchyRootURI = null;
+      String hierarchy = hierarchyLine.substring(HIERARCHY.length()).trim();
+      if (!hierarchy.isEmpty()) {
+         hierarchyRootURI = Factory.createURI(hierarchy);
+      }
+      
+      
+      graphPatternStr = StringUtil.appendAllVarsWith(graphPatternStr, name);
+      
+      GraphPattern graphPattern = new GraphPattern(InstanceVar + name, ValueVar + name, HierarchyVar + name, graphPatternStr);
+      
+      RbcAttribute attribute = new RbcAttribute(name, valueType, aggregator, hierarchyRootURI, graphPattern);
       
       return attribute;
    }
