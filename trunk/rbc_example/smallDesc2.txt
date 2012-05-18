@@ -1,0 +1,33 @@
+@instance_var ?x
+@value_var ?a
+@hierarchy_var ?z
+
+@targetType :small/Instance
+
+@target label
+
+@attribute label
+NOMINAL=A,B,C
+aggregator=NONE
+{
+?x <:small/label> ?a .
+}
+
+@attribute countExp
+NUMERIC=
+aggregator=COUNT
+numbericEstimator=EXPONENTIAL
+{
+?x <:small/prop1> ?p1 .
+?p1 <:small/prop2> ?a .
+}
+
+@attribute sumExp
+NUMERIC=
+aggregator=SUM
+numbericEstimator=EXPONENTIAL
+{
+?x <:small/prop1> ?p1 .
+?p1 <:small/prop3> ?a .
+}
+
