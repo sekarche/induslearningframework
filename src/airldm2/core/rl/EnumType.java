@@ -10,7 +10,7 @@ import org.openrdf.model.Value;
 import airldm2.util.CollectionUtil;
 import airldm2.util.StringUtil;
 
-public class EnumType implements ValueType {
+public class EnumType implements DiscreteType {
 
    public static String NAME = "ENUM";
    

@@ -10,10 +10,10 @@ import weka.classifiers.evaluation.ConfusionMatrix;
 import weka.core.Matrix;
 import airldm2.classifiers.Evaluation;
 import airldm2.classifiers.rl.AggregatedInstances;
-import airldm2.classifiers.rl.ClassValueCount;
 import airldm2.classifiers.rl.InstanceAggregator;
 import airldm2.classifiers.rl.RelationalBayesianClassifier;
-import airldm2.classifiers.rl.ValueIndexCount;
+import airldm2.classifiers.rl.estimator.AttributeEstimator;
+import airldm2.classifiers.rl.estimator.Histogram;
 import airldm2.core.LDInstances;
 import airldm2.core.rl.BinnedType;
 import airldm2.core.rl.EnumType;
@@ -23,7 +23,7 @@ import airldm2.core.rl.RDFDataDescriptor;
 import airldm2.core.rl.RDFDataDescriptorParser;
 import airldm2.core.rl.RDFDataSource;
 import airldm2.core.rl.RbcAttribute;
-import airldm2.core.rl.RbcAttribute.ValueAggregator;
+import airldm2.core.rl.ValueAggregator;
 import airldm2.core.rl.ValueType;
 import airldm2.database.rdf.SPARQLQueryResult;
 import airldm2.exceptions.RDFDatabaseException;
@@ -102,16 +102,16 @@ public class ClassifierGuidedFeatureCrawler {
             cSubRBC2.addAttributeCounts(n.getRBCCount2());
             cTuneAggInstances2.addAttribute(n.getValueIndexCountForTuneInstances2());
             
-            ClassValueCount counts = cRBC.getCounts(att);
+            AttributeEstimator counts = cRBC.getCounts(att);
             cRBC.addAttributeCounts(counts);
          }
          
          List<PropertyChain> childrenProp = crawlChildren(n.getPropertyChain());
          List<RbcAttribute> childrenAtt = makeAttributes(childrenProp);
-         List<ClassValueCount> childrenRBCCounts = makeRBCCounts(childrenAtt);
-         List<List<ValueIndexCount>> valueIndexCountForAttributes = makeAggregateAttributeForTuneData(childrenAtt);
-         List<ClassValueCount> childrenRBCCounts2 = makeRBCCounts2(childrenAtt);
-         List<List<ValueIndexCount>> valueIndexCountForAttributes2 = makeAggregateAttributeForTuneData2(childrenAtt);
+         List<AttributeEstimator> childrenRBCCounts = makeRBCCounts(childrenAtt);
+         List<List<Histogram>> valueIndexCountForAttributes = makeAggregateAttributeForTuneData(childrenAtt);
+         List<AttributeEstimator> childrenRBCCounts2 = makeRBCCounts2(childrenAtt);
+         List<List<Histogram>> valueIndexCountForAttributes2 = makeAggregateAttributeForTuneData2(childrenAtt);
          
          cPropertyTree.expand(n, childrenAtt, childrenRBCCounts, childrenRBCCounts2, valueIndexCountForAttributes, valueIndexCountForAttributes2);
 
@@ -124,11 +124,11 @@ public class ClassifierGuidedFeatureCrawler {
                if (!node.isOpen()) return;
                
                cSubRBC.addAttributeCounts(node.getRBCCount());
-               List<ValueIndexCount> valueIndexCountForTuneInstances = node.getValueIndexCountForTuneInstances();
+               List<Histogram> valueIndexCountForTuneInstances = node.getValueIndexCountForTuneInstances();
                cTuneAggInstances.addAttribute(valueIndexCountForTuneInstances);
 
                cSubRBC2.addAttributeCounts(node.getRBCCount2());
-               List<ValueIndexCount> valueIndexCountForTuneInstances2 = node.getValueIndexCountForTuneInstances2();
+               List<Histogram> valueIndexCountForTuneInstances2 = node.getValueIndexCountForTuneInstances2();
                cTuneAggInstances2.addAttribute(valueIndexCountForTuneInstances2);
 
                
@@ -261,38 +261,38 @@ public class ClassifierGuidedFeatureCrawler {
       return allAttributes;
    }
    
-   private List<ClassValueCount> makeRBCCounts(List<RbcAttribute> childrenAtt) throws RDFDatabaseException {
-      List<ClassValueCount> allCounts = CollectionUtil.makeList();
+   private List<AttributeEstimator> makeRBCCounts(List<RbcAttribute> childrenAtt) throws RDFDatabaseException {
+      List<AttributeEstimator> allCounts = CollectionUtil.makeList();
       for (RbcAttribute att : childrenAtt) {
-         ClassValueCount counts = cSubRBC.getCounts(att);
+         AttributeEstimator counts = cSubRBC.getCounts(att);
          allCounts.add(counts);
       }
       return allCounts;
    }
 
-   private List<List<ValueIndexCount>> makeAggregateAttributeForTuneData(List<RbcAttribute> childrenAtt) throws RDFDatabaseException {
-      List<List<ValueIndexCount>> indexCountForAttribute = CollectionUtil.makeList();
+   private List<List<Histogram>> makeAggregateAttributeForTuneData(List<RbcAttribute> childrenAtt) throws RDFDatabaseException {
+      List<List<Histogram>> indexCountForAttribute = CollectionUtil.makeList();
       for (RbcAttribute att : childrenAtt) {
-         List<ValueIndexCount> indexCounts = InstanceAggregator.aggregateAttributeForInstances(mTuneData, cTuneAggInstances.getURIs(), att);
+         List<Histogram> indexCounts = InstanceAggregator.aggregateAttributeForInstances(mTuneData, cTuneAggInstances.getURIs(), att);
          indexCountForAttribute.add(indexCounts);
          System.out.println(att.getPropertyChain());
       }
       return indexCountForAttribute;
    }
 
-   private List<ClassValueCount> makeRBCCounts2(List<RbcAttribute> childrenAtt) throws RDFDatabaseException {
-      List<ClassValueCount> allCounts = CollectionUtil.makeList();
+   private List<AttributeEstimator> makeRBCCounts2(List<RbcAttribute> childrenAtt) throws RDFDatabaseException {
+      List<AttributeEstimator> allCounts = CollectionUtil.makeList();
       for (RbcAttribute att : childrenAtt) {
-         ClassValueCount counts = cSubRBC2.getCounts(att);
+         AttributeEstimator counts = cSubRBC2.getCounts(att);
          allCounts.add(counts);
       }
       return allCounts;
    }
 
-   private List<List<ValueIndexCount>> makeAggregateAttributeForTuneData2(List<RbcAttribute> childrenAtt) throws RDFDatabaseException {
-      List<List<ValueIndexCount>> indexCountForAttribute = CollectionUtil.makeList();
+   private List<List<Histogram>> makeAggregateAttributeForTuneData2(List<RbcAttribute> childrenAtt) throws RDFDatabaseException {
+      List<List<Histogram>> indexCountForAttribute = CollectionUtil.makeList();
       for (RbcAttribute att : childrenAtt) {
-         List<ValueIndexCount> indexCounts = InstanceAggregator.aggregateAttributeForInstances(mSubtrainData, cTuneAggInstances2.getURIs(), att);
+         List<Histogram> indexCounts = InstanceAggregator.aggregateAttributeForInstances(mSubtrainData, cTuneAggInstances2.getURIs(), att);
          indexCountForAttribute.add(indexCounts);
          System.out.println(att.getPropertyChain());
       }

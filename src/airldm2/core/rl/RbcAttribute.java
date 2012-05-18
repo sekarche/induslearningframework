@@ -6,6 +6,12 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 import org.openrdf.model.URI;
 
+import airldm2.classifiers.rl.estimator.AttributeEstimator;
+import airldm2.classifiers.rl.estimator.CategoryEstimator;
+import airldm2.classifiers.rl.estimator.ExponentialEstimator;
+import airldm2.classifiers.rl.estimator.MultinomialEstimator;
+import airldm2.core.rl.NumericType.Distribution;
+
 /**
  * 
  *  A place holder for an attributes of interest in Relational Bayesian Classifier
@@ -15,17 +21,6 @@ import org.openrdf.model.URI;
  * @version $Date: $
  */
 public class RbcAttribute {
-   /****
-    * A vector of URI specifying relations starting with the targetType. 
-    * The final URI has range as a data type (literal, numbers)
-    * The initial URI is assumed to be targetType
-    *  TODO : Currently not namespace aware
-    */
-   
-   /**
-    * Enum specifying how to aggregate values for a 1->n relationship
-    */
-   public enum ValueAggregator { NONE, HISTOGRAM, COUNT, AVG, MIN, MAX }
    
    private String mName;
    private ValueType mValueType;
@@ -49,15 +44,15 @@ public class RbcAttribute {
       return mGraph;
    }
 
-   public ValueAggregator getAggregatorType(){
+   public ValueAggregator getAggregatorType() {
       return mAggregatorType;
    }
    
-   public URI getHierarchyRoot(){
+   public URI getHierarchyRoot() {
       return mHierarchyRoot;
    }
    
-   public ValueType getValueType(){
+   public ValueType getValueType() {
       return mValueType;
    }
    
@@ -66,7 +61,29 @@ public class RbcAttribute {
    }
    
    public int getDomainSize() {
-      return getValueType().domainSize();
+      return ((DiscreteType) getValueType()).domainSize();
+   }
+
+   public AttributeEstimator getEstimator() {
+      if (getValueType() instanceof DiscreteType) {
+         if (getAggregatorType() == ValueAggregator.HISTOGRAM) {
+            return new MultinomialEstimator(this);
+         } else {
+            return new CategoryEstimator(this);
+         }
+      } else {
+         NumericType nt = (NumericType) getValueType();
+         Distribution dist = nt.getDist();
+         if (dist == Distribution.EXPONENTIAL) {
+            return new ExponentialEstimator(this);
+         } else if (dist == Distribution.GAUSSIAN) {
+            
+         } else if (dist == Distribution.POISSON) {
+            
+         }
+      }
+      
+      return null;
    }
 
    @Override

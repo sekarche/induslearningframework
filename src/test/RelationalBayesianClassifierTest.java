@@ -1,6 +1,5 @@
 package test;
 
-import java.util.Arrays;
 import java.util.List;
 
 import org.junit.Assert;
@@ -9,9 +8,12 @@ import org.junit.Test;
 
 import weka.classifiers.evaluation.ConfusionMatrix;
 import airldm2.classifiers.Evaluation;
-import airldm2.classifiers.rl.ClassCount;
-import airldm2.classifiers.rl.ClassValueCount;
 import airldm2.classifiers.rl.RelationalBayesianClassifier;
+import airldm2.classifiers.rl.estimator.AttributeEstimator;
+import airldm2.classifiers.rl.estimator.ClassEstimator;
+import airldm2.classifiers.rl.estimator.ExponentialEstimator;
+import airldm2.classifiers.rl.estimator.Histogram;
+import airldm2.classifiers.rl.estimator.MultinomialEstimator;
 import airldm2.core.LDInstances;
 import airldm2.core.SSDataSource;
 import airldm2.core.rl.RDFDataDescriptor;
@@ -41,35 +43,66 @@ public class RelationalBayesianClassifierTest {
       RelationalBayesianClassifier rbc = new RelationalBayesianClassifier();
       rbc.buildClassifier(trainInstances);
       
-      List<ClassValueCount> counts = rbc.getCountsForTest();
-      List<ClassValueCount> expected = Arrays.asList(new ClassValueCount[] {
-               new ClassValueCount(new double[][]{ {1, 1, 3}, {0, 1, 0}, {0, 3, 0} }),
-               new ClassValueCount(new double[][]{ {0, 2, 0}, {2, 0, 0}, {0, 1, 0} }),
-               new ClassValueCount(new double[][]{ {0, 1, 1, 0}, {0, 0, 0, 1}, {0, 0, 0, 0} }),
-               new ClassValueCount(new double[][]{ {0, 2, 0, 0}, {1, 0, 0, 0}, {0, 0, 0, 0} }),
-               new ClassValueCount(new double[][]{ {0, 1, 0, 1}, {0, 0, 0, 1}, {0, 0, 0, 0} }),
-            });
-      for (int i = 0; i < expected.size(); i++) {
-         System.out.println(counts.get(i));
-         Assert.assertEquals(expected.get(i), counts.get(i));
-      }
-         
-      List<ClassCount> attributeClassCounts = rbc.getAttributeClassCountsForTest();
-      List<ClassCount> attExpected = Arrays.asList(new ClassCount[] {
-            new ClassCount(new double[]{5, 1, 3}),
-            new ClassCount(new double[]{2, 2, 1}),
-            new ClassCount(new double[]{2, 1, 0}),
-            new ClassCount(new double[]{2, 1, 0}),
-            new ClassCount(new double[]{2, 1, 0}),
+      List<AttributeEstimator> counts = rbc.getCountsForTest();
+      Assert.assertEquals(5, counts.size());
+            
+      Histogram[][] expectedValueHistograms = new Histogram[][] {
+            Histogram.makeArray(new double[][]{ {1, 1, 3}, {0, 1, 0}, {0, 3, 0} }),
+            Histogram.makeArray(new double[][]{ {0, 2, 0}, {2, 0, 0}, {0, 1, 0} }),
+            Histogram.makeArray(new double[][]{ {0, 1, 1, 0}, {0, 0, 0, 1}, {0, 0, 0, 0} }),
+            Histogram.makeArray(new double[][]{ {0, 2, 0, 0}, {1, 0, 0, 0}, {0, 0, 0, 0} }),
+            Histogram.makeArray(new double[][]{ {0, 1, 0, 1}, {0, 0, 0, 1}, {0, 0, 0, 0} }),
+         };
+      Histogram[] expectedClassHistograms = Histogram.makeArray(new double[][]{
+            {5, 1, 3},
+            {2, 2, 1},
+            {2, 1, 0},
+            {2, 1, 0},
+            {2, 1, 0},
          });
-      for (int i = 0; i < attExpected.size(); i++) {
-         Assert.assertEquals(attExpected.get(i), attributeClassCounts.get(i));
+      
+      for (int i = 0; i < counts.size(); i++) {
+         MultinomialEstimator estimator = (MultinomialEstimator) counts.get(i);
+         Histogram[] valueHistograms = estimator.getValueHistogramsForTest();
+         Histogram classHistogram = estimator.getClassHistogramForTest();
+         
+         Assert.assertArrayEquals(expectedValueHistograms[i], valueHistograms);
+         Assert.assertEquals(expectedClassHistograms[i], classHistogram);
       }
+               
+      ClassEstimator classEst = rbc.getClassCountsForTest();
+      Assert.assertEquals(new Histogram(new double[] {2, 2, 1}), classEst.getClassHistogram());
+      Assert.assertEquals(5, classEst.getNumInstances());
+   }
+   
+   @Test
+   public void testSmall2WithExactCounts() throws Exception {
+      RDFDataDescriptor desc = RDFDataDescriptorParser.parse("rbc_example/smallDesc2.txt");
       
-      ClassCount classCounts = rbc.getClassCountsForTest();
-      Assert.assertEquals(new ClassCount(new double[] {2, 2, 1}), classCounts);
+      RDFDatabaseConnection conn = RDFDatabaseConnectionFactory.makeFromConfig();
+      //named RDF graph that stores all training triples 
+      SSDataSource trainSource = new RDFDataSource(conn, desc, ":small");
+      LDInstances trainInstances = new LDInstances();
+      trainInstances.setDesc(desc);
+      trainInstances.setDataSource(trainSource);
+   
+      RelationalBayesianClassifier rbc = new RelationalBayesianClassifier();
+      rbc.buildClassifier(trainInstances);
       
-      Assert.assertEquals(5, rbc.getNumInstances());
+      List<AttributeEstimator> counts = rbc.getCountsForTest();
+      Assert.assertEquals(2, counts.size());
+            
+      Histogram[] expectedValueHistograms = new Histogram[] {
+            new Histogram(new double[]{ 5, 1, 3 }),
+            new Histogram(new double[]{ 100, 100, 0 }),
+         };
+      
+      for (int i = 0; i < counts.size(); i++) {
+         ExponentialEstimator estimator = (ExponentialEstimator) counts.get(i);
+         Histogram valueHistograms = estimator.getValueSumsForTest();
+         
+         Assert.assertEquals(expectedValueHistograms[i], valueHistograms);
+      }
    }
    
    @Test

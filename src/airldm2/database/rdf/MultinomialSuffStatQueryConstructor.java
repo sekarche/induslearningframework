@@ -3,10 +3,10 @@ package airldm2.database.rdf;
 import static airldm2.util.StringUtil.angleBracket;
 import static airldm2.util.StringUtil.triple;
 import airldm2.core.rl.RDFDataDescriptor;
-import airldm2.core.rl.RbcAttribute.ValueAggregator;
+import airldm2.core.rl.ValueAggregator;
 
 
-public class SuffStatQueryConstructor extends QueryConstructor {
+public class MultinomialSuffStatQueryConstructor extends QueryConstructor {
 
    private static final String AGGREGATION_VAR = "?agg";
    private static final String CONTEXT_PATTERN = "%context%";
@@ -46,7 +46,7 @@ public class SuffStatQueryConstructor extends QueryConstructor {
       
    private SuffStatQueryParameter mParam;
    
-   public SuffStatQueryConstructor(RDFDataDescriptor desc, String context, SuffStatQueryParameter queryParam) {
+   public MultinomialSuffStatQueryConstructor(RDFDataDescriptor desc, String context, SuffStatQueryParameter queryParam) {
       super(desc, context);
       mParam = queryParam;
    }
@@ -56,10 +56,7 @@ public class SuffStatQueryConstructor extends QueryConstructor {
       if (mParam.hasFeature()) {
          ValueAggregator featureAggType = mParam.Feature.getAggregatorType();
          
-         if (featureAggType == ValueAggregator.AVG ||
-               featureAggType == ValueAggregator.COUNT ||
-               featureAggType == ValueAggregator.MAX ||
-               featureAggType == ValueAggregator.MIN) {
+         if (ValueAggregator.isNumericOutput(featureAggType)) {
             query = QUERY_WITH_AGGREGATION_FEATURE
                .replace(CONTEXT_PATTERN, mContextPart)
                .replace(AGGREGATION_FUNCTION_PATTERN, featureAggType.toString())

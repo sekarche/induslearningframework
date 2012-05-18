@@ -9,7 +9,6 @@
 @attribute isSuccess
 NOMINAL=YES,NO
 aggregator=NONE
-hierarchyRoot=
 {
 ?x <http://www.examplecompany.org/isSuccess> ?a .
 }
@@ -17,7 +16,6 @@ hierarchyRoot=
 @attribute teamManagers
 ENUM=http://www.examplecompany.org/Manager,http://www.examplecompany.org/Non-Manager
 aggregator=HISTOGRAM
-hierarchyRoot=
 {
 ?x <http://www.examplecompany.org/hasTeam> ?p1 .
 ?p1 a ?p2 .
@@ -25,9 +23,9 @@ hierarchyRoot=
 }
 
 @attribute teamAge
-BINNED=20,30,40,50
+NUMERIC=
 aggregator=AVG
-hierarchyRoot=
+numbericEstimator=BINNED:20,30,40,50
 {
 ?x <http://www.examplecompany.org/hasTeam> ?p1 .
 ?p1 <http://www.examplecompany.org/hasAge> ?a .
@@ -36,7 +34,6 @@ hierarchyRoot=
 @attribute teamGender
 NOMINAL=female,male
 aggregator=HISTOGRAM
-hierarchyRoot=
 {
 ?x <http://www.examplecompany.org/hasTeam> ?p1 .
 ?p1 <http://www.examplecompany.org/hasSex> ?a .

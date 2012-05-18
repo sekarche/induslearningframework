@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.openrdf.model.URI;
 
+import airldm2.classifiers.rl.estimator.AttributeValue;
 import airldm2.util.CollectionUtil;
 
 public class AggregatedInstances {
@@ -28,11 +29,11 @@ public class AggregatedInstances {
       return mInstances;
    }
 
-   public void addAttribute(List<ValueIndexCount> indexCounts) {
+   public void addAttribute(List<AttributeValue> values) {
       for (int i = 0; i < mInstances.size(); i++) {
          AggregatedInstance instance = mInstances.get(i);
-         ValueIndexCount indexCount = indexCounts.get(i);
-         instance.addAttribute(indexCount);
+         AttributeValue value = values.get(i);
+         instance.addAttribute(value);
       }
    }
    

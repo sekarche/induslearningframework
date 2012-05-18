@@ -6,35 +6,34 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 import org.openrdf.model.URI;
 
+import airldm2.classifiers.rl.estimator.AttributeValue;
+import airldm2.classifiers.rl.estimator.Category;
 import airldm2.util.CollectionUtil;
 
 public class AggregatedInstance {
 
    private final URI mURI;
 
-   /* mAttributeValueIndexOrCount[attribute index][value index] = count of value occurrences
-    * If mAggregatorType != INDEPENDENT_VAL, then the sum of counts is exactly 1
-    */
-   private List<ValueIndexCount> mAttributeValueIndexCount;
+   private List<AttributeValue> mAttributeValue;
    
-   private ValueIndexCount mTargetValueIndexCount;
+   private Category mTargetCategory;
 
-   public AggregatedInstance(URI uri, ValueIndexCount targetValueIndexCount) {
+   public AggregatedInstance(URI uri, Category targetCategory) {
       mURI = uri;
-      mTargetValueIndexCount = targetValueIndexCount;
-      mAttributeValueIndexCount = CollectionUtil.makeList();
+      mTargetCategory = targetCategory;
+      mAttributeValue = CollectionUtil.makeList();
    }
 
-   public List<ValueIndexCount> getAttributeValueIndexCount() {
-      return mAttributeValueIndexCount;
+   public List<AttributeValue> getAttributeValues() {
+      return mAttributeValue;
    }
    
-   public void addAttribute(ValueIndexCount count) {
-      mAttributeValueIndexCount.add(count);
+   public void addAttribute(AttributeValue count) {
+      mAttributeValue.add(count);
    }
    
    public void removeLastAttribute() {
-      mAttributeValueIndexCount.remove(mAttributeValueIndexCount.size() - 1);
+      mAttributeValue.remove(mAttributeValue.size() - 1);
    }
 
    public URI getURI() {
@@ -42,13 +41,7 @@ public class AggregatedInstance {
    }
    
    public int getLabel() {
-      for (int i = 0; i < mTargetValueIndexCount.size(); i++) {
-         if (mTargetValueIndexCount.get(i) > 0) {
-            return i;
-         }
-      }
-      
-      return -1;
+      return mTargetCategory.getIndex();
    }
    
    @Override

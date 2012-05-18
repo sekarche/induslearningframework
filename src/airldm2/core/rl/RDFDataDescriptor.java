@@ -127,7 +127,8 @@ public class RDFDataDescriptor implements DataDescriptor {
 
    @Override
    public String[] getClassLabels() {
-      List<String> values = getTargetAttribute().getValueType().getStringValues();
+      DiscreteType valueType = (DiscreteType) getTargetAttribute().getValueType();
+      List<String> values = valueType.getStringValues();
       String[] labels = new String[values.size()];
       values.toArray(labels);
       return labels;

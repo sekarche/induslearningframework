@@ -9,8 +9,9 @@
 % @target attribute_name
 %
 % @attribute name
-% [NOMINAL|ENUM|BINNED|NUMERIC]=[?|values separated by commas|type of distribution for numeric]
+% [NOMINAL|ENUM|NUMERIC]=[?|values separated by commas]
 % aggregator=[NONE|HISTOGRAM|COUNT|SUM|AVG|MIN|MAX]
+% numbericEstimator=[BINNED:values separated by commas|POISSON|EXPONENTIAL|GAUSSIAN]
 % hierarchyRoot=[URI]
 % {
 % Graph pattern
@@ -21,7 +22,7 @@
 %Remark: ? applies to NOMINAL and ENUM only,
 %        in which case a query is posed to retrieve all possible values from the data source
 %
-%Remark: types of distribution for NUMERIC are [POISSON,EXPONENTIAL,GAUSSIAN]
+%Remark: numbericEstimator only applies to COUNT|SUM|AVG|MIN|MAX aggregator, and NONE aggregator with NUMERIC type
 %
 %Remark: If BINNED Option the format is range (of integers) separated by commas
 % Example: 3,5,10

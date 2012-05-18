@@ -11,7 +11,7 @@ import org.openrdf.model.URI;
 import org.openrdf.model.ValueFactory;
 import org.openrdf.model.impl.ValueFactoryImpl;
 
-import airldm2.core.rl.RbcAttribute.ValueAggregator;
+import airldm2.core.rl.NumericType.Distribution;
 import airldm2.exceptions.RDFDataDescriptorFormatException;
 import airldm2.util.StringUtil;
 
@@ -25,7 +25,9 @@ public class RDFDataDescriptorParser {
    public static final String TARGET = "@target ";
    public static final String ATTRIBUTE = "@attribute ";
    public static final String AGGREGATOR = "aggregator=";
+   public static final String ESTIMATOR = "numbericEstimator=";
    public static final String HIERARCHY = "hierarchyRoot=";
+   public static final String BINNED = "BINNED:";
    
    private static ValueFactory Factory = new ValueFactoryImpl();
    private static String InstanceVar;
@@ -55,12 +57,29 @@ public class RDFDataDescriptorParser {
          } else if (line.startsWith(TARGET)) {
             targetAttributeName = line.substring(TARGET.length());
          } else if (line.startsWith(ATTRIBUTE)) {
+            String graphPattern;
+            RbcAttribute attribute;
             String attributeName = line.substring(ATTRIBUTE.length()).trim();
             String valueLine = readContentLine(in);
             String aggregatorLine = readContentLine(in);
+            String estimatorLine = readContentLine(in);
+            if ("{".equals(estimatorLine)) {
+               graphPattern = readContentLines(in, "}");
+               attribute = parseAttribute(attributeName, valueLine, aggregatorLine, null, null, graphPattern);
+               attributes.put(attributeName, attribute);
+               continue;
+            }
+            
             String hierarchyLine = readContentLine(in);
-            String graphPattern = readContentLines(in, "{", "}");
-            RbcAttribute attribute = parseAttribute(attributeName, valueLine, aggregatorLine, hierarchyLine, graphPattern);
+            if ("{".equals(hierarchyLine)) {
+               graphPattern = readContentLines(in, "}");
+               attribute = parseAttribute(attributeName, valueLine, aggregatorLine, estimatorLine, null, graphPattern);
+               attributes.put(attributeName, attribute);
+               continue;
+            }
+            
+            graphPattern = readContentLines(in, "}");
+            attribute = parseAttribute(attributeName, valueLine, aggregatorLine, estimatorLine, hierarchyLine, graphPattern);
             attributes.put(attributeName, attribute);
          }
       }
@@ -91,12 +110,12 @@ public class RDFDataDescriptorParser {
       return null;
    }
    
-   private static String readContentLines(BufferedReader in, String beginLine, String endLine) throws IOException {
+   private static String readContentLines(BufferedReader in, String endLine) throws IOException {
       StringBuilder content = new StringBuilder();
       String line;
       while ((line = in.readLine()) != null) {
          line = line.trim();
-         if (line.startsWith(COMMENT_CHAR) || line.isEmpty() || line.equals(beginLine)) 
+         if (line.startsWith(COMMENT_CHAR) || line.isEmpty()) 
             continue;
          else if (line.equals(endLine))
             return content.toString();
@@ -109,67 +128,99 @@ public class RDFDataDescriptorParser {
       return null;
    }
 
-   private static RbcAttribute parseAttribute(String name, String valueLine, String aggregatorLine, String hierarchyLine, String graphPatternStr) throws RDFDataDescriptorFormatException {
+   private static RbcAttribute parseAttribute(String name, String valueLine, String aggregatorLine, String estimatorLine, String hierarchyLine, String graphPatternStr) throws RDFDataDescriptorFormatException {
       if (!aggregatorLine.startsWith(AGGREGATOR))
          throw new RDFDataDescriptorFormatException("Aggregator is not defined properly: " + aggregatorLine);
       
+      String rawValueType = null;
+      String[] possibleValues = null;
       ValueAggregator aggregator = ValueAggregator.valueOf(aggregatorLine.substring(AGGREGATOR.length()).trim());
+      Distribution dist = null;
+      double[] cutPoints = null;
       
-      ValueType valueType = null;
       String[] valueStrs = StringUtil.trim(valueLine.split("="));
-      if (!"?".equals(valueStrs[1].trim())) {
-         String[] possibleValues = StringUtil.trim(valueStrs[1].split(","));
-         if (BinnedType.NAME.equalsIgnoreCase(valueStrs[0])) {
-            double[] cutPoints = new double[possibleValues.length];
-            for (int i = 0; i < possibleValues.length; i++) {
-               cutPoints[i] = Double.parseDouble(possibleValues[i]);
-            }
-            valueType = new BinnedType(cutPoints);
-            
-            if (aggregator == ValueAggregator.HISTOGRAM) {
-               throw new RDFDataDescriptorFormatException(ValueAggregator.HISTOGRAM + " must be a Nominal type.");
-            }
-         } else if (NominalType.NAME.equalsIgnoreCase(valueStrs[0])) {
-            valueType = new NominalType(Arrays.asList(possibleValues));
-            
-            if (aggregator == ValueAggregator.AVG ||
-                  aggregator == ValueAggregator.COUNT ||
-                  aggregator == ValueAggregator.MAX ||
-                  aggregator == ValueAggregator.MIN) {
-               throw new RDFDataDescriptorFormatException("Aggregator " + aggregator + " can not be a Nominal type.");
-            }
-         } else if (EnumType.NAME.equalsIgnoreCase(valueStrs[0])) {
-            URI[] possibleURIs = new URI[possibleValues.length];
-            for (int i = 0; i < possibleValues.length; i++) {
-               possibleURIs[i] = Factory.createURI(possibleValues[i]);
-            }
-            
-            valueType = new EnumType(Arrays.asList(possibleURIs));
-            
-            if (aggregator == ValueAggregator.AVG ||
-                  aggregator == ValueAggregator.COUNT ||
-                  aggregator == ValueAggregator.MAX ||
-                  aggregator == ValueAggregator.MIN) {
-               throw new RDFDataDescriptorFormatException("Aggregator " + aggregator + " can not be an Enum type.");
+      rawValueType = valueStrs[0];
+      if (valueStrs.length > 1 && !"".equals(valueStrs[1].trim()) && !"?".equals(valueStrs[1].trim())) {
+         possibleValues = StringUtil.trim(valueStrs[1].split(","));
+      }
+      
+      if (estimatorLine != null) {
+         String estimator = estimatorLine.substring(ESTIMATOR.length()).trim();
+         if (estimator.startsWith(BINNED)) {
+            estimator = estimator.substring(BINNED.length());
+            String[] cutPointStrs = StringUtil.trim(estimator.split(","));
+            cutPoints = new double[cutPointStrs.length];
+            for (int i = 0; i < cutPointStrs.length; i++) {
+               cutPoints[i] = Double.parseDouble(cutPointStrs[i]);
             }
          } else {
-            throw new RDFDataDescriptorFormatException("Value type " + valueStrs[0] + " is not supported.");
+            dist = Distribution.valueOf(estimator);
          }
       }
       
-      URI hierarchyRootURI = null;
-      String hierarchy = hierarchyLine.substring(HIERARCHY.length()).trim();
-      if (!hierarchy.isEmpty()) {
-         hierarchyRootURI = Factory.createURI(hierarchy);
+      ValueType valueType = null;
+      if (valueStrs.length == 1 || !"?".equals(valueStrs[1].trim())) {
+         if (ValueAggregator.isNumericOutput(aggregator)) {
+            if (estimatorLine == null) {
+               throw new RDFDataDescriptorFormatException(name + ": Numberic estimator must be specified on a Numeric type or a numerical aggregator.");
+            } else if (aggregator != ValueAggregator.COUNT && !NumericType.NAME.equalsIgnoreCase(rawValueType)) {
+               throw new RDFDataDescriptorFormatException(name + ": Numberic aggregator can not be applied on a non-numeric type.");
+            }
+            
+            if (dist == null) {
+               valueType = new BinnedType(cutPoints);
+            } else {
+               valueType = new NumericType(dist);
+            }
+            
+         } else {
+            if (NominalType.NAME.equalsIgnoreCase(rawValueType)) {
+               if (estimatorLine != null) {
+                  throw new RDFDataDescriptorFormatException(name + ": Numberic estimator can not be applied on a Nominal type.");
+               }
+               
+               valueType = new NominalType(Arrays.asList(possibleValues));
+               
+            } else if (EnumType.NAME.equalsIgnoreCase(rawValueType)) {
+               if (estimatorLine != null) {
+                  throw new RDFDataDescriptorFormatException(name + ": Numberic estimator can not be applied on a Nominal type.");
+               }
+               
+               URI[] possibleURIs = new URI[possibleValues.length];
+               for (int i = 0; i < possibleValues.length; i++) {
+                  possibleURIs[i] = Factory.createURI(possibleValues[i]);
+               }
+               
+               valueType = new EnumType(Arrays.asList(possibleURIs));
+               
+            } else if (NumericType.NAME.equalsIgnoreCase(rawValueType)) {
+               if (aggregator == ValueAggregator.HISTOGRAM) {
+                  throw new RDFDataDescriptorFormatException(name + ": " + ValueAggregator.HISTOGRAM + " can not be applied on a Numeric type.");
+               } else if (estimatorLine == null) {
+                  throw new RDFDataDescriptorFormatException(name + ": Numberic estimator must be specified on a Numeric type.");
+               }
+               
+               if (dist == null) {
+                  valueType = new BinnedType(cutPoints);
+               } else {
+                  valueType = new NumericType(dist);
+               }
+            }
+         }
       }
-      
-      
+            
+      URI hierarchyRootURI = null;
+      if (hierarchyLine != null) {
+         String hierarchy = hierarchyLine.substring(HIERARCHY.length()).trim();
+         if (!hierarchy.isEmpty()) {
+            hierarchyRootURI = Factory.createURI(hierarchy);
+         }
+      }
+
       graphPatternStr = StringUtil.appendAllVarsWith(graphPatternStr, name);
-      
       GraphPattern graphPattern = new GraphPattern(InstanceVar + name, ValueVar + name, HierarchyVar + name, graphPatternStr);
       
       RbcAttribute attribute = new RbcAttribute(name, valueType, aggregator, hierarchyRootURI, graphPattern);
-      
       return attribute;
    }
    
