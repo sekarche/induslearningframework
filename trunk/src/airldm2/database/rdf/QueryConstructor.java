@@ -5,9 +5,9 @@ import static airldm2.util.StringUtil.makeContextPart;
 
 import org.openrdf.model.URI;
 
+import airldm2.core.rl.DiscreteType;
 import airldm2.core.rl.RDFDataDescriptor;
 import airldm2.core.rl.RbcAttribute;
-import airldm2.core.rl.ValueType;
 
 public class QueryConstructor {
 
@@ -29,7 +29,8 @@ public class QueryConstructor {
    }
 
    protected String createValueFilter(RbcAttribute att, int valueIndex, String var) {
-      ValueType valueType = att.getValueType();
+      DiscreteType valueType = (DiscreteType) att.getValueType();
+      
       StringBuilder b = new StringBuilder();
       b.append("FILTER(")
          .append(valueType.makeFilter(var, valueIndex))

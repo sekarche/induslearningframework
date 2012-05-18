@@ -11,22 +11,23 @@ import airldm2.core.SSDataSource;
 import airldm2.database.rdf.AggregationQueryConstructor;
 import airldm2.database.rdf.IndependentValueAggregationQueryConstructor;
 import airldm2.database.rdf.InstanceQueryConstructor;
+import airldm2.database.rdf.MultinomialSuffStatQueryConstructor;
 import airldm2.database.rdf.RDFDatabaseConnection;
 import airldm2.database.rdf.SPARQLQueryResult;
-import airldm2.database.rdf.SuffStatQueryConstructor;
 import airldm2.database.rdf.SuffStatQueryParameter;
+import airldm2.database.rdf.SumSuffStatQueryConstructor;
 import airldm2.database.rdf.ValueQueryConstructor;
 import airldm2.exceptions.RDFDatabaseException;
 import airldm2.exceptions.RTConfigException;
 import airldm2.util.ArrayUtil;
 import airldm2.util.AttribValuePair;
 import explore.database.rdf.CrawlPropertyQueryConstructor;
+import explore.database.rdf.NestedAggregationQueryConstructor;
 import explore.database.rdf.NestedAggregationQueryConstructor.Aggregator;
 import explore.database.rdf.RangeQueryConstructor;
 import explore.database.rdf.RangeSizeQueryConstructor;
 import explore.database.rdf.RangeTypeQueryConstructor;
 import explore.database.rdf.RangeTypeQueryConstructor.RangeType;
-import explore.database.rdf.NestedAggregationQueryConstructor;
 
 public class RDFDataSource implements SSDataSource {
 
@@ -80,14 +81,31 @@ public class RDFDataSource implements SSDataSource {
    public void setRelationName(String relationName) {
    }
 
-   public ISufficentStatistic getSufficientStatistic(SuffStatQueryParameter queryParam) throws RDFDatabaseException {
-      String query = new SuffStatQueryConstructor(mDesc, mDefaultContext, queryParam).createQuery();
+   public ISufficentStatistic getMultinomialSufficientStatistic(SuffStatQueryParameter queryParam) throws RDFDatabaseException {
+      String query = new MultinomialSuffStatQueryConstructor(mDesc, mDefaultContext, queryParam).createQuery();
       System.out.println(query);
       
       SPARQLQueryResult results = mConn.executeQuery(query);
       if (results.isEmpty()) return null;
       ISufficentStatistic stat = new DefaultSufficentStatisticImpl(results.getInt());
       System.out.println(results.getInt());
+      return stat;
+   }
+   
+   public ISufficentStatistic getSumSufficientStatistic(SuffStatQueryParameter queryParam) throws RDFDatabaseException {
+      String query = new SumSuffStatQueryConstructor(mDesc, mDefaultContext, queryParam).createQuery();
+      System.out.println(query);
+      
+      SPARQLQueryResult results = mConn.executeQuery(query);
+      if (results.isEmpty()) return null;
+      
+      ISufficentStatistic stat = null;
+      if (results.isNull()) {
+         stat = new DefaultSufficentStatisticImpl(0.0);
+      } else {
+         stat = new DefaultSufficentStatisticImpl(results.getDouble());
+      }
+      System.out.println(stat.getValue());
       return stat;
    }
 

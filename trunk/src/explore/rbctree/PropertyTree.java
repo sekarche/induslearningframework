@@ -2,8 +2,8 @@ package explore.rbctree;
 
 import java.util.List;
 
-import airldm2.classifiers.rl.ClassValueCount;
-import airldm2.classifiers.rl.ValueIndexCount;
+import airldm2.classifiers.rl.estimator.AttributeEstimator;
+import airldm2.classifiers.rl.estimator.Histogram;
 import airldm2.core.rl.RbcAttribute;
 
 public class PropertyTree {
@@ -29,7 +29,7 @@ public class PropertyTree {
       return v.getCount();
    }
 
-   public void expand(TreeNode n, List<RbcAttribute> childrenAtt, List<ClassValueCount> rbcCounts, List<ClassValueCount> rbcCounts2, List<List<ValueIndexCount>> valueIndexCountForAttributes, List<List<ValueIndexCount>> valueIndexCountForAttributes2) {
+   public void expand(TreeNode n, List<RbcAttribute> childrenAtt, List<AttributeEstimator> rbcCounts, List<AttributeEstimator> rbcCounts2, List<List<Histogram>> valueIndexCountForAttributes, List<List<Histogram>> valueIndexCountForAttributes2) {
       n.expand(childrenAtt, rbcCounts, rbcCounts2, valueIndexCountForAttributes, valueIndexCountForAttributes2);
    }
    

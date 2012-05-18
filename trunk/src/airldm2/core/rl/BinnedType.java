@@ -11,7 +11,7 @@ import airldm2.util.ArrayUtil;
 import airldm2.util.CollectionUtil;
 import airldm2.util.StringUtil;
 
-public class BinnedType implements ValueType {
+public class BinnedType implements DiscreteType {
    
    public static String NAME = "BINNED";
    
@@ -36,7 +36,7 @@ public class BinnedType implements ValueType {
       }
       return mCutPoints.length;
    }
-      
+   
    @Override
    public int domainSize() {
       return mCutPoints.length + 1;

@@ -19,6 +19,11 @@ public class SPARQLQueryResult {
    public boolean isEmpty() {
       return mResult.isEmpty();
    }
+   
+   public boolean isNull() {
+      Value[] rv = mResult.get(0);
+      return rv[0] == null;
+   }
 
    public int getInt() {
       Value[] rv = mResult.get(0);

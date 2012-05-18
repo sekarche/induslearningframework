@@ -9,7 +9,6 @@
 @attribute label
 NOMINAL=A,B,C
 aggregator=NONE
-hierarchyRoot=
 {
 ?x <:small/label> ?a .
 }
@@ -17,43 +16,42 @@ hierarchyRoot=
 @attribute ind
 NOMINAL=i1, i2, i3
 aggregator=HISTOGRAM
-hierarchyRoot=
 {
 ?x <:small/prop1> ?p1 .
 ?p1 <:small/prop2> ?a .
 }
 
 @attribute count
-BINNED=2,4
+NUMERIC=
 aggregator=COUNT
-hierarchyRoot=
+numbericEstimator=BINNED:2,4
 {
 ?x <:small/prop1> ?p1 .
 ?p1 <:small/prop2> ?a .
 }
 
 @attribute avg
-BINNED=15,25,35
+NUMERIC=
 aggregator=AVG
-hierarchyRoot=
+numbericEstimator=BINNED:15,25,35
 {
 ?x <:small/prop1> ?p1 .
 ?p1 <:small/prop3> ?a .
 }
 
 @attribute min
-BINNED=15,25,35
+NUMERIC=
 aggregator=MIN
-hierarchyRoot=
+numbericEstimator=BINNED:15,25,35
 {
 ?x <:small/prop1> ?p1 .
 ?p1 <:small/prop3> ?a .
 }
 
 @attribute max
-BINNED=15,25,35
+NUMERIC=
 aggregator=MAX
-hierarchyRoot=
+numbericEstimator=BINNED:15,25,35
 {
 ?x <:small/prop1> ?p1 .
 ?p1 <:small/prop3> ?a .

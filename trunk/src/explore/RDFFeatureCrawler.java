@@ -15,7 +15,7 @@ import airldm2.core.rl.RDFDataDescriptor;
 import airldm2.core.rl.RDFDataDescriptorParser;
 import airldm2.core.rl.RDFDataSource;
 import airldm2.core.rl.RbcAttribute;
-import airldm2.core.rl.RbcAttribute.ValueAggregator;
+import airldm2.core.rl.ValueAggregator;
 import airldm2.core.rl.ValueType;
 import airldm2.database.rdf.SPARQLQueryResult;
 import airldm2.exceptions.RDFDataDescriptorFormatException;

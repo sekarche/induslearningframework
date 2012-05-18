@@ -18,7 +18,7 @@ import airldm2.core.rl.RDFDataDescriptor;
 import airldm2.core.rl.RDFDataDescriptorParser;
 import airldm2.core.rl.RDFDataSource;
 import airldm2.core.rl.RbcAttribute;
-import airldm2.core.rl.RbcAttribute.ValueAggregator;
+import airldm2.core.rl.ValueAggregator;
 import airldm2.core.rl.ValueType;
 import airldm2.database.rdf.SPARQLQueryResult;
 import airldm2.database.rdf.SuffStatQueryParameter;
@@ -201,7 +201,7 @@ public class MIGuidedFeatureCrawler {
       for (int c = 0; c < counts.length; c++) {
          for (int a = 0; a < counts[0].length; a++) {
             SuffStatQueryParameter queryParam = new SuffStatQueryParameter(cDesc.getTargetType(), targetAttribute, c, att, a);
-            ISufficentStatistic tempSuffStat = mDataSource.getSufficientStatistic(queryParam);
+            ISufficentStatistic tempSuffStat = mDataSource.getMultinomialSufficientStatistic(queryParam);
             counts[c][a] += tempSuffStat.getValue().intValue();
          }
       }

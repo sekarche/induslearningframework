@@ -56,7 +56,7 @@ public class RDFFeatureSelector {
       for (int c = 0; c < counts.length; c++) {
          for (int a = 0; a < counts[0].length; a++) {
             SuffStatQueryParameter queryParam = new SuffStatQueryParameter(cDesc.getTargetType(), targetAttribute, c, att, a);
-            ISufficentStatistic tempSuffStat = mDataSource.getSufficientStatistic(queryParam);
+            ISufficentStatistic tempSuffStat = mDataSource.getMultinomialSufficientStatistic(queryParam);
             counts[c][a] += tempSuffStat.getValue().intValue();
          }
       }

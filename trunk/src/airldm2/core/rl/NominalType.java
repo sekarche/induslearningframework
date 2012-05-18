@@ -8,7 +8,7 @@ import org.openrdf.model.Value;
 
 import airldm2.util.StringUtil;
 
-public class NominalType implements ValueType {
+public class NominalType implements DiscreteType {
 
    public static String NAME = "NOMINAL";
    

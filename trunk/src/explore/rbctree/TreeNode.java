@@ -2,8 +2,8 @@ package explore.rbctree;
 
 import java.util.List;
 
-import airldm2.classifiers.rl.ClassValueCount;
-import airldm2.classifiers.rl.ValueIndexCount;
+import airldm2.classifiers.rl.estimator.AttributeEstimator;
+import airldm2.classifiers.rl.estimator.Histogram;
 import airldm2.core.rl.PropertyChain;
 import airldm2.core.rl.RbcAttribute;
 import airldm2.util.CollectionUtil;
@@ -14,21 +14,21 @@ public class TreeNode {
    private List<TreeNode> mChildren;
    
    private RbcAttribute mAttribute;
-   private ClassValueCount mRBCCount;
-   private ClassValueCount mRBCCount2;
+   private AttributeEstimator mRBCCount;
+   private AttributeEstimator mRBCCount2;
 
    private boolean isOpen;
    private double mScore;
    private int mDepth;
-   private List<ValueIndexCount> mValueIndexCountForTuneInstances;
-   private List<ValueIndexCount> mValueIndexCountForTuneInstances2;
+   private List<Histogram> mValueIndexCountForTuneInstances;
+   private List<Histogram> mValueIndexCountForTuneInstances2;
     
    public TreeNode() {
       mChildren = CollectionUtil.makeList();
       isOpen = true;
    }
    
-   public TreeNode(RbcAttribute att, ClassValueCount rbcCount, ClassValueCount rbcCount2, List<ValueIndexCount> valueIndexCounts, List<ValueIndexCount> valueIndexCounts2) {
+   public TreeNode(RbcAttribute att, AttributeEstimator rbcCount, AttributeEstimator rbcCount2, List<Histogram> valueIndexCounts, List<Histogram> valueIndexCounts2) {
       this();
       mAttribute = att;
       mRBCCount = rbcCount;
@@ -53,13 +53,13 @@ public class TreeNode {
       return mAttribute.getPropertyChain();
    }
 
-   public void expand(List<RbcAttribute> childrenAtt, List<ClassValueCount> rbcCounts, List<ClassValueCount> rbcCounts2, List<List<ValueIndexCount>> valueIndexCountForAttributes, List<List<ValueIndexCount>> valueIndexCountForAttributes2) {
+   public void expand(List<RbcAttribute> childrenAtt, List<AttributeEstimator> rbcCounts, List<AttributeEstimator> rbcCounts2, List<List<Histogram>> valueIndexCountForAttributes, List<List<Histogram>> valueIndexCountForAttributes2) {
       for (int i = 0; i < childrenAtt.size(); i++) {
          RbcAttribute att = childrenAtt.get(i);
-         ClassValueCount rbcCount = rbcCounts.get(i);
-         List<ValueIndexCount> valueIndexCounts = valueIndexCountForAttributes.get(i);
-         ClassValueCount rbcCount2 = rbcCounts2.get(i);
-         List<ValueIndexCount> valueIndexCounts2 = valueIndexCountForAttributes2.get(i);
+         AttributeEstimator rbcCount = rbcCounts.get(i);
+         List<Histogram> valueIndexCounts = valueIndexCountForAttributes.get(i);
+         AttributeEstimator rbcCount2 = rbcCounts2.get(i);
+         List<Histogram> valueIndexCounts2 = valueIndexCountForAttributes2.get(i);
          TreeNode child = new TreeNode(att, rbcCount, rbcCount2, valueIndexCounts, valueIndexCounts2);
          child.mParent = this;
          child.mDepth = mDepth + 1;
@@ -93,19 +93,19 @@ public class TreeNode {
       mScore = v;
    }
 
-   public ClassValueCount getRBCCount() {
+   public AttributeEstimator getRBCCount() {
       return mRBCCount;
    }
    
-   public List<ValueIndexCount> getValueIndexCountForTuneInstances() {
+   public List<Histogram> getValueIndexCountForTuneInstances() {
       return mValueIndexCountForTuneInstances;
    }
 
-   public ClassValueCount getRBCCount2() {
+   public AttributeEstimator getRBCCount2() {
       return mRBCCount2;
    }
    
-   public List<ValueIndexCount> getValueIndexCountForTuneInstances2() {
+   public List<Histogram> getValueIndexCountForTuneInstances2() {
       return mValueIndexCountForTuneInstances2;
    }
 
