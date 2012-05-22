@@ -94,7 +94,7 @@ public class RemoteRBCClassifier {
       testInstances.setDataSource(testSource);
       
       //Build RBC
-      RelationalBayesianClassifier rbc = new RelationalBayesianClassifier();
+      RBClassifier rbc = new RBClassifier();
       rbc.buildClassifier(trainInstances);
       
       //Classify

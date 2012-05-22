@@ -11,7 +11,7 @@ import weka.core.Matrix;
 import airldm2.classifiers.Evaluation;
 import airldm2.classifiers.rl.AggregatedInstances;
 import airldm2.classifiers.rl.InstanceAggregator;
-import airldm2.classifiers.rl.RelationalBayesianClassifier;
+import airldm2.classifiers.rl.RBClassifier;
 import airldm2.classifiers.rl.estimator.AttributeEstimator;
 import airldm2.classifiers.rl.estimator.Histogram;
 import airldm2.core.LDInstances;
@@ -44,9 +44,9 @@ public class ClassifierGuidedFeatureCrawler {
    private final LDInstances mTuneInstances;
    
    private RDFDataDescriptor cDesc;
-   private RelationalBayesianClassifier cRBC;
-   private RelationalBayesianClassifier cSubRBC;
-   private RelationalBayesianClassifier cSubRBC2;
+   private RBClassifier cRBC;
+   private RBClassifier cSubRBC;
+   private RBClassifier cSubRBC2;
    private AggregatedInstances cTuneAggInstances;
    private AggregatedInstances cTuneAggInstances2;
    private PropertyTree cPropertyTree;
@@ -66,11 +66,11 @@ public class ClassifierGuidedFeatureCrawler {
       mSubtrainInstances.setDesc(cDesc);
       mTuneInstances.setDesc(cDesc);
       //Empty classifier to initialize data source and descriptor
-      cRBC = new RelationalBayesianClassifier();
+      cRBC = new RBClassifier();
       cRBC.buildClassifier(trainInstances);
-      cSubRBC = new RelationalBayesianClassifier();
+      cSubRBC = new RBClassifier();
       cSubRBC.buildClassifier(mSubtrainInstances);
-      cSubRBC2 = new RelationalBayesianClassifier();
+      cSubRBC2 = new RBClassifier();
       cSubRBC2.buildClassifier(mTuneInstances);
       cTuneAggInstances = InstanceAggregator.init(mTuneInstances);
       cTuneAggInstances2 = InstanceAggregator.init(mSubtrainInstances);
@@ -81,15 +81,15 @@ public class ClassifierGuidedFeatureCrawler {
       mExclusion = exclusion;
    }
 
-   public RelationalBayesianClassifier crawlAndWriteDesc(String outDescFile, int crawlSize) throws Exception {
-      RelationalBayesianClassifier rbc = crawl(crawlSize);
+   public RBClassifier crawlAndWriteDesc(String outDescFile, int crawlSize) throws Exception {
+      RBClassifier rbc = crawl(crawlSize);
       BufferedWriter out = new BufferedWriter(new FileWriter(outDescFile));
       cDesc.write(out);
       out.close();
       return rbc;
    }
    
-   public RelationalBayesianClassifier crawl(int crawlSize) throws Exception {
+   public RBClassifier crawl(int crawlSize) throws Exception {
       while (cDesc.getNonTargetAttributeCount() < crawlSize) {
          TreeNode n = cPropertyTree.getNextNodeToExpand();
          if (n == null) break;

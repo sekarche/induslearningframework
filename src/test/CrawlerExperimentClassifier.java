@@ -20,7 +20,7 @@ import virtuoso.sesame2.driver.VirtuosoRepository;
 import weka.classifiers.evaluation.ConfusionMatrix;
 import weka.core.Matrix;
 import airldm2.classifiers.Evaluation;
-import airldm2.classifiers.rl.RelationalBayesianClassifier;
+import airldm2.classifiers.rl.RBClassifier;
 import airldm2.core.LDInstances;
 import airldm2.core.rl.RDFDataDescriptor;
 import airldm2.core.rl.RDFDataDescriptorParser;
@@ -74,7 +74,7 @@ public class CrawlerExperimentClassifier {
          out.write("" + n); out.newLine();
          
          String desc = "exp_movie/moviesDescFilled_RBC" + n + ".txt";
-         RelationalBayesianClassifier rbc = crawler.crawlAndWriteDesc(desc, n);
+         RBClassifier rbc = crawler.crawlAndWriteDesc(desc, n);
          
          //Test
          ConfusionMatrix mat = test(desc, rbc);
@@ -87,7 +87,7 @@ public class CrawlerExperimentClassifier {
       out.close();
    }
    
-   private ConfusionMatrix test(String descFile, RelationalBayesianClassifier rbc) throws Exception {
+   private ConfusionMatrix test(String descFile, RBClassifier rbc) throws Exception {
       RDFDataDescriptor desc = RDFDataDescriptorParser.parse(descFile);
       //System.out.println(desc);
       
@@ -150,7 +150,7 @@ public class CrawlerExperimentClassifier {
          for (int i = 0; i < STEPS; i++) {
             int n = (i+1) * STEP_SIZE;
             String desc = "exp_census/censusDescFilled_RBC" + n + "_" + c + ".txt";
-            RelationalBayesianClassifier rbc = crawler.crawlAndWriteDesc(desc, n);
+            RBClassifier rbc = crawler.crawlAndWriteDesc(desc, n);
             
             //Test
             ConfusionMatrix mat = test(desc, rbc);

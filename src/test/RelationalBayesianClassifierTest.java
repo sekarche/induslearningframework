@@ -8,7 +8,7 @@ import org.junit.Test;
 
 import weka.classifiers.evaluation.ConfusionMatrix;
 import airldm2.classifiers.Evaluation;
-import airldm2.classifiers.rl.RelationalBayesianClassifier;
+import airldm2.classifiers.rl.RBClassifier;
 import airldm2.classifiers.rl.estimator.AttributeEstimator;
 import airldm2.classifiers.rl.estimator.ClassEstimator;
 import airldm2.classifiers.rl.estimator.ExponentialEstimator;
@@ -40,7 +40,7 @@ public class RelationalBayesianClassifierTest {
       trainInstances.setDesc(desc);
       trainInstances.setDataSource(trainSource);
    
-      RelationalBayesianClassifier rbc = new RelationalBayesianClassifier();
+      RBClassifier rbc = new RBClassifier();
       rbc.buildClassifier(trainInstances);
       
       List<AttributeEstimator> counts = rbc.getCountsForTest();
@@ -86,7 +86,7 @@ public class RelationalBayesianClassifierTest {
       trainInstances.setDesc(desc);
       trainInstances.setDataSource(trainSource);
    
-      RelationalBayesianClassifier rbc = new RelationalBayesianClassifier();
+      RBClassifier rbc = new RBClassifier();
       rbc.buildClassifier(trainInstances);
       
       List<AttributeEstimator> counts = rbc.getCountsForTest();
@@ -146,7 +146,7 @@ public class RelationalBayesianClassifierTest {
       trainInstances.setDesc(desc);
       trainInstances.setDataSource(trainSource);
    
-      RelationalBayesianClassifier rbc = new RelationalBayesianClassifier();
+      RBClassifier rbc = new RBClassifier();
       rbc.buildClassifier(trainInstances);
    }
    
@@ -167,7 +167,7 @@ public class RelationalBayesianClassifierTest {
       testInstances.setDesc(desc);
       testInstances.setDataSource(testSource);
    
-      RelationalBayesianClassifier rbc = new RelationalBayesianClassifier();
+      RBClassifier rbc = new RBClassifier();
       
       ConfusionMatrix matrix = Evaluation.evaluateRBCModel(rbc, trainInstances, testInstances);
       System.out.println(matrix.toString("===Confusion Matrix==="));
@@ -192,7 +192,7 @@ public class RelationalBayesianClassifierTest {
       testInstances.setDesc(desc);
       testInstances.setDataSource(testSource);
    
-      RelationalBayesianClassifier rbc = new RelationalBayesianClassifier();
+      RBClassifier rbc = new RBClassifier();
       
       ConfusionMatrix matrix = Evaluation.evaluateRBCModel(rbc, trainInstances, testInstances);
       System.out.println(matrix.toString("===Confusion Matrix==="));

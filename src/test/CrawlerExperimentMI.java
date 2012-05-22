@@ -20,7 +20,7 @@ import virtuoso.sesame2.driver.VirtuosoRepository;
 import weka.classifiers.evaluation.ConfusionMatrix;
 import weka.core.Matrix;
 import airldm2.classifiers.Evaluation;
-import airldm2.classifiers.rl.RelationalBayesianClassifier;
+import airldm2.classifiers.rl.RBClassifier;
 import airldm2.core.LDInstances;
 import airldm2.core.SSDataSource;
 import airldm2.core.rl.RDFDataDescriptor;
@@ -69,7 +69,7 @@ public class CrawlerExperimentMI {
             crawler.crawl(desc, n, n);
             
             //Train
-            RelationalBayesianClassifier rbc = train(desc, trainSPARQL, graph);
+            RBClassifier rbc = train(desc, trainSPARQL, graph);
             
             //Test
             ConfusionMatrix mat = test(desc, rbc, testSPARQL, graph);
@@ -132,7 +132,7 @@ public class CrawlerExperimentMI {
                crawler.crawl(desc, n, n);
                
                //Train
-               RelationalBayesianClassifier rbc = train(desc, SPARQL, GRAPH);
+               RBClassifier rbc = train(desc, SPARQL, GRAPH);
                
                //Add Test states
                addStates(stateURIs, testBegin, testEnd);
@@ -206,7 +206,7 @@ public class CrawlerExperimentMI {
       return states;
    }
 
-   private RelationalBayesianClassifier train(String descFile, String sparql, String graph) throws Exception {
+   private RBClassifier train(String descFile, String sparql, String graph) throws Exception {
       RDFDataDescriptor desc = RDFDataDescriptorParser.parse(descFile);
       
       RDFDatabaseConnection trainConn = new VirtuosoConnection(sparql);
@@ -216,13 +216,13 @@ public class CrawlerExperimentMI {
       trainInstances.setDesc(desc);
       trainInstances.setDataSource(trainSource);
    
-      RelationalBayesianClassifier rbc = new RelationalBayesianClassifier();
+      RBClassifier rbc = new RBClassifier();
       rbc.buildClassifier(trainInstances);
       
       return rbc;
    }
    
-   private ConfusionMatrix test(String descFile, RelationalBayesianClassifier rbc, String sparql, String graph) throws Exception {
+   private ConfusionMatrix test(String descFile, RBClassifier rbc, String sparql, String graph) throws Exception {
       RDFDataDescriptor desc = RDFDataDescriptorParser.parse(descFile);
       //System.out.println(desc);
       

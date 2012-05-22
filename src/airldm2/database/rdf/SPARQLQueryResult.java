@@ -16,6 +16,10 @@ public class SPARQLQueryResult {
       this.mResult = result;
    }
    
+   public List<Value[]> getValueTupleList() {
+      return mResult;
+   }
+   
    public boolean isEmpty() {
       return mResult.isEmpty();
    }
