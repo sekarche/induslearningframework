@@ -55,5 +55,6 @@
 	<classpathentry kind="lib" path="lib/apache/httpclient/commons-httpclient-3.1.jar"/>
 	<classpathentry kind="lib" path="lib/apache/httpclient/commons-logging-1.1.1.jar"/>
 	<classpathentry kind="lib" path="lib/jena-2.6.4/jena-2.6.4.jar"/>
+	<classpathentry kind="lib" path="lib/jgrapht/jgrapht-jdk1.6.jar"/>
 	<classpathentry kind="output" path="classes"/>
 </classpath>

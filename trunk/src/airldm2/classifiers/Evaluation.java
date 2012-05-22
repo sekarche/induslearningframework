@@ -6,7 +6,7 @@ import weka.core.Utils;
 import airldm2.classifiers.rl.AggregatedInstance;
 import airldm2.classifiers.rl.AggregatedInstances;
 import airldm2.classifiers.rl.InstanceAggregator;
-import airldm2.classifiers.rl.RelationalBayesianClassifier;
+import airldm2.classifiers.rl.RBClassifier;
 import airldm2.core.LDInstances;
 import airldm2.core.LDTestInstances;
 import airldm2.core.SSDataSource;
@@ -161,7 +161,7 @@ public class Evaluation {
       System.out.println("      Context URI specifying the named RDF graph of test instances");
    }
    
-   public static ConfusionMatrix evaluateRBCModel(RelationalBayesianClassifier rbc, String[] options) throws Exception {
+   public static ConfusionMatrix evaluateRBCModel(RBClassifier rbc, String[] options) throws Exception {
       String descFile = Utils.getOption("desc", options);
       String trainGraph = Utils.getOption("trainGraph", options);
       String testGraph = Utils.getOption("testGraph", options);
@@ -197,7 +197,7 @@ public class Evaluation {
       return evaluateRBCModel(rbc, trainInstances, testInstances);
    }
    
-   public static ConfusionMatrix evaluateRBCModel(RelationalBayesianClassifier rbc, LDInstances trainInstances, LDInstances testInstances) throws Exception {
+   public static ConfusionMatrix evaluateRBCModel(RBClassifier rbc, LDInstances trainInstances, LDInstances testInstances) throws Exception {
       RDFDataDescriptor desc = (RDFDataDescriptor) trainInstances.getDesc();
       String[] classLabels = desc.getClassLabels();
       ConfusionMatrix wekaConfusionMatrix = new ConfusionMatrix(classLabels);
@@ -218,13 +218,13 @@ public class Evaluation {
       return wekaConfusionMatrix;
    }
    
-   public static ConfusionMatrix evaluateBuiltRBCModel(RelationalBayesianClassifier rbc, LDInstances testInstances) throws Exception {
+   public static ConfusionMatrix evaluateBuiltRBCModel(RBClassifier rbc, LDInstances testInstances) throws Exception {
       RDFDataDescriptor desc = (RDFDataDescriptor) testInstances.getDesc();
       AggregatedInstances aggregatedInstances = InstanceAggregator.aggregateAll(testInstances);
       return evaluateBuiltRBCModel(rbc, desc, aggregatedInstances);
    }
 
-   public static ConfusionMatrix evaluateBuiltRBCModel(RelationalBayesianClassifier rbc, RDFDataDescriptor desc, AggregatedInstances aggregatedInstances) throws Exception {
+   public static ConfusionMatrix evaluateBuiltRBCModel(RBClassifier rbc, RDFDataDescriptor desc, AggregatedInstances aggregatedInstances) throws Exception {
       String[] classLabels = desc.getClassLabels();
       ConfusionMatrix wekaConfusionMatrix = new ConfusionMatrix(classLabels);
 

@@ -1,10 +1,12 @@
 package airldm2.core.rl;
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.openrdf.model.URI;
 import org.openrdf.model.Value;
 
+import airldm2.classifiers.rl.ontology.TBox;
 import airldm2.core.DefaultSufficentStatisticImpl;
 import airldm2.core.ISufficentStatistic;
 import airldm2.core.SSDataSource;
@@ -197,6 +199,24 @@ public class RDFDataSource implements SSDataSource {
       
       SPARQLQueryResult results = mConn.executeQuery(query);
       return results.getDouble();
+   }
+
+   public TBox getTBox() throws RDFDatabaseException {
+      TBox tBox = new TBox();
+      
+      String query = "SELECT ?x1 ?x2 WHERE { ?x1 rdfs:subClassOf ?x2 . ";
+      System.out.println(query);
+      SPARQLQueryResult results = mConn.executeQuery(query);
+      List<Value[]> valueTupleList = results.getValueTupleList();
+      for (Value[] vs : valueTupleList) {
+         if (vs[0] instanceof URI && vs[1] instanceof URI) {
+            tBox.addSubclass((URI) vs[0], (URI) vs[1]);
+         } else {
+            System.out.println(Arrays.toString(vs));
+         }
+      }
+      
+      return tBox;
    }
    
 }

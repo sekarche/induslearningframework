@@ -3,12 +3,13 @@ package airldm2.classifiers.rl;
 import java.util.Arrays;
 import java.util.List;
 
-import weka.classifiers.evaluation.ConfusionMatrix;
 import airldm2.classifiers.Classifier;
-import airldm2.classifiers.Evaluation;
 import airldm2.classifiers.rl.estimator.AttributeEstimator;
 import airldm2.classifiers.rl.estimator.AttributeValue;
 import airldm2.classifiers.rl.estimator.ClassEstimator;
+import airldm2.classifiers.rl.ontology.Cut;
+import airldm2.classifiers.rl.ontology.GlobalCut;
+import airldm2.classifiers.rl.ontology.TBox;
 import airldm2.core.LDInstance;
 import airldm2.core.LDInstances;
 import airldm2.core.rl.RDFDataDescriptor;
@@ -17,11 +18,14 @@ import airldm2.core.rl.RbcAttribute;
 import airldm2.util.ArrayUtil;
 import airldm2.util.CollectionUtil;
 
-public class RelationalBayesianClassifier extends Classifier {
+public class OntologyRBClassifier extends Classifier {
 
    private RDFDataSource mDataSource;
    private RDFDataDescriptor mDataDesc;
-
+   private TBox mTBox;
+   
+   private GlobalCut mGlobalCut;
+   
    private int mNumOfClassLabels;
    
    //[attribute name][class value][attribute value]
@@ -44,6 +48,39 @@ public class RelationalBayesianClassifier extends Classifier {
       
       mClassEst = new ClassEstimator();
       mClassEst.estimateParameters(mDataSource, mDataDesc);
+      
+      mTBox = mDataSource.getTBox();
+      mGlobalCut = new GlobalCut(mTBox, nonTargetAttributes);
+      
+      double bestScore = Double.MIN_VALUE;
+      while (true) {
+         double currentBestScore = Double.MIN_VALUE;
+         GlobalCut currentBestGlobalCut = null;
+         
+         for (RbcAttribute att : nonTargetAttributes) {
+            Cut attCut = mGlobalCut.getCut(att);
+            if (attCut == null) continue;
+            
+            for (Cut attRefinement : attCut.refine()) {
+               GlobalCut globalCut = mGlobalCut.copy();
+               globalCut.replace(att, attRefinement);
+               //estimate parameters
+               //compute CMDL
+               double score = 0;
+               if (score > currentBestScore) {
+                  currentBestScore = score;
+                  currentBestGlobalCut = globalCut;
+               }
+            }
+         }         
+         
+         if (currentBestScore > bestScore) {
+            bestScore = currentBestScore;
+            mGlobalCut = currentBestGlobalCut;
+         } else {
+            break;
+         }
+      }
       
       for (int i = 0; i < numAttributes; i++) {
          RbcAttribute att = nonTargetAttributes.get(i);
@@ -96,17 +133,6 @@ public class RelationalBayesianClassifier extends Classifier {
    
    public ClassEstimator getClassCountsForTest() {
       return mClassEst;
-   }
-   
-   public static void main(String[] args) {
-      try {
-         RelationalBayesianClassifier rbc = new RelationalBayesianClassifier();
-         ConfusionMatrix matrix = Evaluation.evaluateRBCModel(rbc, args);
-         System.out.println(matrix.toString("===Confusion Matrix==="));
-      } catch (Exception e) {
-         System.out.println(e.getMessage());
-         e.printStackTrace();
-      }
    }
    
 }
