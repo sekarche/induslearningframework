@@ -64,6 +64,16 @@ public class RbcAttribute {
       return ((DiscreteType) getValueType()).domainSize();
    }
 
+   public boolean isHierarchicalHistogram() {
+      return mValueType == null
+         && mAggregatorType == ValueAggregator.HISTOGRAM
+         && mHierarchyRoot != null;
+   }
+      
+   public RbcAttribute extendWithHierarchy(URI node) {
+      return new RbcAttribute(mName, mValueType, mAggregatorType, mHierarchyRoot, mGraph.extendWithHierarchy(node));
+   }
+   
    public AttributeEstimator getEstimator() {
       if (getValueType() instanceof DiscreteType) {
          if (getAggregatorType() == ValueAggregator.HISTOGRAM) {
@@ -77,9 +87,9 @@ public class RbcAttribute {
          if (dist == Distribution.EXPONENTIAL) {
             return new ExponentialEstimator(this);
          } else if (dist == Distribution.GAUSSIAN) {
-            
+            throw new UnsupportedOperationException(Distribution.GAUSSIAN + " not yet implemented.");
          } else if (dist == Distribution.POISSON) {
-            
+            throw new UnsupportedOperationException(Distribution.POISSON + " not yet implemented.");
          }
       }
       

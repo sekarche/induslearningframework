@@ -6,6 +6,7 @@ import weka.core.Utils;
 import airldm2.classifiers.rl.AggregatedInstance;
 import airldm2.classifiers.rl.AggregatedInstances;
 import airldm2.classifiers.rl.InstanceAggregator;
+import airldm2.classifiers.rl.OntologyRBClassifier;
 import airldm2.classifiers.rl.RBClassifier;
 import airldm2.core.LDInstances;
 import airldm2.core.LDTestInstances;
@@ -242,4 +243,25 @@ public class Evaluation {
       return wekaConfusionMatrix;
    }
 
+   public static ConfusionMatrix evaluateOntologyRBCModel(OntologyRBClassifier rbc, LDInstances trainInstances, LDInstances testInstances) throws Exception {
+      RDFDataDescriptor desc = (RDFDataDescriptor) trainInstances.getDesc();
+      String[] classLabels = desc.getClassLabels();
+      ConfusionMatrix wekaConfusionMatrix = new ConfusionMatrix(classLabels);
+
+      rbc.buildClassifier(trainInstances);
+      AggregatedInstances aggregatedInstances = InstanceAggregator.aggregateAll(testInstances);
+      for (AggregatedInstance i : aggregatedInstances.getInstances()) {
+         double[] distribution = rbc.distributionForInstance(i);
+         double actual = i.getLabel();
+         // return some error message if the class label is not according to the descriptor
+         if (actual == -1) {
+            System.err.println("Please check the class label of test instances match their description");
+            continue;
+         }
+         wekaConfusionMatrix.addPrediction(new NominalPrediction(actual, distribution));
+      }
+      
+      return wekaConfusionMatrix;
+   }
+   
 }

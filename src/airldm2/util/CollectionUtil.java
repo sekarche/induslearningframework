@@ -23,6 +23,10 @@ public class CollectionUtil {
 		return new HashSet<T>();
 	}
 	
+	public static <T> Set<T> makeSet(Collection<T> as) {
+      return new HashSet<T>(as);
+   }
+	
 	public static <K,V> Map<K,V> makeMap() {
 		return new HashMap<K,V>();
 	}

@@ -23,11 +23,7 @@ public class RBClassifier extends Classifier {
    private RDFDataDescriptor mDataDesc;
 
    private int mNumOfClassLabels;
-   
-   //[attribute name][class value][attribute value]
    private List<AttributeEstimator> mAttributeEst;
-   
-   //[class value]
    private ClassEstimator mClassEst;
       
    @Override
@@ -39,9 +35,7 @@ public class RBClassifier extends Classifier {
       List<RbcAttribute> nonTargetAttributes = mDataDesc.getNonTargetAttributeList();
       int numAttributes = nonTargetAttributes.size();
 
-      // [attribute name][class label][attribute value]
       mAttributeEst = CollectionUtil.makeList();
-      
       mClassEst = new ClassEstimator();
       mClassEst.estimateParameters(mDataSource, mDataDesc);
       

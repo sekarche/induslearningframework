@@ -23,7 +23,7 @@ import airldm2.database.rdf.RDFDatabaseConnection;
 import airldm2.database.rdf.RDFDatabaseConnectionFactory;
 import airldm2.database.rdf.VirtuosoConnection;
 
-public class RelationalBayesianClassifierTest {
+public class RBClassifierTest {
    
    @Before
    public void setUp() {

@@ -30,6 +30,7 @@ import explore.database.rdf.RangeQueryConstructor;
 import explore.database.rdf.RangeSizeQueryConstructor;
 import explore.database.rdf.RangeTypeQueryConstructor;
 import explore.database.rdf.RangeTypeQueryConstructor.RangeType;
+import explore.database.rdf.SubclassQueryConstructor;
 
 public class RDFDataSource implements SSDataSource {
 
@@ -204,7 +205,7 @@ public class RDFDataSource implements SSDataSource {
    public TBox getTBox() throws RDFDatabaseException {
       TBox tBox = new TBox();
       
-      String query = "SELECT ?x1 ?x2 WHERE { ?x1 rdfs:subClassOf ?x2 . ";
+      String query = new SubclassQueryConstructor(mDefaultContext).createQuery();
       System.out.println(query);
       SPARQLQueryResult results = mConn.executeQuery(query);
       List<Value[]> valueTupleList = results.getValueTupleList();
@@ -212,10 +213,11 @@ public class RDFDataSource implements SSDataSource {
          if (vs[0] instanceof URI && vs[1] instanceof URI) {
             tBox.addSubclass((URI) vs[0], (URI) vs[1]);
          } else {
-            System.out.println(Arrays.toString(vs));
+            System.err.println(Arrays.toString(vs));
          }
       }
       
+      tBox.computeClosure();
       return tBox;
    }
    
