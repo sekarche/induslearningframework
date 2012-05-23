@@ -25,7 +25,7 @@ public class RDFDataDescriptorParser {
    public static final String TARGET = "@target ";
    public static final String ATTRIBUTE = "@attribute ";
    public static final String AGGREGATOR = "aggregator=";
-   public static final String ESTIMATOR = "numbericEstimator=";
+   public static final String ESTIMATOR = "numericEstimator=";
    public static final String HIERARCHY = "hierarchyRoot=";
    public static final String BINNED = "BINNED:";
    
@@ -38,7 +38,7 @@ public class RDFDataDescriptorParser {
       InstanceVar = null;
       ValueVar = null;
       HierarchyVar = null;
-      
+
       URI targetType = null;
       String targetAttributeName = null;
       Map<String,RbcAttribute> attributes = new LinkedHashMap<String,RbcAttribute>();
@@ -62,22 +62,16 @@ public class RDFDataDescriptorParser {
             String attributeName = line.substring(ATTRIBUTE.length()).trim();
             String valueLine = readContentLine(in);
             String aggregatorLine = readContentLine(in);
-            String estimatorLine = readContentLine(in);
-            if ("{".equals(estimatorLine)) {
-               graphPattern = readContentLines(in, "}");
-               attribute = parseAttribute(attributeName, valueLine, aggregatorLine, null, null, graphPattern);
-               attributes.put(attributeName, attribute);
-               continue;
+            String estimatorLine = null;
+            String hierarchyLine = null;
+            while ((line = readContentLine(in)) != null) {
+               if ("{".equals(line)) break;
+               if (line.startsWith(ESTIMATOR)) {
+                  estimatorLine = line;
+               } else if (line.startsWith(HIERARCHY)) {
+                  hierarchyLine = line;
+               }
             }
-            
-            String hierarchyLine = readContentLine(in);
-            if ("{".equals(hierarchyLine)) {
-               graphPattern = readContentLines(in, "}");
-               attribute = parseAttribute(attributeName, valueLine, aggregatorLine, estimatorLine, null, graphPattern);
-               attributes.put(attributeName, attribute);
-               continue;
-            }
-            
             graphPattern = readContentLines(in, "}");
             attribute = parseAttribute(attributeName, valueLine, aggregatorLine, estimatorLine, hierarchyLine, graphPattern);
             attributes.put(attributeName, attribute);

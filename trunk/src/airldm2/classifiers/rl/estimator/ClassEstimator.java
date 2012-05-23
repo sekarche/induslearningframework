@@ -6,6 +6,7 @@ import airldm2.core.rl.RDFDataSource;
 import airldm2.core.rl.RbcAttribute;
 import airldm2.database.rdf.SuffStatQueryParameter;
 import airldm2.exceptions.RDFDatabaseException;
+import airldm2.util.MathUtil;
 
 
 public class ClassEstimator {
@@ -25,14 +26,28 @@ public class ClassEstimator {
       }
       mClassHistogram = new Histogram(classCounts);
       
-      for (int i = 0; i < numOfClassLabels; i++) {
-         mNumInstances += (int) classCounts[i];
-      }
+      mNumInstances = (int) mClassHistogram.sum();
    }
    
    public double computeLikelihood(int classIndex) {
       //With Laplace correction
       return (double)(mClassHistogram.get(classIndex) + 1.0) / (mNumInstances + mClassHistogram.size());
+   }
+   
+   public double computeLL() {
+      double result = 0.0;
+      for (int j = 0; j < mClassHistogram.size(); j++) {
+         result += mClassHistogram.get(j) * MathUtil.lg(mClassHistogram.get(j) / mNumInstances);
+      }
+      return result;
+   }
+   
+   public double computeDualLL() {
+      double result = 0.0;
+      for (int j = 0; j < mClassHistogram.size(); j++) {
+         result += mClassHistogram.get(j) * MathUtil.lg((mNumInstances - mClassHistogram.get(j)) / mNumInstances);
+      }
+      return result;
    }
    
    public Histogram getClassHistogram() {

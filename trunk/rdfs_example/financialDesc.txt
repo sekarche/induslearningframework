@@ -2,15 +2,44 @@
 @value_var a
 @hierarchy_var z
 
-@targetType <http://data.linkedmdb.org/resource/movie/film>
+@targetType http://:financial/vocab/resource/loan
 
-@target loan
+@target loanStatus
 
-@attribute loan
-NOMINAL=
+@attribute loanStatus
+NOMINAL=A,B
 aggregator=NONE
-hierarchy=<http://data.linkedmdb.org/resource/movie/film>
-RBCOptimize=true
 {
+?x <http://lisp.vse.cz/pkdd99/vocab/resource/loan_status> ?a .
+}
 
+@attribute loanAmount
+NUMERIC=
+aggregator=NONE
+numericEstimator=EXPONENTIAL
+{
+?x <http://lisp.vse.cz/pkdd99/vocab/resource/loan_amount> ?a .
+}
+
+@attribute transType
+ENUM=?
+aggregator=HISTOGRAM
+hierarchyRoot=http://:financial/vocab/resource/trans
+{
+?x <http://lisp.vse.cz/pkdd99/vocab/resource/loan_account_id> ?id .
+?t <http://lisp.vse.cz/pkdd99/vocab/resource/trans_account_id> ?id .
+?t a ?z .
+FILTER(?z=?a)
+}
+
+@attribute transAmount
+NUMERIC=
+aggregator=SUM
+numericEstimator=EXPONENTIAL
+hierarchyRoot=http://:financial/vocab/resource/trans
+{
+?x <http://lisp.vse.cz/pkdd99/vocab/resource/loan_account_id> ?id .
+?t <http://lisp.vse.cz/pkdd99/vocab/resource/trans_account_id> ?id .
+?t a ?z .
+?t <http://lisp.vse.cz/pkdd99/vocab/resource/trans_amount> ?a .
 }

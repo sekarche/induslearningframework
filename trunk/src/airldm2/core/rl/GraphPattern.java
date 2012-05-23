@@ -1,5 +1,7 @@
 package airldm2.core.rl;
 
+import org.openrdf.model.URI;
+
 public class GraphPattern {
 
    private String mInstanceVar;
@@ -15,19 +17,24 @@ public class GraphPattern {
    }
 
    public String getInstanceVar() {
-      return mInstanceVar;
+      return "?" + mInstanceVar;
    }
    
    public String getValueVar() {
-      return mValueVar;
+      return "?" + mValueVar;
    }
    
    public String getHierarchyVar() {
-      return mHierarchyVar;
+      return "?" + mHierarchyVar;
    }
    
    public String getPattern() {
       return mPattern;
+   }
+   
+   public GraphPattern extendWithHierarchy(URI node) {
+      String filter = " FILTER(" + getHierarchyVar() + " = <" + node + ">) ";
+      return new GraphPattern(mInstanceVar, mValueVar, mHierarchyVar, mPattern + filter);
    }
    
    @Override

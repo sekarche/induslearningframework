@@ -60,15 +60,15 @@ public class RDFDataDescriptor implements DataDescriptor {
    }
 
    public String getInstanceVar() {
-      return mInstanceVar;
+      return "?" + mInstanceVar;
    }
    
    public String getValueVar() {
-      return mValueVar;
+      return "?" + mValueVar;
    }
    
    public String getHierarchyVar() {
-      return mHierarchyVar;
+      return "?" + mHierarchyVar;
    }
    
    public URI getTargetType() {

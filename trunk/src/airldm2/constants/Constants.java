@@ -26,4 +26,6 @@ public final class Constants {
    /* String representation of the quote charcter */
    public static final String SQL_DATA_QUOTE_CHAR = "'";
 
+   public static final double EPSILON = 0.000001;
+   
 }

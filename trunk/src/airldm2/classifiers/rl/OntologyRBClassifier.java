@@ -2,11 +2,17 @@ package airldm2.classifiers.rl;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import airldm2.classifiers.Classifier;
 import airldm2.classifiers.rl.estimator.AttributeEstimator;
 import airldm2.classifiers.rl.estimator.AttributeValue;
 import airldm2.classifiers.rl.estimator.ClassEstimator;
+import airldm2.classifiers.rl.estimator.OntologyAttributeEstimator;
+import airldm2.classifiers.rl.estimator.OntologyMultinomialEstimator;
+import airldm2.classifiers.rl.estimator.SetAttributeEstimator;
+import airldm2.classifiers.rl.estimator.SingleAttributeEstimator;
 import airldm2.classifiers.rl.ontology.Cut;
 import airldm2.classifiers.rl.ontology.GlobalCut;
 import airldm2.classifiers.rl.ontology.TBox;
@@ -17,6 +23,7 @@ import airldm2.core.rl.RDFDataSource;
 import airldm2.core.rl.RbcAttribute;
 import airldm2.util.ArrayUtil;
 import airldm2.util.CollectionUtil;
+import airldm2.util.MathUtil;
 
 public class OntologyRBClassifier extends Classifier {
 
@@ -28,8 +35,7 @@ public class OntologyRBClassifier extends Classifier {
    
    private int mNumOfClassLabels;
    
-   //[attribute name][class value][attribute value]
-   private List<AttributeEstimator> mAttributeEst;
+   private Map<RbcAttribute,OntologyAttributeEstimator> mAttributeEst;
    
    //[class value]
    private ClassEstimator mClassEst;
@@ -43,53 +49,122 @@ public class OntologyRBClassifier extends Classifier {
       List<RbcAttribute> nonTargetAttributes = mDataDesc.getNonTargetAttributeList();
       int numAttributes = nonTargetAttributes.size();
 
-      // [attribute name][class label][attribute value]
-      mAttributeEst = CollectionUtil.makeList();
-      
       mClassEst = new ClassEstimator();
       mClassEst.estimateParameters(mDataSource, mDataDesc);
       
       mTBox = mDataSource.getTBox();
       mGlobalCut = new GlobalCut(mTBox, nonTargetAttributes);
       
+      //Initialize
+      mAttributeEst = CollectionUtil.makeMap();
+      for (int i = 0; i < numAttributes; i++) {
+         RbcAttribute att = nonTargetAttributes.get(i);
+         OntologyAttributeEstimator est = null;
+         if (att.getHierarchyRoot() == null) {
+            est = new SingleAttributeEstimator(att);
+         } else if (att.isHierarchicalHistogram()) {
+            est = new OntologyMultinomialEstimator(att);
+         } else {
+            est = new SetAttributeEstimator(att);
+         }
+         est.setCut(mGlobalCut.getCut(att));
+         est.estimateParameters(mDataSource, mDataDesc, mClassEst);
+         mAttributeEst.put(att, est);
+      }
+      
+      System.out.println("Global Cut:");
+      System.out.println(mGlobalCut);
+      System.out.println("Estimators:");
+      System.out.println(mAttributeEst.values());
+      
+      //Greedy search global cut
       double bestScore = Double.MIN_VALUE;
       while (true) {
-         double currentBestScore = Double.MIN_VALUE;
-         GlobalCut currentBestGlobalCut = null;
+         double newBestScore = Double.MIN_VALUE;
+         GlobalCut newBestGlobalCut = null;
          
          for (RbcAttribute att : nonTargetAttributes) {
             Cut attCut = mGlobalCut.getCut(att);
             if (attCut == null) continue;
+            OntologyAttributeEstimator est = mAttributeEst.get(att);
             
             for (Cut attRefinement : attCut.refine()) {
                GlobalCut globalCut = mGlobalCut.copy();
                globalCut.replace(att, attRefinement);
-               //estimate parameters
-               //compute CMDL
-               double score = 0;
-               if (score > currentBestScore) {
-                  currentBestScore = score;
-                  currentBestGlobalCut = globalCut;
+               est.setCut(attRefinement);
+               est.estimateParameters(mDataSource, mDataDesc, mClassEst);
+               double score = computeCMDL();
+               if (score > newBestScore) {
+                  newBestScore = score;
+                  newBestGlobalCut = globalCut;
                }
             }
+            est.setCut(attCut);
          }         
          
-         if (currentBestScore > bestScore) {
-            bestScore = currentBestScore;
-            mGlobalCut = currentBestGlobalCut;
+         if (newBestScore > bestScore) {
+            bestScore = newBestScore;
+            mGlobalCut = newBestGlobalCut;
+            
+            System.out.println("Global Cut:");
+            System.out.println(mGlobalCut);
+            
+            System.out.println("Estimators:");
+            System.out.println(mAttributeEst.values());
+            updateEstimatorCuts(mGlobalCut);
          } else {
             break;
          }
       }
-      
-      for (int i = 0; i < numAttributes; i++) {
-         RbcAttribute att = nonTargetAttributes.get(i);
-         AttributeEstimator estimator = att.getEstimator();
-         estimator.estimateParameters(mDataSource, mDataDesc, mClassEst);
-         mAttributeEst.add(estimator);
-      }
    }
    
+   private void updateEstimatorCuts(GlobalCut globalCut) {
+      for (Entry<RbcAttribute, OntologyAttributeEstimator> entry : mAttributeEst.entrySet()) {
+         RbcAttribute key = entry.getKey();
+         OntologyAttributeEstimator est = entry.getValue();
+         Cut cut = mGlobalCut.getCut(key);
+         est.setCut(cut);
+      }
+   }
+
+   private double computeCMDL() {
+      //return computeLL() - computeSizePenalty();
+      double CLL = computeCLL();
+      double sizePenalty = computeSizePenalty();
+      System.out.println("CLL=" + CLL + " sizePenalty=" + sizePenalty);
+      return CLL - sizePenalty;
+   }
+
+   private double computeSizePenalty() {
+      return mGlobalCut.size() * mNumOfClassLabels * MathUtil.lg(mClassEst.getNumInstances()) / 2.0;
+   }
+
+   private double computeLL() {
+      double result = mClassEst.computeLL();
+      for (OntologyAttributeEstimator est : mAttributeEst.values()) {
+         result += est.computeLL();
+      }
+      return result;
+   }
+   
+   private double computeDualLL() {
+      double result = mClassEst.computeDualLL();
+      for (OntologyAttributeEstimator est : mAttributeEst.values()) {
+         result += est.computeDualLL();
+      }
+      return result;
+   }
+
+   private double computeCLL() {
+      final double PI2 = Math.PI * Math.PI;
+      final double ALPHA = (PI2 + 6) / 24;
+      final double BETA = (PI2 - 18) / 24;
+      double LL = computeLL();
+      double DualLL = computeDualLL();
+      System.out.println("LL=" + LL + " DualLL=" + DualLL);
+      return ALPHA * LL + BETA * DualLL;
+   }
+
    @Override
    public double classifyInstance(LDInstance instance) throws Exception {
       return 0;
@@ -127,7 +202,7 @@ public class OntologyRBClassifier extends Classifier {
       return dist;
    }
 
-   public List<AttributeEstimator> getCountsForTest() {
+   public Map<RbcAttribute,OntologyAttributeEstimator> getCountsForTest() {
       return mAttributeEst;
    }
    

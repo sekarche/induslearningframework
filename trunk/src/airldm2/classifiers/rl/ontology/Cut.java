@@ -23,6 +23,14 @@ public class Cut {
       mCut = cut;
    }
    
+   public List<URI> get() {
+      return mCut;
+   }
+   
+   public int size() {
+      return mCut.size();
+   }
+   
    public List<Cut> refine() {
       List<Cut> refinements = CollectionUtil.makeList();
       for (int i = 0; i < mCut.size(); i++) {
@@ -38,5 +46,9 @@ public class Cut {
       
       return refinements;
    }
-   
+
+   @Override
+   public String toString() {
+      return mCut.toString();
+   }
 }
