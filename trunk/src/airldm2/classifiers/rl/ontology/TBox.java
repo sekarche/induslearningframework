@@ -1,5 +1,6 @@
 package airldm2.classifiers.rl.ontology;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -49,10 +50,14 @@ public class TBox {
    }
    
    public List<URI> getDirectSubclass(URI c) {
+      if (!mSubclass.containsVertex(c)) return Collections.emptyList();
+      
       return Graphs.predecessorListOf(mSubclass, c);
    }
    
    public URI getDirectSuperclass(URI c) {
+      if (!mSubclass.containsVertex(c)) return null;
+      
       List<URI> successors = Graphs.successorListOf(mSubclass, c);
       return successors.get(0);
    }
@@ -62,6 +67,8 @@ public class TBox {
    }
    
    public List<URI> getSuperclasses(URI c) {
+      if (!mSubclassClosed.containsVertex(c)) return Collections.emptyList();
+      
       return Graphs.successorListOf(mSubclassClosed, c);
    }
    
@@ -73,6 +80,16 @@ public class TBox {
          }
       }
       return new Cut(this, leaf);
+   }
+   
+   public List<URI> getLeaves() {
+      List<URI> leaves = CollectionUtil.makeList();
+      for (URI uri : mSubclassClosed.vertexSet()) {
+         if (mSubclassClosed.inDegreeOf(uri) == 0) {
+            leaves.add(uri);
+         }
+      }
+      return leaves;
    }
    
    @Override

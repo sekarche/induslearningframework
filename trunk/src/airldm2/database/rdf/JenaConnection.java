@@ -77,5 +77,10 @@ public class JenaConnection implements RDFDatabaseConnection {
    private BNode convertBNode(com.hp.hpl.jena.rdf.model.Resource resource) {
       return mValueFac.createBNode(resource.getId().getLabelString());
    }
+
+   @Override
+   public void executeUpdate(String query) throws RDFDatabaseException {
+      throw new UnsupportedOperationException();
+   }
   
 }
