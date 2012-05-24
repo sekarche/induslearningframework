@@ -9,6 +9,8 @@ import org.openrdf.query.QueryEvaluationException;
 import org.openrdf.query.QueryLanguage;
 import org.openrdf.query.TupleQuery;
 import org.openrdf.query.TupleQueryResult;
+import org.openrdf.query.Update;
+import org.openrdf.query.UpdateExecutionException;
 import org.openrdf.repository.Repository;
 import org.openrdf.repository.RepositoryConnection;
 import org.openrdf.repository.RepositoryException;
@@ -34,7 +36,25 @@ public class VirtuosoConnection implements RDFDatabaseConnection {
       mRepository.initialize();
       mConn = mRepository.getConnection();
    }
-
+   
+   @Override
+   public void executeUpdate(String query) throws RDFDatabaseException {
+      Update update;
+      try {
+         update = mConn.prepareUpdate(QueryLanguage.SPARQL, query);
+      } catch (RepositoryException e) {
+         throw new RDFDatabaseException(e);
+      } catch (MalformedQueryException e) {
+         throw new RDFDatabaseException(e);
+      }
+      
+      try {
+         update.execute();
+      } catch (UpdateExecutionException e) {
+         throw new RDFDatabaseException(e);
+      }
+   }
+   
    @Override
    public SPARQLQueryResult executeQuery(String query) throws RDFDatabaseException {
       List<Value[]> results = CollectionUtil.makeList();
