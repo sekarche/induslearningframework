@@ -23,6 +23,8 @@ public abstract class AttributeEstimator {
    public abstract double computeLL();
    public abstract double computeDualLL();
    
+   public abstract void mergeWith(AttributeEstimator est);
+   
    @Override
    public String toString() {
       return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE);

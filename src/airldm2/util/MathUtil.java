@@ -8,6 +8,24 @@ import airldm2.classifiers.rl.estimator.Histogram;
 
 public class MathUtil {
    
+   public static double sum(double[] as) {
+      double sum = 0.0;
+      for (int i = 0; i < as.length; i++) {
+         sum += as[i];
+      }
+      return sum;
+   }
+   
+   public static void add(double[] target, double[] source) {
+      if (target.length != source.length) {
+         throw new IllegalArgumentException("Support sizes not equal: " + target.length + " != " + source.length);
+      }
+      
+      for (int i = 0; i < target.length; i++) {
+         target[i] += source[i];
+      }
+   }
+   
    public static double lg(double v) {
       return Math.log(v) / Math.log(2.0);
    }

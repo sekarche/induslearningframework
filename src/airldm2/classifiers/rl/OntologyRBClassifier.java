@@ -1,8 +1,11 @@
 package airldm2.classifiers.rl;
 
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import java.util.Map.Entry;
 
 import airldm2.classifiers.Classifier;
@@ -16,17 +19,21 @@ import airldm2.classifiers.rl.estimator.SingleAttributeEstimator;
 import airldm2.classifiers.rl.ontology.Cut;
 import airldm2.classifiers.rl.ontology.GlobalCut;
 import airldm2.classifiers.rl.ontology.TBox;
+import airldm2.constants.Constants;
 import airldm2.core.LDInstance;
 import airldm2.core.LDInstances;
 import airldm2.core.rl.RDFDataDescriptor;
 import airldm2.core.rl.RDFDataSource;
 import airldm2.core.rl.RbcAttribute;
+import airldm2.exceptions.RTConfigException;
 import airldm2.util.ArrayUtil;
 import airldm2.util.CollectionUtil;
 import airldm2.util.MathUtil;
 
 public class OntologyRBClassifier extends Classifier {
 
+   private boolean OPTIMIZE_ONTOLOGY = false;
+   
    private RDFDataSource mDataSource;
    private RDFDataDescriptor mDataDesc;
    private TBox mTBox;
@@ -40,6 +47,22 @@ public class OntologyRBClassifier extends Classifier {
    //[class value]
    private ClassEstimator mClassEst;
       
+   public OntologyRBClassifier() throws RTConfigException {
+      final Properties defaultProps = new Properties();
+      try {
+         FileInputStream in = new FileInputStream(Constants.CLASSIFIER_PROPERTIES_RESOURCE_PATH);
+         defaultProps.load(in);
+         in.close();
+      } catch (IOException e) {
+         throw new RTConfigException("Error reading " + Constants.CLASSIFIER_PROPERTIES_RESOURCE_PATH, e);
+      }
+      
+      String optimizeOntology = defaultProps.getProperty("RBC.optimizeOntology");
+      if ("true".equalsIgnoreCase(optimizeOntology)) {
+         OPTIMIZE_ONTOLOGY = true;
+      }
+   }
+   
    @Override
    public void buildClassifier(LDInstances instances) throws Exception {
       mDataDesc = (RDFDataDescriptor) instances.getDesc();
@@ -68,8 +91,13 @@ public class OntologyRBClassifier extends Classifier {
             est = new SetAttributeEstimator(att);
          }
          est.setCut(mGlobalCut.getCut(att));
-         est.estimateParameters(mDataSource, mDataDesc, mClassEst);
          mAttributeEst.put(att, est);
+         
+         if (OPTIMIZE_ONTOLOGY) {
+            est.estimateAllParameters(mDataSource, mDataDesc, mClassEst, mTBox);
+         } else {
+            est.estimateParameters(mDataSource, mDataDesc, mClassEst);
+         }
       }
       
       System.out.println("Global Cut:");

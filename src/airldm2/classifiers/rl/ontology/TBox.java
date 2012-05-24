@@ -52,9 +52,32 @@ public class TBox {
       return Graphs.predecessorListOf(mSubclass, c);
    }
    
+   public URI getDirectSuperclass(URI c) {
+      List<URI> successors = Graphs.successorListOf(mSubclass, c);
+      return successors.get(0);
+   }
+   
+   public List<URI> getSiblings(URI c) {
+      return getDirectSubclass(getDirectSuperclass(c));
+   }
+   
+   public List<URI> getSuperclasses(URI c) {
+      return Graphs.successorListOf(mSubclassClosed, c);
+   }
+   
+   public Cut getLeafCut(URI root) {
+      List<URI> leaf = CollectionUtil.makeList();
+      for (URI pred : Graphs.predecessorListOf(mSubclassClosed, root)) {
+         if (mSubclassClosed.inDegreeOf(pred) == 0) {
+            leaf.add(pred);
+         }
+      }
+      return new Cut(this, leaf);
+   }
+   
    @Override
    public String toString() {
       return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE);
    }
-   
+
 }
