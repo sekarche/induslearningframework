@@ -58,6 +58,22 @@ public class MultinomialEstimator extends AttributeEstimator {
    }
 
    @Override
+   public void mergeWith(AttributeEstimator est) {
+      if (!(est instanceof MultinomialEstimator)) {
+         throw new IllegalArgumentException("Expected an MultinomialEstimator but " + est);
+      }
+      
+      MultinomialEstimator otherEst = (MultinomialEstimator) est;
+      
+      for (int i = 0; i < mValueHistograms.length; i++) {
+         mValueHistograms[i].add(otherEst.mValueHistograms[i]);
+      }
+      mClassHistogram.add(otherEst.mClassHistogram);
+      mValueHistogram.add(otherEst.mValueHistogram);
+      mTotal += otherEst.mTotal;
+   }
+
+   @Override
    public double computeLikelihood(int classIndex, AttributeValue v) {
       if (v instanceof Null) return 1.0;
       if (!(v instanceof Histogram)) 

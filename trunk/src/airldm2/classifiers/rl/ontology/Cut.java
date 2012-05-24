@@ -2,6 +2,7 @@ package airldm2.classifiers.rl.ontology;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 import org.openrdf.model.URI;
 
@@ -45,6 +46,22 @@ public class Cut {
       }
       
       return refinements;
+   }
+   
+   public Cut abstractCut() {
+      if (size() <= 1) return null;
+      
+      Set<URI> abstractCut = CollectionUtil.makeSet(mCut);
+      for (URI uri : mCut) {
+         List<URI> siblings = mTBox.getSiblings(uri);
+         if (abstractCut.containsAll(siblings)) {
+            abstractCut.removeAll(siblings);
+            URI sup = mTBox.getDirectSuperclass(uri);
+            abstractCut.add(sup);
+         }
+      }
+      
+      return new Cut(mTBox, CollectionUtil.makeList(abstractCut));
    }
 
    @Override

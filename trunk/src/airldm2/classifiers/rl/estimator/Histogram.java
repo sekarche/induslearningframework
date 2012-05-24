@@ -2,6 +2,8 @@ package airldm2.classifiers.rl.estimator;
 
 import java.util.Arrays;
 
+import airldm2.util.MathUtil;
+
 public class Histogram implements AttributeValue {
    
    //[value index]
@@ -20,11 +22,11 @@ public class Histogram implements AttributeValue {
    }
    
    public double sum() {
-      double sum = 0;
-      for (int i = 0; i < mCount.length; i++) {
-         sum += mCount[i];
-      }
-      return sum;
+      return MathUtil.sum(mCount);
+   }
+
+   public void add(Histogram other) {
+      MathUtil.add(mCount, other.mCount);
    }
    
    public static Histogram make1ofK(int index, int K) {
@@ -52,5 +54,5 @@ public class Histogram implements AttributeValue {
    public String toString() {
       return Arrays.toString(mCount);
    }
-   
+
 }

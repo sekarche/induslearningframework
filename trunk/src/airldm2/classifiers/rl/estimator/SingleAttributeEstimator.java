@@ -1,5 +1,6 @@
 package airldm2.classifiers.rl.estimator;
 
+import airldm2.classifiers.rl.ontology.TBox;
 import airldm2.core.rl.RDFDataDescriptor;
 import airldm2.core.rl.RDFDataSource;
 import airldm2.core.rl.RbcAttribute;
@@ -19,6 +20,11 @@ public class SingleAttributeEstimator extends OntologyAttributeEstimator {
       mEstimator.estimateParameters(source, desc, classEst);
    }
 
+   @Override
+   public void estimateAllParameters(RDFDataSource source, RDFDataDescriptor desc, ClassEstimator classEst, TBox tBox) throws RDFDatabaseException {
+      estimateParameters(source, desc, classEst);
+   }
+   
    @Override
    public double computeLikelihood(int classIndex, AttributeValue v) {
       return mEstimator.computeLikelihood(classIndex, v);

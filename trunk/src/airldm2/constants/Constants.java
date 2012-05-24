@@ -12,6 +12,8 @@ public final class Constants {
    
    public static final String RDFSTORE_PROPERTIES_RESOURCE_PATH = CONFIG_HOME + "rdfstore.properties";
 
+   public static final String CLASSIFIER_PROPERTIES_RESOURCE_PATH = CONFIG_HOME + "classifier.properties";
+
    /* String representing ',' */
    public static final String COMMA = ",";
 

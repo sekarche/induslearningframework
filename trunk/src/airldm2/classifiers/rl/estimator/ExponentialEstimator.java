@@ -13,6 +13,7 @@ public class ExponentialEstimator extends AttributeEstimator {
 
    private Histogram mClassHistogram;
    private int mNumInstances;
+   
    private Histogram mValueSums;
    
    public ExponentialEstimator(RbcAttribute att) {
@@ -36,6 +37,18 @@ public class ExponentialEstimator extends AttributeEstimator {
       mValueSums = new Histogram(valueSums);
    }
 
+   @Override
+   public void mergeWith(AttributeEstimator est) {
+      if (!(est instanceof ExponentialEstimator)) {
+         throw new IllegalArgumentException("Expected an ExponentialEstimator but " + est);
+      }
+      
+      ExponentialEstimator otherEst = (ExponentialEstimator) est;
+      mClassHistogram = otherEst.mClassHistogram;
+      mNumInstances = otherEst.mNumInstances;
+      mValueSums.add(otherEst.mValueSums);
+   }
+   
    @Override
    public double computeLikelihood(int classIndex, AttributeValue v) {
       if (v instanceof Null) return 1.0;
