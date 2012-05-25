@@ -43,6 +43,8 @@ public class RDFDataSource implements SSDataSource {
    private String mDefaultContext;
    private final RDFDataDescriptor mDesc;
 
+   private TBox cTBox;
+   
    public RDFDataSource(RDFDatabaseConnection conn, RDFDataDescriptor desc) {
       this(conn, desc, null);
    }
@@ -208,22 +210,24 @@ public class RDFDataSource implements SSDataSource {
    }
 
    public TBox getTBox() throws RDFDatabaseException {
-      TBox tBox = new TBox();
-      
-      String query = new SubclassQueryConstructor(mDefaultContext).createQuery();
-      Log.info(query);
-      SPARQLQueryResult results = mConn.executeQuery(query);
-      List<Value[]> valueTupleList = results.getValueTupleList();
-      for (Value[] vs : valueTupleList) {
-         if (vs[0] instanceof URI && vs[1] instanceof URI) {
-            tBox.addSubclass((URI) vs[0], (URI) vs[1]);
-         } else {
-            System.err.println(Arrays.toString(vs));
+      if (cTBox == null) {
+         cTBox = new TBox();
+         
+         String query = new SubclassQueryConstructor(mDefaultContext).createQuery();
+         Log.info(query);
+         SPARQLQueryResult results = mConn.executeQuery(query);
+         List<Value[]> valueTupleList = results.getValueTupleList();
+         for (Value[] vs : valueTupleList) {
+            if (vs[0] instanceof URI && vs[1] instanceof URI) {
+               cTBox.addSubclass((URI) vs[0], (URI) vs[1]);
+            } else {
+               System.err.println(Arrays.toString(vs));
+            }
          }
+         
+         cTBox.computeClosure();
       }
-      
-      tBox.computeClosure();
-      return tBox;
+      return cTBox;
    }
    
 }

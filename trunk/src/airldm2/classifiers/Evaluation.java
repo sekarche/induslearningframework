@@ -8,6 +8,7 @@ import airldm2.classifiers.rl.AggregatedInstances;
 import airldm2.classifiers.rl.InstanceAggregator;
 import airldm2.classifiers.rl.OntologyRBClassifier;
 import airldm2.classifiers.rl.RBClassifier;
+import airldm2.classifiers.rl.ontology.GlobalCut;
 import airldm2.core.LDInstances;
 import airldm2.core.LDTestInstances;
 import airldm2.core.SSDataSource;
@@ -249,7 +250,10 @@ public class Evaluation {
       ConfusionMatrix wekaConfusionMatrix = new ConfusionMatrix(classLabels);
 
       rbc.buildClassifier(trainInstances);
-      AggregatedInstances aggregatedInstances = InstanceAggregator.aggregateAll(testInstances);
+      GlobalCut globalCut = rbc.getGlobalCut();
+      
+      AggregatedInstances aggregatedInstances = InstanceAggregator.aggregateAll(testInstances, globalCut);
+      System.out.println(aggregatedInstances);
       for (AggregatedInstance i : aggregatedInstances.getInstances()) {
          double[] distribution = rbc.distributionForInstance(i);
          double actual = i.getLabel();

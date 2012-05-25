@@ -1,6 +1,6 @@
 package airldm2.classifiers.rl;
 
-import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
@@ -8,32 +8,38 @@ import org.openrdf.model.URI;
 
 import airldm2.classifiers.rl.estimator.AttributeValue;
 import airldm2.classifiers.rl.estimator.Category;
+import airldm2.core.rl.RbcAttribute;
 import airldm2.util.CollectionUtil;
 
 public class AggregatedInstance {
 
    private final URI mURI;
 
-   private List<AttributeValue> mAttributeValue;
+   private Map<RbcAttribute, AttributeValue> mAttributeValue;
    
    private Category mTargetCategory;
+   
+   private RbcAttribute cLastAddedAttribute;
 
    public AggregatedInstance(URI uri, Category targetCategory) {
       mURI = uri;
       mTargetCategory = targetCategory;
-      mAttributeValue = CollectionUtil.makeList();
+      mAttributeValue = CollectionUtil.makeMap();
    }
 
-   public List<AttributeValue> getAttributeValues() {
+   public Map<RbcAttribute, AttributeValue> getAttributeValues() {
       return mAttributeValue;
    }
    
-   public void addAttribute(AttributeValue count) {
-      mAttributeValue.add(count);
+   public void addAttribute(RbcAttribute att, AttributeValue value) {
+      mAttributeValue.put(att, value);
+      cLastAddedAttribute = att;
    }
    
    public void removeLastAttribute() {
-      mAttributeValue.remove(mAttributeValue.size() - 1);
+      if (cLastAddedAttribute != null) {
+         mAttributeValue.remove(cLastAddedAttribute);
+      }
    }
 
    public URI getURI() {
@@ -46,7 +52,10 @@ public class AggregatedInstance {
    
    @Override
    public String toString() {
-      return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE);
+      return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
+      .append("mTargetCategory", mTargetCategory)
+      .append("mAttributeValue", mAttributeValue.values())
+      .toString();
    }
    
 }

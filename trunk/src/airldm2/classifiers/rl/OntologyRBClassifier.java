@@ -153,6 +153,10 @@ public class OntologyRBClassifier extends Classifier {
       }
    }
    
+   public GlobalCut getGlobalCut() {
+      return mGlobalCut;
+   }      
+   
    private void logParameters(GlobalCut globalCut) {
       Log.info("Global Cut: " + globalCut.toString());
       Log.info("Class estimator: " + mClassEst.toString());
@@ -222,14 +226,15 @@ public class OntologyRBClassifier extends Classifier {
    }
    
    public double[] distributionForInstance(AggregatedInstance instance) {
-      List<AttributeValue> values = instance.getAttributeValues();
+      Map<RbcAttribute,AttributeValue> values = instance.getAttributeValues();
       double[] dist = new double[mNumOfClassLabels];
       Arrays.fill(dist, 1.0);
       
       for (int c = 0; c < dist.length; c++) {
-         for (int a = 0; a < mAttributeEst.size(); a++) {
-            AttributeEstimator estimator = mAttributeEst.get(a);
-            AttributeValue attValue = values.get(a);
+         for (Entry<RbcAttribute, OntologyAttributeEstimator> entry : mAttributeEst.entrySet()) {
+            RbcAttribute att = entry.getKey();
+            OntologyAttributeEstimator estimator = entry.getValue();
+            AttributeValue attValue = values.get(att);
             double attLikelihood = estimator.computeLikelihood(c, attValue);
             dist[c] *= attLikelihood;
          }
@@ -237,7 +242,9 @@ public class OntologyRBClassifier extends Classifier {
          dist[c] *= mClassEst.computeLikelihood(c);
       }
       
+      System.out.println(Arrays.toString(dist));
       ArrayUtil.normalize(dist);
+      System.out.println(Arrays.toString(dist));
       
       return dist;
    }
