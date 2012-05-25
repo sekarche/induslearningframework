@@ -1,6 +1,10 @@
 package airldm2.classifiers.rl.estimator;
 
 import static airldm2.constants.Constants.EPSILON;
+
+import org.apache.commons.lang.builder.ToStringBuilder;
+import org.apache.commons.lang.builder.ToStringStyle;
+
 import airldm2.core.ISufficentStatistic;
 import airldm2.core.rl.RDFDataDescriptor;
 import airldm2.core.rl.RDFDataSource;
@@ -46,7 +50,11 @@ public class ExponentialEstimator extends AttributeEstimator {
       ExponentialEstimator otherEst = (ExponentialEstimator) est;
       mClassHistogram = otherEst.mClassHistogram;
       mNumInstances = otherEst.mNumInstances;
-      mValueSums.add(otherEst.mValueSums);
+      if (mValueSums == null) {
+         mValueSums = otherEst.mValueSums.copy(); 
+      } else {
+         mValueSums.add(otherEst.mValueSums);
+      }
    }
    
    @Override
@@ -72,6 +80,7 @@ public class ExponentialEstimator extends AttributeEstimator {
          double lambda = 1 / mean;
          result += mNumInstances * MathUtil.lg(lambda) - lambda * mValueSums.get(j);
       }
+      Log.info(String.valueOf(result));
       return result;
    }
 
@@ -89,11 +98,19 @@ public class ExponentialEstimator extends AttributeEstimator {
          double lambda = 1 / mean;
          result += mNumInstances * MathUtil.lg(lambda) - lambda * mValueSums.get(1 - j);
       }
+      Log.info(String.valueOf(result));
       return result;
    }
 
    public Histogram getValueSumsForTest() {
       return mValueSums;
+   }
+   
+   @Override
+   public String toString() {
+      return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
+         .append("mValueSums", mValueSums)
+         .toString();
    }
 
 }

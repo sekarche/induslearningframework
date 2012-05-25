@@ -109,6 +109,7 @@ public class MultinomialEstimator extends AttributeEstimator {
             result += N_JK * MathUtil.lg(N_JK / N_J);
          }
       }
+      Log.info(String.valueOf(result));
       return result;
    }
 
@@ -124,6 +125,7 @@ public class MultinomialEstimator extends AttributeEstimator {
             result += N_JK * MathUtil.lg(NUM / DEN);
          }
       }
+      Log.info(String.valueOf(result));
       return result;
    }
    

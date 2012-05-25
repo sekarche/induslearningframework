@@ -1,5 +1,8 @@
 package airldm2.classifiers.rl.estimator;
 
+import org.apache.commons.lang.builder.ToStringBuilder;
+import org.apache.commons.lang.builder.ToStringStyle;
+
 import airldm2.classifiers.rl.ontology.TBox;
 import airldm2.core.rl.RDFDataDescriptor;
 import airldm2.core.rl.RDFDataSource;
@@ -10,8 +13,8 @@ public class SingleAttributeEstimator extends OntologyAttributeEstimator {
 
    private AttributeEstimator mEstimator;
 
-   public SingleAttributeEstimator(RbcAttribute att) {
-      super(att);
+   public SingleAttributeEstimator(TBox tBox, RbcAttribute att) {
+      super(tBox, att);
       mEstimator = att.getEstimator();
    }
 
@@ -21,7 +24,7 @@ public class SingleAttributeEstimator extends OntologyAttributeEstimator {
    }
 
    @Override
-   public void estimateAllParameters(RDFDataSource source, RDFDataDescriptor desc, ClassEstimator classEst, TBox tBox) throws RDFDatabaseException {
+   public void estimateAllParameters(RDFDataSource source, RDFDataDescriptor desc, ClassEstimator classEst) throws RDFDatabaseException {
       estimateParameters(source, desc, classEst);
    }
    
@@ -40,4 +43,12 @@ public class SingleAttributeEstimator extends OntologyAttributeEstimator {
       return mEstimator.computeDualLL();
    }
 
+   @Override
+   public String toString() {
+      return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
+         .append("name", mAttribute.getName())
+         .append("mEstimator", mEstimator)
+         .toString();
+   }
+   
 }

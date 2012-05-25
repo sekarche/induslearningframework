@@ -91,7 +91,11 @@ public class TBox {
       }
       return leaves;
    }
-   
+
+   public boolean isLeaf(URI c) {
+      return mSubclassClosed.inDegreeOf(c) == 0;
+   }
+
    @Override
    public String toString() {
       return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE);

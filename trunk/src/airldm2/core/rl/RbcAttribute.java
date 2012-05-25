@@ -70,8 +70,8 @@ public class RbcAttribute {
          && mHierarchyRoot != null;
    }
       
-   public RbcAttribute extendWithHierarchy(URI node) {
-      return new RbcAttribute(mName, mValueType, mAggregatorType, mHierarchyRoot, mGraph.extendWithHierarchy(node));
+   public RbcAttribute extendWithHierarchy(URI node, boolean isLeaf) {
+      return new RbcAttribute(mName, mValueType, mAggregatorType, mHierarchyRoot, mGraph.extendWithHierarchy(node, isLeaf));
    }
    
    public AttributeEstimator getEstimator() {
