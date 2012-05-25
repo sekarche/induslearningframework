@@ -30,12 +30,7 @@ public class QueryConstructor {
 
    protected String createValueFilter(RbcAttribute att, int valueIndex, String var) {
       DiscreteType valueType = (DiscreteType) att.getValueType();
-      
-      StringBuilder b = new StringBuilder();
-      b.append("FILTER(")
-         .append(valueType.makeFilter(var, valueIndex))
-         .append(") ");
-      return b.toString();
+      return valueType.makeFilter(var, valueIndex);
    }
    
    protected String createValueFilter(RbcAttribute att, int valueIndex) {

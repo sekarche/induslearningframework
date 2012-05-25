@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Map.Entry;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import airldm2.classifiers.Classifier;
 import airldm2.classifiers.rl.estimator.AttributeEstimator;
@@ -32,6 +34,9 @@ import airldm2.util.MathUtil;
 
 public class OntologyRBClassifier extends Classifier {
 
+   protected static Logger Log = Logger.getLogger("airldm2.classifiers.rl.OntologyRBClassifier");
+   static { Log.setLevel(Level.WARNING); }
+   
    private boolean OPTIMIZE_ONTOLOGY = false;
    
    private RDFDataSource mDataSource;
@@ -84,31 +89,30 @@ public class OntologyRBClassifier extends Classifier {
          RbcAttribute att = nonTargetAttributes.get(i);
          OntologyAttributeEstimator est = null;
          if (att.getHierarchyRoot() == null) {
-            est = new SingleAttributeEstimator(att);
+            est = new SingleAttributeEstimator(mTBox, att);
          } else if (att.isHierarchicalHistogram()) {
-            est = new OntologyMultinomialEstimator(att);
+            est = new OntologyMultinomialEstimator(mTBox, att);
          } else {
-            est = new SetAttributeEstimator(att);
+            est = new SetAttributeEstimator(mTBox, att);
          }
          est.setCut(mGlobalCut.getCut(att));
          mAttributeEst.put(att, est);
          
          if (OPTIMIZE_ONTOLOGY) {
-            est.estimateAllParameters(mDataSource, mDataDesc, mClassEst, mTBox);
+            est.estimateAllParameters(mDataSource, mDataDesc, mClassEst);
          } else {
             est.estimateParameters(mDataSource, mDataDesc, mClassEst);
          }
       }
       
-      System.out.println("Global Cut:");
-      System.out.println(mGlobalCut);
-      System.out.println("Estimators:");
-      System.out.println(mAttributeEst.values());
+      logParameters(mGlobalCut);
+      
+      Log.info("Searching... ");
       
       //Greedy search global cut
-      double bestScore = Double.MIN_VALUE;
+      double bestScore = computeCMDL();
       while (true) {
-         double newBestScore = Double.MIN_VALUE;
+         double newBestScore = Double.NEGATIVE_INFINITY;
          GlobalCut newBestGlobalCut = null;
          
          for (RbcAttribute att : nonTargetAttributes) {
@@ -121,7 +125,12 @@ public class OntologyRBClassifier extends Classifier {
                globalCut.replace(att, attRefinement);
                est.setCut(attRefinement);
                est.estimateParameters(mDataSource, mDataDesc, mClassEst);
+               
+               Log.info("Trying new global cut: " + globalCut.toString());
+               logParameters(globalCut);
+               
                double score = computeCMDL();
+               
                if (score > newBestScore) {
                   newBestScore = score;
                   newBestGlobalCut = globalCut;
@@ -134,11 +143,9 @@ public class OntologyRBClassifier extends Classifier {
             bestScore = newBestScore;
             mGlobalCut = newBestGlobalCut;
             
-            System.out.println("Global Cut:");
-            System.out.println(mGlobalCut);
+            Log.info("New best global cut found.");
+            logParameters(mGlobalCut);
             
-            System.out.println("Estimators:");
-            System.out.println(mAttributeEst.values());
             updateEstimatorCuts(mGlobalCut);
          } else {
             break;
@@ -146,6 +153,12 @@ public class OntologyRBClassifier extends Classifier {
       }
    }
    
+   private void logParameters(GlobalCut globalCut) {
+      Log.info("Global Cut: " + globalCut.toString());
+      Log.info("Class estimator: " + mClassEst.toString());
+      Log.info("Estimators: " + mAttributeEst.values().toString());
+   }
+
    private void updateEstimatorCuts(GlobalCut globalCut) {
       for (Entry<RbcAttribute, OntologyAttributeEstimator> entry : mAttributeEst.entrySet()) {
          RbcAttribute key = entry.getKey();
@@ -156,10 +169,9 @@ public class OntologyRBClassifier extends Classifier {
    }
 
    private double computeCMDL() {
-      //return computeLL() - computeSizePenalty();
       double CLL = computeCLL();
       double sizePenalty = computeSizePenalty();
-      System.out.println("CLL=" + CLL + " sizePenalty=" + sizePenalty);
+      Log.info("CLL=" + CLL + " sizePenalty=" + sizePenalty);
       return CLL - sizePenalty;
    }
 
@@ -189,7 +201,7 @@ public class OntologyRBClassifier extends Classifier {
       final double BETA = (PI2 - 18) / 24;
       double LL = computeLL();
       double DualLL = computeDualLL();
-      System.out.println("LL=" + LL + " DualLL=" + DualLL);
+      Log.info("LL=" + LL + " DualLL=" + DualLL);
       return ALPHA * LL + BETA * DualLL;
    }
 

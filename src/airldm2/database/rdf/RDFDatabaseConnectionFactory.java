@@ -11,6 +11,8 @@ import airldm2.exceptions.RTConfigException;
 
 public class RDFDatabaseConnectionFactory {
 
+   public static boolean QUERY_INFERENCE = false;
+   
    public static RDFDatabaseConnection makeFromConfig() throws RTConfigException, RepositoryException {
       final Properties defaultProps = new Properties();
       try {
@@ -19,6 +21,11 @@ public class RDFDatabaseConnectionFactory {
          in.close();
       } catch (IOException e) {
          throw new RTConfigException("Error reading " + Constants.RDFSTORE_PROPERTIES_RESOURCE_PATH, e);
+      }
+      
+      String queryInference = defaultProps.getProperty("Query.inference");
+      if (queryInference != null) {
+         QUERY_INFERENCE = Boolean.valueOf(queryInference);
       }
       
       String sparqlEndpointURL = defaultProps.getProperty("DataSource.sparqlEndpoint");

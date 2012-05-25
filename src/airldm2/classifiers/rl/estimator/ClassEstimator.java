@@ -1,5 +1,8 @@
 package airldm2.classifiers.rl.estimator;
 
+import org.apache.commons.lang.builder.ToStringBuilder;
+import org.apache.commons.lang.builder.ToStringStyle;
+
 import airldm2.core.ISufficentStatistic;
 import airldm2.core.rl.RDFDataDescriptor;
 import airldm2.core.rl.RDFDataSource;
@@ -56,6 +59,11 @@ public class ClassEstimator {
    
    public int getNumInstances() {
       return mNumInstances;
+   }
+
+   @Override
+   public String toString() {
+      return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE);
    }
    
 }

@@ -1,5 +1,8 @@
 package airldm2.classifiers.rl.estimator;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 
@@ -10,6 +13,9 @@ import airldm2.exceptions.RDFDatabaseException;
 
 
 public abstract class AttributeEstimator {
+   
+   protected static Logger Log = Logger.getLogger("airldm2.classifiers.rl.estimator.AttributeEstimator");
+   static { Log.setLevel(Level.WARNING); }
    
    protected RbcAttribute mAttribute;
    

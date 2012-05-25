@@ -2,6 +2,10 @@ package airldm2.core.rl;
 
 import org.openrdf.model.URI;
 
+import airldm2.database.rdf.RDFDatabaseConnectionFactory;
+
+import static airldm2.util.StringUtil.triple;
+
 public class GraphPattern {
 
    private String mInstanceVar;
@@ -32,8 +36,19 @@ public class GraphPattern {
       return mPattern;
    }
    
-   public GraphPattern extendWithHierarchy(URI node) {
+   public GraphPattern extendWithHierarchy(URI node, boolean isLeaf) {
       String filter = " FILTER(" + getHierarchyVar() + " = <" + node + ">) ";
+      
+      if (RDFDatabaseConnectionFactory.QUERY_INFERENCE && !isLeaf) {
+         String transVar = "?transitive";
+         filter = 
+            "{ SELECT * WHERE { "
+            + triple(getHierarchyVar(), "rdfs:subClassOf", transVar)
+            + " } } "
+            + "OPTION(TRANSITIVE, t_distinct, t_in(" + getHierarchyVar() + "), t_out(" + transVar + ")) . "
+            + "FILTER(" + transVar + " = <" + node + ">) ";
+      }
+      
       return new GraphPattern(mInstanceVar, mValueVar, mHierarchyVar, mPattern + filter);
    }
    

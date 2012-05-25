@@ -5,12 +5,14 @@ import static airldm2.constants.Constants.EPSILON;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.builder.ToStringBuilder;
+import org.apache.commons.lang.builder.ToStringStyle;
 import org.openrdf.model.URI;
 
 import airldm2.classifiers.rl.ontology.Cut;
 import airldm2.classifiers.rl.ontology.TBox;
 import airldm2.core.ISufficentStatistic;
-import airldm2.core.rl.EnumType;
+import airldm2.core.rl.OntologyEnumType;
 import airldm2.core.rl.RDFDataDescriptor;
 import airldm2.core.rl.RDFDataSource;
 import airldm2.core.rl.RbcAttribute;
@@ -32,14 +34,14 @@ public class OntologyMultinomialEstimator extends OntologyAttributeEstimator {
    
    private double mTotal;
    
-   public OntologyMultinomialEstimator(RbcAttribute att) {
-      super(att);
+   public OntologyMultinomialEstimator(TBox tBox, RbcAttribute att) {
+      super(tBox, att);
    }
    
    @Override
    public void setCut(Cut cut) {
       super.setCut(cut);
-      EnumType cutEnum = new EnumType(cut.get());
+      OntologyEnumType cutEnum = new OntologyEnumType(mTBox, cut.get());
       mAttribute.setValueType(cutEnum);
    }
    
@@ -96,12 +98,13 @@ public class OntologyMultinomialEstimator extends OntologyAttributeEstimator {
    }
 
    @Override
-   public void estimateAllParameters(RDFDataSource source, RDFDataDescriptor desc, ClassEstimator classEst, TBox tBox) throws RDFDatabaseException {
+   public void estimateAllParameters(RDFDataSource source, RDFDataDescriptor desc, ClassEstimator classEst) throws RDFDatabaseException {
       RbcAttribute targetAttribute = desc.getTargetAttribute();
       int numOfClassLabels = targetAttribute.getDomainSize();
       
       URI hierarchyRoot = mAttribute.getHierarchyRoot();
-      Cut cut = tBox.getLeafCut(hierarchyRoot);
+      Cut cut = mTBox.getLeafCut(hierarchyRoot);
+      Cut oldCut = mCut;
       setCut(cut);
       computeValueHistograms(source, desc, targetAttribute);
       
@@ -109,7 +112,7 @@ public class OntologyMultinomialEstimator extends OntologyAttributeEstimator {
          for (URI sup : cut.get()) {
             if (mValueHistograms.get(0).containsKey(sup)) continue;
             
-            List<URI> subclasses = tBox.getDirectSubclass(sup);
+            List<URI> subclasses = mTBox.getDirectSubclass(sup);
             for (Map<URI,Double> valueHistogram : mValueHistograms) {
                double sumSubclasses = sum(valueHistogram, subclasses);
                valueHistogram.put(sup, sumSubclasses);
@@ -118,6 +121,7 @@ public class OntologyMultinomialEstimator extends OntologyAttributeEstimator {
       }
       
       computeDependentParameters(numOfClassLabels);
+      setCut(oldCut);
    }
    
    private double sum(Map<URI, Double> valueHistogram, List<URI> subclasses) {
@@ -166,9 +170,12 @@ public class OntologyMultinomialEstimator extends OntologyAttributeEstimator {
             final double N_JK = mValueHistograms.get(j).get(key);
             final double N_J = mClassHistogram.get(j);
             if (N_JK < EPSILON || N_J < EPSILON) continue;
+            
+            Log.info(j + " " + k + " " + key + " " + N_JK + " " + N_J);
             result += N_JK * MathUtil.lg(N_JK / N_J);
          }
       }
+      Log.info(String.valueOf(result));
       return result;
    }
 
@@ -185,7 +192,19 @@ public class OntologyMultinomialEstimator extends OntologyAttributeEstimator {
             result += N_JK * MathUtil.lg(NUM / DEN);
          }
       }
+      Log.info(String.valueOf(result));
       return result;
    }
 
+   @Override
+   public String toString() {
+      return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
+         .append("name", mAttribute.getName())   
+         .append("mValueHistograms", mValueHistograms)
+         .append("mClassHistogram", mClassHistogram)
+         .append("mValueHistogram", mValueHistogram)
+         .append("mTotal", mTotal)
+         .toString();
+   }
+   
 }

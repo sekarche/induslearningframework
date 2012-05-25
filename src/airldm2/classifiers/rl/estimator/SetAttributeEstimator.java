@@ -3,6 +3,8 @@ package airldm2.classifiers.rl.estimator;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.builder.ToStringBuilder;
+import org.apache.commons.lang.builder.ToStringStyle;
 import org.openrdf.model.URI;
 
 import airldm2.classifiers.rl.ontology.Cut;
@@ -17,8 +19,8 @@ public class SetAttributeEstimator extends OntologyAttributeEstimator {
 
    private Map<URI,AttributeEstimator> mEstimators;
    
-   public SetAttributeEstimator(RbcAttribute att) {
-      super(att);
+   public SetAttributeEstimator(TBox tBox, RbcAttribute att) {
+      super(tBox, att);
       mEstimators = CollectionUtil.makeMap();
    }
 
@@ -27,7 +29,7 @@ public class SetAttributeEstimator extends OntologyAttributeEstimator {
       for (URI uri : mCut.get()) {
          AttributeEstimator est = mEstimators.get(uri);
          if (est == null) {
-            RbcAttribute extendedAtt = mAttribute.extendWithHierarchy(uri);
+            RbcAttribute extendedAtt = mAttribute.extendWithHierarchy(uri, mTBox.isLeaf(uri));
             est = extendedAtt.getEstimator();
             mEstimators.put(uri, est);
             est.estimateParameters(source, desc, classEst);
@@ -36,9 +38,10 @@ public class SetAttributeEstimator extends OntologyAttributeEstimator {
    }
 
    @Override
-   public void estimateAllParameters(RDFDataSource source, RDFDataDescriptor desc, ClassEstimator classEst, TBox tBox) throws RDFDatabaseException {
+   public void estimateAllParameters(RDFDataSource source, RDFDataDescriptor desc, ClassEstimator classEst) throws RDFDatabaseException {
       URI hierarchyRoot = mAttribute.getHierarchyRoot();
-      Cut cut = tBox.getLeafCut(hierarchyRoot);
+      Cut cut = mTBox.getLeafCut(hierarchyRoot);
+      Cut oldCut = mCut;
       setCut(cut);
       estimateParameters(source, desc, classEst);
       
@@ -46,9 +49,10 @@ public class SetAttributeEstimator extends OntologyAttributeEstimator {
          for (URI sup : cut.get()) {
             if (mEstimators.containsKey(sup)) continue;
             
-            RbcAttribute extendedAtt = mAttribute.extendWithHierarchy(sup);
+            RbcAttribute extendedAtt = mAttribute.extendWithHierarchy(sup, mTBox.isLeaf(sup));
             AttributeEstimator est = extendedAtt.getEstimator();
-            List<URI> subclasses = tBox.getDirectSubclass(sup);
+            List<URI> subclasses = mTBox.getDirectSubclass(sup);
+            
             for (URI sub : subclasses) {
                AttributeEstimator subEst = mEstimators.get(sub);
                est.mergeWith(subEst);
@@ -56,6 +60,7 @@ public class SetAttributeEstimator extends OntologyAttributeEstimator {
             mEstimators.put(sup, est);
          }
       }
+      setCut(oldCut);
    }
 
    @Override
@@ -87,6 +92,14 @@ public class SetAttributeEstimator extends OntologyAttributeEstimator {
          result += est.computeDualLL();
       }
       return result;
+   }
+   
+   @Override
+   public String toString() {
+      return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
+         .append("name", mAttribute.getName())
+         .append("mEstimators", mEstimators)
+         .toString();
    }
 
 }

@@ -10,10 +10,13 @@ import airldm2.exceptions.RDFDatabaseException;
 
 public abstract class OntologyAttributeEstimator extends AttributeEstimator {
 
+   protected TBox mTBox;
+   
    protected Cut mCut;
    
-   public OntologyAttributeEstimator(RbcAttribute att) {
+   public OntologyAttributeEstimator(TBox tBox, RbcAttribute att) {
       super(att);
+      mTBox = tBox;
    }
    
    public void setCut(Cut cut) {
@@ -24,6 +27,6 @@ public abstract class OntologyAttributeEstimator extends AttributeEstimator {
    public void mergeWith(AttributeEstimator est) {
    }
    
-   public abstract void estimateAllParameters(RDFDataSource source, RDFDataDescriptor desc, ClassEstimator classEst, TBox tBox) throws RDFDatabaseException;
+   public abstract void estimateAllParameters(RDFDataSource source, RDFDataDescriptor desc, ClassEstimator classEst) throws RDFDatabaseException;
 
 }

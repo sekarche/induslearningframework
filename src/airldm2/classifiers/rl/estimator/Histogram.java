@@ -25,6 +25,10 @@ public class Histogram implements AttributeValue {
       return MathUtil.sum(mCount);
    }
 
+   public Histogram copy() {
+      return new Histogram(mCount.clone());
+   }
+   
    public void add(Histogram other) {
       MathUtil.add(mCount, other.mCount);
    }

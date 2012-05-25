@@ -56,6 +56,7 @@ public class BinnedType implements DiscreteType {
    @Override
    public String makeFilter(String varName, int valueIndex) {
       StringBuilder b = new StringBuilder();
+      b.append("FILTER(");
       
       if (valueIndex == 0) {
          b.append(varName).append(" < ").append(mCutPoints[valueIndex]);
@@ -66,6 +67,7 @@ public class BinnedType implements DiscreteType {
          b.append(" && ");
          b.append(varName).append(" < ").append(mCutPoints[valueIndex]);
       }
+      b.append(") ");
       
       return b.toString();
    }

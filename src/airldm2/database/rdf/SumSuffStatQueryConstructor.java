@@ -31,7 +31,7 @@ public class SumSuffStatQueryConstructor extends QueryConstructor {
          + "SELECT (" + AGGREGATION_FUNCTION_PATTERN + "(" + VALUE_VAR_PATTERN + ") AS " + AGGREGATION_VAR + ") WHERE { "
          + INSTANCE_TYPE + " "
          + TARGET_GRAPH + " " + TARGET_FILTER + " "
-         + "OPTIONAL { " + FEATURE_GRAPH + "} "
+         + FEATURE_GRAPH
          + "} GROUP BY " + INSTANCE_VAR_PATTERN
       + "} "
       + " }";
