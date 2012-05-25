@@ -2,6 +2,9 @@ package airldm2.classifiers.rl;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 
 import weka.classifiers.evaluation.ConfusionMatrix;
 import airldm2.classifiers.Classifier;
@@ -23,7 +26,7 @@ public class RBClassifier extends Classifier {
    private RDFDataDescriptor mDataDesc;
 
    private int mNumOfClassLabels;
-   private List<AttributeEstimator> mAttributeEst;
+   private Map<RbcAttribute,AttributeEstimator> mAttributeEst;
    private ClassEstimator mClassEst;
       
    @Override
@@ -35,7 +38,7 @@ public class RBClassifier extends Classifier {
       List<RbcAttribute> nonTargetAttributes = mDataDesc.getNonTargetAttributeList();
       int numAttributes = nonTargetAttributes.size();
 
-      mAttributeEst = CollectionUtil.makeList();
+      mAttributeEst = CollectionUtil.makeMap();
       mClassEst = new ClassEstimator();
       mClassEst.estimateParameters(mDataSource, mDataDesc);
       
@@ -43,7 +46,7 @@ public class RBClassifier extends Classifier {
          RbcAttribute att = nonTargetAttributes.get(i);
          AttributeEstimator estimator = att.getEstimator();
          estimator.estimateParameters(mDataSource, mDataDesc, mClassEst);
-         mAttributeEst.add(estimator);
+         mAttributeEst.put(att, estimator);
       }
    }
    
@@ -64,14 +67,15 @@ public class RBClassifier extends Classifier {
    }
    
    public double[] distributionForInstance(AggregatedInstance instance) {
-      List<AttributeValue> values = instance.getAttributeValues();
+      Map<RbcAttribute,AttributeValue> values = instance.getAttributeValues();
       double[] dist = new double[mNumOfClassLabels];
       Arrays.fill(dist, 1.0);
       
       for (int c = 0; c < dist.length; c++) {
-         for (int a = 0; a < mAttributeEst.size(); a++) {
-            AttributeEstimator estimator = mAttributeEst.get(a);
-            AttributeValue attValue = values.get(a);
+         for (Entry<RbcAttribute, AttributeEstimator> entry : mAttributeEst.entrySet()) {
+            RbcAttribute att = entry.getKey();
+            AttributeEstimator estimator = entry.getValue();
+            AttributeValue attValue = values.get(att);
             double attLikelihood = estimator.computeLikelihood(c, attValue);
             dist[c] *= attLikelihood;
          }
@@ -84,7 +88,7 @@ public class RBClassifier extends Classifier {
       return dist;
    }
 
-   public List<AttributeEstimator> getCountsForTest() {
+   public Map<RbcAttribute,AttributeEstimator> getCountsForTest() {
       return mAttributeEst;
    }
    

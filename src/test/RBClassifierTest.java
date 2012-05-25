@@ -22,6 +22,7 @@ import airldm2.core.rl.RDFDataSource;
 import airldm2.database.rdf.RDFDatabaseConnection;
 import airldm2.database.rdf.RDFDatabaseConnectionFactory;
 import airldm2.database.rdf.VirtuosoConnection;
+import airldm2.util.CollectionUtil;
 
 public class RBClassifierTest {
    
@@ -43,7 +44,7 @@ public class RBClassifierTest {
       RBClassifier rbc = new RBClassifier();
       rbc.buildClassifier(trainInstances);
       
-      List<AttributeEstimator> counts = rbc.getCountsForTest();
+      List<AttributeEstimator> counts = CollectionUtil.makeList(rbc.getCountsForTest().values());
       Assert.assertEquals(5, counts.size());
             
       Histogram[][] expectedValueHistograms = new Histogram[][] {
@@ -89,7 +90,7 @@ public class RBClassifierTest {
       RBClassifier rbc = new RBClassifier();
       rbc.buildClassifier(trainInstances);
       
-      List<AttributeEstimator> counts = rbc.getCountsForTest();
+      List<AttributeEstimator> counts = CollectionUtil.makeList(rbc.getCountsForTest().values());
       Assert.assertEquals(2, counts.size());
             
       Histogram[] expectedValueHistograms = new Histogram[] {

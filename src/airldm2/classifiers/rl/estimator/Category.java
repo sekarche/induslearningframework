@@ -12,4 +12,9 @@ public class Category implements AttributeValue {
       return mIndex;
    }
 
+   @Override
+   public String toString() {
+      return String.valueOf(mIndex);
+   }
+   
 }

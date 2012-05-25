@@ -3,6 +3,8 @@ package test;
 import org.junit.Before;
 import org.junit.Test;
 
+import weka.classifiers.evaluation.ConfusionMatrix;
+import airldm2.classifiers.Evaluation;
 import airldm2.classifiers.rl.OntologyRBClassifier;
 import airldm2.core.LDInstances;
 import airldm2.core.SSDataSource;
@@ -44,9 +46,9 @@ public class OntologyRBClassifierTest {
       
       rbc.buildClassifier(trainInstances);
       
-//      ConfusionMatrix matrix = Evaluation.evaluateOntologyRBCModel(rbc, trainInstances, testInstances);
-//      System.out.println(matrix.toString("===Confusion Matrix==="));
-//      System.out.println("Accuracy = " + (1.0 - matrix.errorRate()));
+      ConfusionMatrix matrix = Evaluation.evaluateOntologyRBCModel(rbc, trainInstances, testInstances);
+      System.out.println(matrix.toString("===Confusion Matrix==="));
+      System.out.println("Accuracy = " + (1.0 - matrix.errorRate()));
    }
    
 }

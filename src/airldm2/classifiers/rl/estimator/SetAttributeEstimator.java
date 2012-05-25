@@ -65,10 +65,16 @@ public class SetAttributeEstimator extends OntologyAttributeEstimator {
 
    @Override
    public double computeLikelihood(int classIndex, AttributeValue v) {
+      if (!(v instanceof SetAttributeValue)) 
+         throw new IllegalArgumentException("Error: value " + v + " is not a SetAttributeValue for SetAttributeEstimator.");
+      
+      SetAttributeValue values = (SetAttributeValue) v;
+      
       double result = 1.0;
       for (URI uri : mCut.get()) {
          AttributeEstimator est = mEstimators.get(uri);
-         double likelihood = est.computeLikelihood(classIndex, v);
+         AttributeValue value = values.get(uri);
+         double likelihood = est.computeLikelihood(classIndex, value);
          result *= likelihood;
       }
       return result;

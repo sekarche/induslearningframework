@@ -12,4 +12,9 @@ public class Numeric implements AttributeValue {
       return mValue;
    }
    
+   @Override
+   public String toString() {
+      return Double.toString(mValue);
+   }
+   
 }

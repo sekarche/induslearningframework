@@ -1,5 +1,4 @@
 package airldm2.classifiers.rl.estimator;
-
 import java.util.Arrays;
 
 import airldm2.util.MathUtil;

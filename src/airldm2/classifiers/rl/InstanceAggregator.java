@@ -11,6 +11,10 @@ import airldm2.classifiers.rl.estimator.Category;
 import airldm2.classifiers.rl.estimator.Histogram;
 import airldm2.classifiers.rl.estimator.Null;
 import airldm2.classifiers.rl.estimator.Numeric;
+import airldm2.classifiers.rl.estimator.SetAttributeValue;
+import airldm2.classifiers.rl.ontology.Cut;
+import airldm2.classifiers.rl.ontology.GlobalCut;
+import airldm2.classifiers.rl.ontology.TBox;
 import airldm2.core.LDInstances;
 import airldm2.core.rl.DiscreteType;
 import airldm2.core.rl.NumericType;
@@ -24,6 +28,8 @@ import airldm2.util.CollectionUtil;
 
 public class InstanceAggregator {
    
+   private static GlobalCut GlobalCut;
+
    public static AggregatedInstances init(LDInstances instances) throws RDFDatabaseException {
       RDFDataSource dataSource = (RDFDataSource) instances.getDataSource();
       RDFDataDescriptor dataDesc = (RDFDataDescriptor) instances.getDesc();
@@ -44,7 +50,8 @@ public class InstanceAggregator {
       return ais;
    }
 
-   public static AggregatedInstances aggregateAll(LDInstances instances) throws RDFDatabaseException {
+   public static AggregatedInstances aggregateAll(LDInstances instances, GlobalCut globalCut) throws RDFDatabaseException {
+      GlobalCut = globalCut;
       AggregatedInstances ais = init(instances);
       
       RDFDataSource dataSource = (RDFDataSource) instances.getDataSource();
@@ -53,10 +60,14 @@ public class InstanceAggregator {
       
       for (RbcAttribute att : nonTargetAttributes) {
          List<AttributeValue> values = aggregateAttributeForInstances(dataSource, ais.getURIs(), att);
-         ais.addAttribute(values);
+         ais.addAttribute(att, values);
       }
             
-      return ais;      
+      return ais;
+   }
+   
+   public static AggregatedInstances aggregateAll(LDInstances instances) throws RDFDatabaseException {
+      return aggregateAll(instances, null);
    }
 
    public static List<AttributeValue> aggregateAttributeForInstances(RDFDataSource dataSource, List<URI> instances, RbcAttribute att) throws RDFDatabaseException {
@@ -73,10 +84,9 @@ public class InstanceAggregator {
       
       return values;
    }
-   
-   private static AttributeValue aggregateAttribute(RDFDataSource dataSource, URI instance, RbcAttribute attribute) throws RDFDatabaseException {
+
+   private static AttributeValue aggregateSingleAttribute(RDFDataSource dataSource, URI instance, RbcAttribute attribute) throws RDFDatabaseException {
       ValueType valueType = attribute.getValueType();
-      
       
       if (attribute.getAggregatorType() == ValueAggregator.HISTOGRAM) {
          DiscreteType dt = (DiscreteType) valueType;
@@ -122,6 +132,23 @@ public class InstanceAggregator {
             int index = dt.indexOf(value);
             return new Category(index);
          }
+      }
+   }
+   
+   private static AttributeValue aggregateAttribute(RDFDataSource dataSource, URI instance, RbcAttribute attribute) throws RDFDatabaseException {
+      if (attribute.getHierarchyRoot() == null || attribute.isHierarchicalHistogram()) {
+         return aggregateSingleAttribute(dataSource, instance, attribute);
+      } else {
+         TBox tBox = dataSource.getTBox();
+         SetAttributeValue valueSet = new SetAttributeValue();
+         Cut cut = GlobalCut.getCut(attribute);
+         for (URI c : cut.get()) {
+            RbcAttribute extendedAtt = attribute.extendWithHierarchy(c, tBox.isLeaf(c));
+            AttributeValue extendedAttValue = aggregateSingleAttribute(dataSource, instance, extendedAtt);
+            valueSet.add(c, extendedAttValue);
+         }
+         
+         return valueSet;
       }
    }
    

@@ -65,7 +65,7 @@ public class RbcAttribute {
    }
 
    public boolean isHierarchicalHistogram() {
-      return mValueType == null
+      return (mValueType == null || mValueType instanceof OntologyEnumType)
          && mAggregatorType == ValueAggregator.HISTOGRAM
          && mHierarchyRoot != null;
    }
