@@ -1,0 +1,346 @@
+@instance_var x
+@value_var a
+@hierarchy_var z
+
+@targetType http://ehr/data/vocab/disease_pair
+
+@target rr
+
+@attribute rr
+NUMERIC=
+aggregator=NONE
+numericEstimator=BINNED:0.05
+{
+?x <http://ehr/data/vocab/relative_risk> ?a .
+}
+
+@attribute typeSim
+NUMERIC=
+aggregator=COUNT
+numericEstimator=EXPONENTIAL
+{
+?x <http://ehr/data/vocab/has_disease> ?d1 .
+?x <http://ehr/data/vocab/has_disease> ?d2 .
+?d1 a ?a .
+?d2 a ?a .
+FILTER(?d1 > ?d2)
+}
+
+@attribute degree1Exp
+NUMERIC=
+aggregator=NONE
+numericEstimator=EXPONENTIAL
+{
+?x <http://ehr/data/vocab/has_disease> ?d1 .
+?x <http://ehr/data/vocab/has_disease> ?d2 .
+FILTER(?d1 > ?d2)
+?d1 <http://ehr/data/vocab/has_degree> ?a .
+}
+
+@attribute degree2Exp
+NUMERIC=
+aggregator=NONE
+numericEstimator=EXPONENTIAL
+{
+?x <http://ehr/data/vocab/has_disease> ?d1 .
+?x <http://ehr/data/vocab/has_disease> ?d2 .
+FILTER(?d1 > ?d2)
+?d2 <http://ehr/data/vocab/has_degree> ?a .
+}
+
+@attribute degreeExp
+NUMERIC=
+aggregator=COUNT
+numericEstimator=EXPONENTIAL
+{
+?x <http://ehr/data/vocab/has_disease> ?d .
+?a <http://ehr/data/vocab/has_disease> ?d .
+?a <http://ehr/data/vocab/relative_risk> ?ar .
+FILTER(?ar > 0.05)
+FILTER (?x != ?a)
+}
+
+@attribute degreeGau
+NUMERIC=
+aggregator=COUNT
+numericEstimator=GAUSSIAN
+{
+?x <http://ehr/data/vocab/has_disease> ?d .
+?a <http://ehr/data/vocab/has_disease> ?d .
+?a <http://ehr/data/vocab/relative_risk> ?ar .
+FILTER(?ar > 0.05)
+FILTER (?x != ?a)
+}
+
+@attribute degDiff
+NUMERIC=
+aggregator=NONE
+numericEstimator=GAUSSIAN
+{
+{
+SELECT ?x (?d1deg - ?d2deg) as ?a {
+?x <http://ehr/data/vocab/has_disease> ?d1 .
+?x <http://ehr/data/vocab/has_disease> ?d2 .
+?d1 <http://ehr/data/vocab/has_degree> ?d1deg .
+?d2 <http://ehr/data/vocab/has_degree> ?d2deg .
+FILTER(?d1 != ?d2)
+FILTER(?d1deg >= ?d2deg) } }
+}
+
+@attribute triadGau
+NUMERIC=
+aggregator=COUNT
+numericEstimator=GAUSSIAN
+{
+?x <http://ehr/data/vocab/has_disease> ?d1 .
+?x <http://ehr/data/vocab/has_disease> ?d2 .
+?y <http://ehr/data/vocab/has_disease> ?d1 .
+?y <http://ehr/data/vocab/has_disease> ?a .
+?y <http://ehr/data/vocab/relative_risk> ?yr .
+FILTER(?yr > 0.05)
+?w <http://ehr/data/vocab/has_disease> ?d2 .
+?w <http://ehr/data/vocab/has_disease> ?a .
+?w <http://ehr/data/vocab/relative_risk> ?wr .
+FILTER(?wr > 0.05)
+FILTER(?x != ?y && ?x != ?w && ?y != ?w)
+FILTER(?d1 > ?d2 && ?d2 != ?a && ?d1 != ?a)
+}
+
+@attribute triadGau
+NUMERIC=
+aggregator=COUNT
+numericEstimator=GAUSSIAN
+hierarchyRoot=http://purl.bioontology.org/ontology/HOM-ICD9CM/MM_CLASS_4999
+{
+?x <http://ehr/data/vocab/has_disease> ?d1 .
+?x <http://ehr/data/vocab/has_disease> ?d2 .
+?y <http://ehr/data/vocab/has_disease> ?d1 .
+?y <http://ehr/data/vocab/has_disease> ?a .
+?y <http://ehr/data/vocab/relative_risk> ?yr .
+FILTER(?yr > 0.05)
+?w <http://ehr/data/vocab/has_disease> ?d2 .
+?w <http://ehr/data/vocab/has_disease> ?a .
+?w <http://ehr/data/vocab/relative_risk> ?wr .
+FILTER(?wr > 0.05)
+FILTER(?x != ?y && ?x != ?w && ?y != ?w)
+FILTER(?d1 > ?d2 && ?d2 != ?a && ?d1 != ?a)
+?a a ?z .
+<HIERARCHY>
+}
+
+@attribute triadPerc
+NUMERIC=
+aggregator=NONE
+numericEstimator=EXPONENTIAL
+{
+{
+SELECT ?x (1.0 * ?n / ?deg) as ?a {
+{
+SELECT ?x count(?na) as ?n {
+?x <http://ehr/data/vocab/has_disease> ?d1 .
+?x <http://ehr/data/vocab/has_disease> ?d2 .
+?y <http://ehr/data/vocab/has_disease> ?d1 .
+?y <http://ehr/data/vocab/has_disease> ?na .
+?y <http://ehr/data/vocab/relative_risk> ?yr .
+FILTER(?yr > 0.05)
+?w <http://ehr/data/vocab/has_disease> ?d2 .
+?w <http://ehr/data/vocab/has_disease> ?na .
+?w <http://ehr/data/vocab/relative_risk> ?wr .
+FILTER(?wr > 0.05)
+FILTER(?x != ?y && ?x != ?w && ?y != ?w)
+FILTER(?d1 > ?d2 && ?d1 != ?na && ?d2 != ?na)
+} group by ?x }
+
+{
+SELECT ?x count(?da) as ?deg {
+?x <http://ehr/data/vocab/has_disease> ?d .
+?da <http://ehr/data/vocab/has_disease> ?d .
+?da <http://ehr/data/vocab/relative_risk> ?ar .
+FILTER(?ar > 0.05)
+FILTER (?x != ?da)
+} group by ?x } } }
+}
+
+@attribute triadPercH
+NUMERIC=
+aggregator=NONE
+numericEstimator=GAUSSIAN
+hierarchyRoot=http://purl.bioontology.org/ontology/HOM-ICD9CM/MM_CLASS_4999
+{
+{
+SELECT ?x (1.0 * ?n / ?deg) as ?a {
+{
+SELECT ?x count(?na) as ?n {
+?x <http://ehr/data/vocab/has_disease> ?d1 .
+?x <http://ehr/data/vocab/has_disease> ?d2 .
+?y <http://ehr/data/vocab/has_disease> ?d1 .
+?y <http://ehr/data/vocab/has_disease> ?na .
+?y <http://ehr/data/vocab/relative_risk> ?yr .
+FILTER(?yr > 0.05)
+?w <http://ehr/data/vocab/has_disease> ?d2 .
+?w <http://ehr/data/vocab/has_disease> ?na .
+?w <http://ehr/data/vocab/relative_risk> ?wr .
+FILTER(?wr > 0.05)
+FILTER(?x != ?y && ?x != ?w && ?y != ?w)
+FILTER(?d1 > ?d2 && ?d1 != ?na && ?d2 != ?na)
+?na a ?z .
+<HIERARCHY>
+} group by ?x }
+
+{
+SELECT ?x count(?da) as ?deg {
+?x <http://ehr/data/vocab/has_disease> ?d .
+?da <http://ehr/data/vocab/has_disease> ?d .
+?da <http://ehr/data/vocab/has_disease> ?d2 .
+?da <http://ehr/data/vocab/relative_risk> ?ar .
+FILTER(?ar > 0.05)
+FILTER (?x != ?da)
+?d2 a ?z .
+<HIERARCHY>
+} group by ?x } } }
+}
+
+@attribute typeTriadPerc
+NUMERIC=
+aggregator=NONE
+numericEstimator=GAUSSIAN
+hierarchyRoot=http://purl.bioontology.org/ontology/HOM-ICD9CM/MM_CLASS_4999
+{
+{
+SELECT ?x (1.0 * (?n1 + ?n2) / (?d1deg + ?d2deg)) as ?a {
+?x <http://ehr/data/vocab/has_disease> ?d1 .
+?x <http://ehr/data/vocab/has_disease> ?d2 .
+FILTER(?d1 > ?d2)
+?d1 <http://ehr/data/vocab/has_degree> ?d1deg .
+?d2 <http://ehr/data/vocab/has_degree> ?d2deg .
+
+{
+SELECT ?x count(?da) as ?n1 {
+?x <http://ehr/data/vocab/has_disease> ?d1 .
+?x <http://ehr/data/vocab/has_disease> ?d2 .
+?da <http://ehr/data/vocab/has_disease> ?d1 .
+?da <http://ehr/data/vocab/has_disease> ?d3 .
+?da <http://ehr/data/vocab/relative_risk> ?ar .
+FILTER(?ar > 0.05)
+FILTER (?d1 > ?d2 && ?d1 != ?d3)
+?d3 a ?z .
+<HIERARCHY>
+} group by ?x }
+
+{
+SELECT ?x count(?da) as ?n2 {
+?x <http://ehr/data/vocab/has_disease> ?d1 .
+?x <http://ehr/data/vocab/has_disease> ?d2 .
+?da <http://ehr/data/vocab/has_disease> ?d2 .
+?da <http://ehr/data/vocab/has_disease> ?d3 .
+?da <http://ehr/data/vocab/relative_risk> ?ar .
+FILTER(?ar > 0.05)
+FILTER (?d1 > ?d2 && ?d2 != ?d3)
+?d3 a ?z .
+<HIERARCHY>
+} group by ?x } } }
+}
+
+@attribute quadGau
+NUMERIC=
+aggregator=COUNT
+numericEstimator=EXPONENTIAL
+{
+?x <http://ehr/data/vocab/has_disease> ?d1 .
+?x <http://ehr/data/vocab/has_disease> ?d2 .
+?u <http://ehr/data/vocab/has_disease> ?d1 .
+?u <http://ehr/data/vocab/has_disease> ?a .
+?u <http://ehr/data/vocab/relative_risk> ?ur .
+FILTER(?ur > 0.05)
+?v <http://ehr/data/vocab/has_disease> ?d4 .
+?v <http://ehr/data/vocab/has_disease> ?a .
+?v <http://ehr/data/vocab/relative_risk> ?vr .
+FILTER(?vr > 0.05)
+?w <http://ehr/data/vocab/has_disease> ?d2 .
+?w <http://ehr/data/vocab/has_disease> ?d4 .
+?w <http://ehr/data/vocab/relative_risk> ?wr .
+FILTER(?wr > 0.05)
+FILTER(?x != ?u && ?x != ?v && ?x != ?w && ?u != ?v && ?u != ?w && ?v != ?w)
+FILTER(?d1 > ?d2 && ?d4 != ?a && ?d1 != ?a && ?d2 != ?d4)
+}
+
+@attribute degDiffPerc
+NUMERIC=
+aggregator=CUTSUM
+numericEstimator=GAUSSIAN
+hierarchyRoot=http://purl.bioontology.org/ontology/HOM-ICD9CM/MM_CLASS_4999
+{
+{
+SELECT ?x (1.0 * ?deg1 / ?d1deg - 1.0 * ?deg2 / ?d2deg)*(1.0 * ?deg1 / ?d1deg - 1.0 * ?deg2 / ?d2deg) as ?a {
+?x <http://ehr/data/vocab/has_disease> ?d1 .
+?x <http://ehr/data/vocab/has_disease> ?d2 .
+FILTER(?d1 > ?d2)
+?d1 <http://ehr/data/vocab/has_degree> ?d1deg .
+?d2 <http://ehr/data/vocab/has_degree> ?d2deg .
+{
+SELECT ?x count(?da) as ?deg1 {
+?x <http://ehr/data/vocab/has_disease> ?d1 .
+?x <http://ehr/data/vocab/has_disease> ?d2 .
+?da <http://ehr/data/vocab/has_disease> ?d1 .
+?da <http://ehr/data/vocab/has_disease> ?d3 .
+?da <http://ehr/data/vocab/relative_risk> ?ar .
+FILTER(?ar > 0.05)
+FILTER (?d1 > ?d2 && ?d1 != ?d3)
+?d3 a ?z .
+<HIERARCHY>
+} group by ?x }
+
+{
+SELECT ?x count(?da) as ?deg2 {
+?x <http://ehr/data/vocab/has_disease> ?d1 .
+?x <http://ehr/data/vocab/has_disease> ?d2 .
+?da <http://ehr/data/vocab/has_disease> ?d2 .
+?da <http://ehr/data/vocab/has_disease> ?d3 .
+?da <http://ehr/data/vocab/relative_risk> ?ar .
+FILTER(?ar > 0.05)
+FILTER (?d1 > ?d2 && ?d2 != ?d3)
+?d3 a ?z .
+<HIERARCHY>
+} group by ?x } } }
+}
+
+@attribute typeTriadPerc
+NUMERIC=
+aggregator=NONE
+numericEstimator=GAUSSIAN
+hierarchyRoot=http://purl.bioontology.org/ontology/HOM-ICD9CM/MM_CLASS_4999
+{
+{
+SELECT ?x (1.0 * (?n1 - ?n2)*(?n1 - ?n2) / (?d1deg + ?d2deg)) as ?a {
+?x <http://ehr/data/vocab/has_disease> ?d1 .
+?x <http://ehr/data/vocab/has_disease> ?d2 .
+FILTER(?d1 > ?d2)
+?d1 <http://ehr/data/vocab/has_degree> ?d1deg .
+?d2 <http://ehr/data/vocab/has_degree> ?d2deg .
+
+{
+SELECT ?x count(?da) as ?n1 {
+?x <http://ehr/data/vocab/has_disease> ?d1 .
+?x <http://ehr/data/vocab/has_disease> ?d2 .
+?da <http://ehr/data/vocab/has_disease> ?d1 .
+?da <http://ehr/data/vocab/has_disease> ?d3 .
+?da <http://ehr/data/vocab/relative_risk> ?ar .
+FILTER(?ar > 0.05)
+FILTER (?d1 > ?d2 && ?d1 != ?d3)
+?d3 a ?z .
+<HIERARCHY>
+} group by ?x }
+
+{
+SELECT ?x count(?da) as ?n2 {
+?x <http://ehr/data/vocab/has_disease> ?d1 .
+?x <http://ehr/data/vocab/has_disease> ?d2 .
+?da <http://ehr/data/vocab/has_disease> ?d2 .
+?da <http://ehr/data/vocab/has_disease> ?d3 .
+?da <http://ehr/data/vocab/relative_risk> ?ar .
+FILTER(?ar > 0.05)
+FILTER (?d1 > ?d2 && ?d2 != ?d3)
+?d3 a ?z .
+<HIERARCHY>
+} group by ?x } } }
+}

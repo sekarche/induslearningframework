@@ -5,16 +5,16 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 import java.util.Map.Entry;
+import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import airldm2.classifiers.Classifier;
-import airldm2.classifiers.rl.estimator.AttributeEstimator;
 import airldm2.classifiers.rl.estimator.AttributeValue;
 import airldm2.classifiers.rl.estimator.ClassEstimator;
 import airldm2.classifiers.rl.estimator.OntologyAttributeEstimator;
+import airldm2.classifiers.rl.estimator.OntologyGaussianFixedVarianceEstimator;
 import airldm2.classifiers.rl.estimator.OntologyMultinomialEstimator;
 import airldm2.classifiers.rl.estimator.SetAttributeEstimator;
 import airldm2.classifiers.rl.estimator.SingleAttributeEstimator;
@@ -28,14 +28,13 @@ import airldm2.core.rl.RDFDataDescriptor;
 import airldm2.core.rl.RDFDataSource;
 import airldm2.core.rl.RbcAttribute;
 import airldm2.exceptions.RTConfigException;
-import airldm2.util.ArrayUtil;
-import airldm2.util.CollectionUtil;
 import airldm2.util.MathUtil;
+import airldm2.util.CollectionUtil;
 
 public class OntologyRBClassifier extends Classifier {
 
    protected static Logger Log = Logger.getLogger("airldm2.classifiers.rl.OntologyRBClassifier");
-   static { Log.setLevel(Level.WARNING); }
+   static { Log.setLevel(Level.INFO); }
    
    private boolean OPTIMIZE_ONTOLOGY = false;
    
@@ -80,8 +79,12 @@ public class OntologyRBClassifier extends Classifier {
       mClassEst = new ClassEstimator();
       mClassEst.estimateParameters(mDataSource, mDataDesc);
       
+      Log.info("Retrieving TBox... ");
+      
       mTBox = mDataSource.getTBox();
       mGlobalCut = new GlobalCut(mTBox, nonTargetAttributes);
+      
+      Log.info("Initializing estimators... ");
       
       //Initialize
       mAttributeEst = CollectionUtil.makeMap();
@@ -92,6 +95,8 @@ public class OntologyRBClassifier extends Classifier {
             est = new SingleAttributeEstimator(mTBox, att);
          } else if (att.isHierarchicalHistogram()) {
             est = new OntologyMultinomialEstimator(mTBox, att);
+         } else if (att.isCutSum()) {
+            est = new OntologyGaussianFixedVarianceEstimator(mTBox, att);
          } else {
             est = new SetAttributeEstimator(mTBox, att);
          }
@@ -106,11 +111,10 @@ public class OntologyRBClassifier extends Classifier {
       }
       
       logParameters(mGlobalCut);
-      
       Log.info("Searching... ");
       
       //Greedy search global cut
-      double bestScore = computeCMDL();
+      double bestScore = computeCMDL(mGlobalCut);
       while (true) {
          double newBestScore = Double.NEGATIVE_INFINITY;
          GlobalCut newBestGlobalCut = null;
@@ -129,9 +133,10 @@ public class OntologyRBClassifier extends Classifier {
                Log.info("Trying new global cut: " + globalCut.toString());
                logParameters(globalCut);
                
-               double score = computeCMDL();
+               double score = computeCMDL(globalCut);
                
                if (score > newBestScore) {
+                  Log.info("New score " + score + " " + globalCut.toString());
                   newBestScore = score;
                   newBestGlobalCut = globalCut;
                }
@@ -143,7 +148,7 @@ public class OntologyRBClassifier extends Classifier {
             bestScore = newBestScore;
             mGlobalCut = newBestGlobalCut;
             
-            Log.info("New best global cut found.");
+            Log.info("New best global cut found with score " + newBestScore);
             logParameters(mGlobalCut);
             
             updateEstimatorCuts(mGlobalCut);
@@ -151,11 +156,17 @@ public class OntologyRBClassifier extends Classifier {
             break;
          }
       }
+      
+      Log.info(mAttributeEst.toString());
    }
    
    public GlobalCut getGlobalCut() {
       return mGlobalCut;
-   }      
+   }
+   
+   public Map<RbcAttribute, OntologyAttributeEstimator> getEstimators() {
+      return mAttributeEst;
+   }
    
    private void logParameters(GlobalCut globalCut) {
       Log.info("Global Cut: " + globalCut.toString());
@@ -172,19 +183,24 @@ public class OntologyRBClassifier extends Classifier {
       }
    }
 
-   private double computeCMDL() {
+   private double computeCMDL(GlobalCut globalCut) {
       double CLL = computeCLL();
-      double sizePenalty = computeSizePenalty();
+      double sizePenalty = computeSizePenalty(globalCut);
       Log.info("CLL=" + CLL + " sizePenalty=" + sizePenalty);
       return CLL - sizePenalty;
    }
 
-   private double computeSizePenalty() {
-      return mGlobalCut.size() * mNumOfClassLabels * MathUtil.lg(mClassEst.getNumInstances()) / 2.0;
+   private double computeSizePenalty(GlobalCut globalCut) {
+      double parameterSize = 0.0;
+      for (OntologyAttributeEstimator est : mAttributeEst.values()) {
+         parameterSize += est.paramSize();
+      }
+      return parameterSize * Math.log(mClassEst.getNumInstances()) / 2.0;
    }
 
    private double computeLL() {
       double result = mClassEst.computeLL();
+      Log.info("Class LL=" + result);
       for (OntologyAttributeEstimator est : mAttributeEst.values()) {
          result += est.computeLL();
       }
@@ -193,6 +209,7 @@ public class OntologyRBClassifier extends Classifier {
    
    private double computeDualLL() {
       double result = mClassEst.computeDualLL();
+      Log.info("Class DualLL=" + result);
       for (OntologyAttributeEstimator est : mAttributeEst.values()) {
          result += est.computeDualLL();
       }
@@ -221,31 +238,41 @@ public class OntologyRBClassifier extends Classifier {
    }
 
    public double classifyInstance(AggregatedInstance instance) {
-      double[] dist = distributionForInstance(instance);
-      return ArrayUtil.maxIndex(dist);
+      double[] dist = distributionForInstance(instance, 0);
+      return MathUtil.maxIndex(dist);
    }
    
-   public double[] distributionForInstance(AggregatedInstance instance) {
+   public Map<RbcAttribute, Double> LogDiffSum = CollectionUtil.makeMap(); 
+   
+   public double[] distributionForInstance(AggregatedInstance instance, int actual) {
       Map<RbcAttribute,AttributeValue> values = instance.getAttributeValues();
       double[] dist = new double[mNumOfClassLabels];
-      Arrays.fill(dist, 1.0);
+      Arrays.fill(dist, 0.0);
       
-      for (int c = 0; c < dist.length; c++) {
-         for (Entry<RbcAttribute, OntologyAttributeEstimator> entry : mAttributeEst.entrySet()) {
-            RbcAttribute att = entry.getKey();
-            OntologyAttributeEstimator estimator = entry.getValue();
-            AttributeValue attValue = values.get(att);
-            double attLikelihood = estimator.computeLikelihood(c, attValue);
-            dist[c] *= attLikelihood;
+      for (Entry<RbcAttribute, OntologyAttributeEstimator> entry : mAttributeEst.entrySet()) {
+         RbcAttribute att = entry.getKey();
+         OntologyAttributeEstimator estimator = entry.getValue();
+         AttributeValue attValue = values.get(att);
+         if (!estimator.isValid()) continue;
+         
+         double[] attLL = new double[mNumOfClassLabels];
+         for (int c = 0; c < dist.length; c++) {
+            attLL[c] = estimator.computeLikelihood(c, attValue);
+            dist[c] += attLL[c];
          }
          
-         dist[c] *= mClassEst.computeLikelihood(c);
+         Double s = LogDiffSum.get(att);
+         if (s == null) s = 0.0;
+         s += attLL[actual] - attLL[1-actual];
+         LogDiffSum.put(att, s);
+         //System.out.print(att.getName() + " " + (attLL[actual] - attLL[1-actual]) + " ");
+      }
+         
+      for (int c = 0; c < dist.length; c++) {
+         dist[c] += mClassEst.computeLikelihood(c);
       }
       
-      System.out.println(Arrays.toString(dist));
-      ArrayUtil.normalize(dist);
-      System.out.println(Arrays.toString(dist));
-      
+      MathUtil.normalizeLog(dist);
       return dist;
    }
 

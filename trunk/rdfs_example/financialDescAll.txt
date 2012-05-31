@@ -1,0 +1,294 @@
+@instance_var x
+@value_var a
+@hierarchy_var z
+
+@targetType http://:financial/vocab/resource/loan
+
+@target loanStatus
+
+@attribute loanStatus
+NOMINAL=A,B
+aggregator=NONE
+{
+?x <http://lisp.vse.cz/pkdd99/vocab/resource/loan_status> ?a .
+}
+
+@attribute transAmountMIN
+NUMERIC=
+aggregator=MIN
+numericEstimator=GAUSSIAN
+hierarchyRoot=http://:financial/vocab/resource/trans
+{
+?x <http://lisp.vse.cz/pkdd99/vocab/resource/loan_account_id> ?id .
+?t <http://lisp.vse.cz/pkdd99/vocab/resource/trans_account_id> ?id .
+?t a ?z .
+?t <http://lisp.vse.cz/pkdd99/vocab/resource/trans_amount> ?a .
+}
+
+@attribute loanAmount
+NUMERIC=
+aggregator=NONE
+numericEstimator=GAUSSIAN
+{
+?x <http://lisp.vse.cz/pkdd99/vocab/resource/loan_amount> ?a .
+}
+
+@attribute loanDuration
+NUMERIC=
+aggregator=NONE
+numericEstimator=GAUSSIAN
+{
+?x <http://lisp.vse.cz/pkdd99/vocab/resource/loan_duration> ?a .
+}
+
+@attribute accountType
+ENUM=http://:financial/vocab/resource/account_poobratu,http://:financial/vocab/resource/account_mesicne,http://:financial/vocab/resource/account_tydne
+aggregator=HISTOGRAM
+{
+?x <http://lisp.vse.cz/pkdd99/vocab/resource/loan_account_id> ?ac .
+?ac a ?a .
+}
+
+@attribute transType
+ENUM=?
+aggregator=HISTOGRAM
+hierarchyRoot=http://:financial/vocab/resource/trans
+{
+?x <http://lisp.vse.cz/pkdd99/vocab/resource/loan_account_id> ?id .
+?t <http://lisp.vse.cz/pkdd99/vocab/resource/trans_account_id> ?id .
+?t a ?z .
+FILTER(?z=?a)
+}
+
+@attribute transCOUNT
+NUMERIC=
+aggregator=COUNT
+numericEstimator=GAUSSIAN
+hierarchyRoot=http://:financial/vocab/resource/trans
+{
+?x <http://lisp.vse.cz/pkdd99/vocab/resource/loan_account_id> ?id .
+?t <http://lisp.vse.cz/pkdd99/vocab/resource/trans_account_id> ?id .
+?t a ?z .
+?t <http://lisp.vse.cz/pkdd99/vocab/resource/trans_amount> ?a .
+}
+
+@attribute transAmountSUM
+NUMERIC=
+aggregator=SUM
+numericEstimator=GAUSSIAN
+hierarchyRoot=http://:financial/vocab/resource/trans
+{
+?x <http://lisp.vse.cz/pkdd99/vocab/resource/loan_account_id> ?id .
+?t <http://lisp.vse.cz/pkdd99/vocab/resource/trans_account_id> ?id .
+?t a ?z .
+?t <http://lisp.vse.cz/pkdd99/vocab/resource/trans_amount> ?a .
+}
+
+@attribute transAmountAVG
+NUMERIC=
+aggregator=AVG
+numericEstimator=GAUSSIAN
+hierarchyRoot=http://:financial/vocab/resource/trans
+{
+?x <http://lisp.vse.cz/pkdd99/vocab/resource/loan_account_id> ?id .
+?t <http://lisp.vse.cz/pkdd99/vocab/resource/trans_account_id> ?id .
+?t a ?z .
+?t <http://lisp.vse.cz/pkdd99/vocab/resource/trans_amount> ?a .
+}
+
+@attribute transBalanceAVG
+NUMERIC=
+aggregator=AVG
+numericEstimator=GAUSSIAN
+hierarchyRoot=http://:financial/vocab/resource/trans
+{
+?x <http://lisp.vse.cz/pkdd99/vocab/resource/loan_account_id> ?id .
+?t <http://lisp.vse.cz/pkdd99/vocab/resource/trans_account_id> ?id .
+?t a ?z .
+?t <http://lisp.vse.cz/pkdd99/vocab/resource/trans_balance> ?a .
+}
+
+@attribute transBalanceSUM
+NUMERIC=
+aggregator=SUM
+numericEstimator=GAUSSIAN
+hierarchyRoot=http://:financial/vocab/resource/trans
+{
+?x <http://lisp.vse.cz/pkdd99/vocab/resource/loan_account_id> ?id .
+?t <http://lisp.vse.cz/pkdd99/vocab/resource/trans_account_id> ?id .
+?t a ?z .
+?t <http://lisp.vse.cz/pkdd99/vocab/resource/trans_balance> ?a .
+}
+
+@attribute clientGender
+ENUM=http://:financial/vocab/resource/client_male,http://:financial/vocab/resource/client_female
+aggregator=HISTOGRAM
+{
+?x <http://lisp.vse.cz/pkdd99/vocab/resource/loan_account_id> ?ac .
+?d <http://lisp.vse.cz/pkdd99/vocab/resource/disp_account_id> ?ac .
+?d <http://lisp.vse.cz/pkdd99/vocab/resource/disp_client_id> ?cl .
+?cl a ?a .
+}
+
+@attribute disA4
+NUMERIC=
+aggregator=SUM
+numericEstimator=GAUSSIAN
+hierarchyRoot=http://:financial/vocab/resource/account
+{
+?x <http://lisp.vse.cz/pkdd99/vocab/resource/loan_account_id> ?ac .
+?ac a ?z .
+?ac <http://lisp.vse.cz/pkdd99/vocab/resource/account_district_id> ?d .
+?d <http://lisp.vse.cz/pkdd99/vocab/resource/district_A4> ?a .
+}
+%0.285
+
+@attribute disA5
+NUMERIC=
+aggregator=SUM
+numericEstimator=GAUSSIAN
+hierarchyRoot=http://:financial/vocab/resource/account
+{
+?x <http://lisp.vse.cz/pkdd99/vocab/resource/loan_account_id> ?ac .
+?ac a ?z .
+?ac <http://lisp.vse.cz/pkdd99/vocab/resource/account_district_id> ?d .
+?d <http://lisp.vse.cz/pkdd99/vocab/resource/district_A5> ?a .
+}
+
+@attribute disA6
+NUMERIC=
+aggregator=SUM
+numericEstimator=GAUSSIAN
+hierarchyRoot=http://:financial/vocab/resource/account
+{
+?x <http://lisp.vse.cz/pkdd99/vocab/resource/loan_account_id> ?ac .
+?ac a ?z .
+?ac <http://lisp.vse.cz/pkdd99/vocab/resource/account_district_id> ?d .
+?d <http://lisp.vse.cz/pkdd99/vocab/resource/district_A6> ?a .
+}
+
+@attribute disA7
+NUMERIC=
+aggregator=SUM
+numericEstimator=GAUSSIAN
+hierarchyRoot=http://:financial/vocab/resource/account
+{
+?x <http://lisp.vse.cz/pkdd99/vocab/resource/loan_account_id> ?ac .
+?ac a ?z .
+?ac <http://lisp.vse.cz/pkdd99/vocab/resource/account_district_id> ?d .
+?d <http://lisp.vse.cz/pkdd99/vocab/resource/district_A7> ?a .
+}
+
+@attribute disA8
+NUMERIC=
+aggregator=SUM
+numericEstimator=GAUSSIAN
+hierarchyRoot=http://:financial/vocab/resource/account
+{
+?x <http://lisp.vse.cz/pkdd99/vocab/resource/loan_account_id> ?ac .
+?ac a ?z .
+?ac <http://lisp.vse.cz/pkdd99/vocab/resource/account_district_id> ?d .
+?d <http://lisp.vse.cz/pkdd99/vocab/resource/district_A8> ?a .
+}
+
+@attribute disA9
+NUMERIC=
+aggregator=SUM
+numericEstimator=GAUSSIAN
+hierarchyRoot=http://:financial/vocab/resource/account
+{
+?x <http://lisp.vse.cz/pkdd99/vocab/resource/loan_account_id> ?ac .
+?ac a ?z .
+?ac <http://lisp.vse.cz/pkdd99/vocab/resource/account_district_id> ?d .
+?d <http://lisp.vse.cz/pkdd99/vocab/resource/district_A9> ?a .
+}
+
+@attribute disA10
+NUMERIC=
+aggregator=SUM
+numericEstimator=GAUSSIAN
+hierarchyRoot=http://:financial/vocab/resource/account
+{
+?x <http://lisp.vse.cz/pkdd99/vocab/resource/loan_account_id> ?ac .
+?ac a ?z .
+?ac <http://lisp.vse.cz/pkdd99/vocab/resource/account_district_id> ?d .
+?d <http://lisp.vse.cz/pkdd99/vocab/resource/district_A10> ?a .
+}
+
+@attribute disA11
+NUMERIC=
+aggregator=SUM
+numericEstimator=GAUSSIAN
+hierarchyRoot=http://:financial/vocab/resource/account
+{
+?x <http://lisp.vse.cz/pkdd99/vocab/resource/loan_account_id> ?ac .
+?ac a ?z .
+?ac <http://lisp.vse.cz/pkdd99/vocab/resource/account_district_id> ?d .
+?d <http://lisp.vse.cz/pkdd99/vocab/resource/district_A11> ?a .
+}
+%0.725
+
+@attribute disA12
+NUMERIC=
+aggregator=SUM
+numericEstimator=GAUSSIAN
+hierarchyRoot=http://:financial/vocab/resource/account
+{
+?x <http://lisp.vse.cz/pkdd99/vocab/resource/loan_account_id> ?ac .
+?ac a ?z .
+?ac <http://lisp.vse.cz/pkdd99/vocab/resource/account_district_id> ?d .
+?d <http://lisp.vse.cz/pkdd99/vocab/resource/district_A12> ?a .
+}
+%0.725
+
+@attribute disA13
+NUMERIC=
+aggregator=SUM
+numericEstimator=GAUSSIAN
+hierarchyRoot=http://:financial/vocab/resource/account
+{
+?x <http://lisp.vse.cz/pkdd99/vocab/resource/loan_account_id> ?ac .
+?ac a ?z .
+?ac <http://lisp.vse.cz/pkdd99/vocab/resource/account_district_id> ?d .
+?d <http://lisp.vse.cz/pkdd99/vocab/resource/district_A13> ?a .
+}
+%0.725
+
+@attribute disA14
+NUMERIC=
+aggregator=SUM
+numericEstimator=GAUSSIAN
+hierarchyRoot=http://:financial/vocab/resource/account
+{
+?x <http://lisp.vse.cz/pkdd99/vocab/resource/loan_account_id> ?ac .
+?ac a ?z .
+?ac <http://lisp.vse.cz/pkdd99/vocab/resource/account_district_id> ?d .
+?d <http://lisp.vse.cz/pkdd99/vocab/resource/district_A14> ?a .
+}
+%0.71
+
+@attribute disA15
+NUMERIC=
+aggregator=SUM
+numericEstimator=GAUSSIAN
+hierarchyRoot=http://:financial/vocab/resource/account
+{
+?x <http://lisp.vse.cz/pkdd99/vocab/resource/loan_account_id> ?ac .
+?ac a ?z .
+?ac <http://lisp.vse.cz/pkdd99/vocab/resource/account_district_id> ?d .
+?d <http://lisp.vse.cz/pkdd99/vocab/resource/district_A15> ?a .
+}
+%0.277
+
+@attribute disA16
+NUMERIC=
+aggregator=SUM
+numericEstimator=GAUSSIAN
+hierarchyRoot=http://:financial/vocab/resource/account
+{
+?x <http://lisp.vse.cz/pkdd99/vocab/resource/loan_account_id> ?ac .
+?ac a ?z .
+?ac <http://lisp.vse.cz/pkdd99/vocab/resource/account_district_id> ?d .
+?d <http://lisp.vse.cz/pkdd99/vocab/resource/district_A16> ?a .
+}
+%0.277

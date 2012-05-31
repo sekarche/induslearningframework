@@ -1,5 +1,6 @@
 package airldm2.classifiers.rl.estimator;
 
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -28,8 +29,18 @@ public abstract class AttributeEstimator {
    
    public abstract double computeLL();
    public abstract double computeDualLL();
+   public abstract boolean isValid();
+   public abstract double paramSize();
+
+   public RbcAttribute getAttribute() {
+      return mAttribute;
+   }
    
-   public abstract void mergeWith(AttributeEstimator est);
+   public double score() {
+      return 0.0;
+   }
+   
+   public abstract void mergeWith(List<AttributeEstimator> subEstimators);
    
    @Override
    public String toString() {

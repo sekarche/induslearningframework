@@ -13,7 +13,7 @@ public class InstanceQueryConstructor extends QueryConstructor {
    private static final String TYPE_PATTERN = "%type%";
    
    private static final String QUERY =
-      "SELECT ?x " + CONTEXT_PATTERN + " WHERE { ?x rdf:type " + TYPE_PATTERN + " . }";
+      "SELECT ?x " + CONTEXT_PATTERN + " WHERE { ?x rdf:type " + TYPE_PATTERN + " . } ";
    
    private URI mType;
    

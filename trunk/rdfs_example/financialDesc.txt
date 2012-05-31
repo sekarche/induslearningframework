@@ -13,33 +13,32 @@ aggregator=NONE
 ?x <http://lisp.vse.cz/pkdd99/vocab/resource/loan_status> ?a .
 }
 
-@attribute loanAmount
+@attribute transAmountMIN
 NUMERIC=
-aggregator=NONE
-numericEstimator=EXPONENTIAL
-{
-?x <http://lisp.vse.cz/pkdd99/vocab/resource/loan_amount> ?a .
-}
-
-@attribute transType
-ENUM=?
-aggregator=HISTOGRAM
-hierarchyRoot=http://:financial/vocab/resource/trans
-{
-?x <http://lisp.vse.cz/pkdd99/vocab/resource/loan_account_id> ?id .
-?t <http://lisp.vse.cz/pkdd99/vocab/resource/trans_account_id> ?id .
-?t a ?z .
-FILTER(?z=?a)
-}
-
-@attribute transAmount
-NUMERIC=
-aggregator=SUM
-numericEstimator=EXPONENTIAL
+aggregator=MIN
+numericEstimator=GAUSSIAN
 hierarchyRoot=http://:financial/vocab/resource/trans
 {
 ?x <http://lisp.vse.cz/pkdd99/vocab/resource/loan_account_id> ?id .
 ?t <http://lisp.vse.cz/pkdd99/vocab/resource/trans_account_id> ?id .
 ?t a ?z .
 ?t <http://lisp.vse.cz/pkdd99/vocab/resource/trans_amount> ?a .
+}
+
+@attribute disA8
+NUMERIC=
+aggregator=SUM
+numericEstimator=GAUSSIAN
+{
+?x <http://lisp.vse.cz/pkdd99/vocab/resource/loan_account_id> ?ac .
+?ac <http://lisp.vse.cz/pkdd99/vocab/resource/account_district_id> ?d .
+?d <http://lisp.vse.cz/pkdd99/vocab/resource/district_A8> ?a .
+}
+
+@attribute loanAmount
+NUMERIC=
+aggregator=NONE
+numericEstimator=GAUSSIAN
+{
+?x <http://lisp.vse.cz/pkdd99/vocab/resource/loan_amount> ?a .
 }

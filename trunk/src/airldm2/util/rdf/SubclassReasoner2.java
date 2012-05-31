@@ -3,6 +3,8 @@ package airldm2.util.rdf;
 import static airldm2.util.StringUtil.angleBracket;
 import static airldm2.util.StringUtil.triple;
 
+import java.util.List;
+
 import org.openrdf.model.URI;
 import org.openrdf.repository.RepositoryException;
 
@@ -23,19 +25,21 @@ public class SubclassReasoner2 {
       
       Timer timer = new Timer();
       timer.start("Inf");
-      for (URI leaf : tBox.getLeaves()) {
-         if (!leaf.stringValue().startsWith("http://:financial")) continue;
+      for (URI c : tBox.getClasses()) {
+         if (!c.stringValue().startsWith("http://purl.bioontology.org")) continue;
+         List<URI> sups = tBox.getSuperclasses(c);
+         if (sups.isEmpty()) continue;
          
          StringBuilder query = new StringBuilder();
-         query.append("INSERT INTO <:financial> { ");
-         for (URI sup : tBox.getSuperclasses(leaf)) {
+         query.append("INSERT INTO <http://ehr> { ");
+         for (URI sup : sups) {
             query.append(triple("?x", "a", angleBracket(sup)));
          }         
          query.append(" } WHERE { ")
-            .append(triple("?x", "a", angleBracket(leaf)))
+            .append(triple("?x", "a", angleBracket(c)))
             .append(" }");
          
-         System.out.println(query.toString());
+         //System.out.println(query.toString());
          conn.executeUpdate(query.toString());
       }
       timer.stop();

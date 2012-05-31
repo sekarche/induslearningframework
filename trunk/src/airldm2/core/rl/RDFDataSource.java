@@ -18,12 +18,13 @@ import airldm2.database.rdf.InstanceQueryConstructor;
 import airldm2.database.rdf.MultinomialSuffStatQueryConstructor;
 import airldm2.database.rdf.RDFDatabaseConnection;
 import airldm2.database.rdf.SPARQLQueryResult;
+import airldm2.database.rdf.SquaredSumSuffStatQueryConstructor;
 import airldm2.database.rdf.SuffStatQueryParameter;
 import airldm2.database.rdf.SumSuffStatQueryConstructor;
 import airldm2.database.rdf.ValueQueryConstructor;
 import airldm2.exceptions.RDFDatabaseException;
 import airldm2.exceptions.RTConfigException;
-import airldm2.util.ArrayUtil;
+import airldm2.util.MathUtil;
 import airldm2.util.AttribValuePair;
 import explore.database.rdf.CrawlPropertyQueryConstructor;
 import explore.database.rdf.NestedAggregationQueryConstructor;
@@ -119,6 +120,23 @@ public class RDFDataSource implements SSDataSource {
       return stat;
    }
 
+   public ISufficentStatistic getSquaredSumSufficientStatistic(SuffStatQueryParameter queryParam) throws RDFDatabaseException {
+      String query = new SquaredSumSuffStatQueryConstructor(mDesc, mDefaultContext, queryParam).createQuery();
+      Log.info(query);
+      
+      SPARQLQueryResult results = mConn.executeQuery(query);
+      if (results.isEmpty()) return null;
+      
+      ISufficentStatistic stat = null;
+      if (results.isNull()) {
+         stat = new DefaultSufficentStatisticImpl(0.0);
+      } else {
+         stat = new DefaultSufficentStatisticImpl(results.getDouble());
+      }
+      Log.info(String.valueOf(stat.getValue()));
+      return stat;
+   }
+
    public List<URI> getTargetInstances(URI targetType) throws RDFDatabaseException {
       String query = new InstanceQueryConstructor(mDesc, mDefaultContext, targetType).createQuery();
       Log.info(query);
@@ -188,7 +206,7 @@ public class RDFDataSource implements SSDataSource {
          counts[i] = results.getInt();   
       }
       
-      int maxIndex = ArrayUtil.maxIndex(counts);
+      int maxIndex = MathUtil.maxIndex(counts);
       return RANGE_TYPES[maxIndex];
    }
 
@@ -213,7 +231,10 @@ public class RDFDataSource implements SSDataSource {
       if (cTBox == null) {
          cTBox = new TBox();
          
-         String query = new SubclassQueryConstructor(mDefaultContext).createQuery();
+         //String query = new SubclassQueryConstructor(mDefaultContext).createQuery();
+         //FIXME
+         String query = new SubclassQueryConstructor(null).createQuery();
+         
          Log.info(query);
          SPARQLQueryResult results = mConn.executeQuery(query);
          List<Value[]> valueTupleList = results.getValueTupleList();

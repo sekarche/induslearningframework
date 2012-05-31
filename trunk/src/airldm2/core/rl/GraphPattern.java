@@ -8,10 +8,15 @@ import static airldm2.util.StringUtil.triple;
 
 public class GraphPattern {
 
+   private String HIERARCHY_PATTERN = "<HIERARCHY>";
+   
    private String mInstanceVar;
    private String mValueVar;
    private String mHierarchyVar;
    private String mPattern;
+   private String mHierarchyPattern;
+
+   private URI mExtendedHierarchy;
    
    public GraphPattern(String instanceVar, String valueVar, String hierarchyVar, String pattern) {
       mInstanceVar = instanceVar;
@@ -33,15 +38,25 @@ public class GraphPattern {
    }
    
    public String getPattern() {
-      return mPattern;
+      if (mHierarchyPattern == null) {
+         return mPattern.replace(HIERARCHY_PATTERN, "");
+      } else {
+         return mPattern.replace(HIERARCHY_PATTERN, mHierarchyPattern);
+      }
+   }
+
+   public URI getExtendedHierarchy() {
+      return mExtendedHierarchy;
    }
    
    public GraphPattern extendWithHierarchy(URI node, boolean isLeaf) {
-      String filter = " FILTER(" + getHierarchyVar() + " = <" + node + ">) ";
+      GraphPattern extended = new GraphPattern(mInstanceVar, mValueVar, mHierarchyVar, mPattern);
+      extended.mHierarchyPattern = " FILTER(" + getHierarchyVar() + " = <" + node + ">) ";
+      extended.mExtendedHierarchy = node;
       
       if (RDFDatabaseConnectionFactory.QUERY_INFERENCE && !isLeaf) {
          String transVar = "?transitive";
-         filter = 
+         extended.mHierarchyPattern = 
             "{ SELECT * WHERE { "
             + triple(getHierarchyVar(), "rdfs:subClassOf", transVar)
             + " } } "
@@ -49,12 +64,12 @@ public class GraphPattern {
             + "FILTER(" + transVar + " = <" + node + ">) ";
       }
       
-      return new GraphPattern(mInstanceVar, mValueVar, mHierarchyVar, mPattern + filter);
+      return extended;
    }
    
    @Override
    public String toString() {
-      return mPattern;
+      return mPattern + " " + mHierarchyPattern;
    }
    
 }

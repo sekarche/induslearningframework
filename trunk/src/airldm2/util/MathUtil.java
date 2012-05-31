@@ -4,14 +4,210 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.openrdf.model.URI;
+
 import airldm2.classifiers.rl.estimator.Histogram;
 
 public class MathUtil {
    
-   public static double sum(double[] as) {
+   public static void normalize(double[] a) {
+      double sum = sum(a);
+      if (sum <= 0.0) return;
+      
+      divide(a, sum);
+      sum = sum(a);
+      a[a.length - 1] = 1.0 - (sum - a[a.length - 1]); 
+   }
+
+   public static double averageLog(double[] logs) {
+      double max = max(logs);
+      double norm = 0.0;
+      for (int i = 0; i < logs.length; i++) {
+         norm += Math.exp(logs[i] - max);
+      }
+      norm = Math.log(norm) + max;
+      return norm - Math.log(logs.length);
+   }
+   
+   public static double sum(List<Double> list) {
       double sum = 0.0;
-      for (int i = 0; i < as.length; i++) {
-         sum += as[i];
+      for (double v : list) {
+         sum += v;
+      }
+      return sum;
+   }
+   
+   public static double averageLog(List<Double> logList) {
+      if (logList.size() == 1) return logList.get(0);
+      
+      double[] logs = new double[logList.size()];
+      for (int i = 0; i < logs.length; i++) {
+         logs[i] = logList.get(i);
+      }
+      return averageLog(logs);
+   }
+   
+   public static void normalizeLog(double[] logs) {
+      double max = max(logs);
+      double norm = 0.0;
+      for (int i = 0; i < logs.length; i++) {
+         norm += Math.exp(logs[i] - max);
+      }
+      norm = Math.log(norm) + max;
+      add(logs, -norm);
+      exp(logs);
+   }
+
+   private static void exp(double[] a) {
+      for (int i = 0; i < a.length; i++) {
+         a[i] = Math.exp(a[i]);
+      }
+   }
+
+   private static double max(double[] a) {
+      double m = a[0];
+      for (int i = 1; i < a.length; i++) {
+         if (a[i] > m) {
+            m = a[i];
+         }
+      }
+      return m;
+   }
+
+   public static double[][] normalize(double[][] a) {
+      double sum = sum(a);
+      if (sum <= 0.0) return null;
+      
+      double[][] result = copy(a);
+      divide(result, sum);
+      return result;
+   }
+   
+   public static void divide(double[][] a, double v) {
+      for (int i = 0; i < a.length; i++) {
+         divide(a[i], v);
+      }
+   }
+
+   public static void divide(double[] a, double v) {
+      for (int i = 0; i < a.length; i++) {
+         a[i] /= v;
+      }
+   }
+
+   private static double[][] copy(double[][] a) {
+      double[][] result = new double[a.length][];
+      for (int i = 0; i < result.length; i++) {
+         result[i] = copy(a[i]);
+      }
+      return result;
+   }
+
+   private static double[] copy(double[] a) {
+      double[] result = new double[a.length];
+      System.arraycopy(a, 0, result, 0, a.length);
+      return result;
+   }
+
+   public static int maxIndex(int[] a) {
+      int currentMax = a[0];
+      int currentMaxIndex = 0;
+      for (int i = 1; i < a.length; i++) {
+         if (a[i] > currentMax) {
+            currentMax = a[i];
+            currentMaxIndex = i;
+         }
+      }
+      return currentMaxIndex;
+   }
+   
+   public static int maxIndex(double[] a) {
+      double currentMax = a[0];
+      int currentMaxIndex = 0;
+      for (int i = 1; i < a.length; i++) {
+         if (a[i] > currentMax) {
+            currentMax = a[i];
+            currentMaxIndex = i;
+         }
+      }
+      return currentMaxIndex;
+   }
+
+   /**
+    * Example:
+    *  Cut Point = [ 3, 5, 10 ]
+    *  indexOf:
+    *    (-infty, 3) = 0
+    *    [3, 5) = 1
+    *    [5, 10) = 2
+    *    [10, +infty) = 3
+    */
+   public static int indexOf(double[] cutPoints, double v) {
+      if (v < cutPoints[0]) return 0;
+      
+      int i = 1;
+      for (; i < cutPoints.length && cutPoints[i] <= v; i++);
+      return i;
+   }
+   
+   public static void add(double[][][] a, double v) {
+      for (int i = 0; i < a.length; i++) {
+         add(a[i], v);
+      }
+   }
+   
+   public static void add(double[][] a, double v) {
+      for (int i = 0; i < a.length; i++) {
+         add(a[i], v);
+      }
+   }
+   
+   public static void add(double[] a, double v) {
+      for (int i = 0; i < a.length; i++) {
+         a[i] += v;
+      }
+   }
+
+   public static int[] castToInt(double[] aDouble) {
+      int[] aInt = new int[aDouble.length];
+      for (int i = 0; i < aInt.length; i++) {
+         aInt[i] = (int) aDouble[i];
+      }
+      return aInt;
+   }
+   
+   public static double[] sumDimension(double[][] matrix, int dim) {
+      if (dim == 1) {
+         double[] sum = new double[matrix[0].length];
+         for (int s = 0; s < sum.length; s++) {
+            for (int i = 0; i < matrix.length; i++) {
+               sum[s] += matrix[i][s];
+            }
+         }
+         return sum;
+      } else if (dim == 2) {
+         double[] sum = new double[matrix.length];
+         for (int s = 0; s < sum.length; s++) {
+            for (int i = 0; i < matrix[0].length; i++) {
+               sum[s] += matrix[s][i];
+            }
+         }
+         return sum;
+      } else return null;
+   }
+
+   public static double sum(double[][] a) {
+      double sum = 0.0;
+      for (int i = 0; i < a.length; i++) {
+         sum += sum(a[i]);
+      }
+      return sum;
+   }
+
+   public static double sum(double[] a) {
+      double sum = 0.0;
+      for (int i = 0; i < a.length; i++) {
+         sum += a[i];
       }
       return sum;
    }
@@ -26,10 +222,14 @@ public class MathUtil {
       }
    }
    
-   public static double lg(double v) {
-      return Math.log(v) / Math.log(2.0);
+   public static double sumValues(Map<URI, Double> valueHistogram) {
+      double sum = 0.0;
+      for (double v : valueHistogram.values()) {
+         sum += v;
+      }
+      return sum;
    }
-
+   
    public static <K> Map<K, Double> sumAcross(List<Map<K, Double>> histograms) {
       Map<K, Double> sumHistogram = CollectionUtil.makeMap();
       for (Map<K, Double> histogram : histograms) {
@@ -58,5 +258,5 @@ public class MathUtil {
       }
       return new Histogram(counts);
    }
-   
+
 }

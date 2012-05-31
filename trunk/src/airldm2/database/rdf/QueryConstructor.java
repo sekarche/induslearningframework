@@ -25,7 +25,7 @@ public class QueryConstructor {
    
    protected String createAttributeGraph(RbcAttribute att) {
       return "FILTER(" + mDesc.getInstanceVar() + "=" + att.getGraphPattern().getInstanceVar() + ") "
-         + att.getGraphPattern();
+         + att.getGraphPattern().getPattern();
    }
 
    protected String createValueFilter(RbcAttribute att, int valueIndex, String var) {

@@ -4,7 +4,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Set;
 
 import weka.classifiers.evaluation.ConfusionMatrix;
 import airldm2.classifiers.Classifier;
@@ -17,7 +16,7 @@ import airldm2.core.LDInstances;
 import airldm2.core.rl.RDFDataDescriptor;
 import airldm2.core.rl.RDFDataSource;
 import airldm2.core.rl.RbcAttribute;
-import airldm2.util.ArrayUtil;
+import airldm2.util.MathUtil;
 import airldm2.util.CollectionUtil;
 
 public class RBClassifier extends Classifier {
@@ -63,13 +62,13 @@ public class RBClassifier extends Classifier {
 
    public double classifyInstance(AggregatedInstance instance) {
       double[] dist = distributionForInstance(instance);
-      return ArrayUtil.maxIndex(dist);
+      return MathUtil.maxIndex(dist);
    }
    
    public double[] distributionForInstance(AggregatedInstance instance) {
       Map<RbcAttribute,AttributeValue> values = instance.getAttributeValues();
       double[] dist = new double[mNumOfClassLabels];
-      Arrays.fill(dist, 1.0);
+      Arrays.fill(dist, 0.0);
       
       for (int c = 0; c < dist.length; c++) {
          for (Entry<RbcAttribute, AttributeEstimator> entry : mAttributeEst.entrySet()) {
@@ -77,13 +76,13 @@ public class RBClassifier extends Classifier {
             AttributeEstimator estimator = entry.getValue();
             AttributeValue attValue = values.get(att);
             double attLikelihood = estimator.computeLikelihood(c, attValue);
-            dist[c] *= attLikelihood;
+            dist[c] += attLikelihood;
          }
          
-         dist[c] *= mClassEst.computeLikelihood(c);
+         dist[c] += mClassEst.computeLikelihood(c);
       }
       
-      ArrayUtil.normalize(dist);
+      MathUtil.normalizeLog(dist);
       
       return dist;
    }

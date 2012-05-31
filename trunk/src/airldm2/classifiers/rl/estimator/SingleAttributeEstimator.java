@@ -27,6 +27,11 @@ public class SingleAttributeEstimator extends OntologyAttributeEstimator {
    public void estimateAllParameters(RDFDataSource source, RDFDataDescriptor desc, ClassEstimator classEst) throws RDFDatabaseException {
       estimateParameters(source, desc, classEst);
    }
+
+   @Override
+   public boolean isValid() {
+      return mEstimator.isValid();
+   }
    
    @Override
    public double computeLikelihood(int classIndex, AttributeValue v) {
@@ -50,5 +55,10 @@ public class SingleAttributeEstimator extends OntologyAttributeEstimator {
          .append("mEstimator", mEstimator)
          .toString();
    }
-   
+
+   @Override
+   public double paramSize() {
+      return mEstimator.paramSize();
+   }
+
 }

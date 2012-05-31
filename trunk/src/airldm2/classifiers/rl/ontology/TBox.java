@@ -82,6 +82,10 @@ public class TBox {
       return new Cut(this, leaf);
    }
    
+   public Set<URI> getClasses() {
+      return mSubclass.vertexSet();
+   }
+   
    public List<URI> getLeaves() {
       List<URI> leaves = CollectionUtil.makeList();
       for (URI uri : mSubclassClosed.vertexSet()) {
