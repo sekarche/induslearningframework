@@ -9,6 +9,7 @@ import org.openrdf.model.URI;
 import airldm2.classifiers.rl.estimator.AttributeEstimator;
 import airldm2.classifiers.rl.estimator.CategoryEstimator;
 import airldm2.classifiers.rl.estimator.ExponentialEstimator;
+import airldm2.classifiers.rl.estimator.GaussianEstimator;
 import airldm2.classifiers.rl.estimator.MultinomialEstimator;
 import airldm2.core.rl.NumericType.Distribution;
 
@@ -69,9 +70,17 @@ public class RbcAttribute {
          && mAggregatorType == ValueAggregator.HISTOGRAM
          && mHierarchyRoot != null;
    }
+   
+   public boolean isCutSum() {
+      return mAggregatorType == ValueAggregator.CUTSUM;
+   }
       
    public RbcAttribute extendWithHierarchy(URI node, boolean isLeaf) {
       return new RbcAttribute(mName, mValueType, mAggregatorType, mHierarchyRoot, mGraph.extendWithHierarchy(node, isLeaf));
+   }
+   
+   public URI getExtendedHierarchy() {
+      return mGraph.getExtendedHierarchy();
    }
    
    public AttributeEstimator getEstimator() {
@@ -87,7 +96,7 @@ public class RbcAttribute {
          if (dist == Distribution.EXPONENTIAL) {
             return new ExponentialEstimator(this);
          } else if (dist == Distribution.GAUSSIAN) {
-            throw new UnsupportedOperationException(Distribution.GAUSSIAN + " not yet implemented.");
+            return new GaussianEstimator(this);
          } else if (dist == Distribution.POISSON) {
             throw new UnsupportedOperationException(Distribution.POISSON + " not yet implemented.");
          }

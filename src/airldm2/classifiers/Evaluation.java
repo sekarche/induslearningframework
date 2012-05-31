@@ -1,5 +1,8 @@
 package airldm2.classifiers;
 
+import java.util.Arrays;
+import java.util.Map;
+
 import weka.classifiers.evaluation.ConfusionMatrix;
 import weka.classifiers.evaluation.NominalPrediction;
 import weka.core.Utils;
@@ -8,6 +11,7 @@ import airldm2.classifiers.rl.AggregatedInstances;
 import airldm2.classifiers.rl.InstanceAggregator;
 import airldm2.classifiers.rl.OntologyRBClassifier;
 import airldm2.classifiers.rl.RBClassifier;
+import airldm2.classifiers.rl.estimator.OntologyAttributeEstimator;
 import airldm2.classifiers.rl.ontology.GlobalCut;
 import airldm2.core.LDInstances;
 import airldm2.core.LDTestInstances;
@@ -17,6 +21,7 @@ import airldm2.core.datatypes.relational.SingleRelationDataDescriptor;
 import airldm2.core.rl.RDFDataDescriptor;
 import airldm2.core.rl.RDFDataDescriptorParser;
 import airldm2.core.rl.RDFDataSource;
+import airldm2.core.rl.RbcAttribute;
 import airldm2.database.rdf.RDFDatabaseConnection;
 import airldm2.database.rdf.RDFDatabaseConnectionFactory;
 import airldm2.util.SimpleArffFileReader;
@@ -251,20 +256,21 @@ public class Evaluation {
 
       rbc.buildClassifier(trainInstances);
       GlobalCut globalCut = rbc.getGlobalCut();
-      
-      AggregatedInstances aggregatedInstances = InstanceAggregator.aggregateAll(testInstances, globalCut);
-      System.out.println(aggregatedInstances);
+      Map<RbcAttribute, OntologyAttributeEstimator> estimators = rbc.getEstimators();
+      AggregatedInstances aggregatedInstances = InstanceAggregator.aggregateAll(testInstances, globalCut, estimators);
+      //System.out.println(aggregatedInstances);
       for (AggregatedInstance i : aggregatedInstances.getInstances()) {
-         double[] distribution = rbc.distributionForInstance(i);
          double actual = i.getLabel();
+         double[] distribution = rbc.distributionForInstance(i, (int)actual);
          // return some error message if the class label is not according to the descriptor
          if (actual == -1) {
             System.err.println("Please check the class label of test instances match their description");
             continue;
          }
+         System.out.println(actual + " " + Arrays.toString(distribution) + (((actual >= 0.999 && distribution[0] > distribution[1]) || (actual <= 0.001 && distribution[0] < distribution[1])) ? "WRONG" : ""));
          wekaConfusionMatrix.addPrediction(new NominalPrediction(actual, distribution));
       }
-      
+      System.out.println(rbc.LogDiffSum);
       return wekaConfusionMatrix;
    }
    

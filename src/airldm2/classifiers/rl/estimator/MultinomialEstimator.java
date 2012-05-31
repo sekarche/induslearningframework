@@ -1,6 +1,11 @@
 package airldm2.classifiers.rl.estimator;
 
 import static airldm2.constants.Constants.EPSILON;
+
+import java.util.List;
+
+import umontreal.iro.lecuyer.probdistmulti.MultinomialDist;
+import umontreal.iro.lecuyer.util.Num;
 import airldm2.core.ISufficentStatistic;
 import airldm2.core.rl.RDFDataDescriptor;
 import airldm2.core.rl.RDFDataSource;
@@ -58,19 +63,26 @@ public class MultinomialEstimator extends AttributeEstimator {
    }
 
    @Override
-   public void mergeWith(AttributeEstimator est) {
-      if (!(est instanceof MultinomialEstimator)) {
-         throw new IllegalArgumentException("Expected an MultinomialEstimator but " + est);
+   public boolean isValid() {
+      return true;
+   }
+
+   @Override
+   public void mergeWith(List<AttributeEstimator> ests) {
+      for (AttributeEstimator est : ests) {
+         if (!(est instanceof MultinomialEstimator)) {
+            throw new IllegalArgumentException("Expected an MultinomialEstimator but " + est);
+         }
+         
+         MultinomialEstimator otherEst = (MultinomialEstimator) est;
+         
+         for (int i = 0; i < mValueHistograms.length; i++) {
+            mValueHistograms[i].add(otherEst.mValueHistograms[i]);
+         }
+         mClassHistogram.add(otherEst.mClassHistogram);
+         mValueHistogram.add(otherEst.mValueHistogram);
+         mTotal += otherEst.mTotal;
       }
-      
-      MultinomialEstimator otherEst = (MultinomialEstimator) est;
-      
-      for (int i = 0; i < mValueHistograms.length; i++) {
-         mValueHistograms[i].add(otherEst.mValueHistograms[i]);
-      }
-      mClassHistogram.add(otherEst.mClassHistogram);
-      mValueHistogram.add(otherEst.mValueHistogram);
-      mTotal += otherEst.mTotal;
    }
 
    @Override
@@ -82,34 +94,34 @@ public class MultinomialEstimator extends AttributeEstimator {
       Histogram val = (Histogram) v;
       Histogram valueHistogram = mValueHistograms[classIndex];
       final double classCount = mClassHistogram.get(classIndex);
-      double likelihood = 1.0;
+      
+      int N = (int) (val.sum() + val.size());
+      double[] p = new double[val.size()];
       for (int i = 0; i < val.size(); i++) {
-         if (val.get(i) == 0) continue;
-
-         //With Laplace correction
-         double pVpC = (double) (valueHistogram.get(i) + 1.0) / (classCount + valueHistogram.size());
-         
-         if (val.get(i) == 1) {
-            likelihood *= pVpC;
-         } else {
-            likelihood *= Math.pow(pVpC, val.get(i));
-         }
+         p[i] = (double) (valueHistogram.get(i) + 1.0) / (classCount + valueHistogram.size());
       }
-      return likelihood;
+
+      MathUtil.normalize(p);
+      return Math.log(MultinomialDist.prob(N, p, val.getIntArray(1)));
    }
    
    @Override
    public double computeLL() {
       double result = 0.0;
       for (int j = 0; j < mValueHistograms.length; j++) {
+         double sumN_JK = 0.0;
+         
          for (int k = 0; k < mValueHistograms[j].size(); k++) {
             final double N_JK = mValueHistograms[j].get(k);
+            sumN_JK += N_JK;
+            
             final double N_J = mClassHistogram.get(j);
             if (N_JK < EPSILON || N_J < EPSILON) continue;
-            result += N_JK * MathUtil.lg(N_JK / N_J);
+            result += N_JK * Math.log(N_JK / N_J);
+            result -= Num.lnFactorial((int)N_JK);
          }
+         result += Num.lnFactorial((int)sumN_JK);
       }
-      Log.info(String.valueOf(result));
       return result;
    }
 
@@ -117,15 +129,20 @@ public class MultinomialEstimator extends AttributeEstimator {
    public double computeDualLL() {
       double result = 0.0;
       for (int j = 0; j < mValueHistograms.length; j++) {
+         double sumN_JK = 0.0;
+         
          for (int k = 0; k < mValueHistograms[j].size(); k++) {
             final double N_JK = mValueHistograms[j].get(k);
+            sumN_JK += N_JK;
+            
             final double NUM = mValueHistogram.get(k) - N_JK;
             final double DEN = mTotal - mClassHistogram.get(j);
             if (NUM < EPSILON || DEN < EPSILON) continue;
-            result += N_JK * MathUtil.lg(NUM / DEN);
+            result += N_JK * Math.log(NUM / DEN);
+            result -= Num.lnFactorial((int)N_JK);
          }
+         result += Num.lnFactorial((int)sumN_JK);
       }
-      Log.info(String.valueOf(result));
       return result;
    }
    
@@ -135,6 +152,11 @@ public class MultinomialEstimator extends AttributeEstimator {
    
    public Histogram getClassHistogramForTest() {
       return mClassHistogram;
+   }
+
+   @Override
+   public double paramSize() {
+      return mClassHistogram.size() * mValueHistogram.size();
    }
 
 }

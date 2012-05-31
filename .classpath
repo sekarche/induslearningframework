@@ -56,5 +56,6 @@
 	<classpathentry kind="lib" path="lib/jena-2.6.4/jena-2.6.4.jar"/>
 	<classpathentry kind="lib" path="lib/jgrapht/jgrapht-jdk1.6.jar"/>
 	<classpathentry kind="lib" path="lib/sesame/openrdf-sesame-2.6.5-onejar.jar"/>
+	<classpathentry kind="lib" path="lib/ssj/ssj.jar"/>
 	<classpathentry kind="output" path="classes"/>
 </classpath>

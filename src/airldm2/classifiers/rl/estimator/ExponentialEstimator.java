@@ -2,6 +2,8 @@ package airldm2.classifiers.rl.estimator;
 
 import static airldm2.constants.Constants.EPSILON;
 
+import java.util.List;
+
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 
@@ -11,7 +13,6 @@ import airldm2.core.rl.RDFDataSource;
 import airldm2.core.rl.RbcAttribute;
 import airldm2.database.rdf.SuffStatQueryParameter;
 import airldm2.exceptions.RDFDatabaseException;
-import airldm2.util.MathUtil;
 
 public class ExponentialEstimator extends AttributeEstimator {
 
@@ -42,32 +43,44 @@ public class ExponentialEstimator extends AttributeEstimator {
    }
 
    @Override
-   public void mergeWith(AttributeEstimator est) {
-      if (!(est instanceof ExponentialEstimator)) {
-         throw new IllegalArgumentException("Expected an ExponentialEstimator but " + est);
-      }
-      
-      ExponentialEstimator otherEst = (ExponentialEstimator) est;
-      mClassHistogram = otherEst.mClassHistogram;
-      mNumInstances = otherEst.mNumInstances;
-      if (mValueSums == null) {
-         mValueSums = otherEst.mValueSums.copy(); 
-      } else {
-         mValueSums.add(otherEst.mValueSums);
+   public boolean isValid() {
+      return !mValueSums.containsZeroCount();
+   }
+
+   @Override
+   public void mergeWith(List<AttributeEstimator> ests) {
+      for (AttributeEstimator est : ests) {
+         if (!(est instanceof ExponentialEstimator)) {
+            throw new IllegalArgumentException("Expected an ExponentialEstimator but " + est);
+         }
+         
+         ExponentialEstimator otherEst = (ExponentialEstimator) est;
+         mClassHistogram = otherEst.mClassHistogram;
+         mNumInstances = otherEst.mNumInstances;
+         if (mValueSums == null) {
+            mValueSums = otherEst.mValueSums.copy(); 
+         } else {
+            mValueSums.add(otherEst.mValueSums);
+         }
       }
    }
    
    @Override
    public double computeLikelihood(int classIndex, AttributeValue v) {
-      if (v instanceof Null) return 1.0;
-      if (!(v instanceof Numeric)) 
-         throw new IllegalArgumentException("Error: value " + v + " is not a Numeric for ExponentialEstimator.");
+      double val = 0.0;
       
-      double val = ((Numeric) v).getValue();
-      double mean = mValueSums.get(classIndex) / mClassHistogram.get(classIndex);
+      if (v instanceof Null) {
+         return 0.0;
+      } else if (!(v instanceof Numeric)) { 
+         throw new IllegalArgumentException("Error: value " + v + " is not a Numeric for ExponentialEstimator.");
+      } else {
+         val = ((Numeric) v).getValue();
+      }
+      
+      double mean = (mValueSums.get(classIndex) + 1) / (mClassHistogram.get(classIndex) + mClassHistogram.size());
       double lambda = 1 / mean;
       
-      return lambda * Math.exp(-lambda * val);
+      return Math.log(lambda) - (lambda * val);
    }
    
    @Override
@@ -78,9 +91,8 @@ public class ExponentialEstimator extends AttributeEstimator {
          if (mean < EPSILON) continue;
          
          double lambda = 1 / mean;
-         result += mNumInstances * MathUtil.lg(lambda) - lambda * mValueSums.get(j);
+         result += mClassHistogram.get(j) * Math.log(lambda) - lambda * mValueSums.get(j);
       }
-      Log.info(String.valueOf(result));
       return result;
    }
 
@@ -96,9 +108,8 @@ public class ExponentialEstimator extends AttributeEstimator {
          if (mean < EPSILON) continue;
          
          double lambda = 1 / mean;
-         result += mNumInstances * MathUtil.lg(lambda) - lambda * mValueSums.get(1 - j);
+         result += mClassHistogram.get(j) * Math.log(lambda) - lambda * mValueSums.get(1 - j);
       }
-      Log.info(String.valueOf(result));
       return result;
    }
 
@@ -111,6 +122,11 @@ public class ExponentialEstimator extends AttributeEstimator {
       return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
          .append("mValueSums", mValueSums)
          .toString();
+   }
+
+   @Override
+   public double paramSize() {
+      return mValueSums.size();
    }
 
 }

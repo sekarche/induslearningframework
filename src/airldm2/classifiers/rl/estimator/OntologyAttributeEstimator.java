@@ -1,5 +1,7 @@
 package airldm2.classifiers.rl.estimator;
 
+import java.util.List;
+
 import airldm2.classifiers.rl.ontology.Cut;
 import airldm2.classifiers.rl.ontology.TBox;
 import airldm2.core.rl.RDFDataDescriptor;
@@ -24,7 +26,7 @@ public abstract class OntologyAttributeEstimator extends AttributeEstimator {
    }
 
    @Override
-   public void mergeWith(AttributeEstimator est) {
+   public void mergeWith(List<AttributeEstimator> ests) {
    }
    
    public abstract void estimateAllParameters(RDFDataSource source, RDFDataDescriptor desc, ClassEstimator classEst) throws RDFDatabaseException;

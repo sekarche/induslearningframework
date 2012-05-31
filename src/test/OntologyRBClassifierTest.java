@@ -25,6 +25,11 @@ public class OntologyRBClassifierTest {
       testWithTrainInDBTestInDB("rdfs_example/financialDesc.txt", ":financial", ":financial");
    }
    
+   @Test
+   public void testDisease() throws Exception {
+      testWithTrainInDBTestInDB("rdfs_example/diseaseDesc.txt", "http://ehr", "http://ehr");
+   }
+   
    private void testWithTrainInDBTestInDB(String descFile, String trainGraph, String testGraph) throws Exception {
       RDFDataDescriptor desc = RDFDataDescriptorParser.parse(descFile);
       //System.out.println(desc);
@@ -43,8 +48,6 @@ public class OntologyRBClassifierTest {
       testInstances.setDataSource(testSource);
    
       OntologyRBClassifier rbc = new OntologyRBClassifier();
-      
-      rbc.buildClassifier(trainInstances);
       
       ConfusionMatrix matrix = Evaluation.evaluateOntologyRBCModel(rbc, trainInstances, testInstances);
       System.out.println(matrix.toString("===Confusion Matrix==="));

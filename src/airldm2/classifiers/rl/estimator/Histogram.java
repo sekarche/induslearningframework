@@ -1,6 +1,7 @@
 package airldm2.classifiers.rl.estimator;
 import java.util.Arrays;
 
+import airldm2.constants.Constants;
 import airldm2.util.MathUtil;
 
 public class Histogram implements AttributeValue {
@@ -16,6 +17,14 @@ public class Histogram implements AttributeValue {
       return mCount[i];
    }
    
+   public int[] getIntArray(int correction) {
+      int[] array = new int[mCount.length];
+      for (int i = 0; i < mCount.length; i++) {
+         array[i] = (int) mCount[i] + correction;
+      }
+      return array;
+   }
+   
    public int size() {
       return mCount.length;
    }
@@ -24,12 +33,23 @@ public class Histogram implements AttributeValue {
       return MathUtil.sum(mCount);
    }
 
+   public boolean containsZeroCount() {
+      for (int i = 0; i < mCount.length; i++) {
+         if (mCount[i] < Constants.EPSILON) return true;
+      }
+      return false;
+   }
+
    public Histogram copy() {
       return new Histogram(mCount.clone());
    }
    
    public void add(Histogram other) {
       MathUtil.add(mCount, other.mCount);
+   }
+   
+   public void add(double[] cs) {
+      MathUtil.add(mCount, cs);
    }
    
    public static Histogram make1ofK(int index, int K) {

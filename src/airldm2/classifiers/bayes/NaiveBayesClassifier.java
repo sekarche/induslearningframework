@@ -11,7 +11,7 @@ import airldm2.core.LDInstances;
 import airldm2.core.SSDataSource;
 import airldm2.core.datatypes.relational.ColumnDescriptor;
 import airldm2.core.datatypes.relational.SingleRelationDataDescriptor;
-import airldm2.util.ArrayUtil;
+import airldm2.util.MathUtil;
 import airldm2.util.AttribValuePair;
 
 public class NaiveBayesClassifier extends Classifier {
@@ -195,7 +195,7 @@ public class NaiveBayesClassifier extends Classifier {
       // for the passed instance the attributes has some value and what is
       // the index of this value in the count structure
       double[] instValsDouble = instance.toDoubleArray();
-      int[] instVals = ArrayUtil.castToInt(instValsDouble);
+      int[] instVals = MathUtil.castToInt(instValsDouble);
       return distributionForInstance(instVals);
    }
 
@@ -219,19 +219,19 @@ public class NaiveBayesClassifier extends Classifier {
          dist[c] *= (mClassCounts[c] + 1) / (mNumInstances + mClassCounts.length);
       }
 
-      ArrayUtil.normalize(dist);
+      MathUtil.normalize(dist);
       
       return dist;
    }
 
    public double classifyInstance(LDInstance instance) {
       double[] dist = distributionForInstance(instance);
-      return ArrayUtil.maxIndex(dist);
+      return MathUtil.maxIndex(dist);
    }
    
    public double classifyInstance(Instance instance) {
       double[] dist = distributionForInstance(instance);
-      return ArrayUtil.maxIndex(dist);
+      return MathUtil.maxIndex(dist);
    }
    
    private void Debug(String debug) {

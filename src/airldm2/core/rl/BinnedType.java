@@ -7,7 +7,7 @@ import java.util.List;
 import org.openrdf.model.Literal;
 import org.openrdf.model.Value;
 
-import airldm2.util.ArrayUtil;
+import airldm2.util.MathUtil;
 import airldm2.util.CollectionUtil;
 import airldm2.util.StringUtil;
 
@@ -47,7 +47,7 @@ public class BinnedType implements DiscreteType {
       if (value instanceof Literal) {
          Literal lit = (Literal) value;
          double doubleValue = lit.doubleValue();
-         return ArrayUtil.indexOf(mCutPoints, doubleValue);
+         return MathUtil.indexOf(mCutPoints, doubleValue);
       }
       
       return -1;

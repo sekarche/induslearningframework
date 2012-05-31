@@ -24,7 +24,7 @@ import airldm2.database.rdf.SPARQLQueryResult;
 import airldm2.database.rdf.SuffStatQueryParameter;
 import airldm2.exceptions.RDFDataDescriptorFormatException;
 import airldm2.exceptions.RDFDatabaseException;
-import airldm2.util.ArrayUtil;
+import airldm2.util.MathUtil;
 import airldm2.util.CollectionUtil;
 import explore.database.rdf.NestedAggregationQueryConstructor.Aggregator;
 import explore.database.rdf.RangeTypeQueryConstructor.RangeType;
@@ -213,13 +213,13 @@ public class MIGuidedFeatureCrawler {
       //counts[class value][attribute value]
       
       //Smoothing
-      ArrayUtil.add(counts, 1.0);
+      MathUtil.add(counts, 1.0);
       
-      double[][] probs = ArrayUtil.normalize(counts);
+      double[][] probs = MathUtil.normalize(counts);
       
       double score = 0.0;
-      double[] attributeProb = ArrayUtil.sumDimension(probs, 1);
-      double[] classProb = ArrayUtil.sumDimension(probs, 2);
+      double[] attributeProb = MathUtil.sumDimension(probs, 1);
+      double[] classProb = MathUtil.sumDimension(probs, 2);
       final double LOG2 = Math.log(2.0);
       for (int c = 0; c < counts.length; c++) {
          for (int a = 0; a < counts[0].length; a++) {

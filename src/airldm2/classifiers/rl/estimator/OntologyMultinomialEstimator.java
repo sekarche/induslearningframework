@@ -9,6 +9,8 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 import org.openrdf.model.URI;
 
+import umontreal.iro.lecuyer.probdistmulti.MultinomialDist;
+import umontreal.iro.lecuyer.util.Num;
 import airldm2.classifiers.rl.ontology.Cut;
 import airldm2.classifiers.rl.ontology.TBox;
 import airldm2.core.ISufficentStatistic;
@@ -20,6 +22,7 @@ import airldm2.database.rdf.SuffStatQueryParameter;
 import airldm2.exceptions.RDFDatabaseException;
 import airldm2.util.CollectionUtil;
 import airldm2.util.MathUtil;
+import cern.colt.Arrays;
 
 public class OntologyMultinomialEstimator extends OntologyAttributeEstimator {
 
@@ -133,6 +136,11 @@ public class OntologyMultinomialEstimator extends OntologyAttributeEstimator {
    }
 
    @Override
+   public boolean isValid() {
+      return true;
+   }
+   
+   @Override
    public double computeLikelihood(int classIndex, AttributeValue v) {
       if (v instanceof Null) return 1.0;
       if (!(v instanceof Histogram)) 
@@ -144,38 +152,41 @@ public class OntologyMultinomialEstimator extends OntologyAttributeEstimator {
       
       Map<URI,Double> valueHistogram = mValueHistograms.get(classIndex);
       final double classCount = mClassHistogram.get(classIndex);
-      double likelihood = 1.0;
+      
+      int N = (int) (val.sum() + val.size());
+      double[] p = new double[val.size()];
       for (int i = 0; i < val.size(); i++) {
-         if (val.get(i) == 0) continue;
-
          URI key = mCut.get().get(i);
-         //With Laplace correction
-         double pVpC = (double) (valueHistogram.get(key) + 1.0) / (classCount + valueHistogram.size());
          
-         if (val.get(i) == 1) {
-            likelihood *= pVpC;
-         } else {
-            likelihood *= Math.pow(pVpC, val.get(i));
-         }
+         p[i] = (valueHistogram.get(key) + 1.0) / (classCount + valueHistogram.size());
       }
-      return likelihood;
+      
+      MathUtil.normalize(p);
+      Log.warning(Arrays.toString(p));
+      
+      return Math.log(MultinomialDist.prob(N, p, val.getIntArray(1)));
    }
 
    @Override
    public double computeLL() {
       double result = 0.0;
       for (int j = 0; j < mClassHistogram.size(); j++) {
+         double sumN_JK = 0.0;
+         
          for (int k = 0; k < mCut.size(); k++) {
             URI key = mCut.get().get(k);
             final double N_JK = mValueHistograms.get(j).get(key);
+            sumN_JK += N_JK;
+            
             final double N_J = mClassHistogram.get(j);
             if (N_JK < EPSILON || N_J < EPSILON) continue;
             
             Log.info(j + " " + k + " " + key + " " + N_JK + " " + N_J);
-            result += N_JK * MathUtil.lg(N_JK / N_J);
+            result += N_JK * Math.log(N_JK / N_J);
+            result -= Num.lnFactorial((int)N_JK);
          }
+         result += Num.lnFactorial((int)sumN_JK);
       }
-      Log.info(String.valueOf(result));
       return result;
    }
 
@@ -183,16 +194,21 @@ public class OntologyMultinomialEstimator extends OntologyAttributeEstimator {
    public double computeDualLL() {
       double result = 0.0;
       for (int j = 0; j < mClassHistogram.size(); j++) {
+         double sumN_JK = 0.0;
+         
          for (int k = 0; k < mCut.size(); k++) {
             URI key = mCut.get().get(k);
             final double N_JK = mValueHistograms.get(j).get(key);
+            sumN_JK += N_JK;
+            
             final double NUM = mValueHistogram.get(key) - N_JK;
             final double DEN = mTotal - mClassHistogram.get(j);
             if (NUM < EPSILON || DEN < EPSILON) continue;
-            result += N_JK * MathUtil.lg(NUM / DEN);
+            result += N_JK * Math.log(NUM / DEN);
+            result -= Num.lnFactorial((int)N_JK);
          }
+         result += Num.lnFactorial((int)sumN_JK);
       }
-      Log.info(String.valueOf(result));
       return result;
    }
 
@@ -206,5 +222,10 @@ public class OntologyMultinomialEstimator extends OntologyAttributeEstimator {
          .append("mTotal", mTotal)
          .toString();
    }
-   
+
+   @Override
+   public double paramSize() {
+      return mClassHistogram.size() * mCut.size();
+   }
+
 }
