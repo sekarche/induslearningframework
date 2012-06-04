@@ -14,6 +14,7 @@ import airldm2.database.rdf.RDFDatabaseConnection;
 import airldm2.database.rdf.VirtuosoConnection;
 import airldm2.exceptions.RDFDatabaseException;
 import airldm2.exceptions.RTConfigException;
+import airldm2.util.Timer;
 
 public class SubclassReasoner2 {
 
@@ -42,7 +43,7 @@ public class SubclassReasoner2 {
          //System.out.println(query.toString());
          conn.executeUpdate(query.toString());
       }
-      timer.stop();
+      timer.stop("Inf");
    }
    
 }
