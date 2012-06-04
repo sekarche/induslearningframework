@@ -18,6 +18,7 @@ import airldm2.database.rdf.RDFDatabaseConnection;
 import airldm2.database.rdf.VirtuosoConnection;
 import airldm2.exceptions.RDFDatabaseException;
 import airldm2.exceptions.RTConfigException;
+import airldm2.util.Timer;
 
 public class SubclassReasoner {
 
@@ -38,7 +39,7 @@ public class SubclassReasoner {
       Timer timer = new Timer();
       timer.start("TBox");
       TBox tBox = dataSource.getTBox();
-      timer.stop();
+      timer.stop("TBox");
       
       Repository repositoryRaw = new VirtuosoRepository("jdbc:virtuoso://localhost:1111/charset=UTF-8", "dba", "dba", raw);
       repositoryRaw.initialize();
@@ -68,27 +69,11 @@ public class SubclassReasoner {
       }
       ConnInf.commit();
       
-      timer.stop();
+      timer.stop("Inference");
       
       ConnRaw.close();
       repositoryRaw.shutDown();
       ConnInf.close();
       repositoryInf.shutDown();
    }
-}
-
-class Timer {
-   
-   private String mName;
-   private long mTime;
-   
-   public void start(String name) {
-      mName = name;
-      mTime = System.currentTimeMillis();
-   }
-   
-   public void stop() {
-      System.out.println(mName + ": " + (System.currentTimeMillis() - mTime) / 1000.0);
-   }
-   
 }
