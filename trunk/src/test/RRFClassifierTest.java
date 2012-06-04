@@ -5,7 +5,7 @@ import org.junit.Test;
 
 import weka.classifiers.evaluation.ConfusionMatrix;
 import airldm2.classifiers.Evaluation;
-import airldm2.classifiers.rl.OntologyRBClassifier;
+import airldm2.classifiers.rl.RRFClassifier;
 import airldm2.core.LDInstances;
 import airldm2.core.SSDataSource;
 import airldm2.core.rl.RDFDataDescriptor;
@@ -13,9 +13,8 @@ import airldm2.core.rl.RDFDataDescriptorParser;
 import airldm2.core.rl.RDFDataSource;
 import airldm2.database.rdf.RDFDatabaseConnection;
 import airldm2.database.rdf.RDFDatabaseConnectionFactory;
-import airldm2.database.rdf.VirtuosoConnection;
 
-public class OntologyRBClassifierTest {
+public class RRFClassifierTest {
    
    @Before
    public void setUp() {
@@ -36,24 +35,21 @@ public class OntologyRBClassifierTest {
       //System.out.println(desc);
       
       RDFDatabaseConnection conn = RDFDatabaseConnectionFactory.makeFromConfig();
-      RDFDatabaseConnection testConn = new VirtuosoConnection("jdbc:virtuoso://localhost:1115/charset=UTF-8/log_enable=2", "dba", "dba");
       //named RDF graph that stores all training triples 
-      SSDataSource trainSource = new RDFDataSource(testConn, desc, trainGraph);
-      //SSDataSource trainSource = new RDFDataSource(conn, desc, trainGraph);
+      SSDataSource trainSource = new RDFDataSource(conn, desc, trainGraph);
       LDInstances trainInstances = new LDInstances();
       trainInstances.setDesc(desc);
       trainInstances.setDataSource(trainSource);
    
       //named RDF graph that stores all test triples
-      SSDataSource testSource = new RDFDataSource(testConn, desc, testGraph);
-      //SSDataSource testSource = new RDFDataSource(conn, desc, testGraph);
+      SSDataSource testSource = new RDFDataSource(conn, desc, testGraph);
       LDInstances testInstances = new LDInstances();
       testInstances.setDesc(desc);
       testInstances.setDataSource(testSource);
    
-      OntologyRBClassifier rbc = new OntologyRBClassifier();
+      RRFClassifier rrf = new RRFClassifier(10, 3, 2);
       
-      ConfusionMatrix matrix = Evaluation.evaluateOntologyRBCModel(rbc, trainInstances, testInstances);
+      ConfusionMatrix matrix = Evaluation.evaluateRRFModel(rrf, trainInstances, testInstances);
       System.out.println(matrix.toString("===Confusion Matrix==="));
       System.out.println("Accuracy = " + (1.0 - matrix.errorRate()));
    }

@@ -79,6 +79,10 @@ public class RDFDataDescriptor implements DataDescriptor {
       return cNonTargetAttributeList;
    }
    
+   public void setNonTargetAttributeList(List<RbcAttribute> att) {
+      cNonTargetAttributeList = att;
+   }
+   
    public int getNonTargetAttributeCount() {
       return cNonTargetAttributeList.size();
    }

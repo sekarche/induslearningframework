@@ -4,8 +4,6 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 
 import airldm2.classifiers.rl.ontology.TBox;
-import airldm2.core.rl.RDFDataDescriptor;
-import airldm2.core.rl.RDFDataSource;
 import airldm2.core.rl.RbcAttribute;
 import airldm2.exceptions.RDFDatabaseException;
 
@@ -19,13 +17,13 @@ public class SingleAttributeEstimator extends OntologyAttributeEstimator {
    }
 
    @Override
-   public void estimateParameters(RDFDataSource source, RDFDataDescriptor desc, ClassEstimator classEst) throws RDFDatabaseException {
-      mEstimator.estimateParameters(source, desc, classEst);
+   public void estimateParameters() throws RDFDatabaseException {
+      mEstimator.estimateParameters();
    }
 
    @Override
-   public void estimateAllParameters(RDFDataSource source, RDFDataDescriptor desc, ClassEstimator classEst) throws RDFDatabaseException {
-      estimateParameters(source, desc, classEst);
+   public void estimateAllParameters() throws RDFDatabaseException {
+      estimateParameters();
    }
 
    @Override

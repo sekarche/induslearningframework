@@ -7,8 +7,11 @@ import java.util.Map.Entry;
 import org.openrdf.model.URI;
 
 import airldm2.classifiers.rl.estimator.Histogram;
+import airldm2.constants.Constants;
 
 public class MathUtil {
+   
+   public static final double LN2 = Math.log(2.0); 
    
    public static void normalize(double[] a) {
       double sum = sum(a);
@@ -257,6 +260,23 @@ public class MathUtil {
          }
       }
       return new Histogram(counts);
+   }
+
+   
+   public static double lg(double p) {
+      return Math.log(p) / LN2;
+   }
+
+   public static double getEntropy(double[] as) {
+      double sum = sum(as);
+      double entropySum = 0.0;
+      for (double c : as) {
+         if (c < Constants.EPSILON) continue;
+         
+         double p = c / sum;
+         entropySum -= p * MathUtil.lg(p);
+      }
+      return entropySum;
    }
 
 }

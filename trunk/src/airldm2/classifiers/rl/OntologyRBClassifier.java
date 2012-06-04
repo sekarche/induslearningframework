@@ -28,8 +28,8 @@ import airldm2.core.rl.RDFDataDescriptor;
 import airldm2.core.rl.RDFDataSource;
 import airldm2.core.rl.RbcAttribute;
 import airldm2.exceptions.RTConfigException;
-import airldm2.util.MathUtil;
 import airldm2.util.CollectionUtil;
+import airldm2.util.MathUtil;
 
 public class OntologyRBClassifier extends Classifier {
 
@@ -103,10 +103,11 @@ public class OntologyRBClassifier extends Classifier {
          est.setCut(mGlobalCut.getCut(att));
          mAttributeEst.put(att, est);
          
+         est.setDataSource(mDataSource, mDataDesc, mClassEst);
          if (OPTIMIZE_ONTOLOGY) {
-            est.estimateAllParameters(mDataSource, mDataDesc, mClassEst);
+            est.estimateAllParameters();
          } else {
-            est.estimateParameters(mDataSource, mDataDesc, mClassEst);
+            est.estimateParameters();
          }
       }
       
@@ -128,7 +129,7 @@ public class OntologyRBClassifier extends Classifier {
                GlobalCut globalCut = mGlobalCut.copy();
                globalCut.replace(att, attRefinement);
                est.setCut(attRefinement);
-               est.estimateParameters(mDataSource, mDataDesc, mClassEst);
+               est.estimateParameters();
                
                Log.info("Trying new global cut: " + globalCut.toString());
                logParameters(globalCut);

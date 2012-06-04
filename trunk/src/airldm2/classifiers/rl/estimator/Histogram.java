@@ -13,6 +13,10 @@ public class Histogram implements AttributeValue {
       mCount = c;
    }
 
+   public Histogram(int size) {
+      mCount = new double[size];
+   }
+
    public double get(int i) {
       return mCount[i];
    }
@@ -38,6 +42,10 @@ public class Histogram implements AttributeValue {
          if (mCount[i] < Constants.EPSILON) return true;
       }
       return false;
+   }
+
+   public double getEntropy() {
+      return MathUtil.getEntropy(mCount);
    }
 
    public Histogram copy() {

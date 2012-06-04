@@ -49,10 +49,10 @@ public class OntologyMultinomialEstimator extends OntologyAttributeEstimator {
    }
    
    @Override
-   public void estimateParameters(RDFDataSource source, RDFDataDescriptor desc, ClassEstimator classEst) throws RDFDatabaseException {
-      RbcAttribute targetAttribute = desc.getTargetAttribute();
+   public void estimateParameters() throws RDFDatabaseException {
+      RbcAttribute targetAttribute = mDesc.getTargetAttribute();
       int numOfClassLabels = targetAttribute.getDomainSize();
-      computeValueHistograms(source, desc, targetAttribute);      
+      computeValueHistograms(mSource, mDesc, targetAttribute);      
       computeDependentParameters(numOfClassLabels);
    }
 
@@ -101,15 +101,15 @@ public class OntologyMultinomialEstimator extends OntologyAttributeEstimator {
    }
 
    @Override
-   public void estimateAllParameters(RDFDataSource source, RDFDataDescriptor desc, ClassEstimator classEst) throws RDFDatabaseException {
-      RbcAttribute targetAttribute = desc.getTargetAttribute();
+   public void estimateAllParameters() throws RDFDatabaseException {
+      RbcAttribute targetAttribute = mDesc.getTargetAttribute();
       int numOfClassLabels = targetAttribute.getDomainSize();
       
       URI hierarchyRoot = mAttribute.getHierarchyRoot();
       Cut cut = mTBox.getLeafCut(hierarchyRoot);
       Cut oldCut = mCut;
       setCut(cut);
-      computeValueHistograms(source, desc, targetAttribute);
+      computeValueHistograms(mSource, mDesc, targetAttribute);
       
       while ((cut = cut.abstractCut()) != null) {
          for (URI sup : cut.get()) {

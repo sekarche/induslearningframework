@@ -3,22 +3,22 @@ package airldm2.classifiers.rl.estimator;
 import static airldm2.constants.Constants.EPSILON;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
+import org.openrdf.model.URI;
 
+import airldm2.classifiers.rl.ontology.TBox;
 import airldm2.core.ISufficentStatistic;
-import airldm2.core.rl.RDFDataDescriptor;
-import airldm2.core.rl.RDFDataSource;
 import airldm2.core.rl.RbcAttribute;
 import airldm2.database.rdf.SuffStatQueryParameter;
 import airldm2.exceptions.RDFDatabaseException;
+import airldm2.util.CollectionUtil;
 
 public class ExponentialEstimator extends AttributeEstimator {
 
-   private Histogram mClassHistogram;
-   private int mNumInstances;
-   
    private Histogram mValueSums;
    
    public ExponentialEstimator(RbcAttribute att) {
@@ -26,16 +26,14 @@ public class ExponentialEstimator extends AttributeEstimator {
    }
 
    @Override
-   public void estimateParameters(RDFDataSource source, RDFDataDescriptor desc, ClassEstimator classEst) throws RDFDatabaseException {
-      mClassHistogram = classEst.getClassHistogram();
-      mNumInstances = classEst.getNumInstances();
-      RbcAttribute targetAttribute = desc.getTargetAttribute();
+   public void estimateParameters() throws RDFDatabaseException {
+      RbcAttribute targetAttribute = mDesc.getTargetAttribute();
       int numOfClassLabels = targetAttribute.getDomainSize();
 
       double[] valueSums = new double[numOfClassLabels];
       for (int j = 0; j < numOfClassLabels; j++) {
-         SuffStatQueryParameter queryParam = new SuffStatQueryParameter(desc.getTargetType(), targetAttribute, j, mAttribute, -1);
-         ISufficentStatistic tempSuffStat = source.getSumSufficientStatistic(queryParam);
+         SuffStatQueryParameter queryParam = new SuffStatQueryParameter(mDesc.getTargetType(), targetAttribute, j, mAttribute, -1);
+         ISufficentStatistic tempSuffStat = mSource.getSumSufficientStatistic(queryParam);
          valueSums[j] = tempSuffStat.getValue().doubleValue();
       }
       
@@ -43,10 +41,64 @@ public class ExponentialEstimator extends AttributeEstimator {
    }
 
    @Override
+   public Map<URI, AttributeEstimator> makeForAllHierarchy(TBox tBox) throws RDFDatabaseException {
+      Map<URI, AttributeEstimator> estimators = CollectionUtil.makeMap();
+      RbcAttribute targetAttribute = mDesc.getTargetAttribute();
+      int numOfClassLabels = targetAttribute.getDomainSize();
+      
+      List<Map<URI, Double>> hierarchyValueSums = CollectionUtil.makeList();
+      Set<URI> hierarchy = CollectionUtil.makeSet();
+      for (int j = 0; j < numOfClassLabels; j++) {
+         SuffStatQueryParameter queryParam = new SuffStatQueryParameter(mDesc.getTargetType(), targetAttribute, j, mAttribute, -1);
+         Map<URI, Double> hierarchyStat;
+         
+         hierarchyStat = mSource.getSumSufficientStatisticForAllHierarchy(queryParam);
+         hierarchyValueSums.add(hierarchyStat);
+         hierarchy.addAll(hierarchyStat.keySet());
+      }
+      
+      for (URI uri : hierarchy) {
+         double[] valueSums = new double[numOfClassLabels];
+         for (int j = 0; j < numOfClassLabels; j++) {
+            Double v = hierarchyValueSums.get(j).get(uri);
+            if (v != null) {
+               valueSums[j] = v;
+            }
+         }
+         
+         RbcAttribute extendedAtt = mAttribute.extendWithHierarchy(uri, tBox.isLeaf(uri));
+         ExponentialEstimator est = (ExponentialEstimator) extendedAtt.getEstimator();
+         est.setDataSource(mSource, mDesc, mClassEst);
+         est.mValueSums = new Histogram(valueSums);
+         estimators.put(uri, est);
+      }
+      
+      return estimators;
+   }
+   
+   @Override
    public boolean isValid() {
       return !mValueSums.containsZeroCount();
    }
 
+   @Override
+   public double score() {
+      if (getClassSize() != 2) {
+         throw new UnsupportedOperationException("score not supported for Exponential estimator if there are more than two classes.");
+      }
+      return (computeKL(0, 1) + computeKL(1, 0)) * -0.5;     
+   }
+   
+   private double computeKL(int class1, int class2) {
+      double mean1 = computeMean(class1);
+      double mean2 = computeMean(class2);
+      return Math.log(mean1) - Math.log(mean2) + mean2 / mean1 - 1;
+   }
+   
+   private double computeMean(int classIndex) {
+      return (mValueSums.get(classIndex) + 1) / (getClassCount(classIndex) + getClassSize());
+   }
+   
    @Override
    public void mergeWith(List<AttributeEstimator> ests) {
       for (AttributeEstimator est : ests) {
@@ -55,8 +107,6 @@ public class ExponentialEstimator extends AttributeEstimator {
          }
          
          ExponentialEstimator otherEst = (ExponentialEstimator) est;
-         mClassHistogram = otherEst.mClassHistogram;
-         mNumInstances = otherEst.mNumInstances;
          if (mValueSums == null) {
             mValueSums = otherEst.mValueSums.copy(); 
          } else {
@@ -77,7 +127,7 @@ public class ExponentialEstimator extends AttributeEstimator {
          val = ((Numeric) v).getValue();
       }
       
-      double mean = (mValueSums.get(classIndex) + 1) / (mClassHistogram.get(classIndex) + mClassHistogram.size());
+      double mean = computeMean(classIndex);
       double lambda = 1 / mean;
       
       return Math.log(lambda) - (lambda * val);
@@ -86,29 +136,29 @@ public class ExponentialEstimator extends AttributeEstimator {
    @Override
    public double computeLL() {
       double result = 0.0;
-      for (int j = 0; j < mClassHistogram.size(); j++) {
-         double mean = mValueSums.get(j) / mClassHistogram.get(j);
+      for (int j = 0; j < getClassSize(); j++) {
+         double mean = computeMean(j);
          if (mean < EPSILON) continue;
          
          double lambda = 1 / mean;
-         result += mClassHistogram.get(j) * Math.log(lambda) - lambda * mValueSums.get(j);
+         result += getClassCount(j) * Math.log(lambda) - lambda * mValueSums.get(j);
       }
       return result;
    }
 
    @Override
    public double computeDualLL() {
-      if (mClassHistogram.size() != 2) {
+      if (getClassSize() != 2) {
          throw new UnsupportedOperationException("DualLL not supported for Exponential estimator if there are more than two classes.");
       }
       
       double result = 0.0;
-      for (int j = 0; j < mClassHistogram.size(); j++) {
-         double mean = mValueSums.get(j) / mClassHistogram.get(j);
+      for (int j = 0; j < getClassSize(); j++) {
+         double mean = computeMean(j);
          if (mean < EPSILON) continue;
          
          double lambda = 1 / mean;
-         result += mClassHistogram.get(j) * Math.log(lambda) - lambda * mValueSums.get(1 - j);
+         result += getClassCount(j) * Math.log(lambda) - lambda * mValueSums.get(1 - j);
       }
       return result;
    }
@@ -120,6 +170,7 @@ public class ExponentialEstimator extends AttributeEstimator {
    @Override
    public String toString() {
       return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
+         .append("URI", mAttribute.getExtendedHierarchy())
          .append("mValueSums", mValueSums)
          .toString();
    }

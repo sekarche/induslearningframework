@@ -84,7 +84,10 @@ public class InstanceAggregator {
       List<RbcAttribute> nonTargetAttributes = dataDesc.getNonTargetAttributeList();
       
       for (RbcAttribute att : nonTargetAttributes) {
-         OntologyAttributeEstimator est = estimators.get(att);
+         OntologyAttributeEstimator est = null;
+         if (estimators != null) {
+            est = estimators.get(att);
+         }
          List<AttributeValue> values = aggregateAttributeForInstances(dataSource, ais.getURIs(), att, est);
          ais.addAttribute(att, values);
       }
@@ -162,9 +165,7 @@ public class InstanceAggregator {
    }
    
    private static AttributeValue aggregateAttribute(RDFDataSource dataSource, URI instance, RbcAttribute attribute, OntologyAttributeEstimator ontEst) throws RDFDatabaseException {
-      if (attribute.getHierarchyRoot() == null || attribute.isHierarchicalHistogram()) {
-         return aggregateSingleAttribute(dataSource, instance, attribute);
-      } else if (attribute.isCutSum()) {
+      if (attribute.isCutSum()) {
          TBox tBox = dataSource.getTBox();
          double sum = 0.0;
          Cut cut = GlobalCut.getCut(attribute);
@@ -177,6 +178,10 @@ public class InstanceAggregator {
          }
          
          return new Numeric(sum);
+      } else if (attribute.getHierarchyRoot() == null
+            || attribute.isHierarchicalHistogram()
+            || ontEst == null) {
+         return aggregateSingleAttribute(dataSource, instance, attribute);
       } else {
          SetAttributeEstimator setEst = (SetAttributeEstimator) ontEst;
          SetAttributeValue valueSet = new SetAttributeValue();

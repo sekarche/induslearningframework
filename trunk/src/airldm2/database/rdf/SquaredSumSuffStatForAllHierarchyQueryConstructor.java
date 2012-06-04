@@ -6,7 +6,7 @@ import airldm2.core.rl.RDFDataDescriptor;
 import airldm2.core.rl.ValueAggregator;
 
 
-public class SquaredSumSuffStatQueryConstructor extends QueryConstructor {
+public class SquaredSumSuffStatForAllHierarchyQueryConstructor extends QueryConstructor {
 
    private static final String AGGREGATION_VAR = "?agg";
    private static final String CONTEXT_PATTERN = "%context%";
@@ -18,27 +18,29 @@ public class SquaredSumSuffStatQueryConstructor extends QueryConstructor {
    private static final String TARGET_FILTER = "%target_filter%";
    private static final String FEATURE_GRAPH = "%feature_graph%";
    
+   private static final String HIERARCHY_VAR_PATTERN = "%hierarchy_var%";
+   
    private static final String QUERY_WITH_SIMPLE_FEATURE =
-      "SELECT SUM(" + VALUE_VAR_PATTERN + " * " + VALUE_VAR_PATTERN + ") " + CONTEXT_PATTERN + " WHERE { "
+      "SELECT " + HIERARCHY_VAR_PATTERN + " SUM(" + VALUE_VAR_PATTERN + " * " + VALUE_VAR_PATTERN + ") " + CONTEXT_PATTERN + " WHERE { "
       + INSTANCE_TYPE + " "
       + TARGET_GRAPH + " " + TARGET_FILTER + " "
       + FEATURE_GRAPH
-      + " }";
+      + " } GROUP BY " + HIERARCHY_VAR_PATTERN;
    
    private static final String QUERY_WITH_AGGREGATION_FEATURE =
-      "SELECT SUM(" + AGGREGATION_VAR + " * " + AGGREGATION_VAR + ") " + CONTEXT_PATTERN + " WHERE { "
+      "SELECT " + HIERARCHY_VAR_PATTERN + " SUM(" + AGGREGATION_VAR + " * " + AGGREGATION_VAR + ") " + CONTEXT_PATTERN + " WHERE { "
       + "{ "
-         + "SELECT " + INSTANCE_VAR_PATTERN + " (" + AGGREGATION_FUNCTION_PATTERN + "(" + VALUE_VAR_PATTERN + ") AS " + AGGREGATION_VAR + ") WHERE { "
+         + "SELECT " + INSTANCE_VAR_PATTERN + " " + HIERARCHY_VAR_PATTERN + " (" + AGGREGATION_FUNCTION_PATTERN + "(" + VALUE_VAR_PATTERN + ") AS " + AGGREGATION_VAR + ") WHERE { "
          + INSTANCE_TYPE + " "
          + TARGET_GRAPH + " " + TARGET_FILTER + " "
          + FEATURE_GRAPH
-         + "} GROUP BY " + INSTANCE_VAR_PATTERN
+         + "} GROUP BY " + INSTANCE_VAR_PATTERN + " " + HIERARCHY_VAR_PATTERN
       + "} "
-      + " }";
+      + " } GROUP BY " + HIERARCHY_VAR_PATTERN;
       
    private SuffStatQueryParameter mParam;
    
-   public SquaredSumSuffStatQueryConstructor(RDFDataDescriptor desc, String context, SuffStatQueryParameter queryParam) {
+   public SquaredSumSuffStatForAllHierarchyQueryConstructor(RDFDataDescriptor desc, String context, SuffStatQueryParameter queryParam) {
       super(desc, context);
       mParam = queryParam;
    }
@@ -67,6 +69,8 @@ public class SquaredSumSuffStatQueryConstructor extends QueryConstructor {
             .replace(FEATURE_GRAPH, createAttributeGraph(mParam.Feature))
             .replace(INSTANCE_VAR_PATTERN, mDesc.getInstanceVar());
       }
+      
+      query = query.replace(HIERARCHY_VAR_PATTERN, mParam.Feature.getGraphPattern().getHierarchyVar());
       
       return query;
    }

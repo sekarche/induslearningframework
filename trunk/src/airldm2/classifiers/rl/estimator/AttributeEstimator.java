@@ -1,12 +1,15 @@
 package airldm2.classifiers.rl.estimator;
 
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
+import org.openrdf.model.URI;
 
+import airldm2.classifiers.rl.ontology.TBox;
 import airldm2.core.rl.RDFDataDescriptor;
 import airldm2.core.rl.RDFDataSource;
 import airldm2.core.rl.RbcAttribute;
@@ -19,12 +22,35 @@ public abstract class AttributeEstimator {
    static { Log.setLevel(Level.WARNING); }
    
    protected RbcAttribute mAttribute;
+   protected RDFDataSource mSource;
+   protected RDFDataDescriptor mDesc;
+   protected ClassEstimator mClassEst;
    
    public AttributeEstimator(RbcAttribute att) {
       mAttribute = att;
    }
    
-   public abstract void estimateParameters(RDFDataSource source, RDFDataDescriptor desc, ClassEstimator classEst) throws RDFDatabaseException;
+   public void setDataSource(RDFDataSource source, RDFDataDescriptor desc, ClassEstimator classEst) {
+      mSource = source;
+      mDesc = desc;
+      mClassEst = classEst;
+   }
+   
+   protected int getClassSize() {
+      return mClassEst.getClassHistogram().size();
+   }
+   
+   protected double getClassCount(int c) {
+      return mClassEst.getClassHistogram().get(c);
+   }
+   
+   protected int getNumInstances() {
+      return mClassEst.getNumInstances();
+   }
+   
+   public abstract Map<URI,AttributeEstimator> makeForAllHierarchy(TBox tBox) throws RDFDatabaseException;
+   
+   public abstract void estimateParameters() throws RDFDatabaseException;
    public abstract double computeLikelihood(int classIndex, AttributeValue v);
    
    public abstract double computeLL();

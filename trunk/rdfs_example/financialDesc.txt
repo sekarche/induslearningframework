@@ -35,10 +35,14 @@ numericEstimator=GAUSSIAN
 ?d <http://lisp.vse.cz/pkdd99/vocab/resource/district_A8> ?a .
 }
 
-@attribute loanAmount
+@attribute transCOUNT
 NUMERIC=
-aggregator=NONE
+aggregator=COUNT
 numericEstimator=GAUSSIAN
+hierarchyRoot=http://:financial/vocab/resource/trans
 {
-?x <http://lisp.vse.cz/pkdd99/vocab/resource/loan_amount> ?a .
+?x <http://lisp.vse.cz/pkdd99/vocab/resource/loan_account_id> ?id .
+?t <http://lisp.vse.cz/pkdd99/vocab/resource/trans_account_id> ?id .
+?t a ?z .
+?t <http://lisp.vse.cz/pkdd99/vocab/resource/trans_amount> ?a .
 }

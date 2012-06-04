@@ -1,6 +1,7 @@
 package airldm2.classifiers;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 import weka.classifiers.evaluation.ConfusionMatrix;
@@ -10,7 +11,11 @@ import airldm2.classifiers.rl.AggregatedInstance;
 import airldm2.classifiers.rl.AggregatedInstances;
 import airldm2.classifiers.rl.InstanceAggregator;
 import airldm2.classifiers.rl.OntologyRBClassifier;
+import airldm2.classifiers.rl.OntologyRDTClassifier;
+import airldm2.classifiers.rl.OntologyRRFClassifier;
 import airldm2.classifiers.rl.RBClassifier;
+import airldm2.classifiers.rl.RDTClassifier;
+import airldm2.classifiers.rl.RRFClassifier;
 import airldm2.classifiers.rl.estimator.OntologyAttributeEstimator;
 import airldm2.classifiers.rl.ontology.GlobalCut;
 import airldm2.core.LDInstances;
@@ -24,7 +29,10 @@ import airldm2.core.rl.RDFDataSource;
 import airldm2.core.rl.RbcAttribute;
 import airldm2.database.rdf.RDFDatabaseConnection;
 import airldm2.database.rdf.RDFDatabaseConnectionFactory;
+import airldm2.util.MathUtil;
 import airldm2.util.SimpleArffFileReader;
+
+import com.clarkparsia.pellint.util.CollectionUtil;
 
 /**
  * 
@@ -225,6 +233,29 @@ public class Evaluation {
       return wekaConfusionMatrix;
    }
    
+   public static ConfusionMatrix evaluateRDTModel(RDTClassifier rdt, LDInstances trainInstances, LDInstances testInstances) throws Exception {
+      RDFDataDescriptor desc = (RDFDataDescriptor) trainInstances.getDesc();
+      String[] classLabels = desc.getClassLabels();
+      ConfusionMatrix wekaConfusionMatrix = new ConfusionMatrix(classLabels);
+
+      rdt.buildClassifier(trainInstances);
+      List<RbcAttribute> discretizedNonTargetAttributes = rdt.getTreeAttributes();
+      desc.setNonTargetAttributeList(discretizedNonTargetAttributes);
+      AggregatedInstances aggregatedInstances = InstanceAggregator.aggregateAll(testInstances);
+      for (AggregatedInstance i : aggregatedInstances.getInstances()) {
+         double[] distribution = rdt.distributionForInstance(i);
+         double actual = i.getLabel();
+         // return some error message if the class label is not according to the descriptor
+         if (actual == -1) {
+            System.err.println("Please check the class label of test instances match their description");
+            continue;
+         }
+         wekaConfusionMatrix.addPrediction(new NominalPrediction(actual, distribution));
+      }
+      
+      return wekaConfusionMatrix;
+   }
+   
    public static ConfusionMatrix evaluateBuiltRBCModel(RBClassifier rbc, LDInstances testInstances) throws Exception {
       RDFDataDescriptor desc = (RDFDataDescriptor) testInstances.getDesc();
       AggregatedInstances aggregatedInstances = InstanceAggregator.aggregateAll(testInstances);
@@ -272,6 +303,76 @@ public class Evaluation {
       }
       System.out.println(rbc.LogDiffSum);
       return wekaConfusionMatrix;
+   }
+   
+   public static ConfusionMatrix evaluateOntologyRDTModel(OntologyRDTClassifier rdt, LDInstances trainInstances, LDInstances testInstances) throws Exception {
+      RDFDataDescriptor desc = (RDFDataDescriptor) trainInstances.getDesc();
+      String[] classLabels = desc.getClassLabels();
+      ConfusionMatrix wekaConfusionMatrix = new ConfusionMatrix(classLabels);
+
+      rdt.buildClassifier(trainInstances);
+      List<RbcAttribute> discretizedNonTargetAttributes = rdt.getTreeAttributes();
+      desc.setNonTargetAttributeList(discretizedNonTargetAttributes);
+      AggregatedInstances aggregatedInstances = InstanceAggregator.aggregateAll(testInstances);
+      for (AggregatedInstance i : aggregatedInstances.getInstances()) {
+         double[] distribution = rdt.distributionForInstance(i);
+         double actual = i.getLabel();
+         // return some error message if the class label is not according to the descriptor
+         if (actual == -1) {
+            System.err.println("Please check the class label of test instances match their description");
+            continue;
+         }
+         wekaConfusionMatrix.addPrediction(new NominalPrediction(actual, distribution));
+      }
+      
+      return wekaConfusionMatrix;
+   }
+   
+   private static ConfusionMatrix evaluateRRFModelImpl(List<RDTClassifier> forest, List<AggregatedInstances> forestInstances, LDInstances trainInstances, LDInstances testInstances) throws Exception {
+      RDFDataDescriptor desc = (RDFDataDescriptor) trainInstances.getDesc();
+      String[] classLabels = desc.getClassLabels();
+      ConfusionMatrix wekaConfusionMatrix = new ConfusionMatrix(classLabels);
+      
+      for (RDTClassifier rdt : forest) {
+         List<RbcAttribute> discretizedNonTargetAttributes = rdt.getTreeAttributes();
+         desc.setNonTargetAttributeList(discretizedNonTargetAttributes);
+         forestInstances.add(InstanceAggregator.aggregateAll(testInstances));
+      }
+      
+      int testSize = forestInstances.get(0).getInstances().size();
+      for (int i = 0; i < testSize; i++) {
+         int[] labelCounts = new int[desc.getTargetAttribute().getDomainSize()];
+         for (int t = 0; t < forest.size(); t++) {
+            RDTClassifier rdt = forest.get(t);
+            List<AggregatedInstance> instances = forestInstances.get(t).getInstances();
+            int label = (int) rdt.classifyInstance(instances.get(i));
+            labelCounts[label]++;
+         }
+         
+         int vote = MathUtil.maxIndex(labelCounts);
+         double[] distribution = new double[labelCounts.length];
+         distribution[vote] = 1.0;
+         double actual = forestInstances.get(0).getInstances().get(i).getLabel();
+         wekaConfusionMatrix.addPrediction(new NominalPrediction(actual, distribution));
+      }
+      
+      return wekaConfusionMatrix;
+   }
+
+   public static ConfusionMatrix evaluateRRFModel(RRFClassifier rrf, LDInstances trainInstances, LDInstances testInstances) throws Exception {
+      rrf.buildClassifier(trainInstances);
+      List<RDTClassifier> forest = rrf.getForest();
+      List<AggregatedInstances> forestInstances = CollectionUtil.makeList();
+      
+      return evaluateRRFModelImpl(forest, forestInstances, trainInstances, testInstances);
+   }
+   
+   public static ConfusionMatrix evaluateOntologyRRFModel(OntologyRRFClassifier rrf, LDInstances trainInstances, LDInstances testInstances) throws Exception {
+      rrf.buildClassifier(trainInstances);
+      List<RDTClassifier> forest = rrf.getForest();
+      List<AggregatedInstances> forestInstances = CollectionUtil.makeList();
+      
+      return evaluateRRFModelImpl(forest, forestInstances, trainInstances, testInstances);
    }
    
 }
