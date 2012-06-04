@@ -2,9 +2,11 @@ package airldm2.core.rl;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.openrdf.model.Literal;
 import org.openrdf.model.URI;
 import org.openrdf.model.Value;
 
@@ -18,14 +20,19 @@ import airldm2.database.rdf.InstanceQueryConstructor;
 import airldm2.database.rdf.MultinomialSuffStatQueryConstructor;
 import airldm2.database.rdf.RDFDatabaseConnection;
 import airldm2.database.rdf.SPARQLQueryResult;
+import airldm2.database.rdf.SquaredSumSuffStatForAllHierarchyQueryConstructor;
 import airldm2.database.rdf.SquaredSumSuffStatQueryConstructor;
 import airldm2.database.rdf.SuffStatQueryParameter;
+import airldm2.database.rdf.SumSuffStatForAllHierarchyQueryConstructor;
 import airldm2.database.rdf.SumSuffStatQueryConstructor;
+import airldm2.database.rdf.TreePathQueryConstructor;
+import airldm2.database.rdf.TreePathQueryParameter;
 import airldm2.database.rdf.ValueQueryConstructor;
 import airldm2.exceptions.RDFDatabaseException;
 import airldm2.exceptions.RTConfigException;
-import airldm2.util.MathUtil;
 import airldm2.util.AttribValuePair;
+import airldm2.util.CollectionUtil;
+import airldm2.util.MathUtil;
 import explore.database.rdf.CrawlPropertyQueryConstructor;
 import explore.database.rdf.NestedAggregationQueryConstructor;
 import explore.database.rdf.NestedAggregationQueryConstructor.Aggregator;
@@ -92,6 +99,24 @@ public class RDFDataSource implements SSDataSource {
    public void setRelationName(String relationName) {
    }
 
+   
+   public ISufficentStatistic getTreePathSufficientStatistic(TreePathQueryParameter queryParam) throws RDFDatabaseException {
+      String query = new TreePathQueryConstructor(mDesc, mDefaultContext, queryParam).createQuery();
+      Log.warning(query);
+      
+      SPARQLQueryResult results = mConn.executeQuery(query);
+      if (results.isEmpty()) return null;
+      
+      ISufficentStatistic stat = null;
+      if (results.isNull()) {
+         stat = new DefaultSufficentStatisticImpl(0.0);
+      } else {
+         stat = new DefaultSufficentStatisticImpl(results.getDouble());
+      }
+      Log.warning(String.valueOf(stat.getValue()));
+      return stat;
+   }
+
    public ISufficentStatistic getMultinomialSufficientStatistic(SuffStatQueryParameter queryParam) throws RDFDatabaseException {
       String query = new MultinomialSuffStatQueryConstructor(mDesc, mDefaultContext, queryParam).createQuery();
       Log.info(query);
@@ -135,6 +160,38 @@ public class RDFDataSource implements SSDataSource {
       }
       Log.info(String.valueOf(stat.getValue()));
       return stat;
+   }
+
+   public Map<URI, Double> getSumSufficientStatisticForAllHierarchy(SuffStatQueryParameter queryParam) throws RDFDatabaseException {
+      String query = new SumSuffStatForAllHierarchyQueryConstructor(mDesc, mDefaultContext, queryParam).createQuery();
+      Log.info(query);
+      
+      SPARQLQueryResult results = mConn.executeQuery(query);
+      
+      Map<URI, Double> stats = CollectionUtil.makeMap();
+      for (Value[] vs : results.getValueTupleList()) {
+         URI uri = (URI) vs[0];
+         double v = ((Literal) vs[1]).doubleValue();
+         stats.put(uri, v);
+      }
+      Log.info(String.valueOf(stats));
+      return stats;
+   }
+   
+   public Map<URI, Double> getSquaredSumSufficientStatisticForAllHierarchy(SuffStatQueryParameter queryParam) throws RDFDatabaseException {
+      String query = new SquaredSumSuffStatForAllHierarchyQueryConstructor(mDesc, mDefaultContext, queryParam).createQuery();
+      Log.info(query);
+      
+      SPARQLQueryResult results = mConn.executeQuery(query);
+      
+      Map<URI, Double> stats = CollectionUtil.makeMap();
+      for (Value[] vs : results.getValueTupleList()) {
+         URI uri = (URI) vs[0];
+         double v = ((Literal) vs[1]).doubleValue();
+         stats.put(uri, v);
+      }
+      Log.info(String.valueOf(stats));
+      return stats;
    }
 
    public List<URI> getTargetInstances(URI targetType) throws RDFDatabaseException {
@@ -250,5 +307,5 @@ public class RDFDataSource implements SSDataSource {
       }
       return cTBox;
    }
-   
+
 }

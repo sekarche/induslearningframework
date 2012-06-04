@@ -12,13 +12,11 @@ import airldm2.classifiers.rl.ontology.Cut;
 import airldm2.classifiers.rl.ontology.TBox;
 import airldm2.constants.Constants;
 import airldm2.core.ISufficentStatistic;
-import airldm2.core.rl.RDFDataDescriptor;
-import airldm2.core.rl.RDFDataSource;
 import airldm2.core.rl.RbcAttribute;
 import airldm2.database.rdf.SuffStatQueryParameter;
 import airldm2.exceptions.RDFDatabaseException;
-import airldm2.util.MathUtil;
 import airldm2.util.CollectionUtil;
+import airldm2.util.MathUtil;
 
 public class OntologyGaussianFixedVarianceEstimator extends OntologyAttributeEstimator {
 
@@ -46,10 +44,10 @@ public class OntologyGaussianFixedVarianceEstimator extends OntologyAttributeEst
    }
    
    @Override
-   public void estimateParameters(RDFDataSource source, RDFDataDescriptor desc, ClassEstimator classEst) throws RDFDatabaseException {
-      mClassHistogram = classEst.getClassHistogram();
+   public void estimateParameters() throws RDFDatabaseException {
+      mClassHistogram = mClassEst.getClassHistogram();
       
-      RbcAttribute targetAttribute = desc.getTargetAttribute();
+      RbcAttribute targetAttribute = mDesc.getTargetAttribute();
       int numOfClassLabels = targetAttribute.getDomainSize();
 
       if (mValueHistograms == null) {
@@ -67,8 +65,8 @@ public class OntologyGaussianFixedVarianceEstimator extends OntologyAttributeEst
             if (valueHistogram.containsKey(key)) continue;
             
             RbcAttribute extendedAtt = mAttribute.extendWithHierarchy(key, mTBox.isLeaf(key));
-            SuffStatQueryParameter queryParam = new SuffStatQueryParameter(desc.getTargetType(), targetAttribute, j, extendedAtt, -1);
-            ISufficentStatistic tempSuffStat = source.getSumSufficientStatistic(queryParam);
+            SuffStatQueryParameter queryParam = new SuffStatQueryParameter(mDesc.getTargetType(), targetAttribute, j, extendedAtt, -1);
+            ISufficentStatistic tempSuffStat = mSource.getSumSufficientStatistic(queryParam);
             double valueCount = tempSuffStat.getValue().doubleValue();
             valueHistogram.put(key, valueCount);
             
@@ -79,7 +77,8 @@ public class OntologyGaussianFixedVarianceEstimator extends OntologyAttributeEst
    }
 
    @Override
-   public void estimateAllParameters(RDFDataSource source, RDFDataDescriptor desc, ClassEstimator classEst) throws RDFDatabaseException {
+   public void estimateAllParameters() throws RDFDatabaseException {
+      throw new UnsupportedOperationException();
    }
    
    private double sum(Map<URI, Double> valueHistogram, Cut cut) {

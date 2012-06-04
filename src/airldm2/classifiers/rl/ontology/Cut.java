@@ -32,6 +32,20 @@ public class Cut {
       return mCut.size();
    }
    
+   public Cut refineAll() {
+      List<URI> refinement = CollectionUtil.makeList();
+      for (int i = 0; i < mCut.size(); i++) {
+         URI cutI = mCut.get(i);
+         List<URI> cutISub = mTBox.getDirectSubclass(cutI);
+         if (cutISub.isEmpty()) {
+            refinement.add(cutI);
+         } else {
+            refinement.addAll(cutISub);
+         }
+      }
+      return new Cut(mTBox, refinement);
+   }
+   
    public List<Cut> refine() {
       List<Cut> refinements = CollectionUtil.makeList();
       for (int i = 0; i < mCut.size(); i++) {
@@ -51,17 +65,20 @@ public class Cut {
    public Cut abstractCut() {
       if (size() <= 1) return null;
       
-      Set<URI> abstractCut = CollectionUtil.makeSet(mCut);
+      Set<URI> oldCut = CollectionUtil.makeSet(mCut);
+      Set<URI> newCut = CollectionUtil.makeSet();
       for (URI uri : mCut) {
          List<URI> siblings = mTBox.getSiblings(uri);
-         if (abstractCut.containsAll(siblings)) {
-            abstractCut.removeAll(siblings);
+                 
+         if (oldCut.containsAll(siblings)) {
+            oldCut.removeAll(siblings);
             URI sup = mTBox.getDirectSuperclass(uri);
-            abstractCut.add(sup);
+            newCut.add(sup);
          }
       }
       
-      return new Cut(mTBox, CollectionUtil.makeList(abstractCut));
+      newCut.addAll(oldCut);      
+      return new Cut(mTBox, CollectionUtil.makeList(newCut));
    }
 
    @Override

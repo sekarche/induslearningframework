@@ -105,6 +105,10 @@ public class RbcAttribute {
       return null;
    }
 
+   public RbcAttribute copy() {
+      return new RbcAttribute(mName, mValueType, mAggregatorType, mHierarchyRoot, mGraph);
+   }
+   
    @Override
    public String toString() {
       return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE);

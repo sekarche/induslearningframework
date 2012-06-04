@@ -14,6 +14,119 @@ numericEstimator=BINNED:0.05
 ?x <http://ehr/data/vocab/relative_risk> ?a .
 }
 
+@attribute typeSim
+NUMERIC=
+aggregator=COUNT
+numericEstimator=GAUSSIAN
+{
+?x <http://ehr/data/vocab/has_disease> ?d1 .
+?x <http://ehr/data/vocab/has_disease> ?d2 .
+?d1 a ?a .
+?d2 a ?a .
+FILTER(?d1 > ?d2)
+}
+
+@attribute degree1Exp
+NUMERIC=
+aggregator=NONE
+numericEstimator=GAUSSIAN
+{
+?x <http://ehr/data/vocab/has_disease> ?d1 .
+?x <http://ehr/data/vocab/has_disease> ?d2 .
+FILTER(?d1 > ?d2)
+?d1 <http://ehr/data/vocab/has_degree> ?a .
+}
+
+@attribute degree2Exp
+NUMERIC=
+aggregator=NONE
+numericEstimator=GAUSSIAN
+{
+?x <http://ehr/data/vocab/has_disease> ?d1 .
+?x <http://ehr/data/vocab/has_disease> ?d2 .
+FILTER(?d1 > ?d2)
+?d2 <http://ehr/data/vocab/has_degree> ?a .
+}
+
+@attribute degreeExp
+NUMERIC=
+aggregator=COUNT
+numericEstimator=GAUSSIAN
+{
+?x <http://ehr/data/vocab/has_disease> ?d .
+?a <http://ehr/data/vocab/has_disease> ?d .
+?a <http://ehr/data/vocab/relative_risk> ?ar .
+FILTER(?ar > 0.05)
+FILTER (?x != ?a)
+}
+
+@attribute degDiff
+NUMERIC=
+aggregator=NONE
+numericEstimator=GAUSSIAN
+{
+{
+SELECT ?x (?d1deg - ?d2deg) as ?a {
+?x <http://ehr/data/vocab/has_disease> ?d1 .
+?x <http://ehr/data/vocab/has_disease> ?d2 .
+?d1 <http://ehr/data/vocab/has_degree> ?d1deg .
+?d2 <http://ehr/data/vocab/has_degree> ?d2deg .
+FILTER(?d1 != ?d2)
+FILTER(?d1deg >= ?d2deg) } }
+}
+
+@attribute triadGau
+NUMERIC=
+aggregator=COUNT
+numericEstimator=GAUSSIAN
+{
+?x <http://ehr/data/vocab/has_disease> ?d1 .
+?x <http://ehr/data/vocab/has_disease> ?d2 .
+?y <http://ehr/data/vocab/has_disease> ?d1 .
+?y <http://ehr/data/vocab/has_disease> ?a .
+?y <http://ehr/data/vocab/relative_risk> ?yr .
+FILTER(?yr > 0.05)
+?w <http://ehr/data/vocab/has_disease> ?d2 .
+?w <http://ehr/data/vocab/has_disease> ?a .
+?w <http://ehr/data/vocab/relative_risk> ?wr .
+FILTER(?wr > 0.05)
+FILTER(?x != ?y && ?x != ?w && ?y != ?w)
+FILTER(?d1 > ?d2 && ?d2 != ?a && ?d1 != ?a)
+}
+
+@attribute triadPerc
+NUMERIC=
+aggregator=NONE
+numericEstimator=GAUSSIAN
+{
+{
+SELECT ?x (1.0 * ?n / ?deg) as ?a {
+{
+SELECT ?x count(?na) as ?n {
+?x <http://ehr/data/vocab/has_disease> ?d1 .
+?x <http://ehr/data/vocab/has_disease> ?d2 .
+?y <http://ehr/data/vocab/has_disease> ?d1 .
+?y <http://ehr/data/vocab/has_disease> ?na .
+?y <http://ehr/data/vocab/relative_risk> ?yr .
+FILTER(?yr > 0.05)
+?w <http://ehr/data/vocab/has_disease> ?d2 .
+?w <http://ehr/data/vocab/has_disease> ?na .
+?w <http://ehr/data/vocab/relative_risk> ?wr .
+FILTER(?wr > 0.05)
+FILTER(?x != ?y && ?x != ?w && ?y != ?w)
+FILTER(?d1 > ?d2 && ?d1 != ?na && ?d2 != ?na)
+} group by ?x }
+
+{
+SELECT ?x count(?da) as ?deg {
+?x <http://ehr/data/vocab/has_disease> ?d .
+?da <http://ehr/data/vocab/has_disease> ?d .
+?da <http://ehr/data/vocab/relative_risk> ?ar .
+FILTER(?ar > 0.05)
+FILTER (?x != ?da)
+} group by ?x } } }
+}
+
 @attribute typeTriadPerc
 NUMERIC=
 aggregator=NONE

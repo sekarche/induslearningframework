@@ -3,12 +3,14 @@ package airldm2.classifiers.rl.estimator;
 import static airldm2.constants.Constants.EPSILON;
 
 import java.util.List;
+import java.util.Map;
+
+import org.openrdf.model.URI;
 
 import umontreal.iro.lecuyer.probdistmulti.MultinomialDist;
 import umontreal.iro.lecuyer.util.Num;
+import airldm2.classifiers.rl.ontology.TBox;
 import airldm2.core.ISufficentStatistic;
-import airldm2.core.rl.RDFDataDescriptor;
-import airldm2.core.rl.RDFDataSource;
 import airldm2.core.rl.RbcAttribute;
 import airldm2.database.rdf.SuffStatQueryParameter;
 import airldm2.exceptions.RDFDatabaseException;
@@ -32,8 +34,8 @@ public class MultinomialEstimator extends AttributeEstimator {
    }
    
    @Override
-   public void estimateParameters(RDFDataSource source, RDFDataDescriptor desc, ClassEstimator classEst) throws RDFDatabaseException {
-      RbcAttribute targetAttribute = desc.getTargetAttribute();
+   public void estimateParameters() throws RDFDatabaseException {
+      RbcAttribute targetAttribute = mDesc.getTargetAttribute();
       int numOfClassLabels = targetAttribute.getDomainSize();
       int numOfAttributeValues = mAttribute.getDomainSize();
 
@@ -41,8 +43,8 @@ public class MultinomialEstimator extends AttributeEstimator {
       for (int j = 0; j < numOfClassLabels; j++) {
          double[] valueCounts = new double[numOfAttributeValues];
          for (int k = 0; k < numOfAttributeValues; k++) {
-            SuffStatQueryParameter queryParam = new SuffStatQueryParameter(desc.getTargetType(), targetAttribute, j, mAttribute, k);
-            ISufficentStatistic tempSuffStat = source.getMultinomialSufficientStatistic(queryParam);
+            SuffStatQueryParameter queryParam = new SuffStatQueryParameter(mDesc.getTargetType(), targetAttribute, j, mAttribute, k);
+            ISufficentStatistic tempSuffStat = mSource.getMultinomialSufficientStatistic(queryParam);
             valueCounts[k] = tempSuffStat.getValue().intValue();
             
             //System.out.println(queryParam);
@@ -157,6 +159,11 @@ public class MultinomialEstimator extends AttributeEstimator {
    @Override
    public double paramSize() {
       return mClassHistogram.size() * mValueHistogram.size();
+   }
+
+   @Override
+   public Map<URI, AttributeEstimator> makeForAllHierarchy(TBox tBox) {
+      return null;
    }
 
 }

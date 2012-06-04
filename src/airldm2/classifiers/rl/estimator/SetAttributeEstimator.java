@@ -2,6 +2,7 @@ package airldm2.classifiers.rl.estimator;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
@@ -9,12 +10,10 @@ import org.openrdf.model.URI;
 
 import airldm2.classifiers.rl.ontology.Cut;
 import airldm2.classifiers.rl.ontology.TBox;
-import airldm2.core.rl.RDFDataDescriptor;
-import airldm2.core.rl.RDFDataSource;
 import airldm2.core.rl.RbcAttribute;
 import airldm2.exceptions.RDFDatabaseException;
-import airldm2.util.MathUtil;
 import airldm2.util.CollectionUtil;
+import airldm2.util.MathUtil;
 
 public class SetAttributeEstimator extends OntologyAttributeEstimator {
 
@@ -32,44 +31,64 @@ public class SetAttributeEstimator extends OntologyAttributeEstimator {
    }
 
    @Override
-   public void estimateParameters(RDFDataSource source, RDFDataDescriptor desc, ClassEstimator classEst) throws RDFDatabaseException {
+   public void estimateParameters() throws RDFDatabaseException {
       for (URI uri : mCut.get()) {
          AttributeEstimator est = mEstimators.get(uri);
          if (est == null) {
             RbcAttribute extendedAtt = mAttribute.extendWithHierarchy(uri, mTBox.isLeaf(uri));
             est = extendedAtt.getEstimator();
+            est.setDataSource(mSource, mDesc, mClassEst);
             mEstimators.put(uri, est);
-            est.estimateParameters(source, desc, classEst);
+            est.estimateParameters();
          }
       }
    }
-
+   
    @Override
-   public void estimateAllParameters(RDFDataSource source, RDFDataDescriptor desc, ClassEstimator classEst) throws RDFDatabaseException {
+   public void estimateAllParameters() throws RDFDatabaseException {
+      AttributeEstimator estimator = mAttribute.getEstimator();
+      estimator.setDataSource(mSource, mDesc, mClassEst);
+      mEstimators = estimator.makeForAllHierarchy(mTBox);
+      
       URI hierarchyRoot = mAttribute.getHierarchyRoot();
       Cut cut = mTBox.getLeafCut(hierarchyRoot);
-      Cut oldCut = mCut;
-      setCut(cut);
-      estimateParameters(source, desc, classEst);
+      
+      Set<URI> hasMerged = CollectionUtil.makeSet();
+      for (URI uri : cut.get()) {
+         if (mEstimators.containsKey(uri)) {
+            hasMerged.add(uri);
+         }
+      }
       
       while ((cut = cut.abstractCut()) != null) {
          for (URI sup : cut.get()) {
-            if (mEstimators.containsKey(sup)) continue;
+            if (hasMerged.contains(sup)) continue;
             
-            RbcAttribute extendedAtt = mAttribute.extendWithHierarchy(sup, mTBox.isLeaf(sup));
-            AttributeEstimator est = extendedAtt.getEstimator();
             List<URI> subclasses = mTBox.getDirectSubclass(sup);
             List<AttributeEstimator> subEstimators = CollectionUtil.makeList();
             for (URI sub : subclasses) {
                AttributeEstimator subEst = mEstimators.get(sub);
+               if (subEst == null) continue;
+               
                subEstimators.add(subEst);
             }
-            est.mergeWith(subEstimators);
             
-            mEstimators.put(sup, est);
+            AttributeEstimator est = mEstimators.get(sup);
+            if (est == null) {
+               if (!subEstimators.isEmpty()) {
+                  RbcAttribute extendedAtt = mAttribute.extendWithHierarchy(sup, mTBox.isLeaf(sup));
+                  est = extendedAtt.getEstimator();
+                  est.setDataSource(mSource, mDesc, mClassEst);
+                  est.mergeWith(subEstimators);
+                  mEstimators.put(sup, est);
+               }
+            } else {
+               est.mergeWith(subEstimators);
+            }
+            
+            hasMerged.add(sup);
          }
       }
-      setCut(oldCut);
    }
 
    public List<AttributeEstimator> getEstimatorSelection() {
@@ -77,7 +96,7 @@ public class SetAttributeEstimator extends OntologyAttributeEstimator {
       if (Selection == SetSelection.ALL) {
          for (URI uri : mCut.get()) {
             AttributeEstimator est = mEstimators.get(uri);
-            if (!est.isValid()) continue;
+            if (est == null || !est.isValid()) continue;
             selection.add(est);
          }
       } else if (Selection == SetSelection.BEST_AND_ANCESTORS) {
@@ -113,7 +132,7 @@ public class SetAttributeEstimator extends OntologyAttributeEstimator {
       double bestScore = Double.NEGATIVE_INFINITY;
       for (URI uri : mCut.get()) {
          AttributeEstimator est = mEstimators.get(uri);
-         if (!est.isValid()) continue;
+         if (est == null || !est.isValid()) continue;
          
          double score = est.score();
          if (score > bestScore) {

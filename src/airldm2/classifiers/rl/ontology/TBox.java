@@ -55,6 +55,12 @@ public class TBox {
       return Graphs.predecessorListOf(mSubclass, c);
    }
    
+   public List<URI> getAllSubclasses(URI c) {
+      if (!mSubclass.containsVertex(c)) return Collections.emptyList();
+      
+      return Graphs.predecessorListOf(mSubclassClosed, c);
+   }
+   
    public URI getDirectSuperclass(URI c) {
       if (!mSubclass.containsVertex(c)) return null;
       
