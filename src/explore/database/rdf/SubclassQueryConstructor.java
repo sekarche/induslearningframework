@@ -7,7 +7,7 @@ public class SubclassQueryConstructor {
 
    private static final String CONTEXT_PATTERN = "%context%";
    private static final String QUERY =
-      "SELECT ?x1 ?x2 " + CONTEXT_PATTERN + " WHERE { ?x1 rdfs:subClassOf ?x2 . }";
+      "SELECT ?x1 ?x2 " + CONTEXT_PATTERN + " WHERE { ?x1 <http://www.w3.org/TR/rdf-schema/subClassOf> ?x2 . }";
     
    private String mContextPart;
    

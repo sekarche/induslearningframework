@@ -20,12 +20,13 @@ import airldm2.core.rl.RDFDataSource;
 import airldm2.core.rl.RbcAttribute;
 import airldm2.exceptions.RDFDatabaseException;
 import airldm2.util.CollectionUtil;
+import airldm2.util.Timer;
 
 
 public class OntologyRDTClassifier extends Classifier {
 
    protected static Logger Log = Logger.getLogger("airldm2.classifiers.rl.OntologyRDTClassifier");
-   static { Log.setLevel(Level.INFO); }
+   static { Log.setLevel(Level.WARNING); }
       
    private LDInstances mInstances;
    private RDFDataDescriptor mDataDesc;
@@ -41,6 +42,8 @@ public class OntologyRDTClassifier extends Classifier {
    
    @Override
    public void buildClassifier(LDInstances instances) throws Exception {
+      Timer.INSTANCE.start("OntoRDT learning");
+      
       mInstances = instances;
       mDataDesc = (RDFDataDescriptor) instances.getDesc();
       mDataSource = (RDFDataSource) instances.getDataSource();
@@ -49,15 +52,15 @@ public class OntologyRDTClassifier extends Classifier {
       mClassEst = new ClassEstimator();
       mClassEst.estimateParameters(mDataSource, mDataDesc);
       
-      Log.info("Retrieving TBox... ");
+      Log.warning("Retrieving TBox... ");
       
       mTBox = mDataSource.getTBox();
       mGlobalCut = new GlobalCut(mTBox, mNonTargetAttributes);
       
-      Log.info("Build tree for root cut... ");
+      Log.warning("Build tree for root cut... ");
       mBestRDT = buildRDT(mGlobalCut);
       
-      Log.info("Searching... ");
+      Log.warning("Searching... ");
       
       //Greedy search global cut
       double bestScore = mBestRDT.getTreeScore();
@@ -76,14 +79,14 @@ public class OntologyRDTClassifier extends Classifier {
             GlobalCut globalCut = mGlobalCut.copy();
             globalCut.replace(att, attRefinement);
             
-            Log.info("Building with new cut: " + globalCut);
+            Log.warning("Building with new cut: " + globalCut);
             
             RDTClassifier rdtNew = buildRDT(globalCut);
             
             double score = rdtNew.getTreeScore();
             
             if (score > newBestScore) {
-               Log.info("New score " + score + " " + globalCut.toString());
+               Log.warning("New score " + score + " " + globalCut.toString());
                newBestScore = score;
                newBestGlobalCut = globalCut;
                newbestRDT = rdtNew;
@@ -94,13 +97,15 @@ public class OntologyRDTClassifier extends Classifier {
             bestScore = newBestScore;
             mGlobalCut = newBestGlobalCut;
             mBestRDT = newbestRDT;
-            Log.info("New best global cut found with score " + newBestScore);
+            Log.warning("New best global cut found with score " + newBestScore);
          } else {
             break;
          }
       }
       
-      Log.info("Final tree: " + mBestRDT.getTree());
+      Log.warning("Final tree: " + mBestRDT.getTree());
+      
+      Timer.INSTANCE.stop("OntoRDT learning");
    }
    
    private RDTClassifier buildRDT(GlobalCut globalCut) throws Exception {
@@ -131,7 +136,7 @@ public class OntologyRDTClassifier extends Classifier {
          estimator.setDataSource(mDataSource, mDataDesc, mClassEst);
          estimator.estimateParameters();
          
-         Log.info(estimator.toString());
+         Log.warning(estimator.toString());
          RbcAttribute discretizedAtt = ((GaussianEstimator) estimator).makeBinaryBinnedAttribute();
          return discretizedAtt;
       } else {

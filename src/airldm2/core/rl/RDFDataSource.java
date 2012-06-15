@@ -33,6 +33,8 @@ import airldm2.exceptions.RTConfigException;
 import airldm2.util.AttribValuePair;
 import airldm2.util.CollectionUtil;
 import airldm2.util.MathUtil;
+import airldm2.util.Timer;
+import airldm2.util.Weigher;
 import explore.database.rdf.CrawlPropertyQueryConstructor;
 import explore.database.rdf.NestedAggregationQueryConstructor;
 import explore.database.rdf.NestedAggregationQueryConstructor.Aggregator;
@@ -104,7 +106,11 @@ public class RDFDataSource implements SSDataSource {
       String query = new TreePathQueryConstructor(mDesc, mDefaultContext, queryParam).createQuery();
       Log.warning(query);
       
+      Weigher.INSTANCE.add(query);
+      Timer.INSTANCE.start("Query");
       SPARQLQueryResult results = mConn.executeQuery(query);
+      Timer.INSTANCE.stop("Query");      
+      
       if (results.isEmpty()) return null;
       
       ISufficentStatistic stat = null;
@@ -121,7 +127,11 @@ public class RDFDataSource implements SSDataSource {
       String query = new MultinomialSuffStatQueryConstructor(mDesc, mDefaultContext, queryParam).createQuery();
       Log.info(query);
       
+      Weigher.INSTANCE.add(query);
+      Timer.INSTANCE.start("Query");
       SPARQLQueryResult results = mConn.executeQuery(query);
+      Timer.INSTANCE.stop("Query");
+      
       if (results.isEmpty()) return null;
       ISufficentStatistic stat = new DefaultSufficentStatisticImpl(results.getInt());
       Log.info(String.valueOf(results.getInt()));
@@ -132,7 +142,11 @@ public class RDFDataSource implements SSDataSource {
       String query = new SumSuffStatQueryConstructor(mDesc, mDefaultContext, queryParam).createQuery();
       Log.info(query);
       
+      Weigher.INSTANCE.add(query);
+      Timer.INSTANCE.start("Query");
       SPARQLQueryResult results = mConn.executeQuery(query);
+      Timer.INSTANCE.stop("Query");
+      
       if (results.isEmpty()) return null;
       
       ISufficentStatistic stat = null;
@@ -149,7 +163,11 @@ public class RDFDataSource implements SSDataSource {
       String query = new SquaredSumSuffStatQueryConstructor(mDesc, mDefaultContext, queryParam).createQuery();
       Log.info(query);
       
+      Weigher.INSTANCE.add(query);
+      Timer.INSTANCE.start("Query");
       SPARQLQueryResult results = mConn.executeQuery(query);
+      Timer.INSTANCE.stop("Query");
+      
       if (results.isEmpty()) return null;
       
       ISufficentStatistic stat = null;
@@ -166,7 +184,10 @@ public class RDFDataSource implements SSDataSource {
       String query = new SumSuffStatForAllHierarchyQueryConstructor(mDesc, mDefaultContext, queryParam).createQuery();
       Log.info(query);
       
+      Weigher.INSTANCE.add(query);
+      Timer.INSTANCE.start("Query");
       SPARQLQueryResult results = mConn.executeQuery(query);
+      Timer.INSTANCE.stop("Query");
       
       Map<URI, Double> stats = CollectionUtil.makeMap();
       for (Value[] vs : results.getValueTupleList()) {
@@ -182,7 +203,10 @@ public class RDFDataSource implements SSDataSource {
       String query = new SquaredSumSuffStatForAllHierarchyQueryConstructor(mDesc, mDefaultContext, queryParam).createQuery();
       Log.info(query);
       
+      Weigher.INSTANCE.add(query);
+      Timer.INSTANCE.start("Query");
       SPARQLQueryResult results = mConn.executeQuery(query);
+      Timer.INSTANCE.stop("Query");
       
       Map<URI, Double> stats = CollectionUtil.makeMap();
       for (Value[] vs : results.getValueTupleList()) {
@@ -285,6 +309,8 @@ public class RDFDataSource implements SSDataSource {
    }
 
    public TBox getTBox() throws RDFDatabaseException {
+      Timer.INSTANCE.start("TBox");
+      
       if (cTBox == null) {
          cTBox = new TBox();
          
@@ -305,6 +331,8 @@ public class RDFDataSource implements SSDataSource {
          
          cTBox.computeClosure();
       }
+      
+      Timer.INSTANCE.stop("TBox");
       return cTBox;
    }
 

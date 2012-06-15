@@ -1,0 +1,68 @@
+@instance_var x
+@value_var a
+@hierarchy_var z
+
+@targetType http://cora/vocab/paper
+
+@target label
+
+@attribute label
+NOMINAL=+,-
+aggregator=NONE
+{
+?x <http://cora/vocab/hasLabel> ?a .
+}
+
+@attribute cites
+ENUM=http://cora/title/Retrieval,http://cora/title/Filtering,http://cora/title/Object_Oriented,http://cora/title/Case-Based,http://cora/title/Extraction,http://cora/title/NLP,http://cora/title/Data_Mining,http://cora/title/Query_Evaluation,http://cora/title/Knowledge_Representation,http://cora/title/Digital_Library,http://cora/title/Relational,http://cora/title/Genetic_Algorithms,http://cora/title/Temporal,http://cora/title/Concurrency,http://cora/title/Performance,http://cora/title/Probabilistic_Methods,http://cora/title/Neural_Networks,http://cora/title/Deductive,http://cora/title/Speech
+aggregator=HISTOGRAM
+{
+?x <http://cora/vocab/cites> ?c .
+?c a <http://cora/vocab/paper> .
+?c <http://cora/vocab/hasTitle> ?t .
+?t a ?a .
+}
+
+@attribute cited
+ENUM=http://cora/title/Retrieval,http://cora/title/Filtering,http://cora/title/Object_Oriented,http://cora/title/Case-Based,http://cora/title/Extraction,http://cora/title/NLP,http://cora/title/Data_Mining,http://cora/title/Query_Evaluation,http://cora/title/Knowledge_Representation,http://cora/title/Digital_Library,http://cora/title/Relational,http://cora/title/Genetic_Algorithms,http://cora/title/Temporal,http://cora/title/Concurrency,http://cora/title/Performance,http://cora/title/Probabilistic_Methods,http://cora/title/Neural_Networks,http://cora/title/Deductive,http://cora/title/Speech
+aggregator=HISTOGRAM
+{
+?c <http://cora/vocab/cites> ?x . ?c a <http://cora/vocab/paper> .
+?c <http://cora/vocab/hasTitle> ?t .
+?t a ?a .
+}
+
+@attribute cocites
+ENUM=http://cora/title/Retrieval,http://cora/title/Filtering,http://cora/title/Object_Oriented,http://cora/title/Case-Based,http://cora/title/Extraction,http://cora/title/NLP,http://cora/title/Data_Mining,http://cora/title/Query_Evaluation,http://cora/title/Knowledge_Representation,http://cora/title/Digital_Library,http://cora/title/Relational,http://cora/title/Genetic_Algorithms,http://cora/title/Temporal,http://cora/title/Concurrency,http://cora/title/Performance,http://cora/title/Probabilistic_Methods,http://cora/title/Neural_Networks,http://cora/title/Deductive,http://cora/title/Speech
+aggregator=HISTOGRAM
+{
+?x <http://cora/vocab/cites> ?c . ?c a <http://cora/vocab/paper> .
+?y <http://cora/vocab/cites> ?c . ?y a <http://cora/vocab/paper> .
+FILTER (?x != ?y)
+?y <http://cora/vocab/hasTitle> ?t .
+?t a ?a .
+}
+
+@attribute cocited
+ENUM=http://cora/title/Retrieval,http://cora/title/Filtering,http://cora/title/Object_Oriented,http://cora/title/Case-Based,http://cora/title/Extraction,http://cora/title/NLP,http://cora/title/Data_Mining,http://cora/title/Query_Evaluation,http://cora/title/Knowledge_Representation,http://cora/title/Digital_Library,http://cora/title/Relational,http://cora/title/Genetic_Algorithms,http://cora/title/Temporal,http://cora/title/Concurrency,http://cora/title/Performance,http://cora/title/Probabilistic_Methods,http://cora/title/Neural_Networks,http://cora/title/Deductive,http://cora/title/Speech
+aggregator=HISTOGRAM
+hierarchyRoot=http://cora/title/Computer_Science
+{
+?c <http://cora/vocab/cites> ?x . ?c a <http://cora/vocab/paper> .
+?c <http://cora/vocab/cites> ?y . ?y a <http://cora/vocab/paper> .
+FILTER (?x != ?y)
+?y <http://cora/vocab/hasTitle> ?t .
+?t a ?a .
+}
+
+@attribute author
+ENUM=http://cora/title/Retrieval,http://cora/title/Filtering,http://cora/title/Object_Oriented,http://cora/title/Case-Based,http://cora/title/Extraction,http://cora/title/NLP,http://cora/title/Data_Mining,http://cora/title/Query_Evaluation,http://cora/title/Knowledge_Representation,http://cora/title/Digital_Library,http://cora/title/Relational,http://cora/title/Genetic_Algorithms,http://cora/title/Temporal,http://cora/title/Concurrency,http://cora/title/Performance,http://cora/title/Probabilistic_Methods,http://cora/title/Neural_Networks,http://cora/title/Deductive,http://cora/title/Speech
+aggregator=HISTOGRAM
+hierarchyRoot=http://cora/title/Computer_Science
+{
+?x <http://cora/vocab/hasAuthor> ?r .
+?y <http://cora/vocab/hasAuthor> ?r . ?y a <http://cora/vocab/paper> .
+FILTER (?x != ?y)
+?y <http://cora/vocab/hasTitle> ?t .
+?t a ?a .
+}

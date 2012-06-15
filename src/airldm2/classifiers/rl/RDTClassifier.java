@@ -21,12 +21,13 @@ import airldm2.core.rl.RDFDataSource;
 import airldm2.core.rl.RbcAttribute;
 import airldm2.exceptions.RDFDatabaseException;
 import airldm2.util.CollectionUtil;
+import airldm2.util.Timer;
 
 
 public class RDTClassifier extends Classifier {
 
    protected static Logger Log = Logger.getLogger("airldm2.classifiers.rl.RDTClassifier");
-   static { Log.setLevel(Level.INFO); }
+   static { Log.setLevel(Level.WARNING); }
    
    private static final double INFO_GAIN_THRESHOLD = 0.1;
    
@@ -51,6 +52,8 @@ public class RDTClassifier extends Classifier {
    }
    
    public void buildClassifier(LDInstances instances, List<RbcAttribute> nonTargetAttributes) throws Exception {
+      Timer.INSTANCE.start("RDT learning");
+      
       mDataDesc = (RDFDataDescriptor) instances.getDesc();
       mDataSource = (RDFDataSource) instances.getDataSource();
       if (mClassEst == null) {
@@ -68,7 +71,9 @@ public class RDTClassifier extends Classifier {
          mTreeAttributes.add(n.getAttribute());
       }
       
-      Log.info("Final tree: " + mTree);
+      Log.warning("Final tree: " + mTree);
+      
+      Timer.INSTANCE.stop("RDT learning");
    }
    
    public SimpleDirectedGraph<TreeNodeSplitter, Category> getTree() {
@@ -78,7 +83,7 @@ public class RDTClassifier extends Classifier {
    public double getTreeScore() {
       double accuracy = computeAccuracy();
       double sizePenalty = computeSizePenalty();
-      Log.info("accuracy=" + accuracy + " sizePenalty=" + sizePenalty);
+      Log.warning("accuracy=" + accuracy + " sizePenalty=" + sizePenalty);
       return accuracy * getTreeAttributes().size() - sizePenalty;
    }
    
@@ -112,15 +117,15 @@ public class RDTClassifier extends Classifier {
       mClassEst = new ClassEstimator();
       mClassEst.estimateParameters(mDataSource, mDataDesc);
       List<RbcAttribute> nonTargetAttributes = discretizeNonTargetAttributes();
-      Log.info(nonTargetAttributes.toString());
+      Log.warning(nonTargetAttributes.toString());
       buildClassifier(instances, nonTargetAttributes);
    }
    
    private void buildTree(List<TreeNodeSplitter> pathNodes, List<Category> pathEdges) throws RDFDatabaseException {
       if (pathNodes.size() >= mDepthLimit) return;
       
-      Log.info("Building tree: " + pathNodes + " " + pathEdges);
-      Log.info("Current tree: " + mTree);
+      Log.warning("Building tree: " + pathNodes + " " + pathEdges);
+      Log.warning("Current tree: " + mTree);
       
       List<RbcAttribute> unusedAttributes = getUnusedAttributes(pathNodes);
       List<TreeNodeSplitter> newNodes = CollectionUtil.makeList();
@@ -133,8 +138,8 @@ public class RDTClassifier extends Classifier {
       Category lastEdge = getLastEdge(pathEdges);
       TreeNodeSplitter bestNewNode = getMaxInfoGain(newNodes);
       
-      Log.info("unusedAttributes=" + unusedAttributes);
-      Log.info("newNodes=" + newNodes);
+      Log.warning("unusedAttributes=" + unusedAttributes);
+      Log.warning("newNodes=" + newNodes);
       
       if (mRoot == null || !isTerminationCriteriaMet(pathNodes, bestNewNode)) {
          mTree.addVertex(bestNewNode);
@@ -160,7 +165,7 @@ public class RDTClassifier extends Classifier {
    private boolean isTerminationCriteriaMet(List<TreeNodeSplitter> pathNodes, TreeNodeSplitter bestNewNode) {
       if (bestNewNode == null) return true;
       
-      Log.info(bestNewNode.toString() + " " + bestNewNode.getInfoGain());
+      Log.warning(bestNewNode.toString() + " " + bestNewNode.getInfoGain());
       return bestNewNode.getInfoGain() < INFO_GAIN_THRESHOLD;
    }
 
@@ -207,7 +212,7 @@ public class RDTClassifier extends Classifier {
             estimator.setDataSource(mDataSource, mDataDesc, mClassEst);
             estimator.estimateParameters();
             
-            Log.info(estimator.toString());
+            Log.warning(estimator.toString());
             RbcAttribute discretizedAtt = ((GaussianEstimator) estimator).makeBinaryBinnedAttribute();
             discretizedList.add(discretizedAtt);
          } else {
@@ -262,6 +267,11 @@ public class RDTClassifier extends Classifier {
       int label = (int) classifyInstance(instance);
       dist[label] = 1.0;
       return dist;
+   }
+   
+   @Override
+   public String toString() {
+      return mTree.toString();
    }
 
 }

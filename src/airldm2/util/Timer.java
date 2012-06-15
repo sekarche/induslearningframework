@@ -4,6 +4,8 @@ import java.util.Map;
 
 public class Timer {
    
+   public static final Timer INSTANCE = new Timer();
+   
    private Map<String,Long> mStartTime = CollectionUtil.makeMap();
    private Map<String,Long> mTotal = CollectionUtil.makeMap();
    

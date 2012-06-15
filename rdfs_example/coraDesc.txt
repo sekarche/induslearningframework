@@ -1,0 +1,61 @@
+@instance_var x
+@value_var a
+@hierarchy_var z
+
+@targetType http://cora/vocab/paper
+
+@target label
+
+@attribute label
+NOMINAL=+,-
+aggregator=NONE
+{
+?x <http://cora/vocab/hasLabel> ?a .
+}
+
+@attribute cites
+NUMERIC=
+aggregator=COUNT
+numericEstimator=GAUSSIAN
+{
+?x <http://cora/vocab/cites> ?a .
+?a a <http://cora/vocab/paper> .
+}
+
+@attribute cited
+NUMERIC=
+aggregator=COUNT
+numericEstimator=GAUSSIAN
+{
+?a <http://cora/vocab/cites> ?x . ?a a <http://cora/vocab/paper> .
+}
+
+@attribute cocites
+NUMERIC=
+aggregator=COUNT
+numericEstimator=GAUSSIAN
+{
+?x <http://cora/vocab/cites> ?c . ?c a <http://cora/vocab/paper> .
+?a <http://cora/vocab/cites> ?c . ?a a <http://cora/vocab/paper> .
+FILTER (?x != ?a)
+}
+
+@attribute cocited
+NUMERIC=
+aggregator=COUNT
+numericEstimator=GAUSSIAN
+{
+?c <http://cora/vocab/cites> ?x . ?c a <http://cora/vocab/paper> .
+?c <http://cora/vocab/cites> ?a . ?a a <http://cora/vocab/paper> .
+FILTER (?x != ?a)
+}
+
+@attribute author
+NUMERIC=
+aggregator=COUNT
+numericEstimator=GAUSSIAN
+{
+?x <http://cora/vocab/hasAuthor> ?r .
+?a <http://cora/vocab/hasAuthor> ?r . ?a a <http://cora/vocab/paper> .
+FILTER (?x != ?a)
+}
