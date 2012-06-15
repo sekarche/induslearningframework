@@ -41,7 +41,7 @@ public class InstanceAggregator {
       RDFDataDescriptor dataDesc = (RDFDataDescriptor) instances.getDesc();
       
       List<URI> instanceURIs = dataSource.getTargetInstances(dataDesc.getTargetType());
-      instanceURIs = sample(instanceURIs, 100);
+      //instanceURIs = sample(instanceURIs, 100);
 
       AggregatedInstances ais = new AggregatedInstances(instanceURIs);
       

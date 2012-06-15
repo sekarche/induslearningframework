@@ -20,12 +20,13 @@ import airldm2.core.rl.RDFDataSource;
 import airldm2.core.rl.RbcAttribute;
 import airldm2.exceptions.RDFDatabaseException;
 import airldm2.util.CollectionUtil;
+import airldm2.util.Timer;
 
 
 public class OntologyRRFClassifier extends Classifier {
 
    protected static Logger Log = Logger.getLogger("airldm2.classifiers.rl.OntologyRRFClassifier");
-   static { Log.setLevel(Level.INFO); }
+   static { Log.setLevel(Level.WARNING); }
       
    private LDInstances mInstances;
    private RDFDataDescriptor mDataDesc;
@@ -53,6 +54,8 @@ public class OntologyRRFClassifier extends Classifier {
    
    @Override
    public void buildClassifier(LDInstances instances) throws Exception {
+      Timer.INSTANCE.start("OntoRRF learning");
+      
       mInstances = instances;
       mDataDesc = (RDFDataDescriptor) instances.getDesc();
       mDataSource = (RDFDataSource) instances.getDataSource();
@@ -61,15 +64,17 @@ public class OntologyRRFClassifier extends Classifier {
       mClassEst = new ClassEstimator();
       mClassEst.estimateParameters(mDataSource, mDataDesc);
       
-      Log.info("Retrieving TBox... ");
+      Log.warning("Retrieving TBox... ");
       
       mTBox = mDataSource.getTBox();
       
       for (int i = 0; i < mForestSize; i++) {
-         Log.info("Building tree " + i + " ... ");
+         Log.warning("Building tree " + i + " ... ");
          RDTClassifier tree = buildRDT();
          mForest.add(tree);
       }
+      
+      Timer.INSTANCE.stop("OntoRRF learning");
    }
    
    private RDTClassifier buildRDT() throws Exception {
@@ -108,7 +113,7 @@ public class OntologyRRFClassifier extends Classifier {
          estimator.setDataSource(mDataSource, mDataDesc, mClassEst);
          estimator.estimateParameters();
          
-         Log.info(estimator.toString());
+         Log.warning(estimator.toString());
          RbcAttribute discretizedAtt = ((GaussianEstimator) estimator).makeBinaryBinnedAttribute();
          return discretizedAtt;
       } else {

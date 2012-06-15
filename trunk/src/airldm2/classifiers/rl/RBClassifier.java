@@ -18,6 +18,7 @@ import airldm2.core.rl.RDFDataSource;
 import airldm2.core.rl.RbcAttribute;
 import airldm2.util.CollectionUtil;
 import airldm2.util.MathUtil;
+import airldm2.util.Timer;
 
 public class RBClassifier extends Classifier {
 
@@ -30,6 +31,8 @@ public class RBClassifier extends Classifier {
       
    @Override
    public void buildClassifier(LDInstances instances) throws Exception {
+      Timer.INSTANCE.start("RBC learning");
+      
       mDataDesc = (RDFDataDescriptor) instances.getDesc();
       mDataSource = (RDFDataSource) instances.getDataSource();
 
@@ -48,6 +51,8 @@ public class RBClassifier extends Classifier {
          estimator.estimateParameters();
          mAttributeEst.put(att, estimator);
       }
+      
+      Timer.INSTANCE.stop("RBC learning");
    }
    
    @Override

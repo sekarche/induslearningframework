@@ -23,6 +23,8 @@ import airldm2.database.rdf.RDFDatabaseConnection;
 import airldm2.database.rdf.SPARQLQueryResult;
 import airldm2.database.rdf.VirtuosoConnection;
 import airldm2.exceptions.RDFDatabaseException;
+import airldm2.util.Timer;
+import airldm2.util.Weigher;
 
 public class ExperimentClassifier {
    
@@ -30,8 +32,6 @@ public class ExperimentClassifier {
    private RDFDataSource mTestData;
 
    private ValueFactory ValueFac = new ValueFactoryImpl();
-   private URI Context;
-   private URI InstanceURI;
    
    private static boolean IsFinancial = true;
    private RDFDatabaseConnection TrainConn;
@@ -39,9 +39,9 @@ public class ExperimentClassifier {
    
    public static void main(String[] args) throws Exception {
       if (IsFinancial) 
-         new ExperimentClassifier().run("rdfs_example/financialDesc.txt", ":financial", "http://:financial/vocab/resource/loan");
+         new ExperimentClassifier().run("rdfs_example/financialDescAll.txt", ":financial", "http://:financial/vocab/resource/loan");
       else
-         new ExperimentClassifier().run("rdfs_example/diseaseDesc.txt", "http://ehr", "http://ehr/data/vocab/disease_pair");
+         new ExperimentClassifier().run("rdfs_example/coraDesc.txt", ":cora", "http://cora/vocab/paper");
    }
    
    private void run(String descFile, String context, String instanceURI) throws Exception {
@@ -77,8 +77,19 @@ public class ExperimentClassifier {
          testInstances.setDesc(desc);
          testInstances.setDataSource(mTestData);
       
-         RBClassifier rdt = new RBClassifier();
-         ConfusionMatrix mat = Evaluation.evaluateRBCModel(rdt, trainInstances, testInstances);
+         RBClassifier model = new RBClassifier();
+         ConfusionMatrix mat = Evaluation.evaluateRBCModel(model, trainInstances, testInstances);
+//         RDTClassifier model = new RDTClassifier();
+//         ConfusionMatrix mat = Evaluation.evaluateRDTModel(model, trainInstances, testInstances);
+//         RRFClassifier model = new RRFClassifier(10, 3, 2);
+//         ConfusionMatrix mat = Evaluation.evaluateRRFModel(model, trainInstances, testInstances);
+//         OntologyRBClassifier model = new OntologyRBClassifier();
+//         ConfusionMatrix mat = Evaluation.evaluateOntologyRBCModel(model, trainInstances, testInstances);
+//         OntologyRDTClassifier model = new OntologyRDTClassifier();
+//         ConfusionMatrix mat = Evaluation.evaluateOntologyRDTModel(model, trainInstances, testInstances);
+//         OntologyRRFClassifier model = new OntologyRRFClassifier(10, 3, 2);
+//         ConfusionMatrix mat = Evaluation.evaluateOntologyRRFModel(model, trainInstances, testInstances);
+         
          matrix = matrix.add(mat);
          
          //add back train test
@@ -89,6 +100,8 @@ public class ExperimentClassifier {
       }
       
       out.write(matrix.toString()); out.newLine();
+      out.write("Total query size: " + Weigher.INSTANCE); out.newLine();
+      out.write(Timer.INSTANCE.toString()); out.newLine();
       
       out.close();
    }
@@ -96,9 +109,6 @@ public class ExperimentClassifier {
    private void setUpDataSource(RDFDataDescriptor desc, String graph, String instanceURI) throws RepositoryException {
       final String trainSPARQL = "http://localhost:8890/sparql";
       final String testSPARQL = "http://localhost:8896/sparql";
-      
-      Context = ValueFac.createURI(graph);
-      InstanceURI = ValueFac.createURI(instanceURI);
       
       RDFDatabaseConnection trainConn = new VirtuosoConnection(trainSPARQL);
       mTrainData = new RDFDataSource(trainConn, desc, graph);
@@ -151,9 +161,9 @@ public class ExperimentClassifier {
             + "?x a <http://:financial/vocab/resource/loan> . }";
          conn.executeUpdate(deleteQuery);
       } else {
-         String deleteQuery = "DELETE FROM <http://ehr> { ?x a <http://ehr/data/vocab/disease_pair> . } WHERE { "
+         String deleteQuery = "DELETE FROM <:cora> { ?x a <http://cora/vocab/paper> . } WHERE { "
             + "FILTER(?x = <" + uri + ">) "
-            + "?x a <http://ehr/data/vocab/disease_pair> . }";
+            + "?x a <http://cora/vocab/paper> . }";
          conn.executeUpdate(deleteQuery);
       }
    }
@@ -163,8 +173,8 @@ public class ExperimentClassifier {
          String addQuery = "INSERT INTO <:financial> { <" + uri + "> a <http://:financial/vocab/resource/loan> . } ";
          conn.executeUpdate(addQuery);
       } else {
-         String deleteQuery = "DELETE FROM <http://ehr> { <" + uri + "> a <http://ehr/data/vocab/disease_pair> . } ";
-         conn.executeUpdate(deleteQuery);
+         String addQuery = "INSERT INTO <:cora> { <" + uri + "> a <http://cora/vocab/paper> . } ";
+         conn.executeUpdate(addQuery);
       }
    }
    
@@ -227,19 +237,17 @@ public class ExperimentClassifier {
          }
       } else {
          if (isPositive) {
-            String query = "SELECT ?x FROM <http://ehr> WHERE { "
-               + "?x a <http://ehr/data/vocab/disease_pair> . "
-               + "?x <http://ehr/data/vocab/relative_risk> ?r . "
-               + "FILTER(?r < 0.05) "
+            String query = "SELECT ?x FROM <:cora> WHERE { "
+               + "?x a <http://cora/vocab/paper> . "
+               + "?x <http://cora/vocab/hasLabel> \"+\" . "
                + " } ORDER BY ?x";
             SPARQLQueryResult result = trainConn.executeQuery(query);
             return result.getURIList();
             
          } else {
-            String query = "SELECT ?x FROM <http://ehr> WHERE { "
-               + "?x a <http://ehr/data/vocab/disease_pair> . "
-               + "?x <http://ehr/data/vocab/relative_risk> ?r . "
-               + "FILTER(?r >= 0.05) "
+            String query = "SELECT ?x FROM <:cora> WHERE { "
+               + "?x a <http://cora/vocab/paper> . "
+               + "?x <http://cora/vocab/hasLabel> \"-\" . "
                + " } ORDER BY ?x";
             SPARQLQueryResult result = trainConn.executeQuery(query);
             return result.getURIList();

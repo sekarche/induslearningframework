@@ -330,6 +330,8 @@ public class Evaluation {
    
    private static ConfusionMatrix evaluateRRFModelImpl(List<RDTClassifier> forest, List<AggregatedInstances> forestInstances, LDInstances trainInstances, LDInstances testInstances) throws Exception {
       RDFDataDescriptor desc = (RDFDataDescriptor) trainInstances.getDesc();
+      List<RbcAttribute> originalNonTargetAttributeList = desc.getNonTargetAttributeList();
+      
       String[] classLabels = desc.getClassLabels();
       ConfusionMatrix wekaConfusionMatrix = new ConfusionMatrix(classLabels);
       
@@ -356,6 +358,7 @@ public class Evaluation {
          wekaConfusionMatrix.addPrediction(new NominalPrediction(actual, distribution));
       }
       
+      desc.setNonTargetAttributeList(originalNonTargetAttributeList);
       return wekaConfusionMatrix;
    }
 

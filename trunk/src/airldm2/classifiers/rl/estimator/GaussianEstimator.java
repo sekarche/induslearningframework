@@ -202,6 +202,10 @@ public class GaussianEstimator extends AttributeEstimator {
       
       double mean = computeMean(classIndex);
       double variance = computeVariance(classIndex);
+      if (variance < Constants.EPSILON) {
+         return 0.0;
+      }
+      
       double density = NormalDist.density(mean, Math.sqrt(variance), val);
       double LL = Math.log(density);
       Log.info("class" + classIndex + " " + val + " " + mean + " " + variance + " Density=" + density + " LL=" + LL);
@@ -215,6 +219,7 @@ public class GaussianEstimator extends AttributeEstimator {
          double N_J = getClassCount(j);
          double mean = computeMean(j); 
          double variance = computeVariance(j);
+         if (variance < Constants.EPSILON) continue;
          
          double[] term = new double[3];
          term[0] = -N_J * Math.log(Math.sqrt(2 * Math.PI * variance));
@@ -238,6 +243,7 @@ public class GaussianEstimator extends AttributeEstimator {
          double N_J_COMP = getClassCount(1 - j);
          double mean = computeMean(j);
          double variance = computeVariance(j);
+         if (variance < Constants.EPSILON) continue;
          
          double[] term = new double[3];
          term[0] = -N_J_COMP * Math.log(Math.sqrt(2 * Math.PI * variance));

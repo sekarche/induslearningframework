@@ -30,6 +30,11 @@ public class OntologyRDTClassifierTest {
       testWithTrainInDBTestInDB("rdfs_example/diseaseDesc.txt", "http://ehr", "http://ehr");
    }
    
+   @Test
+   public void testCora() throws Exception {
+      testWithTrainInDBTestInDB("rdfs_example/coraDesc.txt", ":cora", ":cora");
+   }
+   
    private void testWithTrainInDBTestInDB(String descFile, String trainGraph, String testGraph) throws Exception {
       RDFDataDescriptor desc = RDFDataDescriptorParser.parse(descFile);
       //System.out.println(desc);

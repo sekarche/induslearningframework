@@ -30,11 +30,12 @@ import airldm2.core.rl.RbcAttribute;
 import airldm2.exceptions.RTConfigException;
 import airldm2.util.CollectionUtil;
 import airldm2.util.MathUtil;
+import airldm2.util.Timer;
 
 public class OntologyRBClassifier extends Classifier {
 
    protected static Logger Log = Logger.getLogger("airldm2.classifiers.rl.OntologyRBClassifier");
-   static { Log.setLevel(Level.INFO); }
+   static { Log.setLevel(Level.WARNING); }
    
    private boolean OPTIMIZE_ONTOLOGY = false;
    
@@ -69,6 +70,8 @@ public class OntologyRBClassifier extends Classifier {
    
    @Override
    public void buildClassifier(LDInstances instances) throws Exception {
+      Timer.INSTANCE.start("OntoRBC learning");
+      
       mDataDesc = (RDFDataDescriptor) instances.getDesc();
       mDataSource = (RDFDataSource) instances.getDataSource();
 
@@ -79,12 +82,12 @@ public class OntologyRBClassifier extends Classifier {
       mClassEst = new ClassEstimator();
       mClassEst.estimateParameters(mDataSource, mDataDesc);
       
-      Log.info("Retrieving TBox... ");
+      Log.warning("Retrieving TBox... ");
       
       mTBox = mDataSource.getTBox();
       mGlobalCut = new GlobalCut(mTBox, nonTargetAttributes);
       
-      Log.info("Initializing estimators... ");
+      Log.warning("Initializing estimators... ");
       
       //Initialize
       mAttributeEst = CollectionUtil.makeMap();
@@ -112,7 +115,7 @@ public class OntologyRBClassifier extends Classifier {
       }
       
       logParameters(mGlobalCut);
-      Log.info("Searching... ");
+      Log.warning("Searching... ");
       
       //Greedy search global cut
       double bestScore = computeCMDL(mGlobalCut);
@@ -131,13 +134,13 @@ public class OntologyRBClassifier extends Classifier {
                est.setCut(attRefinement);
                est.estimateParameters();
                
-               Log.info("Trying new global cut: " + globalCut.toString());
+               Log.warning("Trying new global cut: " + globalCut.toString());
                logParameters(globalCut);
                
                double score = computeCMDL(globalCut);
                
                if (score > newBestScore) {
-                  Log.info("New score " + score + " " + globalCut.toString());
+                  Log.warning("New score " + score + " " + globalCut.toString());
                   newBestScore = score;
                   newBestGlobalCut = globalCut;
                }
@@ -149,7 +152,7 @@ public class OntologyRBClassifier extends Classifier {
             bestScore = newBestScore;
             mGlobalCut = newBestGlobalCut;
             
-            Log.info("New best global cut found with score " + newBestScore);
+            Log.warning("New best global cut found with score " + newBestScore);
             logParameters(mGlobalCut);
             
             updateEstimatorCuts(mGlobalCut);
@@ -158,7 +161,9 @@ public class OntologyRBClassifier extends Classifier {
          }
       }
       
-      Log.info(mAttributeEst.toString());
+      Log.warning(mAttributeEst.toString());
+      
+      Timer.INSTANCE.stop("OntoRBC learning");
    }
    
    public GlobalCut getGlobalCut() {
@@ -170,9 +175,9 @@ public class OntologyRBClassifier extends Classifier {
    }
    
    private void logParameters(GlobalCut globalCut) {
-      Log.info("Global Cut: " + globalCut.toString());
-      Log.info("Class estimator: " + mClassEst.toString());
-      Log.info("Estimators: " + mAttributeEst.values().toString());
+      Log.warning("Global Cut: " + globalCut.toString());
+      Log.warning("Class estimator: " + mClassEst.toString());
+      Log.warning("Estimators: " + mAttributeEst.values().toString());
    }
 
    private void updateEstimatorCuts(GlobalCut globalCut) {
@@ -187,7 +192,7 @@ public class OntologyRBClassifier extends Classifier {
    private double computeCMDL(GlobalCut globalCut) {
       double CLL = computeCLL();
       double sizePenalty = computeSizePenalty(globalCut);
-      Log.info("CLL=" + CLL + " sizePenalty=" + sizePenalty);
+      Log.warning("CLL=" + CLL + " sizePenalty=" + sizePenalty);
       return CLL - sizePenalty;
    }
 
@@ -201,7 +206,7 @@ public class OntologyRBClassifier extends Classifier {
 
    private double computeLL() {
       double result = mClassEst.computeLL();
-      Log.info("Class LL=" + result);
+      Log.warning("Class LL=" + result);
       for (OntologyAttributeEstimator est : mAttributeEst.values()) {
          result += est.computeLL();
       }
@@ -210,7 +215,7 @@ public class OntologyRBClassifier extends Classifier {
    
    private double computeDualLL() {
       double result = mClassEst.computeDualLL();
-      Log.info("Class DualLL=" + result);
+      Log.warning("Class DualLL=" + result);
       for (OntologyAttributeEstimator est : mAttributeEst.values()) {
          result += est.computeDualLL();
       }
@@ -223,7 +228,7 @@ public class OntologyRBClassifier extends Classifier {
       final double BETA = (PI2 - 18) / 24;
       double LL = computeLL();
       double DualLL = computeDualLL();
-      Log.info("LL=" + LL + " DualLL=" + DualLL);
+      Log.warning("LL=" + LL + " DualLL=" + DualLL);
       return ALPHA * LL + BETA * DualLL;
    }
 

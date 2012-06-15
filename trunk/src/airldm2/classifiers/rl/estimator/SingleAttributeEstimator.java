@@ -4,6 +4,8 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 
 import airldm2.classifiers.rl.ontology.TBox;
+import airldm2.core.rl.RDFDataDescriptor;
+import airldm2.core.rl.RDFDataSource;
 import airldm2.core.rl.RbcAttribute;
 import airldm2.exceptions.RDFDatabaseException;
 
@@ -14,6 +16,12 @@ public class SingleAttributeEstimator extends OntologyAttributeEstimator {
    public SingleAttributeEstimator(TBox tBox, RbcAttribute att) {
       super(tBox, att);
       mEstimator = att.getEstimator();
+      mEstimator.setDataSource(mSource, mDesc, mClassEst);
+   }
+   
+   public void setDataSource(RDFDataSource source, RDFDataDescriptor desc, ClassEstimator classEst) {
+      super.setDataSource(source, desc, classEst);
+      mEstimator.setDataSource(mSource, mDesc, mClassEst);
    }
 
    @Override

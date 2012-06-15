@@ -17,12 +17,13 @@ import airldm2.core.rl.RDFDataSource;
 import airldm2.core.rl.RbcAttribute;
 import airldm2.exceptions.RDFDatabaseException;
 import airldm2.util.CollectionUtil;
+import airldm2.util.Timer;
 
 
 public class RRFClassifier extends Classifier {
 
    protected static Logger Log = Logger.getLogger("airldm2.classifiers.rl.RRFClassifier");
-   static { Log.setLevel(Level.INFO); }
+   static { Log.setLevel(Level.WARNING); }
       
    private LDInstances mInstances;
    private RDFDataDescriptor mDataDesc;
@@ -48,6 +49,8 @@ public class RRFClassifier extends Classifier {
    
    @Override
    public void buildClassifier(LDInstances instances) throws Exception {
+      Timer.INSTANCE.start("RRF learning");
+      
       mInstances = instances;
       mDataDesc = (RDFDataDescriptor) instances.getDesc();
       mDataSource = (RDFDataSource) instances.getDataSource();
@@ -57,10 +60,14 @@ public class RRFClassifier extends Classifier {
       mClassEst.estimateParameters(mDataSource, mDataDesc);
       
       for (int i = 0; i < mForestSize; i++) {
-         Log.info("Building tree " + i + " ... ");
+         Log.warning("Building tree " + i + " ... ");
          RDTClassifier tree = buildRDT();
          mForest.add(tree);
       }
+      
+      Log.warning("Final forest: " + mForest);
+      
+      Timer.INSTANCE.stop("RRF learning");
    }
    
    private RDTClassifier buildRDT() throws Exception {
@@ -73,7 +80,7 @@ public class RRFClassifier extends Classifier {
       for (RbcAttribute att : nonTargetAttributes) {
          nonTargetAttributeList.add(discretizeNonTargetAttribute(att));
       }
-      
+
       RDTClassifier rdt = new RDTClassifier(mDepthLimit);
       rdt.buildClassifier(mInstances, nonTargetAttributeList);
       return rdt;
@@ -85,7 +92,7 @@ public class RRFClassifier extends Classifier {
          estimator.setDataSource(mDataSource, mDataDesc, mClassEst);
          estimator.estimateParameters();
          
-         Log.info(estimator.toString());
+         Log.warning(estimator.toString());
          RbcAttribute discretizedAtt = ((GaussianEstimator) estimator).makeBinaryBinnedAttribute();
          return discretizedAtt;
       } else {

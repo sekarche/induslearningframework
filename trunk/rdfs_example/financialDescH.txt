@@ -33,9 +33,12 @@ numericEstimator=GAUSSIAN
 NUMERIC=
 aggregator=MIN
 numericEstimator=GAUSSIAN
+hierarchyRoot=http://:financial/vocab/resource/trans
 {
 ?x <http://lisp.vse.cz/pkdd99/vocab/resource/loan_account_id> ?id .
 ?t <http://lisp.vse.cz/pkdd99/vocab/resource/trans_account_id> ?id .
+?t a ?z .
+<HIERARCHY>
 ?t <http://lisp.vse.cz/pkdd99/vocab/resource/trans_amount> ?a .
 }
 
@@ -43,9 +46,12 @@ numericEstimator=GAUSSIAN
 NUMERIC=
 aggregator=MIN
 numericEstimator=GAUSSIAN
+hierarchyRoot=http://:financial/vocab/resource/trans
 {
 ?x <http://lisp.vse.cz/pkdd99/vocab/resource/loan_account_id> ?id .
 ?t <http://lisp.vse.cz/pkdd99/vocab/resource/trans_account_id> ?id .
+?t a ?z .
+<HIERARCHY>
 ?t <http://lisp.vse.cz/pkdd99/vocab/resource/trans_balance> ?a .
 }
 
@@ -53,9 +59,12 @@ numericEstimator=GAUSSIAN
 NUMERIC=
 aggregator=COUNT
 numericEstimator=GAUSSIAN
+hierarchyRoot=http://:financial/vocab/resource/trans
 {
 ?x <http://lisp.vse.cz/pkdd99/vocab/resource/loan_account_id> ?id .
 ?t <http://lisp.vse.cz/pkdd99/vocab/resource/trans_account_id> ?id .
+?t a ?z .
+<HIERARCHY>
 ?t <http://lisp.vse.cz/pkdd99/vocab/resource/trans_amount> ?a .
 }
 
@@ -63,8 +72,11 @@ numericEstimator=GAUSSIAN
 NUMERIC=
 aggregator=SUM
 numericEstimator=GAUSSIAN
+hierarchyRoot=http://:financial/vocab/resource/account
 {
 ?x <http://lisp.vse.cz/pkdd99/vocab/resource/loan_account_id> ?ac .
+?ac a ?z .
+<HIERARCHY>
 ?ac <http://lisp.vse.cz/pkdd99/vocab/resource/account_district_id> ?d .
 ?d <http://lisp.vse.cz/pkdd99/vocab/resource/district_A11> ?a .
 }
@@ -73,8 +85,11 @@ numericEstimator=GAUSSIAN
 NUMERIC=
 aggregator=SUM
 numericEstimator=GAUSSIAN
+hierarchyRoot=http://:financial/vocab/resource/account
 {
 ?x <http://lisp.vse.cz/pkdd99/vocab/resource/loan_account_id> ?ac .
+?ac a ?z .
+<HIERARCHY>
 ?ac <http://lisp.vse.cz/pkdd99/vocab/resource/account_district_id> ?d .
 ?d <http://lisp.vse.cz/pkdd99/vocab/resource/district_A13> ?a .
 }
@@ -83,8 +98,11 @@ numericEstimator=GAUSSIAN
 NUMERIC=
 aggregator=SUM
 numericEstimator=GAUSSIAN
+hierarchyRoot=http://:financial/vocab/resource/account
 {
 ?x <http://lisp.vse.cz/pkdd99/vocab/resource/loan_account_id> ?ac .
+?ac a ?z .
+<HIERARCHY>
 ?ac <http://lisp.vse.cz/pkdd99/vocab/resource/account_district_id> ?d .
 ?d <http://lisp.vse.cz/pkdd99/vocab/resource/district_A14> ?a .
 }
