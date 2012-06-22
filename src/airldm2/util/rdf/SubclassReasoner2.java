@@ -29,12 +29,12 @@ public class SubclassReasoner2 {
       Timer timer = new Timer();
       timer.start("Inf");
       for (URI c : tBox.getClasses()) {
-         if (!c.stringValue().startsWith("http://cora")) continue;
+         if (!c.stringValue().startsWith("http://kdd2002")) continue;
          List<URI> sups = tBox.getSuperclasses(c);
          if (sups.isEmpty()) continue;
          
          StringBuilder query = new StringBuilder();
-         query.append("INSERT INTO <:cora> { ");
+         query.append("INSERT INTO <:gene> { ");
          for (URI sup : sups) {
             query.append(StringUtil.triple("?x", "a", StringUtil.angleBracket(sup)));
          }         
