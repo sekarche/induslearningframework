@@ -1,5 +1,6 @@
 package airldm2.util.rdf;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
@@ -25,8 +26,9 @@ public class Sampler {
 
    public static void main(String[] args) throws RepositoryException, RTConfigException, RDFDatabaseException {
       //pkdd();
-      diseaseSample();
+      //diseaseSample();
       //diseaseFix();
+      geneSample();
    }
 
    private static void diseaseFix() throws RDFDatabaseException, RepositoryException {
@@ -186,6 +188,27 @@ public class Sampler {
          deleteQuery.append("DELETE FROM <:financial> { <" + i.toString() + "> ?y ?z } WHERE { <" + i.toString() + "> ?y ?z . }");
      
          conn.executeUpdate(deleteQuery.toString());
+      }
+   }
+   
+   private static void geneSample() throws RDFDatabaseException, RepositoryException {
+      RDFDatabaseConnection conn = new VirtuosoConnection("jdbc:virtuoso://localhost:1111/charset=UTF-8/log_enable=2", "dba", "dba");
+
+      String query = "SELECT ?x FROM <:gene> WHERE { "
+         + "?x a <http://kdd2002/vocab/gene> . "
+         + "?x <http://kdd2002/vocab/hasLabel> \"-\" . } ORDER BY ?x";
+      SPARQLQueryResult result = conn.executeQuery(query);
+      List<URI> uriList = result.getURIList();
+      Collections.shuffle(uriList, new Random(0));
+      
+      for (int i = uriList.size() - 1; i >= 344; i--) {
+         URI uri = uriList.get(i);
+         uriList.remove(i);
+         
+         String deleteQuery = "delete from <:gene> { ?x a <http://kdd2002/vocab/gene> . } WHERE { "
+            + "?x a <http://kdd2002/vocab/gene> . "
+            + "FILTER (?x = <" + uri + ">) }";
+         conn.executeUpdate(deleteQuery);
       }
    }
 }
