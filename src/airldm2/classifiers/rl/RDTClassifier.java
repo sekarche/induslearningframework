@@ -10,18 +10,20 @@ import org.jgrapht.graph.SimpleDirectedGraph;
 import airldm2.classifiers.Classifier;
 import airldm2.classifiers.rl.estimator.AttributeEstimator;
 import airldm2.classifiers.rl.estimator.AttributeValue;
-import airldm2.classifiers.rl.estimator.Category;
 import airldm2.classifiers.rl.estimator.ClassEstimator;
 import airldm2.classifiers.rl.estimator.GaussianEstimator;
+import airldm2.classifiers.rl.estimator.MappedHistogram;
 import airldm2.classifiers.rl.tree.TreeNodeSplitter;
 import airldm2.core.LDInstance;
 import airldm2.core.LDInstances;
 import airldm2.core.rl.RDFDataDescriptor;
 import airldm2.core.rl.RDFDataSource;
 import airldm2.core.rl.RbcAttribute;
+import airldm2.core.rl.RbcAttributeValue;
 import airldm2.exceptions.RDFDatabaseException;
 import airldm2.util.CollectionUtil;
 import airldm2.util.Timer;
+import explore.RDFDataDescriptorEnhancer;
 
 
 public class RDTClassifier extends Classifier {
@@ -29,18 +31,18 @@ public class RDTClassifier extends Classifier {
    protected static Logger Log = Logger.getLogger("airldm2.classifiers.rl.RDTClassifier");
    static { Log.setLevel(Level.WARNING); }
    
-   private static final double INFO_GAIN_THRESHOLD = 0.1;
+   private static final double INFO_GAIN_THRESHOLD = 0.01;
    
    private RDFDataSource mDataSource;
    private RDFDataDescriptor mDataDesc;
    private ClassEstimator mClassEst;
    
    private int mNumOfClassLabels;
-   private List<RbcAttribute> mNonTargetAttributes;
-   private SimpleDirectedGraph<TreeNodeSplitter,Category> mTree;
+   private List<RbcAttributeValue> mAttributeValues;
+   private SimpleDirectedGraph<TreeNodeSplitter,Boolean> mTree;
    private TreeNodeSplitter mRoot;
    
-   private List<RbcAttribute> mTreeAttributes;
+   private List<RbcAttributeValue> mTreeAttributeValues;
 
    private int mDepthLimit = Integer.MAX_VALUE;
    
@@ -51,7 +53,23 @@ public class RDTClassifier extends Classifier {
       mDepthLimit = depthLimit;
    }
    
-   public void buildClassifier(LDInstances instances, List<RbcAttribute> nonTargetAttributes) throws Exception {
+   @Override
+   public void buildClassifier(LDInstances instances) throws Exception {
+      mDataDesc = (RDFDataDescriptor) instances.getDesc();
+      mDataSource = (RDFDataSource) instances.getDataSource();
+      
+      new RDFDataDescriptorEnhancer(mDataSource).fillDomain(mDataDesc);
+      
+      mNumOfClassLabels = mDataDesc.getTargetAttribute().getDomainSize();
+      mClassEst = new ClassEstimator();
+      mClassEst.estimateParameters(mDataSource, mDataDesc);
+      List<RbcAttribute> nonTargetAttributes = discretizeNonTargetAttributes();
+      List<RbcAttributeValue> nonTargetAttributeValues = propositionalizeAttributes(nonTargetAttributes);
+      Log.warning(nonTargetAttributes.toString());
+      buildClassifier(instances, nonTargetAttributeValues);
+   }
+   
+   public void buildClassifier(LDInstances instances, List<RbcAttributeValue> nonTargetAttributeValues) throws Exception {
       Timer.INSTANCE.start("RDT learning");
       
       mDataDesc = (RDFDataDescriptor) instances.getDesc();
@@ -61,14 +79,14 @@ public class RDTClassifier extends Classifier {
          mClassEst.estimateParameters(mDataSource, mDataDesc);
       }
       mNumOfClassLabels = mDataDesc.getTargetAttribute().getDomainSize();
-      mNonTargetAttributes = nonTargetAttributes;
-      mTree = new SimpleDirectedGraph<TreeNodeSplitter, Category>(Category.class);
-      buildTree(CollectionUtil.<TreeNodeSplitter>makeList(), CollectionUtil.<Category>makeList());
+      mAttributeValues = nonTargetAttributeValues;
+      mTree = new SimpleDirectedGraph<TreeNodeSplitter, Boolean>(Boolean.class);
+      buildTree(CollectionUtil.<TreeNodeSplitter>makeList(), CollectionUtil.<Boolean>makeList());
       
       List<TreeNodeSplitter> nodes = CollectionUtil.makeList(mTree.vertexSet()); 
-      mTreeAttributes = CollectionUtil.makeList();
+      mTreeAttributeValues = CollectionUtil.makeList();
       for (TreeNodeSplitter n : nodes) {
-         mTreeAttributes.add(n.getAttribute());
+         mTreeAttributeValues.add(n.getAttributeValue());
       }
       
       Log.warning("Final tree: " + mTree);
@@ -76,7 +94,7 @@ public class RDTClassifier extends Classifier {
       Timer.INSTANCE.stop("RDT learning");
    }
    
-   public SimpleDirectedGraph<TreeNodeSplitter, Category> getTree() {
+   public SimpleDirectedGraph<TreeNodeSplitter, Boolean> getTree() {
       return mTree;
    }
    
@@ -91,17 +109,17 @@ public class RDTClassifier extends Classifier {
       return 2.0 * mTree.vertexSet().size();
    }
 
-   private double computeAccuracy() {
+   public double computeAccuracy() {
       return getTruePositiveCount(mRoot) / mClassEst.getNumInstances();
    }
    
    private double getTruePositiveCount(TreeNodeSplitter node) {
       double count = 0.0;
       for (int i = 0; i < 2; i++) {
-         Category cat = new Category(i);
-         TreeNodeSplitter next = findNode(node, cat);
+         boolean exists = i == 0;
+         TreeNodeSplitter next = findNode(node, exists);
          if (next == null) {
-            count += node.getTruePositiveCount(cat);
+            count += node.getTruePositiveCount(exists);
          } else {
             count += getTruePositiveCount(next);
          }
@@ -109,37 +127,25 @@ public class RDTClassifier extends Classifier {
       return count;
    }
    
-   @Override
-   public void buildClassifier(LDInstances instances) throws Exception {
-      mDataDesc = (RDFDataDescriptor) instances.getDesc();
-      mDataSource = (RDFDataSource) instances.getDataSource();
-      mNumOfClassLabels = mDataDesc.getTargetAttribute().getDomainSize();
-      mClassEst = new ClassEstimator();
-      mClassEst.estimateParameters(mDataSource, mDataDesc);
-      List<RbcAttribute> nonTargetAttributes = discretizeNonTargetAttributes();
-      Log.warning(nonTargetAttributes.toString());
-      buildClassifier(instances, nonTargetAttributes);
-   }
-   
-   private void buildTree(List<TreeNodeSplitter> pathNodes, List<Category> pathEdges) throws RDFDatabaseException {
+   private void buildTree(List<TreeNodeSplitter> pathNodes, List<Boolean> pathEdges) throws RDFDatabaseException {
       if (pathNodes.size() >= mDepthLimit) return;
       
-      Log.warning("Building tree: " + pathNodes + " " + pathEdges);
-      Log.warning("Current tree: " + mTree);
+      Log.info("Building tree: " + pathNodes + " " + pathEdges);
+      Log.info("Current tree: " + mTree);
       
-      List<RbcAttribute> unusedAttributes = getUnusedAttributes(pathNodes);
+      List<RbcAttributeValue> unusedAttributeValues = getUnusedAttributeValues(pathNodes);
       List<TreeNodeSplitter> newNodes = CollectionUtil.makeList();
-      for (RbcAttribute att : unusedAttributes) {
-         TreeNodeSplitter newNode = new TreeNodeSplitter(mDataSource, mDataDesc, att);
+      for (RbcAttributeValue attValue : unusedAttributeValues) {
+         TreeNodeSplitter newNode = new TreeNodeSplitter(mDataSource, mDataDesc, mClassEst, attValue);
          newNode.estimateParameters(pathNodes, pathEdges);
          newNodes.add(newNode);
       }
       TreeNodeSplitter lastNode = getLastNode(pathNodes);
-      Category lastEdge = getLastEdge(pathEdges);
+      Boolean lastEdge = getLastEdge(pathEdges);
       TreeNodeSplitter bestNewNode = getMaxInfoGain(newNodes);
       
-      Log.warning("unusedAttributes=" + unusedAttributes);
-      Log.warning("newNodes=" + newNodes);
+      Log.info("unusedAttributes=" + unusedAttributeValues);
+      Log.info("newNodes=" + newNodes);
       
       if (mRoot == null || !isTerminationCriteriaMet(pathNodes, bestNewNode)) {
          mTree.addVertex(bestNewNode);
@@ -153,10 +159,11 @@ public class RDTClassifier extends Classifier {
             }
          }
          
-         for (int i = 0; i <= 1; i++) {
+         for (int i = 0; i < 2; i++) {
+            boolean exists = i == 0;
             List<TreeNodeSplitter> newPathNodes = CollectionUtil.makeList(pathNodes);
-            List<Category> newPathEdges = CollectionUtil.makeList(pathEdges);
-            newPathEdges.add(new Category(i));
+            List<Boolean> newPathEdges = CollectionUtil.makeList(pathEdges);
+            newPathEdges.add(exists);
             buildTree(newPathNodes, newPathEdges);
          }
       }
@@ -164,8 +171,7 @@ public class RDTClassifier extends Classifier {
    
    private boolean isTerminationCriteriaMet(List<TreeNodeSplitter> pathNodes, TreeNodeSplitter bestNewNode) {
       if (bestNewNode == null) return true;
-      
-      Log.warning(bestNewNode.toString() + " " + bestNewNode.getInfoGain());
+      Log.warning("" + bestNewNode.getInfoGain());
       return bestNewNode.getInfoGain() < INFO_GAIN_THRESHOLD;
    }
 
@@ -174,7 +180,7 @@ public class RDTClassifier extends Classifier {
       return pathNodes.get(pathNodes.size() - 1);
    }
    
-   private Category getLastEdge(List<Category> pathEdges) {
+   private Boolean getLastEdge(List<Boolean> pathEdges) {
       if (pathEdges.isEmpty()) return null;
       return pathEdges.get(pathEdges.size() - 1);
    }
@@ -191,14 +197,15 @@ public class RDTClassifier extends Classifier {
             max = n.getInfoGain();
          }
       }
+      
       return maxNode;
    }
 
-   private List<RbcAttribute> getUnusedAttributes(List<TreeNodeSplitter> pathNodes) {
-      List<RbcAttribute> unused = CollectionUtil.makeList(mNonTargetAttributes);
+   private List<RbcAttributeValue> getUnusedAttributeValues(List<TreeNodeSplitter> pathNodes) {
+      List<RbcAttributeValue> unused = CollectionUtil.makeList(mAttributeValues);
       for (TreeNodeSplitter n : pathNodes) {
-         RbcAttribute att = n.getAttribute();
-         unused.remove(att);
+         RbcAttributeValue v = n.getAttributeValue();
+         unused.remove(v);
       }
       return unused;
    }
@@ -222,8 +229,21 @@ public class RDTClassifier extends Classifier {
       return discretizedList;
    }
    
+   public static List<RbcAttributeValue> propositionalizeAttributes(List<RbcAttribute> atts) {
+      List<RbcAttributeValue> attValues = CollectionUtil.makeList();
+      for (RbcAttribute att : atts) {
+         List<RbcAttributeValue> values = RbcAttributeValue.makeAllValues(att);
+         attValues.addAll(values);
+      }
+      return attValues;
+   }
+
    public List<RbcAttribute> getTreeAttributes() {
-      return mTreeAttributes;
+      List<RbcAttribute> atts = CollectionUtil.makeList();
+      for (RbcAttributeValue v : mTreeAttributeValues) {
+         atts.add(v.Attribute);
+      }
+      return atts;
    }
    
    @Override
@@ -241,21 +261,22 @@ public class RDTClassifier extends Classifier {
       Map<RbcAttribute,AttributeValue> values = instance.getAttributeValues();
       TreeNodeSplitter currentNode = mRoot;
       while (true) {
-         RbcAttribute att = currentNode.getAttribute();
-         AttributeValue value = values.get(att);
-         Category cat = (Category) value;
-         TreeNodeSplitter nextNode = findNode(currentNode, cat);
+         RbcAttributeValue attValue = currentNode.getAttributeValue();
+         AttributeValue value = values.get(attValue.Attribute);
+         MappedHistogram counts = (MappedHistogram) value;
+         boolean exists = counts.get(attValue.ValueKey) > 0.0;
+         TreeNodeSplitter nextNode = findNode(currentNode, exists);
          if (nextNode == null) {
-            return currentNode.getPredictionAtLeaf(cat);
+            return currentNode.getPredictionAtLeaf(exists);
          } else {
             currentNode = nextNode;
          }
       }
    }
    
-   private TreeNodeSplitter findNode(TreeNodeSplitter node, Category cat) {
-      for (Category out : mTree.outgoingEdgesOf(node)) {
-         if (out.getIndex() == cat.getIndex()) {
+   private TreeNodeSplitter findNode(TreeNodeSplitter node, boolean exists) {
+      for (Boolean out : mTree.outgoingEdgesOf(node)) {
+         if (out == exists) {
             return mTree.getEdgeTarget(out);
          }
       }

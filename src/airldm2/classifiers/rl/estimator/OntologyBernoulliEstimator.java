@@ -20,20 +20,14 @@ import airldm2.exceptions.RDFDatabaseException;
 import airldm2.util.CollectionUtil;
 import airldm2.util.MathUtil;
 
-public class OntologyMultinomialEstimator extends OntologyAttributeEstimator {
+public class OntologyBernoulliEstimator extends OntologyAttributeEstimator {
 
    //[class value]=Map
    private List<Map<URI,Double>> mValueHistograms;
    
-   //[class value]=count
    private Histogram mClassHistogram;
    
-   //[attribute value]=Total
-   private Map<URI,Double> mValueHistogram;
-   
-   private double mTotal;
-   
-   public OntologyMultinomialEstimator(TBox tBox, RbcAttribute att) {
+   public OntologyBernoulliEstimator(TBox tBox, RbcAttribute att) {
       super(tBox, att);
    }
    
@@ -47,10 +41,9 @@ public class OntologyMultinomialEstimator extends OntologyAttributeEstimator {
    
    @Override
    public void estimateParameters() throws RDFDatabaseException {
+      mClassHistogram = mClassEst.getClassHistogram();
       RbcAttribute targetAttribute = mDesc.getTargetAttribute();
-      int numOfClassLabels = targetAttribute.getDomainSize();
-      computeValueHistograms(mSource, mDesc, targetAttribute);      
-      computeDependentParameters(numOfClassLabels);
+      computeValueHistograms(mSource, mDesc, targetAttribute);
    }
 
    private void computeValueHistograms(RDFDataSource source, RDFDataDescriptor desc, RbcAttribute targetAttribute) throws RDFDatabaseException {
@@ -72,7 +65,7 @@ public class OntologyMultinomialEstimator extends OntologyAttributeEstimator {
             if (valueHistogram.containsKey(key)) continue;
             
             SuffStatQueryParameter queryParam = new SuffStatQueryParameter(desc.getTargetType(), targetAttribute, j, mAttribute, k);
-            ISufficentStatistic tempSuffStat = source.getMultinomialSufficientStatistic(queryParam);
+            ISufficentStatistic tempSuffStat = source.getBernoulliSufficientStatistic(queryParam);
             double valueCount = tempSuffStat.getValue().intValue();
             valueHistogram.put(key, valueCount);
             
@@ -82,59 +75,8 @@ public class OntologyMultinomialEstimator extends OntologyAttributeEstimator {
       }
    }
 
-   private void computeDependentParameters(int numOfClassLabels) {
-      if (mClassHistogram == null) {
-         double[] classCounts = new double[numOfClassLabels];
-         for (int j = 0; j < numOfClassLabels; j++) {
-            URI hierarchyRoot = mAttribute.getHierarchyRoot();
-            classCounts[j] = mValueHistograms.get(j).get(hierarchyRoot);
-         }
-         mClassHistogram = new Histogram(classCounts);
-      }
-            
-      mValueHistogram = MathUtil.sumAcross(mValueHistograms);
-      
-      mTotal = mClassHistogram.sum();
-   }
-
    @Override
    public void estimateAllParameters() throws RDFDatabaseException {
-      RbcAttribute targetAttribute = mDesc.getTargetAttribute();
-      int numOfClassLabels = targetAttribute.getDomainSize();
-      
-      URI hierarchyRoot = mAttribute.getHierarchyRoot();
-      //hack
-      Cut cut = mTBox.getAllNodesAsCut(hierarchyRoot);
-      
-      Cut oldCut = mCut;
-      setCut(cut);
-      computeValueHistograms(mSource, mDesc, targetAttribute);
-      
-      cut = mTBox.getLeafCut(hierarchyRoot);
-      cut.optimizeAbstraction();
-      for (URI sup = cut.abstractCut(); sup != null; sup = cut.abstractCut()) { 
-         List<URI> subclasses = mTBox.getDirectSubclass(sup);
-         for (Map<URI,Double> valueHistogram : mValueHistograms) {
-            Double sum = valueHistogram.get(sup);
-            if (sum == null) {
-               sum = 0.0;
-            }
-            sum += sum(valueHistogram, subclasses);
-            
-            valueHistogram.put(sup, sum);
-         }
-      }
-
-      computeDependentParameters(numOfClassLabels);
-      setCut(oldCut);
-   }
-   
-   private double sum(Map<URI, Double> valueHistogram, List<URI> subclasses) {
-      double sum = 0.0;
-      for (URI sub : subclasses) {
-         sum += valueHistogram.get(sub);
-      }
-      return sum;
    }
 
    @Override
@@ -146,7 +88,7 @@ public class OntologyMultinomialEstimator extends OntologyAttributeEstimator {
    public double computeLikelihood(int classIndex, AttributeValue v) {
       if (v instanceof Null) return 1.0;
       if (!(v instanceof Histogram)) 
-         throw new IllegalArgumentException("Error: value " + v + " is not a Histogram for MultinomialEstimator.");
+         throw new IllegalArgumentException("Error: value " + v + " is not a Histogram for OntologyBernoulliEstimator.");
       
       Histogram val = (Histogram) v;
       if (val.size() != mCut.size())
@@ -154,9 +96,8 @@ public class OntologyMultinomialEstimator extends OntologyAttributeEstimator {
       
       initLikelihood();
       
-      int N = (int) (val.sum());
       Log.info(Arrays.toString(val.getIntArray(0)));
-      return MathUtil.logMultinomialDist(N, mParameters[classIndex], val.getIntArray(0));
+      return MathUtil.logBernoulliDist(mParameters[classIndex], val.getIntArray(0));
    }
 
    private double[][] mParameters;
@@ -171,10 +112,9 @@ public class OntologyMultinomialEstimator extends OntologyAttributeEstimator {
          for (int i = 0; i < mParameters[j].length; i++) {
             URI key = mCut.get().get(i);
             
-            mParameters[j][i] = (valueHistogram.get(key) + 1.0) / (classCount + valueHistogram.size());
+            mParameters[j][i] = (valueHistogram.get(key) + 1.0) / (classCount + 2.0);
          }
          
-         MathUtil.normalize(mParameters[j]);
          Log.info(Arrays.toString(mParameters[j]));
       }
    }
@@ -185,8 +125,6 @@ public class OntologyMultinomialEstimator extends OntologyAttributeEstimator {
          .append("name", mAttribute.getName())   
          .append("mValueHistograms", mValueHistograms)
          .append("mClassHistogram", mClassHistogram)
-         .append("mValueHistogram", mValueHistogram)
-         .append("mTotal", mTotal)
          .toString();
    }
 

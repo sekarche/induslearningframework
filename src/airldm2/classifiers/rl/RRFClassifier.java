@@ -6,6 +6,8 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import explore.RDFDataDescriptorEnhancer;
+
 import airldm2.classifiers.Classifier;
 import airldm2.classifiers.rl.estimator.AttributeEstimator;
 import airldm2.classifiers.rl.estimator.ClassEstimator;
@@ -15,6 +17,7 @@ import airldm2.core.LDInstances;
 import airldm2.core.rl.RDFDataDescriptor;
 import airldm2.core.rl.RDFDataSource;
 import airldm2.core.rl.RbcAttribute;
+import airldm2.core.rl.RbcAttributeValue;
 import airldm2.exceptions.RDFDatabaseException;
 import airldm2.util.CollectionUtil;
 import airldm2.util.Timer;
@@ -29,7 +32,6 @@ public class RRFClassifier extends Classifier {
    private RDFDataDescriptor mDataDesc;
    private RDFDataSource mDataSource;
 
-   private List<RbcAttribute> mNonTargetAttributes;
    private ClassEstimator mClassEst;
    
    private List<RDTClassifier> mForest;
@@ -54,15 +56,23 @@ public class RRFClassifier extends Classifier {
       mInstances = instances;
       mDataDesc = (RDFDataDescriptor) instances.getDesc();
       mDataSource = (RDFDataSource) instances.getDataSource();
-      mNonTargetAttributes = mDataDesc.getNonTargetAttributeList();
+      
+      new RDFDataDescriptorEnhancer(mDataSource).fillDomain(mDataDesc);
       
       mClassEst = new ClassEstimator();
       mClassEst.estimateParameters(mDataSource, mDataDesc);
       
-      for (int i = 0; i < mForestSize; i++) {
+      for (int i = 0; mForest.size() < mForestSize; i++) {
          Log.warning("Building tree " + i + " ... ");
          RDTClassifier tree = buildRDT();
-         mForest.add(tree);
+         
+//         if (tree.computeAccuracy() > 0.1) {
+            mForest.add(tree);
+//            Log.warning("Status " + mForest.size() + " / " + mForestSize);
+//         } else {
+//            Log.warning("Discarding tree " + tree);
+//            i--;
+//         }
       }
       
       Log.warning("Final forest: " + mForest);
@@ -71,18 +81,20 @@ public class RRFClassifier extends Classifier {
    }
    
    private RDTClassifier buildRDT() throws Exception {
-      Set<RbcAttribute> nonTargetAttributes = CollectionUtil.makeSet();
-      while (nonTargetAttributes.size() < mAttributeSampleSize) {
-         nonTargetAttributes.add(mNonTargetAttributes.get(mRandom.nextInt(mNonTargetAttributes.size())));
+      List<RbcAttribute> atts = CollectionUtil.makeList();
+      for (RbcAttribute att : mDataDesc.getNonTargetAttributeList()) {
+         atts.add(discretizeNonTargetAttribute(att));
       }
       
-      List<RbcAttribute> nonTargetAttributeList = CollectionUtil.makeList();
-      for (RbcAttribute att : nonTargetAttributes) {
-         nonTargetAttributeList.add(discretizeNonTargetAttribute(att));
+      List<RbcAttributeValue> allAttValues = RDTClassifier.propositionalizeAttributes(atts);
+      
+      Set<RbcAttributeValue> attValues = CollectionUtil.makeSet();
+      while (attValues.size() < mAttributeSampleSize) {
+         attValues.add(allAttValues.get(mRandom.nextInt(allAttValues.size())));
       }
-
+      
       RDTClassifier rdt = new RDTClassifier(mDepthLimit);
-      rdt.buildClassifier(mInstances, nonTargetAttributeList);
+      rdt.buildClassifier(mInstances, CollectionUtil.makeList(attValues));
       return rdt;
    }
    

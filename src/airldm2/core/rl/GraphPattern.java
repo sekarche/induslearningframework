@@ -66,10 +66,14 @@ public class GraphPattern {
       
       return extended;
    }
+
+   public GraphPattern extendGraphVariableName(int id) {
+      return new GraphPattern(id + mInstanceVar, id + mValueVar, id + mHierarchyVar, mPattern.replace("?", "?" + id));
+   }
    
    @Override
    public String toString() {
       return mPattern + " " + mHierarchyPattern;
    }
-   
+
 }

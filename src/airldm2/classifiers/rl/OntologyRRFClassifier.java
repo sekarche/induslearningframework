@@ -8,16 +8,19 @@ import java.util.logging.Logger;
 
 import org.openrdf.model.URI;
 
+import explore.RDFDataDescriptorEnhancer;
+
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 import airldm2.classifiers.Classifier;
-import airldm2.classifiers.rl.estimator.AttributeEstimator;
 import airldm2.classifiers.rl.estimator.ClassEstimator;
-import airldm2.classifiers.rl.estimator.GaussianEstimator;
 import airldm2.classifiers.rl.ontology.TBox;
 import airldm2.core.LDInstance;
 import airldm2.core.LDInstances;
+import airldm2.core.rl.OntologyEnumType;
 import airldm2.core.rl.RDFDataDescriptor;
 import airldm2.core.rl.RDFDataSource;
 import airldm2.core.rl.RbcAttribute;
+import airldm2.core.rl.RbcAttributeValue;
 import airldm2.exceptions.RDFDatabaseException;
 import airldm2.util.CollectionUtil;
 import airldm2.util.Timer;
@@ -32,7 +35,6 @@ public class OntologyRRFClassifier extends Classifier {
    private RDFDataDescriptor mDataDesc;
    private RDFDataSource mDataSource;
 
-   private List<RbcAttribute> mNonTargetAttributes;
    private ClassEstimator mClassEst;
    
    private List<RDTClassifier> mForest;
@@ -59,7 +61,8 @@ public class OntologyRRFClassifier extends Classifier {
       mInstances = instances;
       mDataDesc = (RDFDataDescriptor) instances.getDesc();
       mDataSource = (RDFDataSource) instances.getDataSource();
-      mNonTargetAttributes = mDataDesc.getNonTargetAttributeList();
+      
+      new RDFDataDescriptorEnhancer(mDataSource).fillDomain(mDataDesc);
       
       mClassEst = new ClassEstimator();
       mClassEst.estimateParameters(mDataSource, mDataDesc);
@@ -74,27 +77,51 @@ public class OntologyRRFClassifier extends Classifier {
          mForest.add(tree);
       }
       
+      Log.warning("Final forest: " + mForest);
+      
       Timer.INSTANCE.stop("OntoRRF learning");
    }
    
    private RDTClassifier buildRDT() throws Exception {
-      Set<RbcAttribute> nonTargetAttributes = CollectionUtil.makeSet();
-      while (nonTargetAttributes.size() < mAttributeSampleSize) {
-         nonTargetAttributes.add(mNonTargetAttributes.get(mRandom.nextInt(mNonTargetAttributes.size())));
+      List<RbcAttribute> atts = CollectionUtil.makeList();
+      for (RbcAttribute att : mDataDesc.getNonTargetAttributeList()) {
+         atts.add(discretizeNonTargetAttribute(att));
       }
       
-      List<RbcAttribute> nonTargetAttributeList = CollectionUtil.makeList();
-      for (RbcAttribute att : nonTargetAttributes) {
-         RbcAttribute extendedAtt = randomExtendHierarchy(att);
-         
-         nonTargetAttributeList.add(discretizeNonTargetAttribute(extendedAtt));
-      }
+      List<RbcAttributeValue> attValues = makeRandomAttValues(atts);
       
       RDTClassifier rdt = new RDTClassifier(mDepthLimit);
-      rdt.buildClassifier(mInstances, nonTargetAttributeList);
+      rdt.buildClassifier(mInstances, attValues);
       return rdt;
    }
    
+   private List<RbcAttributeValue> makeRandomAttValues(List<RbcAttribute> atts) {
+      Set<RbcAttributeValue> attValues = CollectionUtil.makeSet();
+      while (attValues.size() < mAttributeSampleSize) {
+         RbcAttribute att = atts.get(mRandom.nextInt(atts.size()));
+         if (att.isHierarchicalHistogram() || att.isHierarchicalSet()) {
+            List<List<URI>> layers = mTBox.getLayers(att.getHierarchyRoot());
+            
+            int level = mRandom.nextInt(layers.size() - 1) + 1;
+            List<URI> cut = layers.get(level);
+            int cutIndex = mRandom.nextInt(cut.size());
+            String key = cut.get(cutIndex).stringValue();
+            
+            Log.info("Level=" + level + " Index=" + cutIndex);
+            
+            RbcAttribute attCopy = att.copy();
+            OntologyEnumType cutEnum = new OntologyEnumType(mTBox, cut);
+            attCopy.setValueType(cutEnum);
+            
+            attValues.add(new RbcAttributeValue(attCopy, key));
+         } else {
+            throw new NotImplementedException();
+         }
+      }
+      
+      return CollectionUtil.makeList(attValues);
+   }
+
    private RbcAttribute randomExtendHierarchy(RbcAttribute att) {
       URI hierarchyRoot = att.getHierarchyRoot();
       if (hierarchyRoot == null) return att;
@@ -108,17 +135,17 @@ public class OntologyRRFClassifier extends Classifier {
    }
 
    private RbcAttribute discretizeNonTargetAttribute(RbcAttribute att) throws RDFDatabaseException {
-      AttributeEstimator estimator = att.getEstimator();
-      if (estimator instanceof GaussianEstimator) {
-         estimator.setDataSource(mDataSource, mDataDesc, mClassEst);
-         estimator.estimateParameters();
-         
-         Log.warning(estimator.toString());
-         RbcAttribute discretizedAtt = ((GaussianEstimator) estimator).makeBinaryBinnedAttribute();
-         return discretizedAtt;
-      } else {
+//      AttributeEstimator estimator = att.getEstimator();
+//      if (estimator instanceof GaussianEstimator) {
+//         estimator.setDataSource(mDataSource, mDataDesc, mClassEst);
+//         estimator.estimateParameters();
+//         
+//         Log.warning(estimator.toString());
+//         RbcAttribute discretizedAtt = ((GaussianEstimator) estimator).makeBinaryBinnedAttribute();
+//         return discretizedAtt;
+//      } else {
          return att;
-      }
+//      }
    }
    
    public List<RDTClassifier> getForest() {

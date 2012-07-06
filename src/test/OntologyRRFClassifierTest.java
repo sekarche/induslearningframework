@@ -35,6 +35,11 @@ public class OntologyRRFClassifierTest {
       testWithTrainInDBTestInDB("rdfs_example/coraDesc.txt", ":cora", ":cora");
    }
    
+   @Test
+   public void testFlickr() throws Exception {
+      testWithTrainInDBTestInDB("rdfs_example/flickrDescH.txt", ":flickr", ":flickr");
+   }
+   
    private void testWithTrainInDBTestInDB(String descFile, String trainGraph, String testGraph) throws Exception {
       RDFDataDescriptor desc = RDFDataDescriptorParser.parse(descFile);
       //System.out.println(desc);
@@ -52,7 +57,7 @@ public class OntologyRRFClassifierTest {
       testInstances.setDesc(desc);
       testInstances.setDataSource(testSource);
    
-      OntologyRRFClassifier rrf = new OntologyRRFClassifier(10, 3, 2);
+      OntologyRRFClassifier rrf = new OntologyRRFClassifier(51, 30, 3);
       
       ConfusionMatrix matrix = Evaluation.evaluateOntologyRRFModel(rrf, trainInstances, testInstances);
       System.out.println(matrix.toString("===Confusion Matrix==="));

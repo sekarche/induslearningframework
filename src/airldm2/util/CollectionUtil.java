@@ -46,5 +46,13 @@ public class CollectionUtil {
       }
       return strings;
    }
+
+   public static <K,V> Map<K, V> subMap(Map<K, V> map, Set<K> keySet) {
+      Map<K, V> subMap = makeMap();
+      for (K key : keySet) {
+         subMap.put(key, map.get(key));
+      }
+      return subMap;
+   }
    
 }

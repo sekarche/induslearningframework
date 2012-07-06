@@ -1,7 +1,5 @@
 package airldm2.classifiers.rl.estimator;
 
-import static airldm2.constants.Constants.EPSILON;
-
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -131,36 +129,6 @@ public class ExponentialEstimator extends AttributeEstimator {
       double lambda = 1 / mean;
       
       return Math.log(lambda) - (lambda * val);
-   }
-   
-   @Override
-   public double computeLL() {
-      double result = 0.0;
-      for (int j = 0; j < getClassSize(); j++) {
-         double mean = computeMean(j);
-         if (mean < EPSILON) continue;
-         
-         double lambda = 1 / mean;
-         result += getClassCount(j) * Math.log(lambda) - lambda * mValueSums.get(j);
-      }
-      return result;
-   }
-
-   @Override
-   public double computeDualLL() {
-      if (getClassSize() != 2) {
-         throw new UnsupportedOperationException("DualLL not supported for Exponential estimator if there are more than two classes.");
-      }
-      
-      double result = 0.0;
-      for (int j = 0; j < getClassSize(); j++) {
-         double mean = computeMean(j);
-         if (mean < EPSILON) continue;
-         
-         double lambda = 1 / mean;
-         result += getClassCount(j) * Math.log(lambda) - lambda * mValueSums.get(1 - j);
-      }
-      return result;
    }
 
    public Histogram getValueSumsForTest() {

@@ -37,11 +37,16 @@ public class EnumType implements DiscreteType {
 
    @Override
    public String makeFilter(String varName, int valueIndex) {
+      return makeFilter(varName, mDomain.get(valueIndex).toString());
+   }
+
+   @Override
+   public String makeFilter(String varName, String value) {
       return new StringBuilder()
          .append("FILTER(")
          .append(varName)
          .append(" = <")
-         .append(mDomain.get(valueIndex))
+         .append(value)
          .append(">")
          .append(") ")
          .toString();

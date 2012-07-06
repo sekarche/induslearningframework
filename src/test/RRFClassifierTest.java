@@ -35,6 +35,11 @@ public class RRFClassifierTest {
       testWithTrainInDBTestInDB("rdfs_example/coraDesc.txt", ":cora", ":cora");
    }
    
+   @Test
+   public void testFlickr() throws Exception {
+      testWithTrainInDBTestInDB("rdfs_example/flickrDesc.txt", ":flickr", ":flickr");
+   }
+   
    private void testWithTrainInDBTestInDB(String descFile, String trainGraph, String testGraph) throws Exception {
       RDFDataDescriptor desc = RDFDataDescriptorParser.parse(descFile);
       //System.out.println(desc);
@@ -52,7 +57,7 @@ public class RRFClassifierTest {
       testInstances.setDesc(desc);
       testInstances.setDataSource(testSource);
    
-      RRFClassifier rrf = new RRFClassifier(10, 3, 2);
+      RRFClassifier rrf = new RRFClassifier(3, 10, 4);
       
       ConfusionMatrix matrix = Evaluation.evaluateRRFModel(rrf, trainInstances, testInstances);
       System.out.println(matrix.toString("===Confusion Matrix==="));

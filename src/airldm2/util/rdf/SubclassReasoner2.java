@@ -21,7 +21,7 @@ import airldm2.util.Timer;
 public class SubclassReasoner2 {
 
    public static void main(String[] args) throws RepositoryException, RTConfigException, RDFDatabaseException, TransformerConfigurationException, SAXException, IOException {
-      RDFDatabaseConnection conn = new VirtuosoConnection("jdbc:virtuoso://localhost:1111/charset=UTF-8/log_enable=2", "dba", "dba");
+      RDFDatabaseConnection conn = new VirtuosoConnection("jdbc:virtuoso://localhost:1113/charset=UTF-8/log_enable=2", "dba", "dba");
       RDFDataSource dataSource = new RDFDataSource(conn, null);
       
       TBox tBox = dataSource.getTBox();
@@ -29,12 +29,12 @@ public class SubclassReasoner2 {
       Timer timer = new Timer();
       timer.start("Inf");
       for (URI c : tBox.getClasses()) {
-         if (!c.stringValue().startsWith("http://kdd2002")) continue;
+         if (!c.stringValue().startsWith("http://purl.org")) continue;
          List<URI> sups = tBox.getSuperclasses(c);
          if (sups.isEmpty()) continue;
          
          StringBuilder query = new StringBuilder();
-         query.append("INSERT INTO <:gene> { ");
+         query.append("INSERT INTO <:flickr> { ");
          for (URI sup : sups) {
             query.append(StringUtil.triple("?x", "a", StringUtil.angleBracket(sup)));
          }         
