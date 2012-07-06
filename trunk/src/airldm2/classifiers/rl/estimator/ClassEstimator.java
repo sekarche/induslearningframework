@@ -36,20 +36,26 @@ public class ClassEstimator {
       return Math.log((mClassHistogram.get(classIndex) + 1.0) / (mNumInstances + mClassHistogram.size()));
    }
    
+   private Double mLL;
    public double computeLL() {
-      double result = 0.0;
-      for (int j = 0; j < mClassHistogram.size(); j++) {
-         result += mClassHistogram.get(j) * Math.log(mClassHistogram.get(j) / mNumInstances);
+      if (mLL == null) {
+         mLL = 0.0;
+         for (int j = 0; j < mClassHistogram.size(); j++) {
+            mLL += mClassHistogram.get(j) * Math.log(mClassHistogram.get(j) / mNumInstances);
+         }
       }
-      return result;
+      return mLL;
    }
    
+   private Double mDualLL;
    public double computeDualLL() {
-      double result = 0.0;
-      for (int j = 0; j < mClassHistogram.size(); j++) {
-         result += mClassHistogram.get(j) * Math.log((mNumInstances - mClassHistogram.get(j)) / mNumInstances);
+      if (mDualLL == null) {
+         mDualLL = 0.0;
+         for (int j = 0; j < mClassHistogram.size(); j++) {
+            mDualLL += mClassHistogram.get(j) * Math.log((mNumInstances - mClassHistogram.get(j)) / mNumInstances);
+         }
       }
-      return result;
+      return mDualLL;
    }
    
    public Histogram getClassHistogram() {
@@ -60,6 +66,10 @@ public class ClassEstimator {
       return mNumInstances;
    }
 
+   public double paramSize() {
+      return mClassHistogram.size();
+   }
+   
    @Override
    public String toString() {
       return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE);

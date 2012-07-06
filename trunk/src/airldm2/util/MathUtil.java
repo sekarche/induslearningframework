@@ -6,12 +6,34 @@ import java.util.Map.Entry;
 
 import org.openrdf.model.URI;
 
+import umontreal.iro.lecuyer.util.Num;
 import airldm2.classifiers.rl.estimator.Histogram;
 import airldm2.constants.Constants;
 
 public class MathUtil {
    
    public static final double LN2 = Math.log(2.0); 
+   
+   public static double logMultinomialDist(int n, double[] ps, int[] x) {
+      double result = Num.lnFactorial(n);
+      for (int i = 0; i < ps.length; i++) {
+         result += x[i] * Math.log(ps[i]);
+         result -= Num.lnFactorial(x[i]);
+      }
+      return result;
+   }
+   
+   public static double logBernoulliDist(double[] ps, int[] x) {
+      double result = 0.0;
+      for (int i = 0; i < ps.length; i++) {
+         if (x[i] > 0) {
+            result += Math.log(ps[i]);
+         } else {
+            result += Math.log(1.0 - ps[i]);
+         }
+      }
+      return result;
+   }
    
    public static void normalize(double[] a) {
       double sum = sum(a);
@@ -59,6 +81,16 @@ public class MathUtil {
       norm = Math.log(norm) + max;
       add(logs, -norm);
       exp(logs);
+   }
+   
+   public static double sumLog(double[] logs) {
+      double max = max(logs);
+      double norm = 0.0;
+      for (int i = 0; i < logs.length; i++) {
+         norm += Math.exp(logs[i] - max);
+      }
+      norm = Math.log(norm) + max;
+      return norm;
    }
 
    private static void exp(double[] a) {

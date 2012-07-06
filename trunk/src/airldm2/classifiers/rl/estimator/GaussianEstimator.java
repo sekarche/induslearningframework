@@ -1,6 +1,5 @@
 package airldm2.classifiers.rl.estimator;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -212,49 +211,6 @@ public class GaussianEstimator extends AttributeEstimator {
       return LL;
    }
    
-   @Override
-   public double computeLL() {
-      double result = 0.0;
-      for (int j = 0; j < getClassSize(); j++) {
-         double N_J = getClassCount(j);
-         double mean = computeMean(j); 
-         double variance = computeVariance(j);
-         if (variance < Constants.EPSILON) continue;
-         
-         double[] term = new double[3];
-         term[0] = -N_J * Math.log(Math.sqrt(2 * Math.PI * variance));
-         term[1] = -mValueSquaredSums.get(j) / (2 * variance);
-         term[2] = 0.5 * N_J * mean * mean / variance;
-         
-         result += MathUtil.sum(term);
-         Log.info("class" + j + " " + N_J + " " + mean + " " + variance + " " + Arrays.toString(term));
-      }
-      return result;
-   }
-
-   @Override
-   public double computeDualLL() {
-      if (getClassSize() != 2) {
-         throw new UnsupportedOperationException("DualLL not supported for Gaussian estimator if there are more than two classes.");
-      }
-      
-      double result = 0.0;
-      for (int j = 0; j < getClassSize(); j++) {
-         double N_J_COMP = getClassCount(1 - j);
-         double mean = computeMean(j);
-         double variance = computeVariance(j);
-         if (variance < Constants.EPSILON) continue;
-         
-         double[] term = new double[3];
-         term[0] = -N_J_COMP * Math.log(Math.sqrt(2 * Math.PI * variance));
-         term[1] = -mValueSquaredSums.get(1 - j) / (2 * variance);
-         term[2] = 0.5 * N_J_COMP * mean * mean / (2 * variance);
-         
-         result += MathUtil.sum(term);
-      }
-      return result;
-   }
-
    public Histogram getValueSumsForTest() {
       return mValueSums;
    }

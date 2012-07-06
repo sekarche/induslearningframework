@@ -10,8 +10,11 @@ public interface DiscreteType extends ValueType {
 
    String makeFilter(String varName, int valueIndex);
 
+   String makeFilter(String var, String value);
+
    int indexOf(Value value);
 
    List<String> getStringValues();
 
+   
 }

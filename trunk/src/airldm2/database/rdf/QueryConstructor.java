@@ -2,6 +2,7 @@ package airldm2.database.rdf;
 
 import static airldm2.util.StringUtil.angleBracket;
 import static airldm2.util.StringUtil.makeContextPart;
+import static airldm2.util.StringUtil.triple;
 
 import org.openrdf.model.URI;
 
@@ -17,6 +18,10 @@ public class QueryConstructor {
    public QueryConstructor(RDFDataDescriptor desc, String context) {
       mDesc = desc;
       mContextPart = makeContextPart(context);
+   }
+   
+   protected String createInstanceType() {
+      return triple(mDesc.getInstanceVar(), "a", angleBracket(mDesc.getTargetType()));
    }
    
    protected String createInstanceFilter(URI instance) {
@@ -35,6 +40,15 @@ public class QueryConstructor {
    
    protected String createValueFilter(RbcAttribute att, int valueIndex) {
       return createValueFilter(att, valueIndex, att.getGraphPattern().getValueVar());
+   }
+   
+   protected String createValueFilter(RbcAttribute att, String value, String var) {
+      DiscreteType valueType = (DiscreteType) att.getValueType();
+      return valueType.makeFilter(var, value);
+   }
+   
+   protected String createValueFilter(RbcAttribute att, String value) {
+      return createValueFilter(att, value, att.getGraphPattern().getValueVar());
    }
 
 }

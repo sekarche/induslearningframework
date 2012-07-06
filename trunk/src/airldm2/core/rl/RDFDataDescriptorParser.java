@@ -190,6 +190,8 @@ public class RDFDataDescriptorParser {
             } else if (NumericType.NAME.equalsIgnoreCase(rawValueType)) {
                if (aggregator == ValueAggregator.HISTOGRAM) {
                   throw new RDFDataDescriptorFormatException(name + ": " + ValueAggregator.HISTOGRAM + " can not be applied on a Numeric type.");
+               } else if (aggregator == ValueAggregator.SET) {
+                  throw new RDFDataDescriptorFormatException(name + ": " + ValueAggregator.SET + " can not be applied on a Numeric type.");
                } else if (estimatorLine == null) {
                   throw new RDFDataDescriptorFormatException(name + ": Numberic estimator must be specified on a Numeric type.");
                }

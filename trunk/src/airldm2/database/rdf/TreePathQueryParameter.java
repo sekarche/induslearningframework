@@ -7,28 +7,26 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 import org.openrdf.model.URI;
 
-import airldm2.classifiers.rl.estimator.Category;
 import airldm2.core.rl.RbcAttribute;
+import airldm2.core.rl.RbcAttributeValue;
 
 public class TreePathQueryParameter {
    
    public final URI TargetType;
    public final RbcAttribute Target;
    public final int TargetValueIndex;
-   public final List<RbcAttribute> AncestorAtts;
-   public final List<Category> TreePath;
-   public final RbcAttribute Feature;
-   public final int FeatureValueIndex;
+   public final List<RbcAttributeValue> AncestorAttValues;
+   public final List<Boolean> TreePath;
+   public final RbcAttributeValue AttValue;
 
    
-   public TreePathQueryParameter(URI targetType, RbcAttribute target, int targetValueIndex, List<RbcAttribute> ancestorAtts, List<Category> path, RbcAttribute feature, int featureValueIndex) {
+   public TreePathQueryParameter(URI targetType, RbcAttribute target, int targetValueIndex, List<RbcAttributeValue> ancestorAttValues, List<Boolean> pathEdges, RbcAttributeValue mAttValue) {
       TargetType = targetType;
       Target = target;
       TargetValueIndex = targetValueIndex;
-      AncestorAtts = ancestorAtts;
-      TreePath = path;
-      Feature = feature;
-      FeatureValueIndex = featureValueIndex;
+      AncestorAttValues = ancestorAttValues;
+      TreePath = pathEdges;
+      AttValue = mAttValue;
    }
       
    @Override

@@ -53,8 +53,6 @@ public abstract class AttributeEstimator {
    public abstract void estimateParameters() throws RDFDatabaseException;
    public abstract double computeLikelihood(int classIndex, AttributeValue v);
    
-   public abstract double computeLL();
-   public abstract double computeDualLL();
    public abstract boolean isValid();
    public abstract double paramSize();
 

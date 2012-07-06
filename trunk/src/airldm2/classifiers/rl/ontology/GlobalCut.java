@@ -64,5 +64,14 @@ public class GlobalCut {
       b.append("]");
       return b.toString();
    }
+
+   public void resetLeafCuts() {
+      for (RbcAttribute att : mCuts.keySet()) {
+         if (att.getHierarchyRoot() != null) {
+            Cut leafCut = mTBox.getLeafCut(att.getHierarchyRoot());
+            mCuts.put(att, leafCut);
+         }
+      }
+   }
    
 }

@@ -1,12 +1,14 @@
 package airldm2.core.rl;
 import java.io.IOException;
 import java.io.Writer;
+import java.util.List;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 import org.openrdf.model.URI;
 
 import airldm2.classifiers.rl.estimator.AttributeEstimator;
+import airldm2.classifiers.rl.estimator.BernoulliEstimator;
 import airldm2.classifiers.rl.estimator.CategoryEstimator;
 import airldm2.classifiers.rl.estimator.ExponentialEstimator;
 import airldm2.classifiers.rl.estimator.GaussianEstimator;
@@ -64,19 +66,29 @@ public class RbcAttribute {
    public int getDomainSize() {
       return ((DiscreteType) getValueType()).domainSize();
    }
+   
+   public List<String> getDomain() {
+      return ((DiscreteType) getValueType()).getStringValues();
+   }
 
    public boolean isHierarchicalHistogram() {
-      return (mValueType == null || mValueType instanceof OntologyEnumType)
+      return (mValueType == null || mValueType instanceof EnumType)
          && mAggregatorType == ValueAggregator.HISTOGRAM
          && mHierarchyRoot != null;
    }
    
-   public boolean isCutSum() {
-      return mAggregatorType == ValueAggregator.CUTSUM;
+   public boolean isHierarchicalSet() {
+      return (mValueType == null || mValueType instanceof EnumType)
+         && mAggregatorType == ValueAggregator.SET
+         && mHierarchyRoot != null;
    }
       
    public RbcAttribute extendWithHierarchy(URI node, boolean isLeaf) {
       return new RbcAttribute(mName, mValueType, mAggregatorType, mHierarchyRoot, mGraph.extendWithHierarchy(node, isLeaf));
+   }
+   
+   public RbcAttribute extendGraphVariableName(int id) {
+      return new RbcAttribute(mName, mValueType, mAggregatorType, mHierarchyRoot, mGraph.extendGraphVariableName(id));
    }
    
    public URI getExtendedHierarchy() {
@@ -87,6 +99,8 @@ public class RbcAttribute {
       if (getValueType() instanceof DiscreteType) {
          if (getAggregatorType() == ValueAggregator.HISTOGRAM) {
             return new MultinomialEstimator(this);
+         } else if (getAggregatorType() == ValueAggregator.SET) {
+            return new BernoulliEstimator(this);
          } else {
             return new CategoryEstimator(this);
          }
@@ -133,5 +147,17 @@ public class RbcAttribute {
       out.write(mGraph.toString());
       out.write("\n");
    }
+   
+   @Override
+   public int hashCode() {
+      return mName.hashCode();
+   }
 
+   @Override
+   public boolean equals(Object obj) {
+      if (!(obj instanceof RbcAttribute)) return false;
+      RbcAttribute other = (RbcAttribute) obj;
+      return mName.equals(other.mName);
+   }
+   
 }

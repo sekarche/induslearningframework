@@ -1,7 +1,5 @@
 package airldm2.database.rdf;
 
-import static airldm2.util.StringUtil.angleBracket;
-import static airldm2.util.StringUtil.triple;
 import airldm2.core.rl.RDFDataDescriptor;
 import airldm2.core.rl.ValueAggregator;
 
@@ -87,8 +85,4 @@ public class MultinomialSuffStatQueryConstructor extends QueryConstructor {
       return query;
    }
 
-   private String createInstanceType() {
-      return triple(mDesc.getInstanceVar(), "a", angleBracket(mParam.TargetType));
-   }
-   
 }

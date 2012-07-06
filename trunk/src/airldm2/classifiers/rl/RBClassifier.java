@@ -19,6 +19,7 @@ import airldm2.core.rl.RbcAttribute;
 import airldm2.util.CollectionUtil;
 import airldm2.util.MathUtil;
 import airldm2.util.Timer;
+import explore.RDFDataDescriptorEnhancer;
 
 public class RBClassifier extends Classifier {
 
@@ -35,6 +36,8 @@ public class RBClassifier extends Classifier {
       
       mDataDesc = (RDFDataDescriptor) instances.getDesc();
       mDataSource = (RDFDataSource) instances.getDataSource();
+      
+      new RDFDataDescriptorEnhancer(mDataSource).fillDomain(mDataDesc);
 
       mNumOfClassLabels = mDataDesc.getTargetAttribute().getDomainSize();
       List<RbcAttribute> nonTargetAttributes = mDataDesc.getNonTargetAttributeList();

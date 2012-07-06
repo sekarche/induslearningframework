@@ -7,8 +7,8 @@ import java.util.List;
 import org.openrdf.model.Literal;
 import org.openrdf.model.Value;
 
-import airldm2.util.MathUtil;
 import airldm2.util.CollectionUtil;
+import airldm2.util.MathUtil;
 import airldm2.util.StringUtil;
 
 public class BinnedType implements DiscreteType {
@@ -91,6 +91,11 @@ public class BinnedType implements DiscreteType {
       out.write(NAME);
       out.write("=");
       out.write(StringUtil.toCSV(mCutPoints));
+   }
+
+   @Override
+   public String makeFilter(String var, String value) {
+      throw new RuntimeException();
    }
 
 }

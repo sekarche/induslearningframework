@@ -4,6 +4,8 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.openrdf.model.URI;
 import org.openrdf.model.Value;
@@ -21,6 +23,9 @@ import airldm2.util.CollectionUtil;
 
 public class RDFDataDescriptorEnhancer {
 
+   protected static Logger Log = Logger.getLogger("airldm2.classifiers.rl.RDFDataDescriptorEnhancer");
+   static { Log.setLevel(Level.WARNING); }
+   
    private RDFDataSource mDataSource;
 
    public RDFDataDescriptorEnhancer(RDFDataSource dataSource) {
@@ -45,7 +50,7 @@ public class RDFDataDescriptorEnhancer {
    public void fillDomain(URI targetType, RbcAttribute a) throws RDFDatabaseException {
       if (a.getValueType() != null) return;
       
-      SPARQLQueryResult result = mDataSource.getRangeOf(targetType, a.getPropertyChain());
+      SPARQLQueryResult result = mDataSource.getRangeOf(targetType, a);
       List<Value> range = result.getValueList();
       boolean allURIs = true;
       for (Value v : range) {
@@ -72,6 +77,8 @@ public class RDFDataDescriptorEnhancer {
          a.setValueType(new NominalType(strs));
          
       }
+      
+      Log.warning("domain size = " + range.size());
    }
    
 }

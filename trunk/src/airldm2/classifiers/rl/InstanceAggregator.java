@@ -9,18 +9,11 @@ import org.openrdf.model.Literal;
 import org.openrdf.model.URI;
 import org.openrdf.model.Value;
 
-import airldm2.classifiers.rl.estimator.AttributeEstimator;
 import airldm2.classifiers.rl.estimator.AttributeValue;
 import airldm2.classifiers.rl.estimator.Category;
-import airldm2.classifiers.rl.estimator.Histogram;
+import airldm2.classifiers.rl.estimator.MappedHistogram;
 import airldm2.classifiers.rl.estimator.Null;
 import airldm2.classifiers.rl.estimator.Numeric;
-import airldm2.classifiers.rl.estimator.OntologyAttributeEstimator;
-import airldm2.classifiers.rl.estimator.SetAttributeEstimator;
-import airldm2.classifiers.rl.estimator.SetAttributeValue;
-import airldm2.classifiers.rl.ontology.Cut;
-import airldm2.classifiers.rl.ontology.GlobalCut;
-import airldm2.classifiers.rl.ontology.TBox;
 import airldm2.core.LDInstances;
 import airldm2.core.rl.DiscreteType;
 import airldm2.core.rl.NumericType;
@@ -29,19 +22,34 @@ import airldm2.core.rl.RDFDataSource;
 import airldm2.core.rl.RbcAttribute;
 import airldm2.core.rl.ValueAggregator;
 import airldm2.core.rl.ValueType;
+import airldm2.database.rdf.SuffStatQueryParameter;
 import airldm2.exceptions.RDFDatabaseException;
 import airldm2.util.CollectionUtil;
 
 public class InstanceAggregator {
    
-   private static GlobalCut GlobalCut;
-
-   public static AggregatedInstances init(LDInstances instances) throws RDFDatabaseException {
+   public static AggregatedInstances init(LDInstances instances, double samplePerc) throws RDFDatabaseException {
       RDFDataSource dataSource = (RDFDataSource) instances.getDataSource();
       RDFDataDescriptor dataDesc = (RDFDataDescriptor) instances.getDesc();
       
-      List<URI> instanceURIs = dataSource.getTargetInstances(dataDesc.getTargetType());
-      //instanceURIs = sample(instanceURIs, 100);
+      List<URI> instanceURIs = null;
+      if (samplePerc >= 1.0) {
+         instanceURIs = dataSource.getTargetInstances(dataDesc.getTargetType());
+      } else {
+         instanceURIs = CollectionUtil.makeList();
+         Random rnd = new Random(0);
+         RbcAttribute targetAttribute = dataDesc.getTargetAttribute();
+         for (int j = 0; j < targetAttribute.getDomainSize(); j++) {
+            SuffStatQueryParameter queryParam = new SuffStatQueryParameter(dataDesc.getTargetType(), targetAttribute, j);
+            List<URI> classInstances = dataSource.getTargetInstances(queryParam);
+            Collections.shuffle(classInstances, rnd);
+            
+            int size = (int) (classInstances.size() * samplePerc);
+            if (size <= 0) size = 1;
+            List<URI> subList = classInstances.subList(0, size);
+            instanceURIs.addAll(subList);
+         }
+      }
 
       AggregatedInstances ais = new AggregatedInstances(instanceURIs);
       
@@ -49,7 +57,7 @@ public class InstanceAggregator {
       for (URI instanceURI : instanceURIs) {
          RbcAttribute targetAttribute = dataDesc.getTargetAttribute();
          
-         Category targetCategory = (Category) aggregateAttribute(dataSource, instanceURI, targetAttribute, null);
+         Category targetCategory = (Category) aggregateAttribute(dataSource, instanceURI, targetAttribute);
          
          AggregatedInstance aggInstance = new AggregatedInstance(instanceURI, targetCategory);
          aggInstances.add(aggInstance);
@@ -58,52 +66,31 @@ public class InstanceAggregator {
       return ais;
    }
 
-   private static List<URI> sample(List<URI> instanceURIs, int size) {
-      List<URI> list = CollectionUtil.makeList();
-      Collections.shuffle(instanceURIs, new Random(0));
-      for (int i = 0; list.size() < size; i++) {
-         if ('n' == instanceURIs.get(i).toString().charAt("http://ehr/stat/disease_pair/".length())) {
-            list.add(instanceURIs.get(i));
-         }
-      }
-      
-      for (int i = 0; list.size() < size * 2; i++) {
-         if ('n' != instanceURIs.get(i).toString().charAt("http://ehr/stat/disease_pair/".length())) {
-            list.add(instanceURIs.get(i));
-         }
-      }
-      return list;
+   public static AggregatedInstances aggregateAll(LDInstances instances) throws RDFDatabaseException {
+      return aggregateSample(instances, 1.0);
    }
-
-   public static AggregatedInstances aggregateAll(LDInstances instances, GlobalCut globalCut, Map<RbcAttribute, OntologyAttributeEstimator> estimators) throws RDFDatabaseException {
-      GlobalCut = globalCut;
-      AggregatedInstances ais = init(instances);
+   
+   public static AggregatedInstances aggregateSample(LDInstances instances, double samplePerc) throws RDFDatabaseException {
+      AggregatedInstances ais = init(instances, samplePerc);
       
       RDFDataSource dataSource = (RDFDataSource) instances.getDataSource();
       RDFDataDescriptor dataDesc = (RDFDataDescriptor) instances.getDesc();
       List<RbcAttribute> nonTargetAttributes = dataDesc.getNonTargetAttributeList();
       
       for (RbcAttribute att : nonTargetAttributes) {
-         OntologyAttributeEstimator est = null;
-         if (estimators != null) {
-            est = estimators.get(att);
-         }
-         List<AttributeValue> values = aggregateAttributeForInstances(dataSource, ais.getURIs(), att, est);
+         List<AttributeValue> values = aggregateAttributeForInstances(dataSource, ais.getURIs(), att);
          ais.addAttribute(att, values);
       }
             
       return ais;
    }
    
-   public static AggregatedInstances aggregateAll(LDInstances instances) throws RDFDatabaseException {
-      return aggregateAll(instances, null, null);
-   }
 
-   public static List<AttributeValue> aggregateAttributeForInstances(RDFDataSource dataSource, List<URI> instances, RbcAttribute att, OntologyAttributeEstimator est) throws RDFDatabaseException {
+   public static List<AttributeValue> aggregateAttributeForInstances(RDFDataSource dataSource, List<URI> instances, RbcAttribute att) throws RDFDatabaseException {
       List<AttributeValue> values = CollectionUtil.makeList();
       for (URI instanceURI : instances) {
          try {
-            AttributeValue value = aggregateAttribute(dataSource, instanceURI, att, est);
+            AttributeValue value = aggregateAttribute(dataSource, instanceURI, att);
             values.add(value);
          } catch (IllegalArgumentException ex) {
             System.err.print(".");
@@ -114,17 +101,40 @@ public class InstanceAggregator {
       return values;
    }
 
-   private static AttributeValue aggregateSingleAttribute(RDFDataSource dataSource, URI instance, RbcAttribute attribute) throws RDFDatabaseException {
+   private static AttributeValue aggregateAttribute(RDFDataSource dataSource, URI instance, RbcAttribute attribute) throws RDFDatabaseException {
       ValueType valueType = attribute.getValueType();
       
       if (attribute.getAggregatorType() == ValueAggregator.HISTOGRAM) {
          DiscreteType dt = (DiscreteType) valueType;
+         List<String> domain = dt.getStringValues();
+         Map<String, Integer> counts = dataSource.countHistogramAggregation(instance, attribute);
          double[] valueIndexCount = new double[dt.domainSize()];
-         
          for (int i = 0; i < valueIndexCount.length; i++) {
-            valueIndexCount[i] = dataSource.countIndependentValueAggregation(instance, attribute, i);
+            String strValue = domain.get(i);
+            Integer count = counts.get(strValue);
+            if (count == null) count = 0;
+            valueIndexCount[i] = count;
          }
-         return new Histogram(valueIndexCount);
+         
+         return new MappedHistogram(valueIndexCount, counts);
+         
+      } else if (attribute.getAggregatorType() == ValueAggregator.SET) {
+         DiscreteType dt = (DiscreteType) valueType;
+         List<String> domain = dt.getStringValues();
+         Map<String, Integer> counts = dataSource.countHistogramAggregation(instance, attribute);
+         double[] valueIndexCount = new double[dt.domainSize()];
+         for (int i = 0; i < valueIndexCount.length; i++) {
+            String strValue = domain.get(i);
+            Integer count = counts.get(strValue);
+            if (count == null) count = 0;
+            if (count > 0) {
+               valueIndexCount[i] = 1;
+            } else {
+               valueIndexCount[i] = 0;
+            }
+         }
+         
+         return new MappedHistogram(valueIndexCount, counts);
          
       } else if (attribute.getAggregatorType() == ValueAggregator.NONE) {
          Value value = dataSource.getValue(instance, attribute);
@@ -163,35 +173,5 @@ public class InstanceAggregator {
          }
       }
    }
-   
-   private static AttributeValue aggregateAttribute(RDFDataSource dataSource, URI instance, RbcAttribute attribute, OntologyAttributeEstimator ontEst) throws RDFDatabaseException {
-      if (attribute.isCutSum()) {
-         TBox tBox = dataSource.getTBox();
-         double sum = 0.0;
-         Cut cut = GlobalCut.getCut(attribute);
-         for (URI c : cut.get()) {
-            RbcAttribute extendedAtt = attribute.extendWithHierarchy(c, tBox.isLeaf(c));
-            Value value = dataSource.getValue(instance, extendedAtt);
-            if (value != null) {
-               sum += ((Literal)value).doubleValue();
-            }
-         }
-         
-         return new Numeric(sum);
-      } else if (attribute.getHierarchyRoot() == null
-            || attribute.isHierarchicalHistogram()
-            || ontEst == null) {
-         return aggregateSingleAttribute(dataSource, instance, attribute);
-      } else {
-         SetAttributeEstimator setEst = (SetAttributeEstimator) ontEst;
-         SetAttributeValue valueSet = new SetAttributeValue();
-         for (AttributeEstimator est : setEst.getEstimatorSelection()) {
-            RbcAttribute att = est.getAttribute();
-            AttributeValue extendedAttValue = aggregateSingleAttribute(dataSource, instance, att);
-            valueSet.add(att.getExtendedHierarchy(), extendedAttValue);
-         }
-         return valueSet;
-      }
-   }
-   
+
 }

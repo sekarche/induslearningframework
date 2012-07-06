@@ -10,8 +10,8 @@
 %
 % @attribute name
 % [NOMINAL|ENUM|NUMERIC]=[?|values separated by commas]
-% aggregator=[NONE|HISTOGRAM|COUNT|SUM|AVG|MIN|MAX|CUTSUM]
-% numbericEstimator=[BINNED:values separated by commas|POISSON|EXPONENTIAL|GAUSSIAN]
+% aggregator=[NONE|HISTOGRAM|SET|COUNT|SUM|AVG|MIN|MAX]
+% numbericEstimator=[BINNED:values separated by commas|EXPONENTIAL|GAUSSIAN]
 % hierarchyRoot=[URI]
 % {
 % Graph pattern

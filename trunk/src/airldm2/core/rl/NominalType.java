@@ -30,11 +30,16 @@ public class NominalType implements DiscreteType {
 
    @Override
    public String makeFilter(String varName, int valueIndex) {
+      return makeFilter(varName, mDomain.get(valueIndex));
+   }
+
+   @Override
+   public String makeFilter(String varName, String value) {
       return new StringBuilder()
          .append("FILTER(")
          .append(varName)
          .append(" = \"")
-         .append(mDomain.get(valueIndex))
+         .append(value)
          .append("\"")
          .append(") ")
          .toString();

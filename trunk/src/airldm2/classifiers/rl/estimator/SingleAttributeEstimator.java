@@ -45,16 +45,6 @@ public class SingleAttributeEstimator extends OntologyAttributeEstimator {
    }
 
    @Override
-   public double computeLL() {
-      return mEstimator.computeLL();
-   }
-
-   @Override
-   public double computeDualLL() {
-      return mEstimator.computeDualLL();
-   }
-
-   @Override
    public String toString() {
       return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
          .append("name", mAttribute.getName())

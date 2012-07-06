@@ -15,6 +15,9 @@ import airldm2.core.DefaultSufficentStatisticImpl;
 import airldm2.core.ISufficentStatistic;
 import airldm2.core.SSDataSource;
 import airldm2.database.rdf.AggregationQueryConstructor;
+import airldm2.database.rdf.BernoulliSuffStatQueryConstructor;
+import airldm2.database.rdf.HierarchyRangeQueryConstructor;
+import airldm2.database.rdf.HistogramAggregationQueryConstructor;
 import airldm2.database.rdf.IndependentValueAggregationQueryConstructor;
 import airldm2.database.rdf.InstanceQueryConstructor;
 import airldm2.database.rdf.MultinomialSuffStatQueryConstructor;
@@ -101,30 +104,80 @@ public class RDFDataSource implements SSDataSource {
    public void setRelationName(String relationName) {
    }
 
-   
+   private Map<Integer, Map<String, Integer>> cTreeRootStat = CollectionUtil.makeMap();
    public ISufficentStatistic getTreePathSufficientStatistic(TreePathQueryParameter queryParam) throws RDFDatabaseException {
-      String query = new TreePathQueryConstructor(mDesc, mDefaultContext, queryParam).createQuery();
+      if (queryParam.AncestorAttValues.isEmpty()) {
+         Map<String, Integer> rootStat = cTreeRootStat.get(queryParam.TargetValueIndex);
+         if (rootStat == null) {
+            rootStat = getTreeRootSufficientStatistic(queryParam);
+            cTreeRootStat.put(queryParam.TargetValueIndex, rootStat);
+         }
+         
+         Integer count = rootStat.get(queryParam.AttValue.ValueKey);
+         if (count == null) count = 0;
+
+         ISufficentStatistic stat = new DefaultSufficentStatisticImpl(count);
+         Log.info(String.valueOf(stat.getValue()));
+         return stat;
+         
+      } else {
+         String query = new TreePathQueryConstructor(mDesc, mDefaultContext, queryParam).createQuery();
+         Log.info(query);
+         
+         Weigher.INSTANCE.add(query);
+         Timer.INSTANCE.start("Query");
+         SPARQLQueryResult results = mConn.executeQuery(query);
+         Timer.INSTANCE.stop("Query");      
+         
+         if (results.isEmpty()) return null;
+         
+         ISufficentStatistic stat = null;
+         if (results.isNull()) {
+            stat = new DefaultSufficentStatisticImpl(0.0);
+         } else {
+            stat = new DefaultSufficentStatisticImpl(results.getDouble());
+         }
+         Log.info(String.valueOf(stat.getValue()));
+         return stat;
+      }
+   }
+
+   private Map<String, Integer> getTreeRootSufficientStatistic(TreePathQueryParameter queryParam) throws RDFDatabaseException {
+      String query = new TreePathQueryConstructor(mDesc, mDefaultContext, queryParam).createRootQuery();
       Log.warning(query);
       
       Weigher.INSTANCE.add(query);
       Timer.INSTANCE.start("Query");
       SPARQLQueryResult results = mConn.executeQuery(query);
-      Timer.INSTANCE.stop("Query");      
+      Timer.INSTANCE.stop("Query");
       
-      if (results.isEmpty()) return null;
-      
-      ISufficentStatistic stat = null;
-      if (results.isNull()) {
-         stat = new DefaultSufficentStatisticImpl(0.0);
-      } else {
-         stat = new DefaultSufficentStatisticImpl(results.getDouble());
+      Map<String, Integer> treeRootStat = CollectionUtil.makeMap();
+      for (Value[] vs : results.getValueTupleList()) {
+         URI uri = (URI) vs[0];
+         int v = ((Literal) vs[1]).intValue();
+         treeRootStat.put(uri.toString(), v);
       }
-      Log.warning(String.valueOf(stat.getValue()));
-      return stat;
+      
+      return treeRootStat;
    }
 
    public ISufficentStatistic getMultinomialSufficientStatistic(SuffStatQueryParameter queryParam) throws RDFDatabaseException {
       String query = new MultinomialSuffStatQueryConstructor(mDesc, mDefaultContext, queryParam).createQuery();
+      Log.info(query);
+      
+      Weigher.INSTANCE.add(query);
+      Timer.INSTANCE.start("Query");
+      SPARQLQueryResult results = mConn.executeQuery(query);
+      Timer.INSTANCE.stop("Query");
+      
+      if (results.isEmpty()) return null;
+      ISufficentStatistic stat = new DefaultSufficentStatisticImpl(results.getInt());
+      Log.info(String.valueOf(results.getInt()));
+      return stat;
+   }
+   
+   public ISufficentStatistic getBernoulliSufficientStatistic(SuffStatQueryParameter queryParam) throws RDFDatabaseException {
+      String query = new BernoulliSuffStatQueryConstructor(mDesc, mDefaultContext, queryParam).createQuery();
       Log.info(query);
       
       Weigher.INSTANCE.add(query);
@@ -226,6 +279,14 @@ public class RDFDataSource implements SSDataSource {
       return results.getURIList();
    }
    
+   public List<URI> getTargetInstances(SuffStatQueryParameter queryParam) throws RDFDatabaseException {
+      String query = new InstanceQueryConstructor(mDesc, mDefaultContext, queryParam).createQuery();
+      Log.info(query);
+      
+      SPARQLQueryResult results = mConn.executeQuery(query);
+      return results.getURIList();
+   }
+   
    public Value getValue(URI instance, RbcAttribute attribute) throws RDFDatabaseException {
       String query = new ValueQueryConstructor(mDesc, mDefaultContext, instance, attribute).createQuery();
       Log.info(query);
@@ -250,6 +311,53 @@ public class RDFDataSource implements SSDataSource {
       if (results.isEmpty()) return 0;
       return results.getInt();
    }
+   
+   
+   private Map<URI, Map<String,Integer>> Histogram = CollectionUtil.makeMap();
+   public Map<String,Integer> countHistogramAggregation(URI instance, RbcAttribute attribute) throws RDFDatabaseException {
+      String query = new HistogramAggregationQueryConstructor(mDesc, mDefaultContext, instance, attribute).createQuery();
+      Log.info(query);
+      
+      Map<String, Integer> cachedCounts = Histogram.get(instance);
+      if (cachedCounts == null) {
+         cachedCounts = CollectionUtil.makeMap();
+         SPARQLQueryResult results = mConn.executeQuery(query);
+         List<Value[]> valueTupleList = results.getValueTupleList();
+         for (Value[] vs : valueTupleList) {
+            int intValue = ((Literal)vs[1]).intValue();
+            cachedCounts.put(vs[0].stringValue(), intValue);
+         }
+         
+         Histogram.put(instance, cachedCounts);
+      }
+      
+      return cachedCounts;
+   }
+   
+//   public Map<Value,Integer> countHistogramAggregation(URI instance, RbcAttribute attribute) throws RDFDatabaseException {
+//      String query = new HistogramAggregationQueryConstructor(mDesc, mDefaultContext, instance, attribute).createQuery();
+//      Log.info(query);
+//      
+//      DiscreteType valueType = (DiscreteType) attribute.getValueType();
+//      Set<String> domain = CollectionUtil.makeSet(valueType.getStringValues());
+//      Map<Value,Integer> counts = CollectionUtil.makeMap();
+//      
+//      SPARQLQueryResult results = mConn.executeQuery(query);
+//      List<Value[]> valueTupleList = results.getValueTupleList();
+//      for (Value[] vs : valueTupleList) {
+//         int intValue = ((Literal)vs[1]).intValue();
+//         counts.put(vs[0], intValue);
+//      }
+//      
+//      Set<Value> keySet = CollectionUtil.makeSet(counts.keySet());
+//      for (Value v : keySet) {
+//         if (!domain.contains(v.stringValue())) {
+//            counts.remove(v);
+//         }
+//      }
+//      
+//      return counts;
+//   }
 
    public int getRangeSizeOf(URI targetType, PropertyChain propChain) throws RDFDatabaseException {
       String query = new RangeSizeQueryConstructor(mDefaultContext, targetType, propChain).createQuery();
@@ -260,8 +368,8 @@ public class RDFDataSource implements SSDataSource {
       return results.getInt();
    }
    
-   public SPARQLQueryResult getRangeOf(URI targetType, PropertyChain propChain) throws RDFDatabaseException {
-      String query = new RangeQueryConstructor(mDefaultContext, targetType, propChain).createQuery();
+   public SPARQLQueryResult getRangeOf(URI targetType, RbcAttribute a) throws RDFDatabaseException {
+      String query = new RangeQueryConstructor(mDesc, mDefaultContext, a).createQuery();
       Log.info(query);
       
       return mConn.executeQuery(query);
@@ -314,9 +422,7 @@ public class RDFDataSource implements SSDataSource {
       if (cTBox == null) {
          cTBox = new TBox();
          
-         //String query = new SubclassQueryConstructor(mDefaultContext).createQuery();
-         //FIXME
-         String query = new SubclassQueryConstructor(null).createQuery();
+         String query = new SubclassQueryConstructor(mDefaultContext).createQuery();
          
          Log.info(query);
          SPARQLQueryResult results = mConn.executeQuery(query);
@@ -334,6 +440,14 @@ public class RDFDataSource implements SSDataSource {
       
       Timer.INSTANCE.stop("TBox");
       return cTBox;
+   }
+
+   public List<URI> getDistinctClasses(RbcAttribute att) throws RDFDatabaseException {
+      String query = new HierarchyRangeQueryConstructor(mDesc, mDefaultContext, att).createQuery();
+      Log.warning(query);
+      
+      SPARQLQueryResult results = mConn.executeQuery(query);
+      return results.getURIList();
    }
 
 }

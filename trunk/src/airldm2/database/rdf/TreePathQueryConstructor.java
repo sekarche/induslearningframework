@@ -1,11 +1,8 @@
 package airldm2.database.rdf;
 
-import static airldm2.util.StringUtil.angleBracket;
-import static airldm2.util.StringUtil.triple;
-import airldm2.classifiers.rl.estimator.Category;
 import airldm2.core.rl.RDFDataDescriptor;
 import airldm2.core.rl.RbcAttribute;
-import airldm2.core.rl.ValueAggregator;
+import airldm2.core.rl.RbcAttributeValue;
 
 
 public class TreePathQueryConstructor extends QueryConstructor {
@@ -21,30 +18,31 @@ public class TreePathQueryConstructor extends QueryConstructor {
    private static final String TARGET_FILTER = "%target_filter%";
    private static final String FEATURE_GRAPH = "%feature_graph%";
    private static final String FEATURE_FILTER = "%feature_filter%";
+   private static final String EXISTS_FILTER = "%exists_filter%";
    
    private static final String QUERY_HEADER =
-      "SELECT COUNT(" + INSTANCE_VAR_PATTERN + ") " + CONTEXT_PATTERN + " WHERE { ";
+      "SELECT COUNT( " + INSTANCE_VAR_PATTERN + ") " + CONTEXT_PATTERN + " WHERE { "
+      + INSTANCE_TYPE + " "
+      + TARGET_GRAPH + " " + TARGET_FILTER + " ";
    
    private static final String QUERY_FOOTER =
       " }";
    
    
    private static final String QUERY_WITH_SIMPLE_FEATURE =
-      " "
-      + INSTANCE_TYPE + " "
-      + TARGET_GRAPH + " " + TARGET_FILTER + " "
+      EXISTS_FILTER + " { "
       + FEATURE_GRAPH + " " + FEATURE_FILTER
-      + " ";
+      + " } ";
    
-   private static final String QUERY_WITH_AGGREGATION_FEATURE =
-      " { "
-         + "SELECT " + INSTANCE_VAR_PATTERN + " (" + AGGREGATION_FUNCTION_PATTERN + "(" + VALUE_VAR_PATTERN + ") AS " + AGGREGATION_VAR_PATTERN + ") WHERE { "
-         + INSTANCE_TYPE + " "
-         + TARGET_GRAPH + " " + TARGET_FILTER + " "
-         + "OPTIONAL { " + FEATURE_GRAPH + "} "
-         + "} GROUP BY " + INSTANCE_VAR_PATTERN
-      + "} "
-      + FEATURE_FILTER;
+//   private static final String QUERY_WITH_AGGREGATION_FEATURE =
+//      " { "
+//         + "SELECT " + INSTANCE_VAR_PATTERN + " (" + AGGREGATION_FUNCTION_PATTERN + "(" + VALUE_VAR_PATTERN + ") AS " + AGGREGATION_VAR_PATTERN + ") WHERE { "
+//         + INSTANCE_TYPE + " "
+//         + TARGET_GRAPH + " " + TARGET_FILTER + " "
+//         + "OPTIONAL { " + FEATURE_GRAPH + "} "
+//         + "} GROUP BY " + INSTANCE_VAR_PATTERN
+//      + "} "
+//      + FEATURE_FILTER;
       
    private TreePathQueryParameter mParam;
    
@@ -56,50 +54,75 @@ public class TreePathQueryConstructor extends QueryConstructor {
    public String createQuery() {
       StringBuilder b = new StringBuilder();
       b.append(QUERY_HEADER.replace(CONTEXT_PATTERN, mContextPart)
-                           .replace(INSTANCE_VAR_PATTERN, mDesc.getInstanceVar()));
+                           .replace(INSTANCE_VAR_PATTERN, mDesc.getInstanceVar())
+                           .replace(INSTANCE_TYPE, createInstanceType())
+                           .replace(TARGET_GRAPH, createAttributeGraph(mParam.Target))
+                           .replace(TARGET_FILTER, createValueFilter(mParam.Target, mParam.TargetValueIndex))
+                           );
        
-      for (int i = 0; i < mParam.AncestorAtts.size(); i++) {
-         RbcAttribute ancAtt = mParam.AncestorAtts.get(i);
-         Category ancCategory = mParam.TreePath.get(i);
-         b.append(createSubQuery(ancAtt, ancCategory.getIndex()));
+      for (int i = 0; i < mParam.AncestorAttValues.size(); i++) {
+         RbcAttributeValue ancAtt = mParam.AncestorAttValues.get(i);
+         Boolean ancPath = mParam.TreePath.get(i);
+         b.append(createSubQuery(i, ancAtt, ancPath));
       }
       
-      b.append(createSubQuery(mParam.Feature, mParam.FeatureValueIndex));
+      b.append(createSubQuery(mParam.AncestorAttValues.size(), mParam.AttValue, true));
       
       b.append(QUERY_FOOTER);
       return b.toString();
    }
    
-   public String createSubQuery(RbcAttribute att, int valueIndex) {
+   public String createSubQuery(int id, RbcAttributeValue ancAttValue, Boolean exists) {
+      RbcAttribute extendedAtt = ancAttValue.Attribute.extendGraphVariableName(id);
       String query;   
-      ValueAggregator featureAggType = att.getAggregatorType();
-      String aggVar = AGGREGATION_VAR + att.getName();
+//      ValueAggregator featureAggType = ancAtt.getAggregatorType();
+//      String aggVar = AGGREGATION_VAR + ancAtt.getName();
+//      
+//      if (ValueAggregator.isNumericOutput(featureAggType)) {
+//         query = QUERY_WITH_AGGREGATION_FEATURE
+//            .replace(AGGREGATION_FUNCTION_PATTERN, featureAggType.toString())
+//            .replace(AGGREGATION_VAR_PATTERN, aggVar)
+//            .replace(VALUE_VAR_PATTERN, ancAtt.getGraphPattern().getValueVar())
+//            .replace(TARGET_GRAPH, createAttributeGraph(mParam.Target))
+//            .replace(TARGET_FILTER, createValueFilter(mParam.Target, mParam.TargetValueIndex))
+//            .replace(INSTANCE_TYPE, createInstanceType())
+//            .replace(FEATURE_GRAPH, createAttributeGraph(ancAtt))
+//            .replace(INSTANCE_VAR_PATTERN, mDesc.getInstanceVar())
+//            .replace(FEATURE_FILTER, createValueFilter(ancAtt, exists, aggVar));
+//      } else {
+         String existsFilter = exists ? "FILTER EXISTS" : "FILTER NOT EXISTS";
       
-      if (ValueAggregator.isNumericOutput(featureAggType)) {
-         query = QUERY_WITH_AGGREGATION_FEATURE
-            .replace(AGGREGATION_FUNCTION_PATTERN, featureAggType.toString())
-            .replace(AGGREGATION_VAR_PATTERN, aggVar)
-            .replace(VALUE_VAR_PATTERN, att.getGraphPattern().getValueVar())
-            .replace(TARGET_GRAPH, createAttributeGraph(mParam.Target))
-            .replace(TARGET_FILTER, createValueFilter(mParam.Target, mParam.TargetValueIndex))
-            .replace(INSTANCE_TYPE, createInstanceType())
-            .replace(FEATURE_GRAPH, createAttributeGraph(att))
-            .replace(INSTANCE_VAR_PATTERN, mDesc.getInstanceVar())
-            .replace(FEATURE_FILTER, createValueFilter(att, valueIndex, aggVar));
-      } else {
          query = QUERY_WITH_SIMPLE_FEATURE
-            .replace(INSTANCE_TYPE, createInstanceType())
-            .replace(TARGET_GRAPH, createAttributeGraph(mParam.Target))
-            .replace(TARGET_FILTER, createValueFilter(mParam.Target, mParam.TargetValueIndex))
-            .replace(FEATURE_GRAPH, createAttributeGraph(att))
-            .replace(FEATURE_FILTER, createValueFilter(att, valueIndex));
-      }
+            .replace(EXISTS_FILTER, existsFilter)
+            .replace(FEATURE_GRAPH, createAttributeGraph(extendedAtt))
+            .replace(FEATURE_FILTER, createValueFilter(extendedAtt, ancAttValue.ValueKey));
+//      }
      
       return query;
    }
-
-   private String createInstanceType() {
-      return triple(mDesc.getInstanceVar(), "a", angleBracket(mParam.TargetType));
-   }
    
+   protected String createAttributeGraph(RbcAttribute att) {
+      String pattern = att.getGraphPattern().getPattern();
+      return pattern.replace(att.getGraphPattern().getInstanceVar(), mDesc.getInstanceVar());
+   }
+
+
+   private static final String ROOT_QUERY =
+         "SELECT " + VALUE_VAR_PATTERN + " COUNT( DISTINCT " + INSTANCE_VAR_PATTERN + ") " + CONTEXT_PATTERN + " WHERE { "
+         + INSTANCE_TYPE + " "
+         + TARGET_GRAPH + " " + TARGET_FILTER + " "
+         + FEATURE_GRAPH
+         + " } GROUP BY " + VALUE_VAR_PATTERN;
+      
+   public String createRootQuery() {
+      return ROOT_QUERY
+            .replace(CONTEXT_PATTERN, mContextPart)
+            .replace(INSTANCE_VAR_PATTERN, mDesc.getInstanceVar())
+            .replace(INSTANCE_TYPE, createInstanceType())
+            .replace(TARGET_GRAPH, createAttributeGraph(mParam.Target))
+            .replace(TARGET_FILTER, createValueFilter(mParam.Target, mParam.TargetValueIndex))
+            .replace(FEATURE_GRAPH, createAttributeGraph(mParam.AttValue.Attribute))
+            .replace(VALUE_VAR_PATTERN, mParam.AttValue.Attribute.getGraphPattern().getValueVar());
+   }
+
 }

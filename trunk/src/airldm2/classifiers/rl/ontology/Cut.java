@@ -24,8 +24,16 @@ public class Cut {
       mCut = cut;
    }
    
+   public Cut copy() {
+      return new Cut(mTBox, new LinkedList<URI>(mCut));
+   }
+   
    public List<URI> get() {
       return mCut;
+   }
+   
+   public TBox getTBox() {
+      return mTBox;
    }
    
    public int size() {
@@ -62,27 +70,48 @@ public class Cut {
       return refinements;
    }
    
-   public Cut abstractCut() {
+   public boolean refineGreedyBFS() {
+      for (int i = 0; i < mCut.size(); i++) {
+         URI cutI = mCut.get(i);
+         List<URI> cutISub = mTBox.getDirectSubclass(cutI);
+         if (cutISub.isEmpty()) continue;
+         
+         mCut.remove(i);
+         mCut.addAll(cutISub);
+         return true;
+      }
+      return false;
+   }
+   
+   private Set<URI> mCutSet;
+   public void optimizeAbstraction() {
+      mCutSet = CollectionUtil.makeSet(mCut);
+   }
+   
+   public URI abstractCut() {
       if (size() <= 1) return null;
       
-      Set<URI> oldCut = CollectionUtil.makeSet(mCut);
-      Set<URI> newCut = CollectionUtil.makeSet();
-      for (URI uri : mCut) {
+      for (int i = 0; i < mCut.size(); i++) {
+         URI uri = mCut.get(i);
          List<URI> siblings = mTBox.getSiblings(uri);
-                 
-         if (oldCut.containsAll(siblings)) {
-            oldCut.removeAll(siblings);
+         
+         if (mCutSet.containsAll(siblings)) {
+            mCut.removeAll(siblings);
+            mCutSet.removeAll(siblings);
+            
             URI sup = mTBox.getDirectSuperclass(uri);
-            newCut.add(sup);
+            mCut.add(sup);
+            mCutSet.add(sup);
+            return sup;
          }
       }
       
-      newCut.addAll(oldCut);      
-      return new Cut(mTBox, CollectionUtil.makeList(newCut));
+      throw new RuntimeException("abstractCut");
    }
 
    @Override
    public String toString() {
       return mCut.toString();
    }
+
 }

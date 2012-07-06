@@ -1,7 +1,5 @@
 package airldm2.database.rdf;
 
-import static airldm2.util.StringUtil.angleBracket;
-import static airldm2.util.StringUtil.triple;
 import airldm2.core.rl.RDFDataDescriptor;
 import airldm2.core.rl.ValueAggregator;
 
@@ -47,8 +45,7 @@ public class SumSuffStatQueryConstructor extends QueryConstructor {
       String query;
       ValueAggregator featureAggType = mParam.Feature.getAggregatorType();
       
-      if (featureAggType == ValueAggregator.NONE
-            || featureAggType == ValueAggregator.CUTSUM) {
+      if (featureAggType == ValueAggregator.NONE) {
          query = QUERY_WITH_SIMPLE_FEATURE
             .replace(CONTEXT_PATTERN, mContextPart)
             .replace(VALUE_VAR_PATTERN, mParam.Feature.getGraphPattern().getValueVar())
@@ -71,8 +68,4 @@ public class SumSuffStatQueryConstructor extends QueryConstructor {
       return query;
    }
 
-   private String createInstanceType() {
-      return triple(mDesc.getInstanceVar(), "a", angleBracket(mParam.TargetType));
-   }
-   
 }
