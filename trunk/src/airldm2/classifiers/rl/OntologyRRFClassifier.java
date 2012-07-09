@@ -107,7 +107,7 @@ public class OntologyRRFClassifier extends Classifier {
             int cutIndex = mRandom.nextInt(cut.size());
             String key = cut.get(cutIndex).stringValue();
             
-            Log.info("Level=" + level + " Index=" + cutIndex);
+            Log.info("Level size=" + layers.size() + " Level=" + level + " Index=" + cutIndex);
             
             RbcAttribute attCopy = att.copy();
             OntologyEnumType cutEnum = new OntologyEnumType(mTBox, cut);

@@ -13,6 +13,7 @@ import airldm2.classifiers.rl.estimator.AttributeValue;
 import airldm2.classifiers.rl.estimator.ClassEstimator;
 import airldm2.classifiers.rl.estimator.GaussianEstimator;
 import airldm2.classifiers.rl.estimator.MappedHistogram;
+import airldm2.classifiers.rl.tree.TreeEdge;
 import airldm2.classifiers.rl.tree.TreeNodeSplitter;
 import airldm2.core.LDInstance;
 import airldm2.core.LDInstances;
@@ -39,7 +40,7 @@ public class RDTClassifier extends Classifier {
    
    private int mNumOfClassLabels;
    private List<RbcAttributeValue> mAttributeValues;
-   private SimpleDirectedGraph<TreeNodeSplitter,Boolean> mTree;
+   private SimpleDirectedGraph<TreeNodeSplitter,TreeEdge> mTree;
    private TreeNodeSplitter mRoot;
    
    private List<RbcAttributeValue> mTreeAttributeValues;
@@ -80,8 +81,8 @@ public class RDTClassifier extends Classifier {
       }
       mNumOfClassLabels = mDataDesc.getTargetAttribute().getDomainSize();
       mAttributeValues = nonTargetAttributeValues;
-      mTree = new SimpleDirectedGraph<TreeNodeSplitter, Boolean>(Boolean.class);
-      buildTree(CollectionUtil.<TreeNodeSplitter>makeList(), CollectionUtil.<Boolean>makeList());
+      mTree = new SimpleDirectedGraph<TreeNodeSplitter, TreeEdge>(TreeEdge.class);
+      buildTree(CollectionUtil.<TreeNodeSplitter>makeList(), CollectionUtil.<TreeEdge>makeList());
       
       List<TreeNodeSplitter> nodes = CollectionUtil.makeList(mTree.vertexSet()); 
       mTreeAttributeValues = CollectionUtil.makeList();
@@ -94,7 +95,7 @@ public class RDTClassifier extends Classifier {
       Timer.INSTANCE.stop("RDT learning");
    }
    
-   public SimpleDirectedGraph<TreeNodeSplitter, Boolean> getTree() {
+   public SimpleDirectedGraph<TreeNodeSplitter, TreeEdge> getTree() {
       return mTree;
    }
    
@@ -127,7 +128,7 @@ public class RDTClassifier extends Classifier {
       return count;
    }
    
-   private void buildTree(List<TreeNodeSplitter> pathNodes, List<Boolean> pathEdges) throws RDFDatabaseException {
+   private void buildTree(List<TreeNodeSplitter> pathNodes, List<TreeEdge> pathEdges) throws RDFDatabaseException {
       if (pathNodes.size() >= mDepthLimit) return;
       
       Log.info("Building tree: " + pathNodes + " " + pathEdges);
@@ -136,12 +137,14 @@ public class RDTClassifier extends Classifier {
       List<RbcAttributeValue> unusedAttributeValues = getUnusedAttributeValues(pathNodes);
       List<TreeNodeSplitter> newNodes = CollectionUtil.makeList();
       for (RbcAttributeValue attValue : unusedAttributeValues) {
+         Log.info("pathNodes=" + pathNodes + " pathEdges=" + pathEdges + " unusedAttributeValues=" + unusedAttributeValues + " attValue=" + attValue);
+         
          TreeNodeSplitter newNode = new TreeNodeSplitter(mDataSource, mDataDesc, mClassEst, attValue);
          newNode.estimateParameters(pathNodes, pathEdges);
          newNodes.add(newNode);
       }
       TreeNodeSplitter lastNode = getLastNode(pathNodes);
-      Boolean lastEdge = getLastEdge(pathEdges);
+      TreeEdge lastEdge = getLastEdge(pathEdges);
       TreeNodeSplitter bestNewNode = getMaxInfoGain(newNodes);
       
       Log.info("unusedAttributes=" + unusedAttributeValues);
@@ -155,14 +158,15 @@ public class RDTClassifier extends Classifier {
          } else {
             if (lastEdge != null) {
                mTree.addEdge(lastNode, bestNewNode, lastEdge);
-               pathEdges.add(lastEdge);
             }
          }
          
+         Log.info("lastNode=" + lastNode + " lastEdge=" + lastEdge + " bestNewNode=" + bestNewNode + " tree=" + mTree.toString());
+         
          for (int i = 0; i < 2; i++) {
-            boolean exists = i == 0;
+            TreeEdge exists = new TreeEdge(i == 0);
             List<TreeNodeSplitter> newPathNodes = CollectionUtil.makeList(pathNodes);
-            List<Boolean> newPathEdges = CollectionUtil.makeList(pathEdges);
+            List<TreeEdge> newPathEdges = CollectionUtil.makeList(pathEdges);
             newPathEdges.add(exists);
             buildTree(newPathNodes, newPathEdges);
          }
@@ -180,7 +184,7 @@ public class RDTClassifier extends Classifier {
       return pathNodes.get(pathNodes.size() - 1);
    }
    
-   private Boolean getLastEdge(List<Boolean> pathEdges) {
+   private <T> T getLastEdge(List<T> pathEdges) {
       if (pathEdges.isEmpty()) return null;
       return pathEdges.get(pathEdges.size() - 1);
    }
@@ -275,8 +279,8 @@ public class RDTClassifier extends Classifier {
    }
    
    private TreeNodeSplitter findNode(TreeNodeSplitter node, boolean exists) {
-      for (Boolean out : mTree.outgoingEdgesOf(node)) {
-         if (out == exists) {
+      for (TreeEdge out : mTree.outgoingEdgesOf(node)) {
+         if (out.Value == exists) {
             return mTree.getEdgeTarget(out);
          }
       }

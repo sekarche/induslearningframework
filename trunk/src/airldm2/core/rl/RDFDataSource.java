@@ -138,6 +138,7 @@ public class RDFDataSource implements SSDataSource {
             stat = new DefaultSufficentStatisticImpl(results.getDouble());
          }
          Log.info(String.valueOf(stat.getValue()));
+         
          return stat;
       }
    }
