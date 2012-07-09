@@ -46,7 +46,7 @@ public class TreeNodeSplitter {
       return mAttValue;
    }
    
-   public void estimateParameters(List<TreeNodeSplitter> ancestors, List<Boolean> pathEdges) throws RDFDatabaseException {
+   public void estimateParameters(List<TreeNodeSplitter> ancestors, List<TreeEdge> pathEdges) throws RDFDatabaseException {
       RbcAttribute targetAttribute = mDesc.getTargetAttribute();
       int numOfClassLabels = targetAttribute.getDomainSize();
 
@@ -74,15 +74,15 @@ public class TreeNodeSplitter {
       mTotal = mClassHistogram.sum();
    }
    
-   private void computeClassHistogram(List<TreeNodeSplitter> ancestors, List<Boolean> pathEdges, int numOfClassLabels) {
+   private void computeClassHistogram(List<TreeNodeSplitter> ancestors, List<TreeEdge> pathEdges, int numOfClassLabels) {
       if (ancestors.isEmpty()) {
          mClassHistogram = mClassEst.getClassHistogram().copy();
          
       } else {
          double[] classCounts = new double[numOfClassLabels];
          TreeNodeSplitter parent = ancestors.get(ancestors.size() - 1);
-         Boolean parentEdge = pathEdges.get(pathEdges.size() - 1);
-         int edgeIndex = parentEdge ? 0 : 1;
+         TreeEdge parentEdge = pathEdges.get(pathEdges.size() - 1);
+         int edgeIndex = parentEdge.Value ? 0 : 1;
          
          for (int j = 0; j < numOfClassLabels; j++) {
             classCounts[j] = parent.mValueHistograms[j].get(edgeIndex);
@@ -136,6 +136,7 @@ public class TreeNodeSplitter {
          .append("Attribute", mAttValue.Attribute.getName())
          .append("AttributeValue", mAttValue.ValueKey)
          .append("mValueHistograms", mValueHistograms)
+         .append("mClassHistogram", mClassHistogram)
          .toString();
    }
    

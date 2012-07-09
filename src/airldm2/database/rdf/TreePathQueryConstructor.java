@@ -1,5 +1,6 @@
 package airldm2.database.rdf;
 
+import airldm2.classifiers.rl.tree.TreeEdge;
 import airldm2.core.rl.RDFDataDescriptor;
 import airldm2.core.rl.RbcAttribute;
 import airldm2.core.rl.RbcAttributeValue;
@@ -62,8 +63,8 @@ public class TreePathQueryConstructor extends QueryConstructor {
        
       for (int i = 0; i < mParam.AncestorAttValues.size(); i++) {
          RbcAttributeValue ancAtt = mParam.AncestorAttValues.get(i);
-         Boolean ancPath = mParam.TreePath.get(i);
-         b.append(createSubQuery(i, ancAtt, ancPath));
+         TreeEdge ancPath = mParam.TreePath.get(i);
+         b.append(createSubQuery(i, ancAtt, ancPath.Value));
       }
       
       b.append(createSubQuery(mParam.AncestorAttValues.size(), mParam.AttValue, true));
@@ -72,7 +73,7 @@ public class TreePathQueryConstructor extends QueryConstructor {
       return b.toString();
    }
    
-   public String createSubQuery(int id, RbcAttributeValue ancAttValue, Boolean exists) {
+   public String createSubQuery(int id, RbcAttributeValue ancAttValue, boolean exists) {
       RbcAttribute extendedAtt = ancAttValue.Attribute.extendGraphVariableName(id);
       String query;   
 //      ValueAggregator featureAggType = ancAtt.getAggregatorType();
