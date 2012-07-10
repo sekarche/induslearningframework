@@ -161,6 +161,24 @@ public class RDFDataSource implements SSDataSource {
       
       return treeRootStat;
    }
+   
+   public List<Map<String, Integer>> getAllTreeRootSufficientStatistic(RDFDataDescriptor desc, RbcAttribute att) throws RDFDatabaseException {
+      if (cTreeRootStat.isEmpty()) {
+         RbcAttribute targetAttribute = desc.getTargetAttribute();
+         
+         for (int j = 0; j < targetAttribute.getDomainSize(); j++) {
+            TreePathQueryParameter queryParam = new TreePathQueryParameter(desc.getTargetType(), desc.getTargetAttribute(), j, att);
+            Map<String, Integer> rootStat = getTreeRootSufficientStatistic(queryParam);
+            cTreeRootStat.put(j, rootStat);
+         }
+      }
+      
+      List<Map<String, Integer>> stat = CollectionUtil.makeList();
+      for (int i = 0; i < cTreeRootStat.size(); i++) {
+         stat.add(cTreeRootStat.get(i));
+      }
+      return stat;
+   }
 
    public ISufficentStatistic getMultinomialSufficientStatistic(SuffStatQueryParameter queryParam) throws RDFDatabaseException {
       String query = new MultinomialSuffStatQueryConstructor(mDesc, mDefaultContext, queryParam).createQuery();

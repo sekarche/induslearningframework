@@ -16,18 +16,25 @@ public class TreePathQueryParameter {
    public final URI TargetType;
    public final RbcAttribute Target;
    public final int TargetValueIndex;
-   public final List<RbcAttributeValue> AncestorAttValues;
-   public final List<TreeEdge> TreePath;
+   public List<RbcAttributeValue> AncestorAttValues;
+   public List<TreeEdge> TreePath;
    public final RbcAttributeValue AttValue;
 
-   
-   public TreePathQueryParameter(URI targetType, RbcAttribute target, int targetValueIndex, List<RbcAttributeValue> ancestorAttValues, List<TreeEdge> pathEdges, RbcAttributeValue mAttValue) {
+   public TreePathQueryParameter(URI targetType, RbcAttribute target, int targetValueIndex, RbcAttributeValue attValue) {
       TargetType = targetType;
       Target = target;
       TargetValueIndex = targetValueIndex;
+      AttValue = attValue;
+   }
+   
+   public TreePathQueryParameter(URI targetType, RbcAttribute target, int targetValueIndex, RbcAttribute att) {
+      this(targetType, target, targetValueIndex, new RbcAttributeValue(att, null));
+   }
+
+   public TreePathQueryParameter(URI targetType, RbcAttribute target, int targetValueIndex, List<RbcAttributeValue> ancestorAttValues, List<TreeEdge> pathEdges, RbcAttributeValue attValue) {
+      this(targetType, target, targetValueIndex, attValue);
       AncestorAttValues = ancestorAttValues;
       TreePath = pathEdges;
-      AttValue = mAttValue;
    }
       
    @Override
