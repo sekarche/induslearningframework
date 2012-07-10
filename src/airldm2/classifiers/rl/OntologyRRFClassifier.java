@@ -1,6 +1,7 @@
 package airldm2.classifiers.rl;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 import java.util.logging.Level;
@@ -8,11 +9,10 @@ import java.util.logging.Logger;
 
 import org.openrdf.model.URI;
 
-import explore.RDFDataDescriptorEnhancer;
-
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 import airldm2.classifiers.Classifier;
 import airldm2.classifiers.rl.estimator.ClassEstimator;
+import airldm2.classifiers.rl.estimator.Histogram;
 import airldm2.classifiers.rl.ontology.TBox;
 import airldm2.core.LDInstance;
 import airldm2.core.LDInstances;
@@ -23,7 +23,9 @@ import airldm2.core.rl.RbcAttribute;
 import airldm2.core.rl.RbcAttributeValue;
 import airldm2.exceptions.RDFDatabaseException;
 import airldm2.util.CollectionUtil;
+import airldm2.util.MathUtil;
 import airldm2.util.Timer;
+import explore.RDFDataDescriptorEnhancer;
 
 
 public class OntologyRRFClassifier extends Classifier {
@@ -88,7 +90,7 @@ public class OntologyRRFClassifier extends Classifier {
          atts.add(discretizeNonTargetAttribute(att));
       }
       
-      List<RbcAttributeValue> attValues = makeRandomAttValues(atts);
+      List<RbcAttributeValue> attValues = makeWeightedRandomAttValues(atts);
       
       RDTClassifier rdt = new RDTClassifier(mDepthLimit);
       rdt.buildClassifier(mInstances, attValues);
@@ -120,6 +122,53 @@ public class OntologyRRFClassifier extends Classifier {
       }
       
       return CollectionUtil.makeList(attValues);
+   }
+   
+   //Only works for single attribute
+   private List<RbcAttributeValue> makeWeightedRandomAttValues(List<RbcAttribute> atts) throws RDFDatabaseException {
+      RbcAttribute att = atts.get(0);
+      List<Map<String, Integer>> allTreeRootStat = mDataSource.getAllTreeRootSufficientStatistic(mDataDesc, att);
+      Map<String, Double> rootGain = computeRootGain(allTreeRootStat);
+      WeightedRandom wr = new WeightedRandom(rootGain, mRandom);
+      
+      Set<RbcAttributeValue> attValues = CollectionUtil.makeSet();
+      while (attValues.size() < mAttributeSampleSize) {
+         String key = wr.next();
+         attValues.add(new RbcAttributeValue(att, key));
+      }
+      
+      return CollectionUtil.makeList(attValues);
+   }
+
+   private Map<String, Double> computeRootGain(List<Map<String, Integer>> allTreeRootStat) {
+      Histogram classHistogram = mClassEst.getClassHistogram();
+      Map<String, Double> gains = CollectionUtil.makeMap();
+      
+      for (String key : allTreeRootStat.get(0).keySet()) {
+         double remainder = 0.0;
+         double[] valueHistogram = null;
+         double entropy = 0.0;
+         
+         //Positive
+         valueHistogram = new double[allTreeRootStat.size()];
+         for (int j = 0; j < valueHistogram.length; j++) {
+            valueHistogram[j] = allTreeRootStat.get(j).get(key);
+         }
+         entropy = MathUtil.getEntropy(valueHistogram);
+         remainder += entropy * MathUtil.sum(valueHistogram);
+         
+         //Negative
+         valueHistogram = new double[allTreeRootStat.size()];
+         for (int j = 0; j < valueHistogram.length; j++) {
+            valueHistogram[j] = classHistogram.get(j) - allTreeRootStat.get(j).get(key);
+         }
+         entropy = MathUtil.getEntropy(valueHistogram);
+         remainder += entropy * MathUtil.sum(valueHistogram);
+         
+         gains.put(key, remainder);
+      }
+      
+      return gains;
    }
 
    private RbcAttribute randomExtendHierarchy(RbcAttribute att) {

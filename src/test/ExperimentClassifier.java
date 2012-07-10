@@ -50,8 +50,6 @@ public class ExperimentClassifier {
    private void run(String descFile, String context, String instanceURI) throws Exception {
       RDFDataDescriptor desc = RDFDataDescriptorParser.parse(descFile);
       
-      setUpDataSource(desc, context, instanceURI);
-      
       TrainConn = new VirtuosoConnection("jdbc:virtuoso://localhost:1113/charset=UTF-8/log_enable=2", "dba", "dba");
       TestConn = new VirtuosoConnection("jdbc:virtuoso://localhost:1115/charset=UTF-8/log_enable=2", "dba", "dba");
 
@@ -66,6 +64,8 @@ public class ExperimentClassifier {
       Matrix matrix = new Matrix(2, 2);
             
       for (int c = 0; c < CROSS; c++) {
+         setUpDataSource(desc, context, instanceURI);
+         
          //remove train test
          removeFold(TrainConn, posInstances, CROSS, c);
          removeFold(TrainConn, negInstances, CROSS, c);
