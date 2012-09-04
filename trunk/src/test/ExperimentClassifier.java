@@ -18,7 +18,7 @@ import weka.classifiers.evaluation.ConfusionMatrix;
 import weka.core.Matrix;
 import airldm2.classifiers.Evaluation;
 import airldm2.classifiers.rl.OntologyRBClassifier;
-import airldm2.classifiers.rl.RRFClassifier;
+import airldm2.classifiers.rl.OntologyRRFClassifier;
 import airldm2.classifiers.rl.ontology.Cut;
 import airldm2.classifiers.rl.ontology.TBox;
 import airldm2.core.LDInstances;
@@ -26,9 +26,13 @@ import airldm2.core.rl.RDFDataDescriptor;
 import airldm2.core.rl.RDFDataDescriptorParser;
 import airldm2.core.rl.RDFDataSource;
 import airldm2.database.rdf.RDFDatabaseConnection;
+import airldm2.database.rdf.RDFDatabaseConnectionFactory;
 import airldm2.database.rdf.SPARQLQueryResult;
 import airldm2.database.rdf.VirtuosoConnection;
+import airldm2.exceptions.RDFDataDescriptorFormatException;
 import airldm2.exceptions.RDFDatabaseException;
+import airldm2.util.Timer;
+import airldm2.util.Weigher;
 
 import com.clarkparsia.pellint.util.CollectionUtil;
 
@@ -43,13 +47,18 @@ public class ExperimentClassifier {
    private RDFDatabaseConnection TestConn;
    
    public static void main(String[] args) throws Exception {
-      new ExperimentClassifier().run("rdfs_example/flickrDesc.txt", ":flickr", "http://flickr/vocab/user");
-      //new ExperimentClassifier().runCut("rdfs_example/flickrDesc.txt", ":flickr", "http://flickr/vocab/user");
+      new ExperimentClassifier().run("rdfs_example/flickrDescH.txt", ":flickr", "http://flickr/vocab/user");
+      //new ExperimentClassifier().runCut("rdfs_example/flickrDescH.txt", ":flickr", "http://flickr/vocab/user");
+      
+      //new ExperimentClassifier().run("rdfs_example/lastfmDesc.txt", ":lastfm", "http://lastfm/vocab/user");
+      //new ExperimentClassifier().runCut("rdfs_example/lastfmDescH.txt", ":lastfm", "http://lastfm/vocab/user");
+      
+//      new ExperimentClassifier().runComm("rdfs_example/flickrDescH.txt", ":subset", "http://flickr/vocab/user");
+//      SubclassReasoner2.main(null);
+//      new ExperimentClassifier().runCommMat("rdfs_example/flickrDescH.txt", ":subset", "http://flickr/vocab/user");
    }
    
    private void run(String descFile, String context, String instanceURI) throws Exception {
-      RDFDataDescriptor desc = RDFDataDescriptorParser.parse(descFile);
-      
       TrainConn = new VirtuosoConnection("jdbc:virtuoso://localhost:1113/charset=UTF-8/log_enable=2", "dba", "dba");
       TestConn = new VirtuosoConnection("jdbc:virtuoso://localhost:1115/charset=UTF-8/log_enable=2", "dba", "dba");
 
@@ -64,6 +73,7 @@ public class ExperimentClassifier {
       Matrix matrix = new Matrix(2, 2);
             
       for (int c = 0; c < CROSS; c++) {
+         RDFDataDescriptor desc = RDFDataDescriptorParser.parse(descFile);
          setUpDataSource(desc, context, instanceURI);
          
          //remove train test
@@ -82,11 +92,11 @@ public class ExperimentClassifier {
       
 //         RBClassifier model = new RBClassifier();
 //         ConfusionMatrix mat = Evaluation.evaluateRBCModel(model, trainInstances, testInstances);
-         RRFClassifier model = new RRFClassifier(11, 10, 5);
-         ConfusionMatrix mat = Evaluation.evaluateRRFModel(model, trainInstances, testInstances);
-//         OntologyRBClassifier model = new OntologyRBClassifier(false);
-//         ConfusionMatrix mat = Evaluation.evaluateOntologyRBCModel(model, trainInstances, testInstances);
-//         OntologyRRFClassifier model = new OntologyRRFClassifier(10, 3, 2);
+//         RRFClassifier model = new RRFClassifier(51, 30, 3);
+//         ConfusionMatrix mat = Evaluation.evaluateRRFModel(model, trainInstances, testInstances);
+         OntologyRBClassifier model = new OntologyRBClassifier(false);
+         ConfusionMatrix mat = Evaluation.evaluateOntologyRBCModel(model, trainInstances, testInstances);
+//         OntologyRRFClassifier model = new OntologyRRFClassifier(11, 30, 3);
 //         ConfusionMatrix mat = Evaluation.evaluateOntologyRRFModel(model, trainInstances, testInstances);
          
          matrix = matrix.add(mat);
@@ -99,17 +109,15 @@ public class ExperimentClassifier {
       }
       
       out.write(matrix.toString()); out.newLine();
-      //out.write("Total query size: " + Weigher.INSTANCE); out.newLine();
-      //out.write(Timer.INSTANCE.toString()); out.newLine();
+      out.write("Total query size: " + Weigher.INSTANCE); out.newLine();
+      out.write(Timer.INSTANCE.toString()); out.newLine();
       
       out.close();
    }
    
    private void runCut(String descFile, String context, String instanceURI) throws Exception {
       RDFDataDescriptor desc = RDFDataDescriptorParser.parse(descFile);
-      
       setUpDataSource(desc, context, instanceURI);
-      
       TrainConn = new VirtuosoConnection("jdbc:virtuoso://localhost:1113/charset=UTF-8/log_enable=2", "dba", "dba");
       TestConn = new VirtuosoConnection("jdbc:virtuoso://localhost:1115/charset=UTF-8/log_enable=2", "dba", "dba");
 
@@ -127,6 +135,9 @@ public class ExperimentClassifier {
          final int CROSS = 5;
          Matrix matrix = new Matrix(2, 2);
          for (int c = 0; c < CROSS; c++) {
+            desc = RDFDataDescriptorParser.parse(descFile);
+            setUpDataSource(desc, context, instanceURI);
+            
             //remove train test
             removeFold(TrainConn, posInstances, CROSS, c);
             removeFold(TrainConn, negInstances, CROSS, c);
@@ -163,6 +174,100 @@ public class ExperimentClassifier {
       out.close();
    }
    
+   private void runComm(String descFile, String context, String instanceURI) throws Exception {
+      TrainConn = new VirtuosoConnection("jdbc:virtuoso://localhost:1113/charset=UTF-8/log_enable=2", "dba", "dba");
+
+      BufferedWriter out = new BufferedWriter(new FileWriter("resultRaw.txt"));
+      
+      LDInstances trainInstances = resetTrainingInstances(descFile, context, instanceURI);
+      List<Cut> allCuts = readCuts();
+      int[] cutSizes = new int[] {2000};
+      for (int i = 0; i < cutSizes.length; i++) {
+         Cut cut = chooseCut(allCuts, cutSizes[i]);
+         
+         trainInstances = resetTrainingInstances(descFile, context, instanceURI);
+         OntologyRBClassifier rbcOpt = new OntologyRBClassifier(cut);
+         rbcOpt.setOptimizeOntology(true);
+         RDFDatabaseConnectionFactory.QUERY_INFERENCE = false;
+         rbcOpt.buildClassifier(trainInstances);
+         out.write("RBC (cut " + cut.size() + ") optimized:"); out.newLine();
+         out.write("Total query size: " + Weigher.INSTANCE); out.newLine();
+         out.write(Timer.INSTANCE.toString()); out.newLine();
+
+//         trainInstances = resetTrainingInstances(descFile, context, instanceURI);
+//         OntologyRBClassifier rbcInf = new OntologyRBClassifier(cut);
+//         rbcInf.setOptimizeOntology(false);
+//         RDFDatabaseConnectionFactory.QUERY_INFERENCE = true;
+//         rbcInf.buildClassifier(trainInstances);
+//         out.write("RBC (cut " + cut.size() + ") online inf:"); out.newLine();
+//         out.write("Total query size: " + Weigher.INSTANCE); out.newLine();
+//         out.write(Timer.INSTANCE.toString()); out.newLine();
+      }
+      
+//      trainInstances = resetTrainingInstances(descFile, context, instanceURI);
+//      OntologyRRFClassifier rrf = new OntologyRRFClassifier(11, 30, 3);
+//      RDFDatabaseConnectionFactory.QUERY_INFERENCE = true;
+//      rrf.buildClassifier(trainInstances);
+//      out.write("RRF online inf:"); out.newLine();
+//      out.write("Total query size: " + Weigher.INSTANCE); out.newLine();
+//      out.write(Timer.INSTANCE.toString()); out.newLine();
+      
+      out.close();
+   }
+   
+   private void runCommMat(String descFile, String context, String instanceURI) throws Exception {
+      TrainConn = new VirtuosoConnection("jdbc:virtuoso://localhost:1113/charset=UTF-8/log_enable=2", "dba", "dba");
+
+      BufferedWriter out = new BufferedWriter(new FileWriter("resultMat.txt"));
+      
+      LDInstances trainInstances = resetTrainingInstances(descFile, context, instanceURI);
+      List<Cut> allCuts = readCuts();
+      int[] cutSizes = new int[] {200, 2000};
+      for (int i = 0; i < cutSizes.length; i++) {
+         Cut cut = chooseCut(allCuts, cutSizes[i]);
+         
+         trainInstances = resetTrainingInstances(descFile, context, instanceURI);
+         OntologyRBClassifier rbcMat = new OntologyRBClassifier(cut);
+         rbcMat.setOptimizeOntology(false);
+         RDFDatabaseConnectionFactory.QUERY_INFERENCE = false;
+         rbcMat.buildClassifier(trainInstances);
+         out.write("RBC (cut " + cut.size() + ") materialized:"); out.newLine();
+         out.write("Total query size: " + Weigher.INSTANCE); out.newLine();
+         out.write(Timer.INSTANCE.toString()); out.newLine();
+      }
+      
+      trainInstances = resetTrainingInstances(descFile, context, instanceURI);
+      OntologyRRFClassifier rrf = new OntologyRRFClassifier(11, 30, 3);
+      RDFDatabaseConnectionFactory.QUERY_INFERENCE = false;
+      rrf.buildClassifier(trainInstances);
+      out.write("RRF materialized:"); out.newLine();
+      out.write("Total query size: " + Weigher.INSTANCE); out.newLine();
+      out.write(Timer.INSTANCE.toString()); out.newLine();
+      
+      out.close();
+   }
+   
+   private LDInstances resetTrainingInstances(String descFile, String context, String instanceURI) throws IOException, RDFDataDescriptorFormatException, RepositoryException {
+      RDFDataDescriptor desc = RDFDataDescriptorParser.parse(descFile);
+      setUpDataSource(desc, context, instanceURI);
+      LDInstances trainInstances = new LDInstances();
+      trainInstances.setDesc(desc);
+      trainInstances.setDataSource(mTrainData);
+   
+      Weigher.INSTANCE.reset();
+      Timer.INSTANCE.reset();
+      return trainInstances;
+   }
+
+   private Cut chooseCut(List<Cut> cuts, int i) {
+      for (Cut cut : cuts) {
+         if (cut.size() >= i) {
+            return cut;
+         }
+      }
+      return null;
+   }
+
    private List<Cut> readCuts() throws IOException, RDFDatabaseException {
       List<Cut> allCuts = CollectionUtil.makeList();
       
@@ -234,6 +339,18 @@ public class ExperimentClassifier {
       }
    }
 
+//   private void removeURI(RDFDatabaseConnection conn, URI uri) throws RDFDatabaseException {
+//      String deleteQuery = "DELETE FROM <:lastfm> { ?x a <http://lastfm/vocab/user> . } WHERE { "
+//         + "FILTER(?x = <" + uri + ">) "
+//         + "?x a <http://lastfm/vocab/user> . }";
+//      conn.executeUpdate(deleteQuery);
+//   }
+//   
+//   private void addURI(RDFDatabaseConnection conn, URI uri) throws RDFDatabaseException {
+//      String addQuery = "INSERT INTO <:lastfm> { <" + uri + "> a <http://lastfm/vocab/user> . } ";
+//      conn.executeUpdate(addQuery);
+//   }
+   
    private void removeURI(RDFDatabaseConnection conn, URI uri) throws RDFDatabaseException {
       String deleteQuery = "DELETE FROM <:flickr> { ?x a <http://flickr/vocab/user> . } WHERE { "
          + "FILTER(?x = <" + uri + ">) "
@@ -284,6 +401,26 @@ public class ExperimentClassifier {
       }
    }
    
+//   private List<URI> getInstances(RDFDatabaseConnection trainConn, boolean isPositive) throws RDFDatabaseException {
+//      if (isPositive) {
+//         String query = "SELECT ?x FROM <:lastfm> WHERE { "
+//            + "?x a <http://lastfm/vocab/user> . "
+//            + "?x <http://lastfm/vocab/hasGroup> \"group0\" . "
+//            + " } ORDER BY ?x";
+//         SPARQLQueryResult result = trainConn.executeQuery(query);
+//         return result.getURIList();
+//         
+//      } else {
+//         String query = "SELECT ?x FROM <:lastfm> WHERE { "
+//            + "?x a <http://lastfm/vocab/user> . "
+//            + "?x <http://lastfm/vocab/hasGroup> \"group1\" . "
+//            + " } ORDER BY ?x";
+//         SPARQLQueryResult result = trainConn.executeQuery(query);
+//         return result.getURIList();
+//
+//      }
+//   }
+
    private List<URI> getInstances(RDFDatabaseConnection trainConn, boolean isPositive) throws RDFDatabaseException {
       if (isPositive) {
          String query = "SELECT ?x FROM <:flickr> WHERE { "
@@ -303,5 +440,5 @@ public class ExperimentClassifier {
 
       }
    }
-
+   
 }

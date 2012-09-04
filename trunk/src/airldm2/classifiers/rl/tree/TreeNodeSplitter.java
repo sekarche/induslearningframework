@@ -121,6 +121,10 @@ public class TreeNodeSplitter {
       return mValueHistograms[prediction].get(i);
    }
    
+   public double getNumInstances() {
+      return mTotal;
+   }
+
    public int getPredictionAtLeaf(Boolean v) {
       int i = v ? 0 : 1;
       double[] vs = new double[mClassHistogram.size()];
@@ -128,6 +132,11 @@ public class TreeNodeSplitter {
          vs[j] = mValueHistograms[j].get(i);
       }
       return MathUtil.maxIndex(vs);
+   }
+   
+   public int getSizeLeaf(Boolean v) {
+      int i = v ? 0 : 1;
+      return (int) mValueHistogram.get(i);
    }
 
    @Override

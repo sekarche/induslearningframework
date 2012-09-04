@@ -26,15 +26,15 @@ public class SubclassReasoner2 {
       
       TBox tBox = dataSource.getTBox();
       
-      Timer timer = new Timer();
-      timer.start("Inf");
+      Timer.INSTANCE.reset();
+      Timer.INSTANCE.start("Inf");
       for (URI c : tBox.getClasses()) {
          if (!c.stringValue().startsWith("http://purl.org")) continue;
          List<URI> sups = tBox.getSuperclasses(c);
          if (sups.isEmpty()) continue;
          
          StringBuilder query = new StringBuilder();
-         query.append("INSERT INTO <:flickr> { ");
+         query.append("INSERT INTO <:subset> { ");
          for (URI sup : sups) {
             query.append(StringUtil.triple("?x", "a", StringUtil.angleBracket(sup)));
          }         
@@ -45,7 +45,8 @@ public class SubclassReasoner2 {
          //System.out.println(query.toString());
          conn.executeUpdate(query.toString());
       }
-      timer.stop("Inf");
+      Timer.INSTANCE.stop("Inf");
+      System.out.println(Timer.INSTANCE);
    }
    
 }

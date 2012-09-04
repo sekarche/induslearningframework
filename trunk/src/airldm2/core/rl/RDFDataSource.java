@@ -122,13 +122,7 @@ public class RDFDataSource implements SSDataSource {
          
       } else {
          String query = new TreePathQueryConstructor(mDesc, mDefaultContext, queryParam).createQuery();
-         Log.info(query);
-         
-         Weigher.INSTANCE.add(query);
-         Timer.INSTANCE.start("Query");
          SPARQLQueryResult results = mConn.executeQuery(query);
-         Timer.INSTANCE.stop("Query");      
-         
          if (results.isEmpty()) return null;
          
          ISufficentStatistic stat = null;
@@ -145,12 +139,7 @@ public class RDFDataSource implements SSDataSource {
 
    private Map<String, Integer> getTreeRootSufficientStatistic(TreePathQueryParameter queryParam) throws RDFDatabaseException {
       String query = new TreePathQueryConstructor(mDesc, mDefaultContext, queryParam).createRootQuery();
-      Log.warning(query);
-      
-      Weigher.INSTANCE.add(query);
-      Timer.INSTANCE.start("Query");
       SPARQLQueryResult results = mConn.executeQuery(query);
-      Timer.INSTANCE.stop("Query");
       
       Map<String, Integer> treeRootStat = CollectionUtil.makeMap();
       for (Value[] vs : results.getValueTupleList()) {
@@ -182,12 +171,7 @@ public class RDFDataSource implements SSDataSource {
 
    public ISufficentStatistic getMultinomialSufficientStatistic(SuffStatQueryParameter queryParam) throws RDFDatabaseException {
       String query = new MultinomialSuffStatQueryConstructor(mDesc, mDefaultContext, queryParam).createQuery();
-      Log.info(query);
-      
-      Weigher.INSTANCE.add(query);
-      Timer.INSTANCE.start("Query");
       SPARQLQueryResult results = mConn.executeQuery(query);
-      Timer.INSTANCE.stop("Query");
       
       if (results.isEmpty()) return null;
       ISufficentStatistic stat = new DefaultSufficentStatisticImpl(results.getInt());
@@ -197,12 +181,7 @@ public class RDFDataSource implements SSDataSource {
    
    public ISufficentStatistic getBernoulliSufficientStatistic(SuffStatQueryParameter queryParam) throws RDFDatabaseException {
       String query = new BernoulliSuffStatQueryConstructor(mDesc, mDefaultContext, queryParam).createQuery();
-      Log.info(query);
-      
-      Weigher.INSTANCE.add(query);
-      Timer.INSTANCE.start("Query");
       SPARQLQueryResult results = mConn.executeQuery(query);
-      Timer.INSTANCE.stop("Query");
       
       if (results.isEmpty()) return null;
       ISufficentStatistic stat = new DefaultSufficentStatisticImpl(results.getInt());
@@ -212,12 +191,7 @@ public class RDFDataSource implements SSDataSource {
    
    public ISufficentStatistic getSumSufficientStatistic(SuffStatQueryParameter queryParam) throws RDFDatabaseException {
       String query = new SumSuffStatQueryConstructor(mDesc, mDefaultContext, queryParam).createQuery();
-      Log.info(query);
-      
-      Weigher.INSTANCE.add(query);
-      Timer.INSTANCE.start("Query");
       SPARQLQueryResult results = mConn.executeQuery(query);
-      Timer.INSTANCE.stop("Query");
       
       if (results.isEmpty()) return null;
       
@@ -233,12 +207,7 @@ public class RDFDataSource implements SSDataSource {
 
    public ISufficentStatistic getSquaredSumSufficientStatistic(SuffStatQueryParameter queryParam) throws RDFDatabaseException {
       String query = new SquaredSumSuffStatQueryConstructor(mDesc, mDefaultContext, queryParam).createQuery();
-      Log.info(query);
-      
-      Weigher.INSTANCE.add(query);
-      Timer.INSTANCE.start("Query");
       SPARQLQueryResult results = mConn.executeQuery(query);
-      Timer.INSTANCE.stop("Query");
       
       if (results.isEmpty()) return null;
       
@@ -254,12 +223,7 @@ public class RDFDataSource implements SSDataSource {
 
    public Map<URI, Double> getSumSufficientStatisticForAllHierarchy(SuffStatQueryParameter queryParam) throws RDFDatabaseException {
       String query = new SumSuffStatForAllHierarchyQueryConstructor(mDesc, mDefaultContext, queryParam).createQuery();
-      Log.info(query);
-      
-      Weigher.INSTANCE.add(query);
-      Timer.INSTANCE.start("Query");
       SPARQLQueryResult results = mConn.executeQuery(query);
-      Timer.INSTANCE.stop("Query");
       
       Map<URI, Double> stats = CollectionUtil.makeMap();
       for (Value[] vs : results.getValueTupleList()) {
@@ -273,12 +237,7 @@ public class RDFDataSource implements SSDataSource {
    
    public Map<URI, Double> getSquaredSumSufficientStatisticForAllHierarchy(SuffStatQueryParameter queryParam) throws RDFDatabaseException {
       String query = new SquaredSumSuffStatForAllHierarchyQueryConstructor(mDesc, mDefaultContext, queryParam).createQuery();
-      Log.info(query);
-      
-      Weigher.INSTANCE.add(query);
-      Timer.INSTANCE.start("Query");
       SPARQLQueryResult results = mConn.executeQuery(query);
-      Timer.INSTANCE.stop("Query");
       
       Map<URI, Double> stats = CollectionUtil.makeMap();
       for (Value[] vs : results.getValueTupleList()) {
@@ -292,40 +251,30 @@ public class RDFDataSource implements SSDataSource {
 
    public List<URI> getTargetInstances(URI targetType) throws RDFDatabaseException {
       String query = new InstanceQueryConstructor(mDesc, mDefaultContext, targetType).createQuery();
-      Log.info(query);
-      
       SPARQLQueryResult results = mConn.executeQuery(query);
       return results.getURIList();
    }
    
    public List<URI> getTargetInstances(SuffStatQueryParameter queryParam) throws RDFDatabaseException {
       String query = new InstanceQueryConstructor(mDesc, mDefaultContext, queryParam).createQuery();
-      Log.info(query);
-      
       SPARQLQueryResult results = mConn.executeQuery(query);
       return results.getURIList();
    }
    
    public Value getValue(URI instance, RbcAttribute attribute) throws RDFDatabaseException {
       String query = new ValueQueryConstructor(mDesc, mDefaultContext, instance, attribute).createQuery();
-      Log.info(query);
-      
       SPARQLQueryResult results = mConn.executeQuery(query);
       return results.getValue();
    }
    
    public Value getAggregation(URI instance, RbcAttribute attribute) throws RDFDatabaseException {
       String query = new AggregationQueryConstructor(mDesc, mDefaultContext, instance, attribute).createQuery();
-      Log.info(query);
-      
       SPARQLQueryResult results = mConn.executeQuery(query);
       return results.getValue();
    }
    
    public int countIndependentValueAggregation(URI instance, RbcAttribute attribute, int v) throws RDFDatabaseException {
       String query = new IndependentValueAggregationQueryConstructor(mDesc, mDefaultContext, instance, attribute, v).createQuery();
-      Log.info(query);
-      
       SPARQLQueryResult results = mConn.executeQuery(query);
       if (results.isEmpty()) return 0;
       return results.getInt();
@@ -335,8 +284,6 @@ public class RDFDataSource implements SSDataSource {
    private Map<URI, Map<String,Integer>> Histogram = CollectionUtil.makeMap();
    public Map<String,Integer> countHistogramAggregation(URI instance, RbcAttribute attribute) throws RDFDatabaseException {
       String query = new HistogramAggregationQueryConstructor(mDesc, mDefaultContext, instance, attribute).createQuery();
-      Log.info(query);
-      
       Map<String, Integer> cachedCounts = Histogram.get(instance);
       if (cachedCounts == null) {
          cachedCounts = CollectionUtil.makeMap();
@@ -380,8 +327,6 @@ public class RDFDataSource implements SSDataSource {
 
    public int getRangeSizeOf(URI targetType, PropertyChain propChain) throws RDFDatabaseException {
       String query = new RangeSizeQueryConstructor(mDefaultContext, targetType, propChain).createQuery();
-      Log.info(query);
-      
       SPARQLQueryResult results = mConn.executeQuery(query);
       if (results.isEmpty()) return 0;
       return results.getInt();
@@ -389,15 +334,11 @@ public class RDFDataSource implements SSDataSource {
    
    public SPARQLQueryResult getRangeOf(URI targetType, RbcAttribute a) throws RDFDatabaseException {
       String query = new RangeQueryConstructor(mDesc, mDefaultContext, a).createQuery();
-      Log.info(query);
-      
       return mConn.executeQuery(query);
    }
 
    public List<URI> getPropertiesOf(URI targetType, PropertyChain propChain) throws RDFDatabaseException {
       String query = new CrawlPropertyQueryConstructor(mDefaultContext, targetType, propChain).createQuery();
-      Log.info(query);
-      
       SPARQLQueryResult results = mConn.executeQuery(query);
       return results.getURIList();
    }
@@ -420,8 +361,6 @@ public class RDFDataSource implements SSDataSource {
 
    public boolean isUniqueForInstance(URI targetType, PropertyChain propChain) throws RDFDatabaseException {
       String query = new NestedAggregationQueryConstructor(mDefaultContext, targetType, propChain, Aggregator.MAX, Aggregator.COUNT, false).createQuery();
-      //Log.info(query);
-      
       SPARQLQueryResult results = mConn.executeQuery(query);
       return results.getInt() <= 1;
    }
@@ -429,14 +368,13 @@ public class RDFDataSource implements SSDataSource {
    public double getAverageForAggregation(URI targetType, PropertyChain propChain, Aggregator inner) throws RDFDatabaseException {
       boolean needsNumericFilter = !Aggregator.COUNT.equals(inner);
       String query = new NestedAggregationQueryConstructor(mDefaultContext, targetType, propChain, Aggregator.AVG, inner, needsNumericFilter).createQuery();
-      //Log.info(query);
-      
       SPARQLQueryResult results = mConn.executeQuery(query);
       return results.getDouble();
    }
 
    public TBox getTBox() throws RDFDatabaseException {
       Timer.INSTANCE.start("TBox");
+      Weigher.INSTANCE.pause();
       
       if (cTBox == null) {
          cTBox = new TBox();
@@ -458,13 +396,12 @@ public class RDFDataSource implements SSDataSource {
       }
       
       Timer.INSTANCE.stop("TBox");
+      Weigher.INSTANCE.resume();
       return cTBox;
    }
 
    public List<URI> getDistinctClasses(RbcAttribute att) throws RDFDatabaseException {
       String query = new HierarchyRangeQueryConstructor(mDesc, mDefaultContext, att).createQuery();
-      Log.warning(query);
-      
       SPARQLQueryResult results = mConn.executeQuery(query);
       return results.getURIList();
    }

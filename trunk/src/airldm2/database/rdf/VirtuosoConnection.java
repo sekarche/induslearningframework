@@ -1,6 +1,8 @@
 package airldm2.database.rdf;
 
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.openrdf.model.Value;
 import org.openrdf.query.BindingSet;
@@ -19,11 +21,16 @@ import org.openrdf.repository.http.HTTPRepository;
 import virtuoso.sesame2.driver.VirtuosoRepository;
 import airldm2.exceptions.RDFDatabaseException;
 import airldm2.util.CollectionUtil;
+import airldm2.util.Timer;
+import airldm2.util.Weigher;
 
 public class VirtuosoConnection implements RDFDatabaseConnection {
    
    private Repository mRepository;
    private RepositoryConnection mConn;
+   
+   private static Logger Log = Logger.getLogger("airldm2.core.rl.VirtuosoConnection");
+   static { Log.setLevel(Level.WARNING); }
    
    public VirtuosoConnection(String sparqlEndpointURL) throws RepositoryException {
       mRepository = new HTTPRepository(sparqlEndpointURL);
@@ -57,6 +64,10 @@ public class VirtuosoConnection implements RDFDatabaseConnection {
    
    @Override
    public SPARQLQueryResult executeQuery(String query) throws RDFDatabaseException {
+      Log.info(query);
+      
+      Weigher.INSTANCE.add(query);
+      
       List<Value[]> results = CollectionUtil.makeList();
       
       TupleQuery resultsTable;
@@ -69,7 +80,10 @@ public class VirtuosoConnection implements RDFDatabaseConnection {
       }
       
       try {
+         Timer.INSTANCE.start("Query");
          TupleQueryResult bindings = resultsTable.evaluate();
+         Timer.INSTANCE.stop("Query");
+         
          List<String> names = bindings.getBindingNames();
          while (bindings.hasNext()) {
             BindingSet pairs = bindings.next();
@@ -88,6 +102,8 @@ public class VirtuosoConnection implements RDFDatabaseConnection {
       } catch (QueryEvaluationException e) {
          throw new RDFDatabaseException(e);
       }
+      
+      Weigher.INSTANCE.add(results);
       
       return new SPARQLQueryResult(results);
    }

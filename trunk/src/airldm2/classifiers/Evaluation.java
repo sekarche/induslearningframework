@@ -27,6 +27,8 @@ import airldm2.database.rdf.RDFDatabaseConnectionFactory;
 import airldm2.util.MathUtil;
 import airldm2.util.SimpleArffFileReader;
 
+import cern.colt.Arrays;
+
 import com.clarkparsia.pellint.util.CollectionUtil;
 
 /**
@@ -320,6 +322,8 @@ public class Evaluation {
          double[] distribution = new double[labelCounts.length];
          distribution[vote] = 1.0;
          double actual = aggregatedInstances.getInstances().get(i).getLabel();
+         System.out.println(Arrays.toString(labelCounts) + " " + Arrays.toString(distribution) + " " + actual);
+         
          wekaConfusionMatrix.addPrediction(new NominalPrediction(actual, distribution));
       }
       

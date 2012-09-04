@@ -11,7 +11,7 @@ import java.util.Scanner;
 public class ResultFormatter {
    public static void main(String[] args) throws IOException {
       BufferedWriter out = new BufferedWriter(new FileWriter("result.csv"));
-      BufferedReader in = new BufferedReader(new FileReader(args[0]));
+      BufferedReader in = new BufferedReader(new FileReader("result.txt"));
       out.write("cut,accuracy,precision,recall");
       out.newLine();
       

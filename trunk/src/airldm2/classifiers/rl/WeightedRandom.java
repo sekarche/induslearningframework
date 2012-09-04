@@ -1,5 +1,6 @@
 package airldm2.classifiers.rl;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -28,6 +29,14 @@ public class WeightedRandom {
       }
       
       mSum = mAccWeight[mAccWeight.length - 1];
+      
+      
+      double[] test = new double[mAccWeight.length];
+      for (int i = 0; i < test.length; i++) {
+         test[i] = mWeight.get(mWeightList.get(i));
+      }
+      Arrays.sort(test);
+      System.out.println(test[0] + " " + test[test.length / 4] + " " + test[test.length / 2] + " " + test[test.length * 3 / 4] + " " + test[test.length - 1]);
    }
 
    public String next() {

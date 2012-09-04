@@ -90,12 +90,20 @@ public class OntologyBernoulliEstimator extends OntologyAttributeEstimator {
       if (!(v instanceof Histogram)) 
          throw new IllegalArgumentException("Error: value " + v + " is not a Histogram for OntologyBernoulliEstimator.");
       
-      Histogram val = (Histogram) v;
+      Histogram val = null;
+      if (v instanceof MappedHistogram) {
+         List<URI> domain = mCut.get();
+         MappedHistogram allV = (MappedHistogram) v;
+         val = allV.induce(domain);
+      } else {
+         val = (Histogram) v;
+      }
+      
       if (val.size() != mCut.size())
          throw new IllegalArgumentException("Error: size of " + v + " (" + val.size() + ") does not match the size of current cut (" + mCut.size() + ").");
-      
+
       initLikelihood();
-      
+
       Log.info(Arrays.toString(val.getIntArray(0)));
       return MathUtil.logBernoulliDist(mParameters[classIndex], val.getIntArray(0));
    }

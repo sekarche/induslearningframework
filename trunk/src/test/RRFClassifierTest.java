@@ -57,7 +57,7 @@ public class RRFClassifierTest {
       testInstances.setDesc(desc);
       testInstances.setDataSource(testSource);
    
-      RRFClassifier rrf = new RRFClassifier(3, 10, 4);
+      RRFClassifier rrf = new RRFClassifier(3, 30, 4);
       
       ConfusionMatrix matrix = Evaluation.evaluateRRFModel(rrf, trainInstances, testInstances);
       System.out.println(matrix.toString("===Confusion Matrix==="));

@@ -20,6 +20,10 @@ public class OntologyEnumType extends EnumType {
       mTBox = tBox;
    }
 
+   public OntologyEnumType(TBox tBox, EnumType type) {
+      this(tBox, type.mDomain);
+   }
+
    @Override
    public String makeFilter(String varName, int valueIndex) {
       String filter = super.makeFilter(varName, valueIndex);
