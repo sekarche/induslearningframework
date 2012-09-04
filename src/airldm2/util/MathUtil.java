@@ -62,6 +62,10 @@ public class MathUtil {
       return sum;
    }
    
+   public static double average(List<Double> list) {
+      return sum(list) / list.size();
+   }
+   
    public static double averageLog(List<Double> logList) {
       if (logList.size() == 1) return logList.get(0);
       

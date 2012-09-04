@@ -3,6 +3,7 @@ package airldm2.classifiers.rl;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -12,7 +13,6 @@ import java.util.logging.Logger;
 
 import weka.classifiers.evaluation.ConfusionMatrix;
 import weka.classifiers.evaluation.NominalPrediction;
-
 import airldm2.classifiers.Classifier;
 import airldm2.classifiers.rl.estimator.AttributeValue;
 import airldm2.classifiers.rl.estimator.ClassEstimator;
@@ -41,6 +41,8 @@ public class OntologyRBClassifier extends Classifier {
    static { Log.setLevel(Level.WARNING); }
    
    private boolean OPTIMIZE_ONTOLOGY = false;
+   private boolean SMOOTH_CUT_SELECTION = true;
+   private int CUT_SELECTION_WINDOW = 10;
    
    private LDInstances mInstances;
    private RDFDataSource mDataSource;
@@ -73,6 +75,10 @@ public class OntologyRBClassifier extends Classifier {
       if ("true".equalsIgnoreCase(optimizeOntology)) {
          OPTIMIZE_ONTOLOGY = true;
       }
+   }
+   
+   public void setOptimizeOntology(boolean v) {
+      OPTIMIZE_ONTOLOGY = v;
    }
    
    public OntologyRBClassifier(boolean useLeaveCut) throws RTConfigException {
@@ -163,7 +169,6 @@ public class OntologyRBClassifier extends Classifier {
          Log.warning("Searching... ");
          
          //Greedy search global cut
-         double bestScore = computeModelScore();
          while (true) {
             double newBestScore = Double.NEGATIVE_INFINITY;
             GlobalCut newBestGlobalCut = null;
@@ -192,24 +197,66 @@ public class OntologyRBClassifier extends Classifier {
                est.setCut(attCut);
             }         
             
-            if (newBestGlobalCut.size() < 50 || newBestScore > bestScore) {
-               bestScore = newBestScore;
+            if (stoppingCriterion(newBestScore, newBestGlobalCut.size())) {
+               break;
+            } else {
                mGlobalCut = newBestGlobalCut;
-               
                Log.warning("New best global cut found with score " + newBestScore + " and hierarchy size " + mGlobalCut.size());
-               //logParameters(mGlobalCut);
                
                updateEstimatorCuts(mGlobalCut);
-            } else {
-               break;
             }
          }
          
-         logParameters(mGlobalCut);
-         Log.warning(mAttributeEst.toString());
+//         logParameters(mGlobalCut);
+//         Log.warning(mAttributeEst.toString());
       }
       
       Timer.INSTANCE.stop("OntoRBC learning");
+   }
+
+   static class CutStack {
+      
+      private LinkedList<Double> mScores = new LinkedList<Double>();
+      private int mWindowSize;
+      
+      public CutStack(int windowSize) {
+         mWindowSize = windowSize;
+      }
+
+      public boolean isFull() {
+         return mScores.size() == mWindowSize;
+      }
+      
+      public void push(double newBestScore) {
+         mScores.offerLast(newBestScore);
+         if (mScores.size() > mWindowSize) {
+            mScores.removeFirst();
+         }
+      }
+
+      public double getAverage() {
+         if (mScores.isEmpty()) {
+            return -1E10;
+         }
+         
+         return MathUtil.average(mScores);
+      }
+      
+   }
+   
+   private CutStack mCutStack = new CutStack(SMOOTH_CUT_SELECTION ? CUT_SELECTION_WINDOW : 1);
+   private boolean stoppingCriterion(double newBestScore, int newCutSize) {
+      double lastAve = mCutStack.getAverage();
+      mCutStack.push(newBestScore);
+      double currentAve = mCutStack.getAverage();
+      double diff = currentAve - lastAve;
+      
+      if (!mCutStack.isFull() || newCutSize < 50) return false;
+      if (diff > 0.0) {
+         return false;
+      } else {
+         return true;
+      }
    }
 
    public GlobalCut getGlobalCut() {
@@ -235,14 +282,16 @@ public class OntologyRBClassifier extends Classifier {
       }
    }
 
+   private AggregatedInstances cAggregatedInstances;
    private double computeModelScore() throws RDFDatabaseException {
-      AggregatedInstances aggregatedInstances = InstanceAggregator.aggregateSample(mInstances, 0.1);
+      if (cAggregatedInstances == null) {
+         cAggregatedInstances = InstanceAggregator.aggregateSample(mInstances, 1.0);
+      }
       
       //double fit = computeTrainingAccuracy(aggregatedInstances);
-      double fit = computeCLL(aggregatedInstances);
-      double sizePenalty = computeSizePenalty(aggregatedInstances);
-      Log.info("fit=" + fit + " sizePenalty=" + sizePenalty + " model=" + (fit - sizePenalty));
-      return fit;// - sizePenalty;
+      double fit = computeCLL(cAggregatedInstances);
+      Log.info("fit=" + fit);
+      return fit;
    }
 
    private double computeTrainingAccuracy(AggregatedInstances aggregatedInstances) throws RDFDatabaseException {
@@ -282,7 +331,6 @@ public class OntologyRBClassifier extends Classifier {
          parameterSize += est.paramSize();
       }
       return parameterSize * Math.log(aggregatedInstances.getInstances().size()) / 2.0;
-      //return parameterSize * Math.log(mClassEst.getNumInstances()) / 2.0;
    }
 
    @Override

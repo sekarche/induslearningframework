@@ -65,14 +65,7 @@ public class RRFClassifier extends Classifier {
       for (int i = 0; mForest.size() < mForestSize; i++) {
          Log.warning("Building tree " + i + " ... ");
          RDTClassifier tree = buildRDT();
-         
-//         if (tree.computeAccuracy() > 0.1) {
-            mForest.add(tree);
-//            Log.warning("Status " + mForest.size() + " / " + mForestSize);
-//         } else {
-//            Log.warning("Discarding tree " + tree);
-//            i--;
-//         }
+         mForest.add(tree);
       }
       
       Log.warning("Final forest: " + mForest);

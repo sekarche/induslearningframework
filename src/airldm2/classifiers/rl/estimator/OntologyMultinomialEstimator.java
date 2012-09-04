@@ -148,7 +148,15 @@ public class OntologyMultinomialEstimator extends OntologyAttributeEstimator {
       if (!(v instanceof Histogram)) 
          throw new IllegalArgumentException("Error: value " + v + " is not a Histogram for MultinomialEstimator.");
       
-      Histogram val = (Histogram) v;
+      Histogram val = null;
+      if (v instanceof MappedHistogram) {
+         List<URI> domain = mCut.get();
+         MappedHistogram allV = (MappedHistogram) v;
+         val = allV.induce(domain);
+      } else {
+         val = (Histogram) v;
+      }
+
       if (val.size() != mCut.size())
          throw new IllegalArgumentException("Error: size of " + v + " (" + val.size() + ") does not match the size of current cut (" + mCut.size() + ").");
       

@@ -2,15 +2,15 @@
 @value_var a
 @hierarchy_var z
 
-@targetType http://flickr/vocab/user
+@targetType http://lastfm/vocab/user
 
 @target group
 
 @attribute group
-NOMINAL=AbandonedCalifornia,FindingHome
+NOMINAL=group0,group1
 aggregator=NONE
 {
-?x <http://flickr/vocab/hasGroup> ?a .
+?x <http://lastfm/vocab/hasGroup> ?a .
 }
 
 @attribute tag
@@ -18,9 +18,9 @@ ENUM=?
 aggregator=HISTOGRAM
 hierarchyRoot=http://purl.org/vocabularies/princeton/wn30/synset-entity-noun-1
 {
-?x <http://flickr/vocab/hasPhoto> ?p .
-?p <http://flickr/vocab/hasTag> ?t .
-?t <http://flickr/vocab/hasSynset> ?s .
+?x <http://lastfm/vocab/hasTrack> ?p .
+?p <http://lastfm/vocab/hasTag> ?t .
+?t <http://lastfm/vocab/hasSynset> ?s .
 ?s a ?z .
 FILTER(?a = ?z)
 <HIERARCHY>

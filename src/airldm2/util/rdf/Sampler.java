@@ -50,8 +50,13 @@ public class Sampler {
       //geneSample();
       //flickrSample();
       //flickrTBoxSample();
-      //flickrCutPrint();
-      flickrCutSample();
+      //cutPrint("rdfs_example/flickrDescH.txt", ":flickr");
+      //cutSample();
+      //lastfmSample();
+      //lastfmTBoxSample();
+      //cutPrint("rdfs_example/lastfmDescH.txt", ":lastfm");
+      
+      flickrSubsetSample(1000);
    }
 
    private static void diseaseFix() throws RDFDatabaseException, RepositoryException {
@@ -381,10 +386,156 @@ public class Sampler {
       out.close();
    }
    
-   private static void flickrCutPrint() throws RDFDatabaseException, RepositoryException, IOException, RDFDataDescriptorFormatException {
+   private static void lastfmSample() throws RDFDatabaseException, RepositoryException {
+      RDFDatabaseConnection conn = new VirtuosoConnection("jdbc:virtuoso://localhost:1113/charset=UTF-8/log_enable=2", "dba", "dba");
+      String query;
+      SPARQLQueryResult result;
+      query = "select ?w { "
+            + " FILTER(?c < 10) { "
+            + " select ?w (count(distinct ?x) as ?c) { "
+            + " ?x <http://lastfm/vocab/hasTrack> ?p . "
+            + " ?p <http://lastfm/vocab/hasTag> ?t . "
+            + " ?t <http://lastfm/vocab/hasSynset> ?s . "
+            + " ?s a ?w . "
+            + " } group by ?w "
+            + " } }";
+      
+      result = conn.executeQuery(query);
+      List<URI> wordList = result.getURIList();
+      for (URI word : wordList) {
+         String deleteQuery = "delete from <:lastfm> { ?t <http://lastfm/vocab/hasSynset> ?s . ?s a ?w . } WHERE { "
+               + "?t <http://lastfm/vocab/hasSynset> ?s . ?s a ?w . "
+               + "FILTER (?w = <" + word + ">) }";
+         conn.executeUpdate(deleteQuery);
+      }
+      
+      query = "delete from <:lastfm> { "
+            + " ?p <http://lastfm/vocab/hasTag> ?t . "
+            + " } where { "
+            + " ?p <http://lastfm/vocab/hasTag> ?t . "
+            + " FILTER NOT EXISTS { "
+            + " ?t <http://lastfm/vocab/hasSynset> ?s . "
+            + " } }";
+      conn.executeUpdate(query);
+      
+      query = "delete from <:lastfm> { "
+            + " ?x <http://lastfm/vocab/hasTrack> ?p . "
+            + " } where { "
+            + " ?x <http://lastfm/vocab/hasTrack> ?p . "
+            + " FILTER NOT EXISTS { "
+            + " ?p <http://lastfm/vocab/hasTag> ?t . "
+            + " } }";
+      conn.executeUpdate(query);
+      
+      query = "select ?u (count(?p) as ?c) { "
+            + "?u <http://lastfm/vocab/hasTrack> ?p . "
+            + "} group by ?u";
+      result = conn.executeQuery(query);
+      List<Value[]> userList = result.getValueTupleList();
+
+      for (Value[] user : userList) {
+         URI uriUser = (URI) user[0];
+         Literal count = (Literal) user[1];
+         if (count.intValue() < 10) {
+            String deleteQuery = "delete from <:lastfm> { ?u a <http://lastfm/vocab/user> . } WHERE { "
+                  + "?u a <http://lastfm/vocab/user> . "
+                  + "FILTER (?u = <" + uriUser + ">) }";
+            conn.executeUpdate(deleteQuery);
+               
+         } else if (count.intValue() > 50) {
+            query = "select ?p { "
+                  + "<" + uriUser + "> <http://lastfm/vocab/hasTrack> ?p . "
+                  + "} order by ?p";
+            result = conn.executeQuery(query);
+            List<URI> photoList = result.getURIList();
+            Collections.shuffle(photoList, new Random(0));
+            
+            for (int i = photoList.size() - 1; i >= 50; i--) {
+               URI uri = photoList.get(i);
+               photoList.remove(i);
+               
+               String deleteQuery = "delete from <:lastfm> { ?u <http://lastfm/vocab/hasTrack> ?p . } WHERE { "
+                  + "?u <http://lastfm/vocab/hasTrack> ?p . "
+                  + "FILTER (?u = <" + uriUser + "> && ?p = <" + uri + ">) }";
+               conn.executeUpdate(deleteQuery);
+            }
+         }
+      }
+   }
+   
+   private static void lastfmTBoxSample() throws RDFDatabaseException, RepositoryException, FileNotFoundException {
+      RDFDatabaseConnection conn = new VirtuosoConnection("jdbc:virtuoso://localhost:1113/charset=UTF-8/log_enable=2", "dba", "dba");
+
+      TBox tBox = new TBox();
+      
+      //Convert from DAG to tree
+      Set<URI> subclassSet = CollectionUtil.makeSet();
+      
+      String query = new SubclassQueryConstructor(":lastfm").createQuery();
+      
+      SPARQLQueryResult results = conn.executeQuery(query);
+      List<Value[]> valueTupleList = results.getValueTupleList();
+      for (Value[] vs : valueTupleList) {
+         if (vs[0] instanceof URI && vs[1] instanceof URI) {
+            URI sub = (URI) vs[0];
+            URI sup = (URI) vs[1];
+            if (subclassSet.contains(sub)) continue;
+            
+            subclassSet.add(sub);
+            tBox.addSubclass(sub, sup);
+         } else {
+            System.err.println(Arrays.toString(vs));
+         }
+      }
+      
+      tBox.computeClosure();
+      SimpleDirectedGraph<URI, DefaultEdge> original = tBox.getOriginal();
+      SimpleDirectedGraph<URI, DefaultEdge> closed = tBox.getClosed();
+      
+      query = "select  distinct ?w { " + 
+            "?u a <http://lastfm/vocab/user> . " + 
+            "?u <http://lastfm/vocab/hasTrack> ?p . " +
+            "?p <http://lastfm/vocab/hasTag> ?t . " +
+            "?t <http://lastfm/vocab/hasSynset> ?s . " +
+            "?s a ?w . " +
+            "}";
+      SPARQLQueryResult result = conn.executeQuery(query);
+      List<URI> userList = result.getURIList();
+      
+      Set<URI> referred = CollectionUtil.makeSet();
+      for (URI u : userList) {
+         
+         if (closed.containsVertex(u)) {
+            List<URI> succ = Graphs.successorListOf(closed, u);
+            referred.add(u);
+            referred.addAll(succ);
+         } else {
+            System.out.println(u);
+         }
+      }
+      
+      Set<URI> all = CollectionUtil.makeSet(closed.vertexSet());
+      
+      all.removeAll(referred);
+      for (URI remove : all) {
+         original.removeVertex(remove);
+      }
+      
+      PrintWriter out = new PrintWriter(new File("lastfmSubclass.ttl")); 
+      out.println("@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .");
+      
+      for (DefaultEdge edge : original.edgeSet()) {
+         URI source = original.getEdgeSource(edge);
+         URI target = original.getEdgeTarget(edge);
+         out.println("<" + source + "> rdfs:subClassOf <" + target + "> .");
+      }
+      out.close();
+   }
+   
+   private static void cutPrint(String descFile, String context) throws RDFDatabaseException, RepositoryException, IOException, RDFDataDescriptorFormatException {
       VirtuosoConnection conn = new VirtuosoConnection("jdbc:virtuoso://localhost:1113/charset=UTF-8/log_enable=2", "dba", "dba");
-      RDFDataDescriptor desc = RDFDataDescriptorParser.parse("rdfs_example/flickrDescH.txt");
-      RDFDataSource source = new RDFDataSource(conn, desc, ":flickr");
+      RDFDataDescriptor desc = RDFDataDescriptorParser.parse(descFile);
+      RDFDataSource source = new RDFDataSource(conn, desc, context);
       TBox tBox = source.getTBox();
       URI hierarchyRoot = desc.getNonTargetAttributeList().get(0).getHierarchyRoot();
       Cut cut = tBox.getRootCut(hierarchyRoot);
@@ -404,14 +555,15 @@ public class Sampler {
       
    }
 
-   private static void flickrCutSample() throws IOException {
+   private static void cutSample() throws IOException {
       final int TOTAL = 50;
-      final int MAX = 9537;
+      final int MAX = 13416;
       final double LOG_STEP = Math.log10(MAX) / TOTAL;
       
       int[] cutpoints = new int[TOTAL + 1];
       for (int i = 1; i < cutpoints.length; i++) {
          cutpoints[i] = (int) Math.pow(10, LOG_STEP * i);
+         System.out.println(cutpoints[i]);
       }
       cutpoints[0] = 1;
       cutpoints[cutpoints.length - 1] = MAX;
@@ -433,4 +585,46 @@ public class Sampler {
       out.close();
    }
 
+   
+   private static void flickrSubsetSample(int size) throws RDFDatabaseException, RepositoryException {
+      RDFDatabaseConnection conn = new VirtuosoConnection("jdbc:virtuoso://localhost:1113/charset=UTF-8/log_enable=2", "dba", "dba");
+      String query;
+      
+      query = "select ?x from <:flickr> { "
+            + " ?x a <http://flickr/vocab/user> . "
+            + " ?x <http://flickr/vocab/hasGroup> \"AbandonedCalifornia\" . "
+            + " } order by ?x limit " + (size / 2);
+      
+      sample(conn, query);
+      
+      query = "select ?x from <:flickr> { "
+            + " ?x a <http://flickr/vocab/user> . "
+            + " ?x <http://flickr/vocab/hasGroup> \"FindingHome\" . "
+            + " } order by ?x limit " + (size / 2);
+      
+      sample(conn, query);
+   }
+
+   private static void sample(RDFDatabaseConnection conn, String query)
+         throws RDFDatabaseException {
+      SPARQLQueryResult result;
+      result = conn.executeQuery(query);
+      List<URI> userList = result.getURIList();
+      for (URI user : userList) {
+         String graph = "<" + user + "> a <http://flickr/vocab/user> . "
+               + "<" + user + "> <http://flickr/vocab/hasGroup> ?g . "
+               + "<" + user + "> <http://flickr/vocab/hasPhoto> ?p . "
+               + "?p <http://flickr/vocab/hasTag> ?t . "
+               + "?t <http://flickr/vocab/hasSynset> ?s . "
+               + "?s a ?a . ";
+         String insertQuery = "insert into <:subset> { "
+               + graph
+               + " } WHERE { "
+               + graph
+               + " }";
+         System.out.println(insertQuery);
+         conn.executeUpdate(insertQuery);
+      }
+   }
+   
 }

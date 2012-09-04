@@ -57,7 +57,7 @@ public class OntologyRRFClassifierTest {
       testInstances.setDesc(desc);
       testInstances.setDataSource(testSource);
    
-      OntologyRRFClassifier rrf = new OntologyRRFClassifier(31, 30, 4);
+      OntologyRRFClassifier rrf = new OntologyRRFClassifier(3, 30, 4);
       
       ConfusionMatrix matrix = Evaluation.evaluateOntologyRRFModel(rrf, trainInstances, testInstances);
       System.out.println(matrix.toString("===Confusion Matrix==="));

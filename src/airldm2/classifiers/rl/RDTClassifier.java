@@ -33,6 +33,7 @@ public class RDTClassifier extends Classifier {
    static { Log.setLevel(Level.WARNING); }
    
    private static final double INFO_GAIN_THRESHOLD = 0.01;
+   private static final double SIZE_THRESHOLD = 0.05;
    
    private RDFDataSource mDataSource;
    private RDFDataDescriptor mDataDesc;
@@ -143,6 +144,7 @@ public class RDTClassifier extends Classifier {
          newNode.estimateParameters(pathNodes, pathEdges);
          newNodes.add(newNode);
       }
+      
       TreeNodeSplitter lastNode = getLastNode(pathNodes);
       TreeEdge lastEdge = getLastEdge(pathEdges);
       TreeNodeSplitter bestNewNode = getMaxInfoGain(newNodes);
@@ -150,7 +152,7 @@ public class RDTClassifier extends Classifier {
       Log.info("unusedAttributes=" + unusedAttributeValues);
       Log.info("newNodes=" + newNodes);
       
-      if (mRoot == null || !isTerminationCriteriaMet(pathNodes, bestNewNode)) {
+      //if (mRoot == null || !isTerminationCriteriaMet(pathNodes, bestNewNode)) {
          mTree.addVertex(bestNewNode);
          pathNodes.add(bestNewNode);
          if (lastNode == null) {
@@ -164,19 +166,27 @@ public class RDTClassifier extends Classifier {
          Log.info("lastNode=" + lastNode + " lastEdge=" + lastEdge + " bestNewNode=" + bestNewNode + " tree=" + mTree.toString());
          
          for (int i = 0; i < 2; i++) {
+            if (isTerminationCriteriaMet(bestNewNode, i == 0)) continue;
+            
             TreeEdge exists = new TreeEdge(i == 0);
             List<TreeNodeSplitter> newPathNodes = CollectionUtil.makeList(pathNodes);
             List<TreeEdge> newPathEdges = CollectionUtil.makeList(pathEdges);
             newPathEdges.add(exists);
             buildTree(newPathNodes, newPathEdges);
          }
-      }
+      //}
    }
    
-   private boolean isTerminationCriteriaMet(List<TreeNodeSplitter> pathNodes, TreeNodeSplitter bestNewNode) {
-      if (bestNewNode == null) return true;
-      Log.warning("" + bestNewNode.getInfoGain());
-      return bestNewNode.getInfoGain() < INFO_GAIN_THRESHOLD;
+//   private boolean isTerminationCriteriaMet(List<TreeNodeSplitter> pathNodes) {
+//      if (pathNodes.isEmpty()) return false;
+//      
+//      TreeNodeSplitter lastNode = pathNodes.get(pathNodes.size() - 1);
+//      
+//      return (double) lastNode.getNumInstances() / mClassEst.getNumInstances() < SIZE_THRESHOLD;
+//   }
+   
+   private boolean isTerminationCriteriaMet(TreeNodeSplitter pathNode, boolean edge) {
+      return (double) pathNode.getSizeLeaf(edge) / mClassEst.getNumInstances() < SIZE_THRESHOLD;
    }
 
    private TreeNodeSplitter getLastNode(List<TreeNodeSplitter> pathNodes) {

@@ -16,11 +16,17 @@ public class Timer {
    public void stop(String name) {
       long start = mStartTime.get(name);
       long duration = (System.currentTimeMillis() - start);
+      
       Long total = mTotal.get(name);
       if (total == null) {
          total = 0L;
       }
       mTotal.put(name, total + duration);
+   }
+   
+   public void reset() {
+      mStartTime.clear();
+      mTotal.clear();
    }
    
    @Override
