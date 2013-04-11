@@ -59,6 +59,9 @@ public class Cut {
       for (int i = 0; i < mCut.size(); i++) {
          URI cutI = mCut.get(i);
          List<URI> cutISub = mTBox.getDirectSubclass(cutI);
+         while (cutISub.size() == 1) {
+            cutISub = mTBox.getDirectSubclass(cutISub.get(0));
+         }
          if (cutISub.isEmpty()) continue;
          
          LinkedList<URI> copy = new LinkedList<URI>(mCut);
