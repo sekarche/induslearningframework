@@ -21,7 +21,12 @@ import airldm2.util.Timer;
 public class SubclassReasoner2 {
 
    public static void main(String[] args) throws RepositoryException, RTConfigException, RDFDatabaseException, TransformerConfigurationException, SAXException, IOException {
-      RDFDatabaseConnection conn = new VirtuosoConnection("jdbc:virtuoso://localhost:1113/charset=UTF-8/log_enable=2", "dba", "dba");
+      run("jdbc:virtuoso://localhost:1113/charset=UTF-8/log_enable=2");
+      run("jdbc:virtuoso://localhost:1115/charset=UTF-8/log_enable=2");
+   }
+
+   private static void run(String connStr) throws RepositoryException, RDFDatabaseException {
+      RDFDatabaseConnection conn = new VirtuosoConnection(connStr, "dba", "dba");
       RDFDataSource dataSource = new RDFDataSource(conn, null);
       
       TBox tBox = dataSource.getTBox();
@@ -29,12 +34,12 @@ public class SubclassReasoner2 {
       Timer.INSTANCE.reset();
       Timer.INSTANCE.start("Inf");
       for (URI c : tBox.getClasses()) {
-         if (!c.stringValue().startsWith("http://purl.org")) continue;
+         if (!c.stringValue().startsWith("http://data/synset/") && !c.stringValue().startsWith("http://purl.org/")) continue;
          List<URI> sups = tBox.getSuperclasses(c);
          if (sups.isEmpty()) continue;
          
          StringBuilder query = new StringBuilder();
-         query.append("INSERT INTO <:subset> { ");
+         query.append("INSERT INTO <:data> { ");
          for (URI sup : sups) {
             query.append(StringUtil.triple("?x", "a", StringUtil.angleBracket(sup)));
          }         

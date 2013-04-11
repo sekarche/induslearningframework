@@ -29,6 +29,13 @@ public class VirtuosoConnection implements RDFDatabaseConnection {
    private Repository mRepository;
    private RepositoryConnection mConn;
    
+   private String mLocalURL;
+   private String mUsername;
+   private String mPassword;
+   
+   private final int QUERY_LIMIT = 9000;
+   private int mQueryCount = 0;
+   
    private static Logger Log = Logger.getLogger("airldm2.core.rl.VirtuosoConnection");
    static { Log.setLevel(Level.WARNING); }
    
@@ -39,13 +46,29 @@ public class VirtuosoConnection implements RDFDatabaseConnection {
    }
 
    public VirtuosoConnection(String localURL, String username, String password) throws RepositoryException {
+      this.mLocalURL = localURL;
+      this.mUsername = username;
+      this.mPassword = password;
+      init(localURL, username, password);
+   }
+
+   private void init(String localURL, String username, String password) throws RepositoryException {
       mRepository = new VirtuosoRepository(localURL, username, password);
       mRepository.initialize();
       mConn = mRepository.getConnection();
    }
    
+   public void close() throws RepositoryException {
+      mConn.close();
+      mRepository.shutDown();
+   }
+   
    @Override
    public void executeUpdate(String query) throws RDFDatabaseException {
+      Log.info(query);
+      
+      Weigher.INSTANCE.add(query);
+      
       Update update;
       try {
          update = mConn.prepareUpdate(QueryLanguage.SPARQL, query);
@@ -56,7 +79,9 @@ public class VirtuosoConnection implements RDFDatabaseConnection {
       }
       
       try {
+         Timer.INSTANCE.start("Query");
          update.execute();
+         Timer.INSTANCE.stop("Query");
       } catch (UpdateExecutionException e) {
          throw new RDFDatabaseException(e);
       }
@@ -99,13 +124,31 @@ public class VirtuosoConnection implements RDFDatabaseConnection {
          }
 
          bindings.close();
+         
       } catch (QueryEvaluationException e) {
          throw new RDFDatabaseException(e);
       }
       
       Weigher.INSTANCE.add(results);
       
+      try {
+         manageQueryCount();
+      } catch (RepositoryException e) {
+         throw new RDFDatabaseException(e);
+      }
+      
       return new SPARQLQueryResult(results);
+   }
+
+   private void manageQueryCount() throws RepositoryException {
+      if (mLocalURL == null) return;
+      
+      mQueryCount++;
+      if (mQueryCount > QUERY_LIMIT) {
+         mQueryCount = 0;
+         close();
+         init(mLocalURL, mUsername, mPassword);
+      }
    }
    
 }
