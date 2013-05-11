@@ -29,6 +29,8 @@ public class BernoulliEstimator extends AttributeEstimator {
    
    @Override
    public void estimateParameters() throws RDFDatabaseException {
+      mClassHistogram = mClassEst.getClassHistogram();
+      
       RbcAttribute targetAttribute = mDesc.getTargetAttribute();
       int numOfClassLabels = targetAttribute.getDomainSize();
       int numOfAttributeValues = mAttribute.getDomainSize();
@@ -46,12 +48,6 @@ public class BernoulliEstimator extends AttributeEstimator {
          }
          mValueHistograms[j] = new Histogram(valueCounts);
       }
-      
-      double[] classCounts = new double[numOfClassLabels];
-      for (int j = 0; j < numOfClassLabels; j++) {
-         classCounts[j] = mValueHistograms[j].sum();
-      }
-      mClassHistogram = new Histogram(classCounts);
    }
 
    @Override

@@ -16,7 +16,7 @@ public class RangeQueryConstructor extends QueryConstructor {
          "SELECT DISTINCT " + VALUE_VAR_PATTERN + " " + CONTEXT_PATTERN + " WHERE { "
                + INSTANCE_TYPE + " "
                + FEATURE_GRAPH
-               + " }";
+               + " } ORDER BY " + VALUE_VAR_PATTERN;
     
    private RbcAttribute mAtt;
    

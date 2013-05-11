@@ -105,9 +105,9 @@ public class VirtuosoConnection implements RDFDatabaseConnection {
       }
       
       try {
-         Timer.INSTANCE.start("Query");
+         //Timer.INSTANCE.start("Query");
          TupleQueryResult bindings = resultsTable.evaluate();
-         Timer.INSTANCE.stop("Query");
+         //Timer.INSTANCE.stop("Query");
          
          List<String> names = bindings.getBindingNames();
          while (bindings.hasNext()) {

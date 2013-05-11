@@ -20,6 +20,7 @@ import airldm2.database.rdf.HierarchyRangeQueryConstructor;
 import airldm2.database.rdf.HistogramAggregationQueryConstructor;
 import airldm2.database.rdf.IndependentValueAggregationQueryConstructor;
 import airldm2.database.rdf.InstanceQueryConstructor;
+import airldm2.database.rdf.MultinomialSuffStatForAllHierarchyQueryConstructor;
 import airldm2.database.rdf.MultinomialSuffStatQueryConstructor;
 import airldm2.database.rdf.RDFDatabaseConnection;
 import airldm2.database.rdf.SPARQLQueryResult;
@@ -169,10 +170,24 @@ public class RDFDataSource implements SSDataSource {
       return stat;
    }
 
+   public Map<URI, Double> getMultinomialSufficientStatisticForAllHierarchy(SuffStatQueryParameter queryParam) throws RDFDatabaseException {
+      String query = new MultinomialSuffStatForAllHierarchyQueryConstructor(mDesc, mDefaultContext, queryParam).createQuery();
+      SPARQLQueryResult results = mConn.executeQuery(query);
+      
+      Map<URI, Double> stats = CollectionUtil.makeMap();
+      for (Value[] vs : results.getValueTupleList()) {
+         URI uri = (URI) vs[0];
+         double v = ((Literal) vs[1]).doubleValue();
+         stats.put(uri, v);
+      }
+      Log.info(String.valueOf(stats));
+      return stats;
+   }
+   
    public ISufficentStatistic getMultinomialSufficientStatistic(SuffStatQueryParameter queryParam) throws RDFDatabaseException {
       String query = new MultinomialSuffStatQueryConstructor(mDesc, mDefaultContext, queryParam).createQuery();
       SPARQLQueryResult results = mConn.executeQuery(query);
-      
+
       if (results.isEmpty()) return null;
       ISufficentStatistic stat = new DefaultSufficentStatisticImpl(results.getInt());
       Log.info(String.valueOf(results.getInt()));
@@ -299,31 +314,6 @@ public class RDFDataSource implements SSDataSource {
       
       return cachedCounts;
    }
-   
-//   public Map<Value,Integer> countHistogramAggregation(URI instance, RbcAttribute attribute) throws RDFDatabaseException {
-//      String query = new HistogramAggregationQueryConstructor(mDesc, mDefaultContext, instance, attribute).createQuery();
-//      Log.info(query);
-//      
-//      DiscreteType valueType = (DiscreteType) attribute.getValueType();
-//      Set<String> domain = CollectionUtil.makeSet(valueType.getStringValues());
-//      Map<Value,Integer> counts = CollectionUtil.makeMap();
-//      
-//      SPARQLQueryResult results = mConn.executeQuery(query);
-//      List<Value[]> valueTupleList = results.getValueTupleList();
-//      for (Value[] vs : valueTupleList) {
-//         int intValue = ((Literal)vs[1]).intValue();
-//         counts.put(vs[0], intValue);
-//      }
-//      
-//      Set<Value> keySet = CollectionUtil.makeSet(counts.keySet());
-//      for (Value v : keySet) {
-//         if (!domain.contains(v.stringValue())) {
-//            counts.remove(v);
-//         }
-//      }
-//      
-//      return counts;
-//   }
 
    public int getRangeSizeOf(URI targetType, PropertyChain propChain) throws RDFDatabaseException {
       String query = new RangeSizeQueryConstructor(mDefaultContext, targetType, propChain).createQuery();

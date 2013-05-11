@@ -1,0 +1,27 @@
+@instance_var x
+@value_var a
+@hierarchy_var z
+
+@targetType http://data/vocab/user
+
+@target group
+
+@attribute group
+NOMINAL=55259373_N00,45288288_N00
+aggregator=NONE
+{
+?x <http://data/vocab/hasGroup> ?a .
+}
+
+@attribute tag
+ENUM=?
+aggregator=SET
+hierarchyRoot=http://purl.org/vocabularies/princeton/wn30/synset-entity-noun-1
+{
+?x <http://data/vocab/hasItem> ?p .
+?p <http://data/vocab/hasTag> ?t .
+?t <http://data/vocab/hasSynset> ?s .
+?s a ?z .
+FILTER(?a = ?z)
+<HIERARCHY>
+}

@@ -8,6 +8,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -49,14 +50,36 @@ public class Sampler {
       //diseaseFix();
       //geneSample();
       //flickrSample();
-      //flickrTBoxSample();
-      //cutPrint("rdfs_example/flickrDescH.txt", ":flickr");
+      //minimizeTBox();
+      cutPrint("rdfs_example/flickrDescHistH.txt", ":data");
       //cutSample();
       //lastfmSample();
       //lastfmTBoxSample();
-      //cutPrint("rdfs_example/lastfmDescH.txt", ":lastfm");
+      //cutPrint("rdfs_example/lastfmDescSetH.txt", ":data");
       
-      flickrSubsetSample(1000);
+      //flickrSubsetSample(1000);
+      
+      //flickrSampleTag();
+      
+      //flickrOutputUser();
+      
+      //kmeansdownload();
+   }
+
+   private static void kmeansdownload() throws RDFDatabaseException, RepositoryException, FileNotFoundException {
+      RDFDatabaseConnection conn = new VirtuosoConnection("jdbc:virtuoso://localhost:1111/charset=UTF-8/log_enable=2", "dba", "dba");
+
+      String query = "SELECT * FROM <:flickr> WHERE { "
+         + "?x ?y ?z . }";
+      SPARQLQueryResult result = conn.executeQuery(query);
+      List<Value[]> pairList = result.getValueTupleList();
+      
+      PrintWriter out = new PrintWriter(new File("flickr.ttl")); 
+      for (Value[] vs : pairList) {
+         out.println(new StringBuilder().append(vs[0]).append(" ").append(vs[1]).append(" ").append(vs[2]).toString());
+      }
+      
+      out.close();
    }
 
    private static void diseaseFix() throws RDFDatabaseException, RepositoryException {
@@ -317,7 +340,7 @@ public class Sampler {
       }
    }
    
-   private static void flickrTBoxSample() throws RDFDatabaseException, RepositoryException, FileNotFoundException {
+   private static void minimizeTBox() throws RDFDatabaseException, RepositoryException, FileNotFoundException {
       RDFDatabaseConnection conn = new VirtuosoConnection("jdbc:virtuoso://localhost:1113/charset=UTF-8/log_enable=2", "dba", "dba");
 
       TBox tBox = new TBox();
@@ -325,7 +348,7 @@ public class Sampler {
       //Convert from DAG to tree
       Set<URI> subclassSet = CollectionUtil.makeSet();
       
-      String query = new SubclassQueryConstructor(":flickr").createQuery();
+      String query = new SubclassQueryConstructor(":data").createQuery();
       
       SPARQLQueryResult results = conn.executeQuery(query);
       List<Value[]> valueTupleList = results.getValueTupleList();
@@ -347,10 +370,10 @@ public class Sampler {
       SimpleDirectedGraph<URI, DefaultEdge> closed = tBox.getClosed();
       
       query = "select  distinct ?w { " + 
-            "?u a <http://flickr/vocab/user> . " + 
-            "?u <http://flickr/vocab/hasPhoto> ?p . " +
-            "?p <http://flickr/vocab/hasTag> ?t . " +
-            "?t <http://flickr/vocab/hasSynset> ?s . " +
+            "?u a <http://data/vocab/user> . " + 
+            "?u <http://data/vocab/hasItem> ?p . " +
+            "?p <http://data/vocab/hasTag> ?t . " +
+            "?t <http://data/vocab/hasSynset> ?s . " +
             "?s a ?w . " +
             "}";
       SPARQLQueryResult result = conn.executeQuery(query);
@@ -375,7 +398,7 @@ public class Sampler {
          original.removeVertex(remove);
       }
       
-      PrintWriter out = new PrintWriter(new File("flickrSubclass.ttl")); 
+      PrintWriter out = new PrintWriter(new File("minimalSubclass.ttl")); 
       out.println("@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .");
       
       for (DefaultEdge edge : original.edgeSet()) {
@@ -539,34 +562,33 @@ public class Sampler {
       TBox tBox = source.getTBox();
       URI hierarchyRoot = desc.getNonTargetAttributeList().get(0).getHierarchyRoot();
       Cut cut = tBox.getRootCut(hierarchyRoot);
-      
       BufferedWriter out = new BufferedWriter(new FileWriter("cut.txt"));
       
       int lastSize = cut.size();
-      while (cut.refineGreedyBFS()) {
-         if (cut.size() > lastSize) {
+      while (cut.refineGreedyBFS() && cut.size() < 3500) {
+         if (cut.size() > lastSize) { System.out.println(cut.size());
             lastSize = cut.size();
             out.write(cut.get().toString());
             out.newLine();
-            System.out.println(cut.size());
          }
       }
       out.close();
-      
+      //System.out.println(cut);
    }
 
+   
+   
    private static void cutSample() throws IOException {
-      final int TOTAL = 50;
-      final int MAX = 13416;
-      final double LOG_STEP = Math.log10(MAX) / TOTAL;
+      final int MIN = 200;
+      final int MAX = 12400;
+      final int STEP = 200;
+      //final double STEP = 1.0 * MAX / TOTAL;
       
-      int[] cutpoints = new int[TOTAL + 1];
-      for (int i = 1; i < cutpoints.length; i++) {
-         cutpoints[i] = (int) Math.pow(10, LOG_STEP * i);
-         System.out.println(cutpoints[i]);
+      List<Integer> cutpoints = new ArrayList<Integer>();
+      for (int i = MIN; i <= MAX; i += STEP) {
+         cutpoints.add(i);
+         System.out.println(i);
       }
-      cutpoints[0] = 1;
-      cutpoints[cutpoints.length - 1] = MAX;
       
       BufferedWriter out = new BufferedWriter(new FileWriter("cutFiltered.txt"));
       BufferedReader in = new BufferedReader(new FileReader("cut.txt"));
@@ -575,17 +597,49 @@ public class Sampler {
       int nextCutpoint = 0;
       while ((line=in.readLine()) != null) {
          int size = line.split(",").length;
-         if (size >= cutpoints[nextCutpoint]) {
+         if (size >= cutpoints.get(nextCutpoint)) {
             nextCutpoint++;
             out.write(line);
             out.newLine();
+            
+            if (nextCutpoint == cutpoints.size()) break;
          }
       }
       in.close();
       out.close();
    }
-
    
+//   private static void cutSample() throws IOException {
+//      final int TOTAL = 30;
+//      final int MIN = 10;
+//      final int MAX = 12500;
+//      final double POWER = 0.2;
+//      final double INIT = Math.pow(MIN, POWER);
+//      final double STEP = (Math.pow(MAX, POWER) - INIT) / TOTAL;
+//      
+//      int[] cutpoints = new int[TOTAL + 1];
+//      for (int i = 0; i < cutpoints.length; i++) {
+//         cutpoints[i] = (int) Math.pow((INIT + STEP * i), 1 / POWER);
+//         System.out.println(cutpoints[i]);
+//      }
+//      
+//      BufferedWriter out = new BufferedWriter(new FileWriter("cutFiltered.txt"));
+//      BufferedReader in = new BufferedReader(new FileReader("cut.txt"));
+//      
+//      String line;
+//      int nextCutpoint = 0;
+//      while ((line=in.readLine()) != null) {
+//         int size = line.split(",").length;
+//         if (size >= cutpoints[nextCutpoint]) {
+//            nextCutpoint++;
+//            out.write(line);
+//            out.newLine();
+//         }
+//      }
+//      in.close();
+//      out.close();
+//   }
+
    private static void flickrSubsetSample(int size) throws RDFDatabaseException, RepositoryException {
       RDFDatabaseConnection conn = new VirtuosoConnection("jdbc:virtuoso://localhost:1113/charset=UTF-8/log_enable=2", "dba", "dba");
       String query;
@@ -626,5 +680,88 @@ public class Sampler {
          conn.executeUpdate(insertQuery);
       }
    }
+
+   private static void flickrSampleTag() throws RDFDatabaseException, RepositoryException {
+//    delete from <:flickr> {
+//    ?u ?b1 ?b2 .
+//    } where {
+//    ?u ?b1 ?b2 .
+//          { select ?u from <:flickr> {
+//             ?u a <http://flickr/vocab/user> .
+//             FILTER NOT EXISTS {
+//             ?u <http://flickr/vocab/hasFriend> ?u1 .
+//             }
+//          }
+//          }
+//     }
+//    
+//    delete from <:flickr> {
+//       ?u ?b1 ?b2 .
+//       } where {
+//       ?u ?b1 ?b2 .
+//             { select ?u from <:flickr> {
+//                ?u a <http://flickr/vocab/user> .
+//                FILTER NOT EXISTS {
+//                   ?u <http://flickr/vocab/hasPhoto> ?p .
+//                }
+//             }
+//             }
+//        }
+//       
+//    delete from <:flickr> {
+//    ?x <http://flickr/vocab/hasPhoto> ?p .
+//    } where {
+//    ?x <http://flickr/vocab/hasPhoto> ?p .
+//    FILTER NOT EXISTS {
+//    ?p <http://flickr/vocab/hasTag> ?t .
+//    } }
+//       
+//    delete from <:flickr> {
+//       ?p <http://flickr/vocab/hasTag> ?t .
+//    } where {
+//    ?p <http://flickr/vocab/hasTag> ?t .
+//    FILTER NOT EXISTS {
+//    ?u <http://flickr/vocab/hasPhoto> ?p .
+//    }
+//    }
+      
+      RDFDatabaseConnection conn = new VirtuosoConnection("jdbc:virtuoso://localhost:1111/charset=UTF-8/log_enable=2", "dba", "dba");
+      String query;
+      SPARQLQueryResult result;
+      query = " select ?t (count(?p) as ?c) { "
+            + " ?p <http://flickr/vocab/hasTag> ?t . "
+            + " } group by ?t "
+            + " order by ?c";
+      
+      result = conn.executeQuery(query);
+      List<URI> wordList = result.getURIList();
+      int size = wordList.size();
+      for (int i = 0 ; i < size - 5000; i++) {
+         URI word = wordList.get(i);
+         
+         String deleteQuery = "delete from <:flickr> { ?p <http://flickr/vocab/hasTag> ?t . } WHERE { "
+               + "?p <http://flickr/vocab/hasTag> ?t . "
+               + "FILTER (?t = <" + word + ">) }";
+         conn.executeUpdate(deleteQuery);
+      }
+   }
    
+
+   private static void flickrOutputUser() throws RepositoryException, RDFDatabaseException, FileNotFoundException {
+      RDFDatabaseConnection conn = new VirtuosoConnection("jdbc:virtuoso://localhost:1111/charset=UTF-8/log_enable=2", "dba", "dba");
+      String query;
+      SPARQLQueryResult result;
+      query = " select ?u { "
+            + " ?u a <http://flickr/vocab/user> . "
+            + " } ";
+      
+      result = conn.executeQuery(query);
+      List<URI> users = result.getURIList();
+      
+      PrintWriter out = new PrintWriter(new File("flickrUsers.ttl"));
+      for (URI u : users) {
+         out.println(u);
+      }
+   }
+
 }

@@ -1,0 +1,24 @@
+@instance_var x
+@value_var a
+@hierarchy_var z
+
+@targetType http://data/vocab/user
+
+@target group
+
+@attribute group
+NOMINAL=1,2
+aggregator=NONE
+{
+?x <http://data/vocab/hasGroup> ?a .
+}
+
+@attribute tag
+ENUM=?
+aggregator=HISTOGRAM
+{
+?x <http://data/vocab/hasItem> ?p .
+?p <http://data/vocab/hasTag> ?t .
+?t <http://data/vocab/hasSynset> ?s .
+?s a ?a .
+}
