@@ -19,6 +19,7 @@ import airldm2.database.rdf.SuffStatQueryParameter;
 import airldm2.exceptions.RDFDatabaseException;
 import airldm2.util.CollectionUtil;
 import airldm2.util.MathUtil;
+import airldm2.util.Timer;
 
 public class OntologyMultinomialEstimator extends OntologyAttributeEstimator {
 
@@ -64,7 +65,8 @@ public class OntologyMultinomialEstimator extends OntologyAttributeEstimator {
             mValueHistograms.add(histogram);
          }
       }
-      
+
+      Timer.INSTANCE.start("Query");
       for (int j = 0; j < numOfClassLabels; j++) {
          Map<URI, Double> valueHistogram = mValueHistograms.get(j);
          for (int k = 0; k < numOfAttributeValues; k++) {
@@ -79,6 +81,24 @@ public class OntologyMultinomialEstimator extends OntologyAttributeEstimator {
             //System.out.println(queryParam);
             //System.out.println(tempSuffStat.getValue());
          }
+      }
+      Timer.INSTANCE.stop("Query");
+   }
+   
+   private void computeValueHistogramsForAllHierarchy(RDFDataSource source, RDFDataDescriptor desc, RbcAttribute targetAttribute) throws RDFDatabaseException {
+      int numOfClassLabels = targetAttribute.getDomainSize();
+      
+      if (mValueHistograms == null) {
+         Timer.INSTANCE.start("Query");
+         
+         mValueHistograms = CollectionUtil.makeList();
+         for (int j = 0; j < numOfClassLabels; j++) {
+            SuffStatQueryParameter queryParam = new SuffStatQueryParameter(desc.getTargetType(), targetAttribute, j, mAttribute, -1);
+            Map<URI, Double> valueHistogram = source.getMultinomialSufficientStatisticForAllHierarchy(queryParam);
+            mValueHistograms.add(valueHistogram);
+         }
+         
+         Timer.INSTANCE.stop("Query");
       }
    }
 
@@ -103,36 +123,53 @@ public class OntologyMultinomialEstimator extends OntologyAttributeEstimator {
       int numOfClassLabels = targetAttribute.getDomainSize();
       
       URI hierarchyRoot = mAttribute.getHierarchyRoot();
-      //hack
-      Cut cut = mTBox.getAllNodesAsCut(hierarchyRoot);
+      computeValueHistogramsForAllHierarchy(mSource, mDesc, targetAttribute);
       
-      Cut oldCut = mCut;
-      setCut(cut);
-      computeValueHistograms(mSource, mDesc, targetAttribute);
-      
-      cut = mTBox.getLeafCut(hierarchyRoot);
-      cut.optimizeAbstraction();
-      for (URI sup = cut.abstractCut(); sup != null; sup = cut.abstractCut()) { 
-         List<URI> subclasses = mTBox.getDirectSubclass(sup);
-         for (Map<URI,Double> valueHistogram : mValueHistograms) {
-            Double sum = valueHistogram.get(sup);
-            if (sum == null) {
-               sum = 0.0;
-            }
-            sum += sum(valueHistogram, subclasses);
+//      Cut cut = mTBox.getAllNodesAsCut(hierarchyRoot);
+//      
+//      Cut oldCut = mCut;
+//      setCut(cut);
+//      computeValueHistograms(mSource, mDesc, targetAttribute);
+
+      List<List<URI>> layers = mTBox.getLayers(hierarchyRoot);
+      for (int i = layers.size() - 1; i >= 0; i--) {
+         List<URI> layer = layers.get(i);
+         for (URI n : layer) {
+            if (mTBox.isLeaf(n)) continue;
+            List<URI> subclasses = mTBox.getDirectSubclass(n);
             
-            valueHistogram.put(sup, sum);
+            for (Map<URI,Double> valueHistogram : mValueHistograms) {
+               Double sum = valueHistogram.get(n);
+               if (sum == null) sum = 0.0;
+               sum += sum(valueHistogram, subclasses);
+               
+               valueHistogram.put(n, sum);
+            }
          }
       }
 
       computeDependentParameters(numOfClassLabels);
+      
+//      setCut(oldCut);
+   }
+
+   public void estimateLeafParameters() throws RDFDatabaseException {
+      RbcAttribute targetAttribute = mDesc.getTargetAttribute();
+      
+      URI hierarchyRoot = mAttribute.getHierarchyRoot();
+      Cut cut = mTBox.getLeafCut(hierarchyRoot);
+      Cut oldCut = mCut;
+      setCut(cut);
+      computeValueHistograms(mSource, mDesc, targetAttribute);
       setCut(oldCut);
    }
    
    private double sum(Map<URI, Double> valueHistogram, List<URI> subclasses) {
       double sum = 0.0;
       for (URI sub : subclasses) {
-         sum += valueHistogram.get(sub);
+         Double v = valueHistogram.get(sub);
+         if (v == null) v = 0.0;
+         sum += v;
       }
       return sum;
    }
@@ -201,6 +238,10 @@ public class OntologyMultinomialEstimator extends OntologyAttributeEstimator {
    @Override
    public double paramSize() {
       return mClassHistogram.size() * mCut.size();
+   }
+
+   public List<Map<URI, Double>> getValueHistograms() {
+      return mValueHistograms;
    }
 
 }

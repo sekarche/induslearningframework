@@ -1,8 +1,11 @@
 package airldm2.util;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.openrdf.model.URI;
 
@@ -11,6 +14,9 @@ import airldm2.classifiers.rl.estimator.Histogram;
 import airldm2.constants.Constants;
 
 public class MathUtil {
+   
+   protected static Logger Log = Logger.getLogger("airldm2.util.MathUtil");
+   static { Log.setLevel(Level.INFO); }
    
    public static final double LN2 = Math.log(2.0); 
    
@@ -207,6 +213,12 @@ public class MathUtil {
       }
    }
 
+   public static void addTo(int[] a, int[] b) {
+      for (int i = 0; i < a.length; i++) {
+         a[i] += b[i];
+      }
+   }
+   
    public static int[] castToInt(double[] aDouble) {
       int[] aInt = new int[aDouble.length];
       for (int i = 0; i < aInt.length; i++) {
@@ -245,6 +257,14 @@ public class MathUtil {
 
    public static double sum(double[] a) {
       double sum = 0.0;
+      for (int i = 0; i < a.length; i++) {
+         sum += a[i];
+      }
+      return sum;
+   }
+   
+   public static int sum(int[] a) {
+      int sum = 0;
       for (int i = 0; i < a.length; i++) {
          sum += a[i];
       }
@@ -313,6 +333,46 @@ public class MathUtil {
          entropySum -= p * MathUtil.lg(p);
       }
       return entropySum;
+   }
+
+   public static int findSlope(double[][] profileScaled, double slopeThreshold) {
+      final double MA_DELTA = 0.01;
+      final double SLOPE_DELTA = 0.005;
+      final int MA_WINDOW = (int)(profileScaled.length * MA_DELTA);
+      final int SLOPE_WINDOW = (int)(profileScaled.length * SLOPE_DELTA);
+      
+      double[] ma = new double[profileScaled.length];
+      double sum = 0.0;
+      for (int i = 0; i < MA_WINDOW; i++) {
+         sum += profileScaled[i][1];
+      }
+      for (int a = 0, b = MA_WINDOW; b < profileScaled.length; a++, b++) {
+         sum = sum - profileScaled[a][1] + profileScaled[b][1];
+         ma[b] = sum / MA_WINDOW;
+      }
+      System.out.println(Arrays.toString(ma));
+      for (int i = MA_WINDOW + SLOPE_WINDOW; i < profileScaled.length; i++) {
+         double slope = (ma[i] - ma[i - SLOPE_WINDOW]) / (profileScaled[i][0] - profileScaled[i - SLOPE_WINDOW][0]);
+         System.out.println(i + " " + slope);
+         if (slope < slopeThreshold) return i;
+      }
+      
+      return profileScaled.length - 1;
+   }
+
+   public static double[][] scale(double[][] as) {
+      final int VALUES = as[0].length;
+      double[][] result = new double[as.length][VALUES];
+      
+      for (int v = 0; v < VALUES; v++) {
+         double max = as[as.length - 1][v];
+         for (int i = 0; i < as.length; i++) {
+            result[i][v] = as[i][v] / max;
+         }
+      }
+      
+      System.out.println(Arrays.deepToString(result));
+      return result;
    }
 
 }

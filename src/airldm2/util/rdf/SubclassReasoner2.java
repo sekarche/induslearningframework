@@ -22,7 +22,7 @@ public class SubclassReasoner2 {
 
    public static void main(String[] args) throws RepositoryException, RTConfigException, RDFDatabaseException, TransformerConfigurationException, SAXException, IOException {
       run("jdbc:virtuoso://localhost:1113/charset=UTF-8/log_enable=2");
-      run("jdbc:virtuoso://localhost:1115/charset=UTF-8/log_enable=2");
+      //run("jdbc:virtuoso://localhost:1115/charset=UTF-8/log_enable=2");
    }
 
    private static void run(String connStr) throws RepositoryException, RDFDatabaseException {
